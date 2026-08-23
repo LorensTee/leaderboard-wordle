@@ -35,10 +35,15 @@ for (const file of files) {
 	for (const word of poolWords) {
 		if (content.includes(word)) hits.push(`${word} → ${file}`);
 	}
-	// Fold-regression guard: the hard-coded dev fallback session secret must
-	// never survive into build output (it is dead code under NODE_ENV fold).
-	if (content.includes('dev-only-secret-change-me')) {
-		hits.push(`dev fallback secret literal → ${file}`);
+	// Fold/import-regression guards: secret literals that must never survive
+	// into build output — DEV_SECRET is dead code under the NODE_ENV fold,
+	// and the generation-only dummy is a top-level literal (not foldable) that
+	// would become the effective signing secret if auth.generate.ts were ever
+	// imported by app code (it is CLI-only; a scan failure means a regression).
+	for (const literal of ['dev-only-secret-change-me', 'cli-generation-only-secret']) {
+		if (content.includes(literal)) {
+			hits.push(`secret literal (${literal}) → ${file}`);
+		}
 	}
 }
 

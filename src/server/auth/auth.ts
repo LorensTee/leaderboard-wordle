@@ -83,11 +83,14 @@ export type Auth = ReturnType<typeof createAuth>;
 /** getSession result shape: { session, user } (docs: integrations/svelte-kit). */
 export type SessionData = Auth['$Infer']['Session'];
 
-// Per-isolate memo. The cache key covers the binding values that change the
-// auth instance (secret rotation must rebuild, not silently reuse). Worker
-// env is stable per deployment; a misconfigured deploy therefore fails fast
-// on the first request (module scope cannot read env in workers — the fetch
-// handler is the earliest point) and every subsequent request re-throws.
+// Per-isolate memo. The cache key covers the binding values that define the
+// session-signing identity (DATABASE_URL + BETTER_AUTH_SECRET): rotation
+// rebuilds, never silently reuses. Provider/URL overrides intentionally
+// stay out of the key — they are stable per deployment and have no isolated
+// security consequence. Worker env is stable per deployment; a misconfigured
+// deploy therefore fails fast on the first request (module scope cannot read
+// env in workers — the fetch handler is the earliest point) and every
+// subsequent request re-throws.
 let cachedAuth: Auth | null = null;
 let cachedKey = '';
 
