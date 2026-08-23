@@ -20,11 +20,11 @@ export function allowedOrigins(): string[] {
  * True when this unsafe request is same-origin (or unambiguously
  * non-browser). Returns false when a browser-driven cross-site request is
  * detected:
- *  - Sec-Fetch-Site present but not same-origin/none → reject
+ *  - Sec-Fetch-Site present but not same-origin → reject
  *  - Origin present but not the request's own origin (or an allowlisted one)
  *    → reject
- *  - neither header present (non-browser client) → reject in production
- *    (curl/tests must send an Origin), allow in dev for tooling ergonomics.
+ *  - neither header present (non-browser client / opaque context) → reject —
+ *    mutations must prove same-origin; tooling/tests send an Origin header.
  */
 export function isSameOriginRequest(c: Context): boolean {
 	const url = new URL(c.req.url);

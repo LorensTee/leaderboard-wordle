@@ -35,6 +35,11 @@ for (const file of files) {
 	for (const word of poolWords) {
 		if (content.includes(word)) hits.push(`${word} → ${file}`);
 	}
+	// Fold-regression guard: the hard-coded dev fallback session secret must
+	// never survive into build output (it is dead code under NODE_ENV fold).
+	if (content.includes('dev-only-secret-change-me')) {
+		hits.push(`dev fallback secret literal → ${file}`);
+	}
 }
 
 if (hits.length > 0) {

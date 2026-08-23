@@ -83,15 +83,19 @@ export type Auth = ReturnType<typeof createAuth>;
 /** getSession result shape: { session, user } (docs: integrations/svelte-kit). */
 export type SessionData = Auth['$Infer']['Session'];
 
-// Per-isolate memo. Worker env is stable per request for one deployment; the
-// DATABASE_URL key forces a rebuild if bindings legitimately change (tests).
+// Per-isolate memo. The cache key covers the binding values that change the
+// auth instance (secret rotation must rebuild, not silently reuse). Worker
+// env is stable per deployment; a misconfigured deploy therefore fails fast
+// on the first request (module scope cannot read env in workers — the fetch
+// handler is the earliest point) and every subsequent request re-throws.
 let cachedAuth: Auth | null = null;
-let cachedDatabaseUrl: string | undefined;
+let cachedKey = '';
 
 export function getAuth(env: AuthBindings): Auth {
-	if (!cachedAuth || cachedDatabaseUrl !== env.DATABASE_URL) {
+	const key = [env.DATABASE_URL, env.BETTER_AUTH_SECRET ?? ''].join('\u0000');
+	if (!cachedAuth || cachedKey !== key) {
 		cachedAuth = createAuth(env);
-		cachedDatabaseUrl = env.DATABASE_URL;
+		cachedKey = key;
 	}
 	return cachedAuth;
 }

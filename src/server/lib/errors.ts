@@ -70,9 +70,11 @@ export function resolveError(err: unknown, requestId: string): { status: number;
 
 /** Centralized onError: JSON envelope for every thrown error (NG21). */
 export function onErrorHandler(err: Error, c: Context): Response {
-	// Custom onError replaces Hono's default, which is the only place
-	// HTTPException responses (e.g. the 408 timeout envelope) are preserved.
-	if (err instanceof HTTPException) return err.getResponse();
+	// Custom onError replaces Hono's default. The ONLY intentional
+	// HTTPException payload is the NG19 408 timeout envelope (routes.ts) —
+	// preserve exactly that; anything else stays on the sanitized envelope
+	// (a future user-controlled HTTPException must not bypass it).
+	if (err instanceof HTTPException && err.status === 408) return err.getResponse();
 
 	const requestId = c.get('requestId') ?? 'unknown';
 	const { status, body } = resolveError(err, requestId);

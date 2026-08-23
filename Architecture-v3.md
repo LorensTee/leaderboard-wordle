@@ -270,6 +270,13 @@ Independent (`tool:review`, verdict warn) and security (`tool:security_review`, 
 
 Verification after fixes: `bun run check` 0 errors; unit suite 21/21 (5 files); production build green; `auth:schema` regenerates identically; live dev-server probes above.
 
+Second review round (fresh `tool:review` + `tool:security_review` scoped to c90716f): verdicts **OK to ship** / **no blocking issues** — applied their micro-findings:
+- `lib/origin.ts` docstring updated (no stale "allow in dev" that could be reverted into a fail-open).
+- `auth.generate.ts` pins an explicit dummy `BETTER_AUTH_SECRET` → `auth:schema` is independent of the invoking shell's `NODE_ENV`.
+- `getAuth` cache key now includes `BETTER_AUTH_SECRET` (rotation rebuilds; misconfigured deploy fails fast on first request — module scope cannot read env earlier in workers).
+- `onErrorHandler` preserves `HTTPException` responses only for `status === 408` (the single intentional payload; anything else stays sanitized).
+- `verify:bundle` additionally fails if the dev fallback secret literal appears in build output (NODE_ENV fold regression guard — verified absent).
+
 ## Hono
 
 Use **Hono** as the dedicated API/business boundary beneath SvelteKit's `/api/*` routes.
