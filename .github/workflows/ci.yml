@@ -32,6 +32,27 @@ jobs:
       - name: Answer-pool secrecy proof (absent from build output)
         run: bun run verify:bundle
 
+  integration:
+    runs-on: ubuntu-latest
+    needs: unit-and-build
+    # B6/B7 external gate — runs the DB integration suite (migration applied
+    # first) against a NON-production database; exercises the app's real
+    # neon-serverless driver path.
+    if: ${{ secrets.DATABASE_URL != '' }}
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install
+        run: bun install --frozen-lockfile
+      - name: Apply migrations (non-production database)
+        run: bun run db:migrate
+      - name: Integration tests (FOR UPDATE, NG9 lock orders, M3, NG2/NG3)
+        run: bun run test:integration
+
   e2e:
     runs-on: ubuntu-latest
     needs: unit-and-build

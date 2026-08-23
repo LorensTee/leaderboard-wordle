@@ -23,6 +23,7 @@
 		"word-list": "bun ./scripts/build-word-list.ts",
 		"verify:bundle": "bun ./scripts/verify-bundle-secrecy.ts",
 		"test:unit": "vitest run",
+		"test:integration": "vitest run tests/integration",
 		"test:e2e": "playwright test"
 	},
 	"devDependencies": {

@@ -223,6 +223,17 @@ Version-relevant corrections to this document:
 - **Bundle-secrecy proof:** `scripts/verify-bundle-secrecy.ts` (`bun run verify:bundle`, CI gate after build) — greps all build output for answer-pool words; public artifact is client-side by design. Unit test proves `src/` never references the seed pipeline.
 - `tests/integration/` + `tests/security/` dirs scaffolded for B6.
 
+### Phase 0 B6 (2026-08-23)
+
+- **Integration suite (7 tests, all green against real PostgreSQL 17):**
+  - `db.test.ts`: 8 tables created by the migration; **NG2** `hint_letter_shape` CHECK enforced; **NG3** `UNIQUE(user_id, puzzle_id)`; **`SELECT … FOR UPDATE` serializes concurrent transactions** (dedicated-connection probe: B blocks while A holds the lock, then sees A's committed change — READ COMMITTED re-evaluation, 424 ms observed lock wait).
+  - `midnight-lock-order.test.ts` — **NG9 both mandatory orders**: A) guess locks puzzle first → completion valid (finalize queues, observes ACTIVE, guess committed); B) finalize locks first → guess blocked until FINALIZED, re-read observes FINALIZED and writes nothing (ROLLBACK, guess_count 0).
+  - `lazy-activation.test.ts` — **M3**: first-start activation of a SCHEDULED puzzle under `FOR UPDATE` with the documented guards (date, SCHEDULED, `expires_at > now()`, no other ACTIVE for the date).
+- **Driver seam** (`tests/integration/helpers.ts`): default = app production path (`@neondatabase/serverless` Pool + `drizzle-orm/neon-serverless`); `LOCAL_PG=1` = `drizzle-orm/node-postgres` + `pg` Pool for local executions. **Empirically confirmed: the neon driver is WebSocket-proxy-only** (connects to `wss://<host>/v2`; a plain local Postgres cannot be reached by it) — so local semantics proofs run via the pg path, and the Neon WebSocket transport verification stays at the B7 external gate. Transactional sequences use dedicated connections (`connectClient`) — pooled drizzle dispatch would break BEGIN/COMMIT spans.
+- **Execution:** migrations applied to a throwaway local PostgreSQL 17 (embedded binaries under `.cache/pg`, gitignored; downloaded 2026-08-23, PG 17.2.0) via `bun run db:migrate`; `LOCAL_PG=1 bun run test:integration` → 7/7 passed; integration files auto-skip without `DATABASE_URL`. Throwaway server stopped and cleaned up.
+- **CI:** new `integration` job (gated on `secrets.DATABASE_URL`, applies migrations then `test:integration` against the non-prod DB — the neon driver path). Unit job stays DB-free. `fileParallelism: false` in vitest (locks/fixtures are serial).
+- Phase 1 will re-point the NG9 lock-order tests at the real `submitGuess`/`finalizePuzzle` services; the asserted transaction contract is what they must preserve.
+
 ## Hono
 
 Use **Hono** as the dedicated API/business boundary beneath SvelteKit's `/api/*` routes.
