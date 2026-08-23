@@ -59,6 +59,13 @@ jobs:
           bun-version: latest
       - name: Install
         run: bun install --frozen-lockfile
+      # Redacted connection diagnostics: URL facts (no credentials) + the pg
+      # driver error (code + first line). Fails before the migration so the
+      # runner log carries the actual cause (run-3 failure surfaced no message
+      # between 'Using pg driver' and the exit).
+      - name: DB connection probe (redacted diagnostics)
+        if: ${{ env.DATABASE_URL != '' }}
+        run: bun ./scripts/ci-db-probe.ts
       - name: Apply migrations (non-production database)
         if: ${{ env.DATABASE_URL != '' }}
         run: bun run db:migrate
