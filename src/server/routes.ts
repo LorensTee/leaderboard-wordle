@@ -33,6 +33,9 @@ export type AppEnv = {
 
 export const app = new Hono<AppEnv>();
 
+// NG21 — requestId FIRST (every downstream envelope references it).
+app.use('*', requestIdMiddleware);
+
 // NG19 — 30s timeout → JSON 408 envelope (via HTTPException carrying the response).
 const TIMEOUT_MS = 30_000;
 app.use(
@@ -67,9 +70,6 @@ app.use(
 			)
 	})
 );
-
-// NG21 — requestId on every request (first, so envelopes can reference it).
-app.use('*', requestIdMiddleware);
 
 // NG22 — secure-header baseline (+ production-only HSTS over TLS).
 app.use('*', securityHeadersMiddleware);

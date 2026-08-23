@@ -234,6 +234,29 @@ Version-relevant corrections to this document:
 - **CI:** new `integration` job (gated on `secrets.DATABASE_URL`, applies migrations then `test:integration` against the non-prod DB — the neon driver path). Unit job stays DB-free. `fileParallelism: false` in vitest (locks/fixtures are serial).
 - Phase 1 will re-point the NG9 lock-order tests at the real `submitGuess`/`finalizePuzzle` services; the asserted transaction contract is what they must preserve.
 
+### Phase 0 B7 — exit-criteria verification (2026-08-23, v19 §14 order)
+
+| # | Gate | Status | Evidence |
+|---|---|---|---|
+| 1 | package installation / `bun.lock` | ✅ PASS | `bun.lock` committed (e185dbf); reproducible `bun install --frozen-lockfile` (CI) |
+| 2 | TypeScript check | ✅ PASS | `bun run check` 0 errors (post-B7 re-run) |
+| 3 | Cloudflare production build | ✅ PASS | `vite build` + adapter-cloudflare → `.svelte-kit/cloudflare/_worker.js` (`✓ built in 4.57s`) |
+| 4 | Wrangler configuration validation | ✅ PASS | `wrangler deploy --dry-run` parsed config + bundle; `types:check` is the CI gate. **Note:** `wrangler types` folds local `.dev.vars` into `Env` — the committed `worker-configuration.d.ts` is the clean CI baseline; regenerate locally only when bindings change (never commit a `.dev.vars`-dependent file) |
+| 5 | Neon connection | ⛔ EXTERNAL | requires Neon `DATABASE_URL` (credential gate) |
+| 6 | migration application | ✅ PASS (pg) / ⛔ Neon | applied twice to throwaway PostgreSQL 17 (embedded, `.cache/pg`); Neon apply = external |
+| 7 | transaction + `SELECT ... FOR UPDATE` proof | ✅ PASS (pg) / ⛔ Neon-WS | real lock wait 424 ms + READ COMMITTED visibility (B6); neon WS transport = external |
+| 8 | Hono bridge | ✅ PASS | live smoke: 404 envelope + requestId + headers; CSRF 403 vs passed flows; `app.request` unit tests |
+| 9 | Better Auth config/session resolution | ✅ PASS (structural) | mount live (`get-session` 200 null, `sign-out` 200, `sign-in/social` reached OAuth state → DB layer), hooks session resolution on `/`; live Google flow = external |
+| 10 | CSRF / error / timeout / body-limit / secure headers | ✅ PASS | unit (4 tests incl. 413 + requestId, 403 CSRF, 404 envelope, headers) + live smoke (B3/B4). requestId reordered FIRST so 408/413 envelopes carry it (B7 fix) |
+| 11 | word-list generation | ✅ PASS | 20 words source → artifact; rule-enforcing script |
+| 12 | answer-pool secrecy / build inspection | ✅ PASS | `verify:bundle` (post-build grep) + unit separation test |
+| 13 | lazy activation (M3) | ✅ PASS | integration green |
+| 14 | midnight concurrency tests (NG9) | ✅ PASS | both orders green (B6) |
+| 15 | CI | ✅ PASS (authored) / ⏳ not executed here | `.github/workflows/ci.yml` (unit-and-build, integration gated on `secrets.DATABASE_URL`, e2e); GitHub execution requires a push — cannot run from this sandbox |
+| 16 | live Google OAuth | ⛔ EXTERNAL | requires `GOOGLE_CLIENT_ID/SECRET` (+ `BETTER_AUTH_SECRET`), real redirect/callback flow |
+
+**Externally blocked items (need user-provided credentials):** Neon `DATABASE_URL` (5–7), Google OAuth (16), GitHub push for CI execution (15). All structural gates PASS. B7 also introduced the middleware test suite (18 unit tests) and fixed the requestId ordering.
+
 ## Hono
 
 Use **Hono** as the dedicated API/business boundary beneath SvelteKit's `/api/*` routes.
