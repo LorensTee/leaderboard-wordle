@@ -4,7 +4,11 @@
 // gates form content-types — this JSON boundary needs its own check.
 import type { Context } from 'hono';
 
-const ALLOWED_SEC_FETCH_SITE = new Set(['same-origin', 'none']);
+// Only same-origin is acceptable for unsafe methods. `Sec-Fetch-Site: none`
+// is ambiguous (opaque origins, non-browser clients) — accepting it for
+// mutations would be a fail-open (it may accompany cross-site requests from
+// contexts that cannot compute an origin).
+const ALLOWED_SEC_FETCH_SITE = new Set(['same-origin']);
 
 /** Extra allowed origins (dev servers, etc.). Never '*' in production. */
 export function allowedOrigins(): string[] {
@@ -34,7 +38,9 @@ export function isSameOriginRequest(c: Context): boolean {
 		return origin === ownOrigin || allowedOrigins().includes(origin);
 	}
 
-	// Neither signal: not a browser. Strict in production, permissive in dev.
-	const isProduction = c.req.header('x-forwarded-proto') === 'https' || url.protocol === 'https:';
-	return !isProduction;
+	// Neither signal present: this is not a browser-initiated request.
+	// Reject unconditionally — no dev-permissive heuristic here: the previous
+	// production-detection via x-forwarded-proto was client-spoofable
+	// (fail-open). Tooling/tests must send an Origin header.
+	return false;
 }

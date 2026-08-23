@@ -24,11 +24,11 @@ describe('isSameOriginRequest (NG4)', () => {
 		expect(isSameOriginRequest(c)).toBe(true);
 	});
 
-	it('accepts Sec-Fetch-Site: none (browser navigation/direct entry)', async () => {
+	it('rejects Sec-Fetch-Site: none for mutations (ambiguous context, fail-closed)', async () => {
 		const c = await makeContext('http://localhost:5173/api/game/start', {
 			'sec-fetch-site': 'none'
 		});
-		expect(isSameOriginRequest(c)).toBe(true);
+		expect(isSameOriginRequest(c)).toBe(false);
 	});
 
 	it('rejects a cross-site POST (Sec-Fetch-Site: cross-site)', async () => {
@@ -59,13 +59,10 @@ describe('isSameOriginRequest (NG4)', () => {
 		}
 	});
 
-	it('rejects headerless mutations in production (https)', async () => {
-		const c = await makeContext('https://leaderboard-wordle.example/api/game/start', {});
-		expect(isSameOriginRequest(c)).toBe(false);
-	});
-
-	it('allows headerless mutations in local dev (http)', async () => {
+	it('rejects headerless mutations unconditionally (no spoofable heuristic)', async () => {
+		// Neither Sec-Fetch-Site nor Origin present — always reject unsafe
+		// methods (the old x-forwarded-proto-based dev allowance was fail-open).
 		const c = await makeContext('http://localhost:5173/api/game/start', {});
-		expect(isSameOriginRequest(c)).toBe(true);
+		expect(isSameOriginRequest(c)).toBe(false);
 	});
 });

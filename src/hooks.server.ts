@@ -5,15 +5,21 @@ import type { Handle } from '@sveltejs/kit';
 import { getAuth, type AuthBindings } from '$server/auth/auth';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const auth = getAuth((event.platform?.env ?? {}) as unknown as AuthBindings);
-
-	const session = await auth.api.getSession({
-		headers: event.request.headers
-	});
-
-	// Docs pattern (integrations/svelte-kit.mdx): populate locals from getSession.
-	event.locals.session = session?.session ?? null;
-	event.locals.user = session?.user ?? null;
+	// Fast path: without the Better Auth session cookie there is nothing to
+	// resolve (keeps asset requests and logged-out browsing DB-free).
+	const cookie = event.request.headers.get('cookie') ?? '';
+	if (!cookie.includes('better-auth.session_token')) {
+		event.locals.session = null;
+		event.locals.user = null;
+	} else {
+		const auth = getAuth((event.platform?.env ?? {}) as unknown as AuthBindings);
+		const session = await auth.api.getSession({
+			headers: event.request.headers
+		});
+		// Docs pattern (integrations/svelte-kit.mdx): populate locals from getSession.
+		event.locals.session = session?.session ?? null;
+		event.locals.user = session?.user ?? null;
+	}
 
 	return resolve(event);
 };

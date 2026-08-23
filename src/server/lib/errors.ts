@@ -2,6 +2,7 @@
 // Every API error response has the shape:
 //   { error: { code, message, requestId, issues? } }
 import type { Context } from 'hono';
+import { HTTPException } from 'hono/http-exception';
 
 export type ErrorEnvelope = {
 	error: {
@@ -69,6 +70,10 @@ export function resolveError(err: unknown, requestId: string): { status: number;
 
 /** Centralized onError: JSON envelope for every thrown error (NG21). */
 export function onErrorHandler(err: Error, c: Context): Response {
+	// Custom onError replaces Hono's default, which is the only place
+	// HTTPException responses (e.g. the 408 timeout envelope) are preserved.
+	if (err instanceof HTTPException) return err.getResponse();
+
 	const requestId = c.get('requestId') ?? 'unknown';
 	const { status, body } = resolveError(err, requestId);
 	// Internal errors keep a server-side trace via the requestId.

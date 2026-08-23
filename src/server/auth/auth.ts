@@ -18,12 +18,21 @@ export type AuthBindings = {
 
 // Inert fallback so this module can be imported without a .env (schema
 // generation, structural tests). Never a real credential.
-const INERT_DB_URL = 'postgresql://unused:unused@localhost:5432/unused';
+export const INERT_DB_URL = 'postgresql://unused:unused@localhost:5432/unused';
+
+// Dev/test-only session secret. In production (folded to 'production' at
+// build time) a missing BETTER_AUTH_SECRET is a hard failure — a published
+// deterministic secret would allow session forgery (security-review finding).
+const DEV_SECRET = 'dev-only-secret-change-me';
 
 export function createAuth(env: AuthBindings) {
+	const secret = env.BETTER_AUTH_SECRET ?? (process.env.NODE_ENV === 'production' ? undefined : DEV_SECRET);
+	if (!secret) {
+		throw new Error('BETTER_AUTH_SECRET is required (refusing to start with a known fallback secret)');
+	}
 	return betterAuth({
 		appName: 'Leaderboard Wordle',
-		secret: env.BETTER_AUTH_SECRET ?? 'dev-only-secret-change-me',
+		secret,
 		baseURL: env.BETTER_AUTH_URL ?? 'http://localhost:5173',
 		database: drizzleAdapter(
 			createDb(env.DATABASE_URL || INERT_DB_URL),

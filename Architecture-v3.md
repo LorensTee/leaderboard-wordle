@@ -257,6 +257,19 @@ Version-relevant corrections to this document:
 
 **Externally blocked items (need user-provided credentials):** Neon `DATABASE_URL` (5–7), Google OAuth (16), GitHub push for CI execution (15). All structural gates PASS. B7 also introduced the middleware test suite (18 unit tests) and fixed the requestId ordering.
 
+### Phase 0 B7 follow-up — independent + security review fixes (2026-08-23)
+
+Independent (`tool:review`, verdict warn) and security (`tool:security_review`, verdict block: 1 critical / 1 high / 3 medium) reviews ran against e185dbf..HEAD. Fixes applied:
+
+- **CRITICAL — hardcoded fallback auth secret usable in production** (`auth.ts`): now fails hard — `createAuth` throws when `BETTER_AUTH_SECRET` is missing under `NODE_ENV === 'production'` (folded at build time); dev/tooling keep the explicit `DEV_SECRET`. Restored `auth:schema` (the B4 factory refactor had broken the CLI's config convention) via a **generation-only** `auth.generate.ts` (never imported by app code); regenerated schema is byte-identical to the committed file. Unit tests: `tests/unit/auth.test.ts` (3).
+- **HIGH — CSRF fail-open** (`lib/origin.ts`): removed the spoofable `x-forwarded-proto` dev-permissive heuristic — unsafe methods with **no** Origin/Sec-Fetch-Site are now rejected unconditionally, and `Sec-Fetch-Site: none` is rejected for mutations (ambiguous context). Live probes: headerless POST → 403, `Sec-Fetch-Site: none` POST → 403, same-origin POST → passes.
+- **HIGH — 408 timeout degraded to 500 INTERNAL** (`lib/errors.ts`): custom `onError` replaces Hono's default, which is the only place `HTTPException` responses are preserved — `onErrorHandler` now returns `err.getResponse()` for `HTTPException`; regression test in `middleware.test.ts`.
+- **MEDIUM — per-request DB session lookup in hooks** (`hooks.server.ts`): cookie fast-path — without the `better-auth.session_token` cookie, `locals` are nulled without touching Better Auth/the DB (keeps asset requests and logged-out browsing DB-free, fixes dev-without-DB page breakage).
+- **MEDIUM — integration TRUNCATE parallelism**: already addressed at B6 (`fileParallelism: false`).
+- **Accepted/documented LOW+INFO items** (no code change): answer-pool RLS deferred to Phase 5 hardening (server-only access path + bundle-secrecy gates in place); error-envelope `issues` passthrough is by design for validation; CI `integration` job targets the non-production DB from `secrets.DATABASE_URL` (operator boundary); `verify:bundle`/word-list scripts only ever hold public words.
+
+Verification after fixes: `bun run check` 0 errors; unit suite 21/21 (5 files); production build green; `auth:schema` regenerates identically; live dev-server probes above.
+
 ## Hono
 
 Use **Hono** as the dedicated API/business boundary beneath SvelteKit's `/api/*` routes.
