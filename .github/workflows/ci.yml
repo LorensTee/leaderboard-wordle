@@ -67,8 +67,11 @@ jobs:
         if: ${{ env.DATABASE_URL != '' }}
         run: bun ./scripts/ci-db-probe.ts
       - name: Apply migrations (non-production database)
+        # programmatic migrator — drizzle-kit CLI exits 1 silently on this
+        # runner (~140ms after 'Using pg driver', no message); ci-migrate.ts
+        # prints the real error/stack if anything fails.
         if: ${{ env.DATABASE_URL != '' }}
-        run: bun run db:migrate
+        run: bun ./scripts/ci-migrate.ts
       - name: Integration tests (FOR UPDATE, NG9 lock orders, M3, NG2/NG3)
         if: ${{ env.DATABASE_URL != '' }}
         run: bun run test:integration
