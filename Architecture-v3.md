@@ -178,6 +178,16 @@ Version-relevant corrections to this document:
 - Zod is on **v4**: `better-auth` 1.7.1 depends on `zod ^4.3.6`; `drizzle-zod` 0.8.3 supports `zod ^3.25 || ^4`.
 - Cloudflare/TypeScript tooling: `@cloudflare/workers-types` v5 (peer of wrangler 4.125.0) plus Wrangler-generated binding types (`wrangler types` → `worker-configuration.d.ts`), surfaced via `App.Platform` in `src/app.d.ts`.
 
+### Phase 0 B1 (2026-08-23)
+
+- `wrangler.toml` created: name `leaderboard-wordle`, `main = ".svelte-kit/cloudflare/_worker.js"`, `compatibility_date = "2026-08-23"`, `compatibility_flags = ["nodejs_compat"]` (Better Auth/AsyncLocalStorage), `[assets]` → `.svelte-kit/cloudflare` (Workers Static Assets; binding `ASSETS`), `[triggers] crons = ["0 16 * * *"]` — Asia/Manila midnight in UTC-only Cloudflare Cron (**NG1 encoded**). Validated with `wrangler deploy --dry-run`.
+- **Binding types:** `wrangler types --include-runtime=false` → `worker-configuration.d.ts` (env-only). Full workerd **runtime** types were tried first but conflict with the DOM lib in the SvelteKit program; env-only types coexist. Regeneration: `bun run types`; CI gate: `bun run types:check`.
+- `tsconfig.json`: `checkJs: false` — the generated `worker-configuration.d.ts` references the built worker via `Cloudflare.GlobalProps.mainModule`, which pulled the `.svelte-kit` build output into `svelte-check` (470 errors under `checkJs: true`). `.ts`/`.svelte` checking is unaffected.
+- DevDeps added: `wrangler` 4.125.0, `@cloudflare/workers-types` 5.20260823.1, `@types/node` 26.x (wrangler's recommendation for `nodejs_compat`).
+- `src/app.d.ts`: `App.Platform.env: Env` (the adapter's ambient types provide `ctx`/`context`/`caches`/`cf` and deliberately leave `env` app-owned).
+- `.env.example`: `DATABASE_URL` (Neon WebSocket), `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `ADMIN_EMAIL` (NG18).
+- FSD-minimal skeleton directories created (`src/lib/app`, `src/lib/shared/{ui,lib,api,data,config}`, `src/server/{auth,middleware,lib,game,puzzle,leaderboard,profile,admin,db,data}`) with `.gitkeep`; no invented code (per proposed-repo-tree).
+
 ## Hono
 
 Use **Hono** as the dedicated API/business boundary beneath SvelteKit's `/api/*` routes.
