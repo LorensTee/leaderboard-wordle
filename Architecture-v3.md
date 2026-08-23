@@ -242,9 +242,9 @@ Version-relevant corrections to this document:
 | 2 | TypeScript check | ✅ PASS | `bun run check` 0 errors (post-B7 re-run) |
 | 3 | Cloudflare production build | ✅ PASS | `vite build` + adapter-cloudflare → `.svelte-kit/cloudflare/_worker.js` (`✓ built in 4.57s`) |
 | 4 | Wrangler configuration validation | ✅ PASS | `wrangler deploy --dry-run` parsed config + bundle; `types:check` is the CI gate. **Note:** `wrangler types` folds local `.dev.vars` into `Env` — the committed `worker-configuration.d.ts` is the clean CI baseline; regenerate locally only when bindings change (never commit a `.dev.vars`-dependent file) |
-| 5 | Neon connection | ⛔ EXTERNAL | requires Neon `DATABASE_URL` (credential gate) |
-| 6 | migration application | ✅ PASS (pg) / ⛔ Neon | applied twice to throwaway PostgreSQL 17 (embedded, `.cache/pg`); Neon apply = external |
-| 7 | transaction + `SELECT ... FOR UPDATE` proof | ✅ PASS (pg) / ⛔ Neon-WS | real lock wait 424 ms + READ COMMITTED visibility (B6); neon WS transport = external |
+| 5 | Neon connection | ✅ PASS (2026-08-23) | live: `db=neondb`, Neon `ap-southeast-1`, non-destructive probe via pg; dedicated non-prod DB (user-confirmed reset-safe) |
+| 6 | migration application | ✅ PASS | applied on live Neon via `bun run db:migrate` (drizzle-kit → `[✓] migrations applied successfully!`); previously also proven on throwaway PG 17 |
+| 7 | transaction + `SELECT ... FOR UPDATE` proof | ✅ PASS (live Neon WS) | integration suite through the REAL `@neondatabase/serverless` WebSocket + `drizzle-orm/neon-serverless` path — FOR UPDATE serialization (1059 ms lock wait, READ COMMITTED visibility), NG9 order A/B, M3, NG2/NG3: **7/7 on live Neon** (2026-08-23) |
 | 8 | Hono bridge | ✅ PASS | live smoke: 404 envelope + requestId + headers; CSRF 403 vs passed flows; `app.request` unit tests |
 | 9 | Better Auth config/session resolution | ✅ PASS (structural) | mount live (`get-session` 200 null, `sign-out` 200, `sign-in/social` reached OAuth state → DB layer), hooks session resolution on `/`; live Google flow = external |
 | 10 | CSRF / error / timeout / body-limit / secure headers | ✅ PASS | unit (4 tests incl. 413 + requestId, 403 CSRF, 404 envelope, headers) + live smoke (B3/B4). requestId reordered FIRST so 408/413 envelopes carry it (B7 fix) |
@@ -253,7 +253,7 @@ Version-relevant corrections to this document:
 | 13 | lazy activation (M3) | ✅ PASS | integration green |
 | 14 | midnight concurrency tests (NG9) | ✅ PASS | both orders green (B6) |
 | 15 | CI | ✅ PASS (authored) / ⏳ not executed here | `.github/workflows/ci.yml` (unit-and-build, integration gated on `secrets.DATABASE_URL`, e2e); GitHub execution requires a push — cannot run from this sandbox |
-| 16 | live Google OAuth | ⛔ EXTERNAL | requires `GOOGLE_CLIENT_ID/SECRET` (+ `BETTER_AUTH_SECRET`), real redirect/callback flow |
+| 16 | live Google OAuth | ✅ PASS (2026-08-23) | full live flow on the dev server: sign-in/social → Google authorize URL (PKCE S256, real client_id, callback `http://localhost:5173/api/auth/callback/google`) → user-assisted consent → session issued (get-session: user tee.johnlor@gmail.com, `emailVerified: true`, `role: player`, `avatarEmoji: 🙂`, onboarding fields null) → Neon rows verified: `user`/`session` (expiry matches)/`account` (provider google). Per-provider `requireEmailVerification` gate confirmed; `ADMIN_EMAIL` (dedicated account) ≠ signed-in email → no promotion (correct). Temp dev page removed; no committed code touched |
 
 **Externally blocked items (need user-provided credentials):** Neon `DATABASE_URL` (5–7), Google OAuth (16), GitHub push for CI execution (15). All structural gates PASS. B7 also introduced the middleware test suite (18 unit tests) and fixed the requestId ordering.
 
