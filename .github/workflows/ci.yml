@@ -13,14 +13,12 @@ jobs:
   unit-and-build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
       - name: Install
         run: bun install --frozen-lockfile
-      - name: Wrangler types in sync (wrangler.toml ↔ worker-configuration.d.ts)
-        run: bun run types:check
       - name: Word-list artifact (src/lib/shared/data/valid-guesses.json)
         run: bun run word-list
       - name: Typecheck
@@ -29,6 +27,13 @@ jobs:
         run: bun run test:unit
       - name: Production build (Cloudflare Workers)
         run: bun run build
+      # types:check compares against the committed worker-configuration.d.ts,
+      # whose Cloudflare.GlobalProps.mainModule block is only emitted when
+      # .svelte-kit/cloudflare/_worker.js exists (post-build) — on a fresh
+      # checkout the hash+content differ and the check would fail. Kept AFTER
+      # the build by design (wrangler 4.125.0 behavior, verified 2026-08-23).
+      - name: Wrangler types in sync (wrangler.toml ↔ worker-configuration.d.ts)
+        run: bun run types:check
       - name: Answer-pool secrecy proof (absent from build output)
         run: bun run verify:bundle
 
@@ -48,7 +53,7 @@ jobs:
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
@@ -65,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: unit-and-build
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
