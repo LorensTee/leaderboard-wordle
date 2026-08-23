@@ -1,0 +1,26 @@
+# Valid-guesses source (canonical, PUBLIC — safe for the client bundle).
+# Rules: one lowercase 5-letter word per line; `#` lines are comments.
+#
+# SAMPLE DATA — replace with the real imported list before Phase 1.
+# NG16 provenance for the real import (upstream source, version/commit,
+# license, import date, filtering rules) must be recorded here.
+about
+after
+again
+below
+candy
+drain
+early
+flame
+grain
+hello
+juice
+light
+mount
+north
+ocean
+plant
+quick
+river
+stone
+tiger

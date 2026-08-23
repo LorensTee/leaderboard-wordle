@@ -215,6 +215,14 @@ Version-relevant corrections to this document:
 - **Structural verification (all credential-free):** GET / → 200 (hooks + session resolution run); GET `/api/auth/get-session` → 200 `null`; POST `/api/auth/sign-out` without Origin → 200 (**CSRF `/api/auth` exclusion works**); POST `/api/auth/sign-in/social` → 500 **only** because the inert `DATABASE_URL` cannot connect — the stack trace proves the full path: `generateGenericState → createVerificationValue → @better-auth/drizzle-adapter → drizzle-orm/neon-serverless (NeonPreparedQuery)`, inserting into `verification`. `bun run check` 0 errors.
 - **External gate (B7):** live Google OAuth flow + real Neon connection require credentials; `.dev.vars` (gitignored) holds local dummy values.
 
+### Phase 0 B5 (2026-08-23)
+
+- **CI (NG23)** `.github/workflows/ci.yml`: job `unit-and-build` (bun install --frozen-lockfile → `types:check` → `word-list` → `check` → `test:unit` → `build` → `verify:bundle`) and job `e2e` (Playwright chromium + `test:e2e` against `vite preview`, needs `unit-and-build`). Integration tests against a non-production DB are wired in B6 (credentials as GitHub secrets).
+- **Test harness:** `vitest` 4 (vitest.config.ts, node env, `tests/unit` + `tests/security`) — 14 unit tests: NG4 origin validation (7), NG21 error envelope (4), NC3/NG7 word-list artifact + private-pipeline separation (3). `@playwright/test` + playwright.config.ts + `tests/e2e/smoke.spec.ts` (homepage + NG21 404 envelope through the full chain). B6 adds the midnight lock-order, FOR UPDATE, lazy-activation, and adversarial suites.
+- **Word-list tooling (NC3/NG7):** `scripts/build-word-list.ts` (canonical `src/server/data/valid-guesses.source.txt` → public artifact `src/lib/shared/data/valid-guesses.json`; build-fails on non-lowercase-5-letter or duplicates; sorted/deduped) — sample source currently (provenance TODO for the real import, recorded in the file header). Private answer pool: `scripts/seed/` (gitignored `*.txt`, README documents NC3/NG16 provenance rules).
+- **Bundle-secrecy proof:** `scripts/verify-bundle-secrecy.ts` (`bun run verify:bundle`, CI gate after build) — greps all build output for answer-pool words; public artifact is client-side by design. Unit test proves `src/` never references the seed pipeline.
+- `tests/integration/` + `tests/security/` dirs scaffolded for B6.
+
 ## Hono
 
 Use **Hono** as the dedicated API/business boundary beneath SvelteKit's `/api/*` routes.

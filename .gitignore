@@ -30,3 +30,9 @@ vite.config.ts.timestamp-*
 
 # Local tool caches (wrangler/miniflare XDG config redirected into workspace)
 .cache/
+
+# Private answer-pool seed inputs (NC3) — never commit
+scripts/seed/*.txt
+
+# Private answer-pool seed inputs (NC3) — never commit
+scripts/seed/*.txt

@@ -1,0 +1,50 @@
+# NG23 — CI pipeline: install → types → check → unit tests → build →
+# bundle-secrecy proof → e2e (Playwright). All DB-dependent integration
+# tests run against a NON-production database (credentials injected as
+# GitHub secrets; see B6 integration job extension).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  unit-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install
+        run: bun install --frozen-lockfile
+      - name: Wrangler types in sync (wrangler.toml ↔ worker-configuration.d.ts)
+        run: bun run types:check
+      - name: Word-list artifact (src/lib/shared/data/valid-guesses.json)
+        run: bun run word-list
+      - name: Typecheck
+        run: bun run check
+      - name: Unit tests (no DB)
+        run: bun run test:unit
+      - name: Production build (Cloudflare Workers)
+        run: bun run build
+      - name: Answer-pool secrecy proof (absent from build output)
+        run: bun run verify:bundle
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: unit-and-build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install
+        run: bun install --frozen-lockfile
+      - name: Install Playwright browsers
+        run: bunx playwright install --with-deps chromium
+      - name: Build
+        run: bun run build
+      - name: E2E smoke (production preview → Hono chain)
+        run: bun run test:e2e
