@@ -197,6 +197,15 @@ Version-relevant corrections to this document:
 - **Structural verification:** `bun run check` 0 errors; migration SQL reviewed. **Live apply is an external gate** (B6/credentials): no Postgres/docker available in this sandbox (docker daemon socket denied; no `postgres`/`psql` binaries) — the sandbox cannot run a local DB, so migration application + Neon WS `SELECT ... FOR UPDATE` verification require the Neon `DATABASE_URL` at the external gate.
 - Scripts: `bun run auth:schema`, `db:generate`, `db:migrate` (plus `types`/`types:check` from B1).
 
+### Phase 0 B3 (2026-08-23)
+
+- **Hono bridge** (`src/routes/api/[...path]/+server.ts`): the single platform boundary — `app.fetch(request, platform.env → HonoBindings, platform.ctx)`; one `bridge` impl exported as explicit `GET/POST/PUT/PATCH/DELETE/OPTIONS/HEAD` (the installed kit does **not** support an `ALL` export).
+- **Composed app** (`src/server/routes.ts`): middleware order = requestId (NG21) → timeout 30 s → JSON 408 (NG19) → bodyLimit 64 KB → JSON 413 (NG20) → secure headers (NG22) → HSTS over TLS only → CSRF (NG4). Centralized `onError`/`notFound` emit the `{ error: { code, message, requestId, issues? } }` envelope (NG21); internal errors log with requestId, never leak details.
+- **CSRF** (`middleware/csrf.ts` + `lib/origin.ts`): unsafe methods rejected unless same-origin — Sec-Fetch-Site ∈ {same-origin, none}, Origin === request origin or `ALLOWED_ORIGINS`; requests with neither signal pass only outside TLS (dev); `/api/auth/*` excluded (OAuth flow).
+- **Alias** `$server` → `./src/server` configured in `vite.config.ts` (`sveltekit({ alias })`) — kit 2.62+ ignores `svelte.config.js` when options are passed via the Vite config (verified; the file was removed).
+- **Verified by live smoke test** (dev server, port 5199): GET /api/nope → 404 JSON envelope + `x-request-id` + nosniff/DENY/referrer-policy; POST with cross-site Origin → **403 CSRF** envelope; POST with `Sec-Fetch-Site: cross-site` → **403**; POST with same-origin Origin → 404. `bun run check` 0 errors; production build green.
+- Dev-environment note: adapter-cloudflare's dev `platformProxy` (miniflare) needs a writable registry; this sandbox blocks `~/.config/.wrangler`, so dev runs with `XDG_CONFIG_HOME=.cache/xdg-config` (gitignored via `.cache/`).
+
 ## Hono
 
 Use **Hono** as the dedicated API/business boundary beneath SvelteKit's `/api/*` routes.

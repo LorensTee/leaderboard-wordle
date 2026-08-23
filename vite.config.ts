@@ -12,7 +12,13 @@ export default defineConfig({
 			},
 
 			// Cloudflare Workers adapter — see https://svelte.dev/docs/kit/adapter-cloudflare
-			adapter: adapter()
+			adapter: adapter(),
+
+			// Kit options passed via the Vite config (kit 2.62+ — svelte.config.js
+			// is ignored when options are passed here).
+			alias: {
+				$server: './src/server'
+			}
 		})
 	]
 });

@@ -27,3 +27,6 @@ test-results
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Local tool caches (wrangler/miniflare XDG config redirected into workspace)
+.cache/
