@@ -38,7 +38,13 @@ jobs:
     # B6/B7 external gate — runs the DB integration suite (migration applied
     # first) against a NON-production database; exercises the app's real
     # neon-serverless driver path.
-    if: ${{ secrets.DATABASE_URL != '' }}
+    #
+    # Context rules (docs.github.com contexts reference): `secrets` and `env`
+    # are NOT available in `jobs.<job_id>.if` (only github/needs/vars/inputs).
+    # `secrets` IS available in job-level `env`, and `env` IS available in
+    # step-level `if` — so the secret is injected as a job env var and the
+    # gate lives on the DB steps. Without the secret the steps skip (job
+    # reports success with skipped steps).
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
@@ -49,8 +55,10 @@ jobs:
       - name: Install
         run: bun install --frozen-lockfile
       - name: Apply migrations (non-production database)
+        if: ${{ env.DATABASE_URL != '' }}
         run: bun run db:migrate
       - name: Integration tests (FOR UPDATE, NG9 lock orders, M3, NG2/NG3)
+        if: ${{ env.DATABASE_URL != '' }}
         run: bun run test:integration
 
   e2e:
