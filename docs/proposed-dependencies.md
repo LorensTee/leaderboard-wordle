@@ -18,7 +18,7 @@ All packages below were verified against live npm registry manifests (`registry.
 | `vite` | 8.2.2 | vite.dev (repo `vitejs/vite`) | ✅ peer of `@sveltejs/kit` (2.70.3 accepts vite ^5–^8) + `@sveltejs/vite-plugin-svelte` 7.3.0 (peer `vite ^8`, `svelte ^5.46.4`) |
 | `better-auth` | 1.7.1 | better-auth.com | ✅ `./svelte-kit` + `./adapters/drizzle` exports; bundles `@better-auth/drizzle-adapter` 1.7.1; peers `drizzle-orm ^0.45.2`, `drizzle-kit >=0.31.4`, `@sveltejs/kit ^2`, `svelte ^4\|\|^5`; Cloudflare Workers via `nodejs_compat` |
 | `@neondatabase/serverless` | 1.1.0 | neon.tech/docs/serverless | ✅ single package; WebSocket `Pool`/`Client` for interactive transactions; HTTP `neon()` is one-shot only — keep WebSocket strategy |
-| `drizzle-orm` | 0.45.2 | orm.drizzle.team | ✅ `./neon` + `./neon-http` exports; peer `@neondatabase/serverless >=0.10.0` |
+| `drizzle-orm` | 0.45.2 | orm.drizzle.team | ✅ **0.45 renamed the driver modules**: WebSocket serverless driver = `drizzle-orm/neon-serverless` (with `@neondatabase/serverless` `Pool`); `drizzle-orm/neon` is now the Neon-Auth/RLS module (`neon-auth`, `rls`); HTTP one-shot = `drizzle-orm/neon-http`. Peer `@neondatabase/serverless >=0.10.0` |
 | `drizzle-kit` | 0.31.10 | orm.drizzle.team | ✅ peer range satisfied by better-auth |
 | `hono` | 4.13.3 | hono.dev | ✅ v4; `./client` (RPC), `./timeout`, `./body-limit`, `./request-id`, `./secure-headers`, `./csrf`, `./cloudflare-workers` all present |
 | `zod` | 4.4.3 | zod.dev | ⚠️ **Zod 4 is current**; better-auth 1.7.1 depends on `zod ^4.3.6`; `drizzle-zod` 0.8.3 supports `zod ^3.25 \|\| ^4` |

@@ -16,7 +16,10 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"types": "wrangler types --include-runtime=false",
-		"types:check": "wrangler types --check --include-runtime=false"
+		"types:check": "wrangler types --check --include-runtime=false",
+		"auth:schema": "bunx auth@latest generate --config ./src/server/auth/auth.ts --output ./src/server/db/auth-schema.generated.ts --adapter drizzle --dialect postgresql -y",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^5.20260823.1",
@@ -24,10 +27,21 @@
 		"@sveltejs/kit": "^2.63.0",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",
 		"@types/node": "^26.2.0",
+		"@types/pg": "^8.23.1",
+		"dotenv": "^17.4.2",
+		"drizzle-kit": "^0.31.10",
+		"pg": "^8.23.0",
 		"svelte": "^5.56.1",
 		"svelte-check": "^4.6.0",
 		"typescript": "^6.0.3",
 		"vite": "^8.0.16",
 		"wrangler": "^4.125.0"
+	},
+	"dependencies": {
+		"@neondatabase/serverless": "^1.1.0",
+		"better-auth": "^1.7.1",
+		"drizzle-orm": "^0.45.2",
+		"drizzle-zod": "^0.8.3",
+		"zod": "^4.4.3"
 	}
 }

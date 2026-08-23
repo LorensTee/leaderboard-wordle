@@ -188,6 +188,15 @@ Version-relevant corrections to this document:
 - `.env.example`: `DATABASE_URL` (Neon WebSocket), `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `ADMIN_EMAIL` (NG18).
 - FSD-minimal skeleton directories created (`src/lib/app`, `src/lib/shared/{ui,lib,api,data,config}`, `src/server/{auth,middleware,lib,game,puzzle,leaderboard,profile,admin,db,data}`) with `.gitkeep`; no invented code (per proposed-repo-tree).
 
+### Phase 0 B2 (2026-08-23)
+
+- **Better Auth schema mechanism (v19 change #3):** `src/server/auth/auth.ts` (config: Google provider with per-provider `requireEmailVerification` — NG18, `drizzleAdapter`, `user.additionalFields` for `avatarEmoji`/`role`/`display_name_normalized`(unique, required:false)/`onboarding_completed_at`(required:false)) → `bunx auth@latest generate` (installed Better Auth CLI mechanism) → `src/server/db/auth-schema.generated.ts` (`user`/`account`/`session`/`verification`). The application does **not** hand-author these tables; config, generated schema, and migration stay in sync (NC2). Optionality uses `required: false` (this Better Auth version's field attribute — `nullable` is not part of the shape).
+- **App tables** (`src/server/db/schema.ts`): `answer_dictionary`, `daily_puzzles`, `games`, `guesses` per Architecture §374–491. Decisions: `uuid` PKs (`gen_random_uuid`); `puzzle_date` as DATE with `mode: 'string'` (ISO, no JS-Date TZ pitfalls at the Manila boundary); statuses as `pgEnum` (`puzzle_status`, `game_status`); `feedback` JSONB; the two NG3 candidate indexes plus UNIQUE indexes from the documented constraints; app-table FKs `ON DELETE no action`, Better Auth FKs cascade (generated).
+- **Client** (`src/server/db/client.ts`): `drizzle-orm/neon-serverless` + `@neondatabase/serverless` `Pool` (WebSocket interactive-transaction path, Architecture §343–361). Driver-module rename recorded in `proposed-dependencies.md`.
+- **Migration** `src/server/db/migrations/0000_init.sql` (8 tables): verified statically — NG2 `hint_letter_shape` CHECK, NG3 types/unique indexes, NG24 nullable `completion_time_ms`, `user.display_name_normalized` UNIQUE nullable, `verification` table (email verification), `session.token` UNIQUE, `account(issuer, account_id)` UNIQUE.
+- **Structural verification:** `bun run check` 0 errors; migration SQL reviewed. **Live apply is an external gate** (B6/credentials): no Postgres/docker available in this sandbox (docker daemon socket denied; no `postgres`/`psql` binaries) — the sandbox cannot run a local DB, so migration application + Neon WS `SELECT ... FOR UPDATE` verification require the Neon `DATABASE_URL` at the external gate.
+- Scripts: `bun run auth:schema`, `db:generate`, `db:migrate` (plus `types`/`types:check` from B1).
+
 ## Hono
 
 Use **Hono** as the dedicated API/business boundary beneath SvelteKit's `/api/*` routes.
