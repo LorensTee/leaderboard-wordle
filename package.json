@@ -18,6 +18,7 @@
 		"types": "wrangler types --include-runtime=false",
 		"types:check": "wrangler types --check --include-runtime=false",
 		"auth:schema": "bunx auth@latest generate --config ./src/server/auth/auth.generate.ts --output ./src/server/db/auth-schema.generated.ts --adapter drizzle --dialect postgresql -y",
+		"auth:check": "cp src/server/db/auth-schema.generated.ts .cache/auth-check.before.ts && bun run auth:schema && bun ./scripts/check-auth-schema.ts .cache/auth-check.before.ts src/server/db/auth-schema.generated.ts",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"word-list": "bun ./scripts/build-word-list.ts",

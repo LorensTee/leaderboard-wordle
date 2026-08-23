@@ -1,6 +1,6 @@
 # Leaderboard Wordle — Architecture & Technology Plan
 
-> **Implementation gate:** decisions that supersede wording in this document are tracked in `docs/contradictions-and-gaps.md` (open items NC1–NC3, NG1–NG21, M1–M5). Where this document conflicts with that file, the contradictions file governs until this document is updated.
+> **Implementation gate:** decisions that supersede wording in this document are tracked in `docs/contradictions-and-gaps.md` (open items NC1–NC3, NG1–NG25, M1–M5). Where this document conflicts with that file, the contradictions file governs until this document is updated.
 
 ## Project goal
 
@@ -259,6 +259,7 @@ Version-relevant corrections to this document:
 - **Test-count snapshot (corrected 2026-08-23):** per-commit suite totals (unit + integration): B6 = 14+7 = **21**; B7 (`c228196`) = 18+7 = **25** (the "25/25" figure referred to this pre-fix run); `c90716f` = 21+7 = **28**; final (`4b83167`+ — one unit test added: the deployed-Worker secret regression) = 22+7 = **29**. The "21 unit + 7 integration = 28 total" wording corresponded to the `c90716f` snapshot; the current suite is **22 unit + 7 integration = 29 total**.
 - **CI diagnostics retained by design:** `scripts/ci-db-probe.ts` (redacted connection facts + pg error) and `scripts/ci-migrate.ts` (programmatic migrator, full error output) stay in the workflow — they cost ~1 s and cleanly separated connection vs tooling failures during Gate 3; local dev continues with `bun run db:migrate` (drizzle-kit CLI).
 - **Gate 3 CLOSED (run 6 `6b646a2`, 2026-08-23):** all three jobs green — B7 checklist row 15 → PASS; security-relevant files remain byte-identical to reviewed `4b83167` (only CI scripts, workflows, migration metadata, and records changed since).
+- **Auth-schema regeneration drift — FOUND during the post-Phase-0 recheck (2026-08-23):** the Better Auth schema generator (`bunx auth@latest`, unpinned) is **not reproducible between fetches**: regenerating today produced fingerprint-only drift — the current CLI artifact drops `.defaultNow()` (6 occurrences) on auth-managed `created_at`/`updated_at` and the `/* @__PURE__ */` annotations that the committed `auth-schema.generated.ts` carries. No field/type changes (verified by diff). The committed file stays canonical; a **fingerprint-aware parity guard** `scripts/check-auth-schema.ts` + `bun run auth:check` now fails only on real (non-fingerprint) drift. **Action item:** on a networked machine run `bun add -d auth@1.7.1` (pins the CLI in `bun.lock`) so future regenerations are deterministic; re-run `bun run auth:check` to confirm parity. Do not commit regenerated output while only fingerprints differ.
 
 ### Phase 0 B7 follow-up — independent + security review fixes (2026-08-23)
 

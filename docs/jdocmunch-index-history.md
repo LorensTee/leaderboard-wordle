@@ -115,7 +115,7 @@ No incidents during indexing. All 22 incremental index calls (15 new + 7 refresh
 
 ## Version and freshness notes
 
-- All `Project version` values are `TBD` — no `bun.lock` exists yet (project has no installed dependencies). Re-run freshness checks after the first `bun install` populates `bun.lock`.
+- **2026-08-23 update:** `bun.lock` now exists (`bun install`, 21 commits through Phase 0). Installed core versions (authoritative: `bun.lock`): `@sveltejs/kit` 2.70.3, `svelte` 5.56.10, `vite` 8.2.2, `@sveltejs/vite-plugin-svelte` 7.3.0, `@sveltejs/adapter-cloudflare` 7.2.9, `hono` 4.13.3, `better-auth` 1.7.1, `drizzle-orm` 0.45.2 / `drizzle-kit` 0.31.10, `zod` 4.4.3, `@neondatabase/serverless` 1.1.0, `wrangler` 4.125.0, `@cloudflare/workers-types` 5.20260823.1, `tailwindcss` 4.3.3 (not yet installed — scheduled with Phase 1 UI work). The `Project version` column can now be filled per package from the lockfile; targeted freshness re-checks are pending per-package use.
 - `tanstack/query` section count dropped from 2,698 to 2,498 after refresh — docs reorganized upstream, not a data loss.
 - `lucide-icons/lucide` section count dropped from 5,603 to 5,324 after refresh — 13 docs deleted upstream, 47 new docs added.
 - `huntabyte/shadcn-svelte` docs include changelog entries through 2026-04, suggesting the index is current as of that period.

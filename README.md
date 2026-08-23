@@ -1,42 +1,45 @@
-# sv
+# Leaderboard Wordle
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Wordle with a leaderboard — SvelteKit + Hono + Drizzle/Neon on Cloudflare Workers.
 
-## Creating a project
+Full architecture: `Architecture-v3.md` · decisions & gaps: `docs/contradictions-and-gaps.md` · dependency intent: `docs/proposed-dependencies.md` (authoritative state = `bun.lock`).
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Stack (Phase-0 verified)
 
-```sh
-# create a new project
-npx sv create my-app
-```
+- SvelteKit 2.70 / Svelte 5 (runes) / Vite 8 / TypeScript 6 — scaffolded with `sv`
+- Hono 4 API behind the SvelteKit catch-all bridge (`src/routes/api/[...path]/+server.ts`)
+- Better Auth 1.7 (Google OIDC) — `src/server/auth/auth.ts`
+- Drizzle ORM 0.45 + Neon (`drizzle-orm/neon-serverless`, WebSocket driver)
+- Cloudflare Workers (`@sveltejs/adapter-cloudflare`, `wrangler.toml`, `nodejs_compat`)
+- Bun as runtime + package manager
 
-To recreate this project with the same configuration:
+## Prerequisites
 
-```sh
-# recreate this project
-npx sv@0.17.0 create --template minimal --types ts --no-install .
-```
+- bun ≥ 1.4
+- `.env` (see `.env.example`) and `.dev.vars` (local dev bindings, gitignored)
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
 ```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+bun install
+bun run dev        # http://localhost:5173 (requires .env + .dev.vars)
 ```
 
-## Building
-
-To create a production version of your app:
+## Checks
 
 ```sh
-npm run build
+bun run check            # svelte-check
+bun run test:unit        # unit tests (DB-free)
+bun run test:integration # Neon integration tests (requires DATABASE_URL, non-prod)
+bun run build            # Cloudflare Workers build
+bun run verify:bundle    # answer-pool secrecy proof (run after build)
+bun run types:check      # wrangler.toml ↔ worker-configuration.d.ts (no .env/.dev.vars)
+bun run auth:check       # Better Auth schema regeneration parity guard
+bun run db:generate      # drizzle-kit migration generation
 ```
 
-You can preview the production build with `npm run preview`.
+## CI
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+`.github/workflows/ci.yml` — `unit-and-build`, `integration` (gated on the non-prod `DATABASE_URL` secret), `e2e` (Playwright).
+
+**Phase 1 handoff prompt: `docs/phase-1-handoff-prompt.md`**
