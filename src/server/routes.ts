@@ -5,6 +5,7 @@ import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { HTTPException } from 'hono/http-exception';
 import { timeout } from 'hono/timeout';
+import { getAuth } from './auth/auth';
 import { csrfProtection } from './middleware/csrf';
 import { requestIdMiddleware } from './middleware/request-id';
 import { hstsOnHttps, securityHeadersMiddleware } from './middleware/security-headers';
@@ -76,6 +77,11 @@ app.use('*', hstsOnHttps);
 
 // NG4 — CSRF for cookie-authenticated JSON mutations (excludes /api/auth/*).
 app.use('*', csrfProtection);
+
+// Better Auth — mounted per the current Hono integration docs:
+// `app.all("/api/auth/*", (c) => auth.handler(c.req.raw))`. Runtime values
+// come from Hono bindings (getAuth factory).
+app.all('/api/auth/*', (c) => getAuth(c.env).handler(c.req.raw));
 
 // NG21 — centralized error/notFound handling.
 app.onError(onErrorHandler);

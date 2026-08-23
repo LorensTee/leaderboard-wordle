@@ -206,6 +206,15 @@ Version-relevant corrections to this document:
 - **Verified by live smoke test** (dev server, port 5199): GET /api/nope → 404 JSON envelope + `x-request-id` + nosniff/DENY/referrer-policy; POST with cross-site Origin → **403 CSRF** envelope; POST with `Sec-Fetch-Site: cross-site` → **403**; POST with same-origin Origin → 404. `bun run check` 0 errors; production build green.
 - Dev-environment note: adapter-cloudflare's dev `platformProxy` (miniflare) needs a writable registry; this sandbox blocks `~/.config/.wrangler`, so dev runs with `XDG_CONFIG_HOME=.cache/xdg-config` (gitignored via `.cache/`).
 
+### Phase 0 B4 (2026-08-23)
+
+- **Auth factory** (`src/server/auth/auth.ts`): `createAuth(env)` + memoized `getAuth(env)` — runtime values (secret, baseURL, Google creds, `DATABASE_URL`) come from **Worker bindings**, not `process.env`; process.env looked at nothing at import time. Config: Google provider with per-provider `requireEmailVerification` (NG18), global `requireEmailVerification`, `user.additionalFields` (NC2, unchanged), `drizzleAdapter(createDb(...))`.
+- **Mount** (`routes.ts`): `app.all('/api/auth/*', (c) => getAuth(c.env).handler(c.req.raw))` — the current Hono integration pattern (better-auth docs). **Current social endpoint is `/api/auth/sign-in/social` with `{ provider: "google" }`** (not `/sign-in/google` — that path 404s on this version; verified live).
+- **Hooks** (`src/hooks.server.ts`): per the current SvelteKit integration docs — `auth.api.getSession({ headers })` → `event.locals.session/user`; `App.Locals` typed in `app.d.ts`.
+- **Bindings pipeline proven live:** `.dev.vars` → dev `platformProxy` → `platform.env` → bridge cast → `c.env` → `getAuth` (dev needs `.dev.vars`, not process.env — verified empirically).
+- **Structural verification (all credential-free):** GET / → 200 (hooks + session resolution run); GET `/api/auth/get-session` → 200 `null`; POST `/api/auth/sign-out` without Origin → 200 (**CSRF `/api/auth` exclusion works**); POST `/api/auth/sign-in/social` → 500 **only** because the inert `DATABASE_URL` cannot connect — the stack trace proves the full path: `generateGenericState → createVerificationValue → @better-auth/drizzle-adapter → drizzle-orm/neon-serverless (NeonPreparedQuery)`, inserting into `verification`. `bun run check` 0 errors.
+- **External gate (B7):** live Google OAuth flow + real Neon connection require credentials; `.dev.vars` (gitignored) holds local dummy values.
+
 ## Hono
 
 Use **Hono** as the dedicated API/business boundary beneath SvelteKit's `/api/*` routes.
