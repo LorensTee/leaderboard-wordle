@@ -20,13 +20,22 @@ export type AuthBindings = {
 // generation, structural tests). Never a real credential.
 export const INERT_DB_URL = 'postgresql://unused:unused@localhost:5432/unused';
 
-// Dev/test-only session secret. In production (folded to 'production' at
-// build time) a missing BETTER_AUTH_SECRET is a hard failure — a published
-// deterministic secret would allow session forgery (security-review finding).
+// Dev/test-only session secret. Production is the DEFAULT: Workers never
+// set NODE_ENV (nodejs_compat → undefined), so without a real binding the
+// app fails hard. The non-production escape hatch is explicit and
+// tooling-controlled: vite dev sets NODE_ENV=development, vitest sets test.
+// This is deliberately NOT fold-dependent — bundlers have been observed to
+// emit `process.env.NODE_ENV === 'production'` dynamically in SSR chunks,
+// which would silently select DEV_SECRET on a deployed Worker (the earlier
+// 'fold guarantee' was validated against the wrong artifact — the adapter
+// shell — and is removed).
 const DEV_SECRET = 'dev-only-secret-change-me';
+const NON_PRODUCTION_ENVS = new Set(['development', 'test']);
 
 export function createAuth(env: AuthBindings) {
-	const secret = env.BETTER_AUTH_SECRET ?? (process.env.NODE_ENV === 'production' ? undefined : DEV_SECRET);
+	const secret =
+		env.BETTER_AUTH_SECRET ??
+		(NON_PRODUCTION_ENVS.has(process.env.NODE_ENV ?? '') ? DEV_SECRET : undefined);
 	if (!secret) {
 		throw new Error('BETTER_AUTH_SECRET is required (refusing to start with a known fallback secret)');
 	}

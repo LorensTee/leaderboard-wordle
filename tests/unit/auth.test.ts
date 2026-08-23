@@ -20,6 +20,19 @@ describe('auth secret policy', () => {
 		}
 	});
 
+	it('refuses to start without BETTER_AUTH_SECRET when NODE_ENV is unset (deployed Worker condition)', () => {
+		// Workers never set NODE_ENV (nodejs_compat) — production is the
+		// default; the dev fallback must NOT be selected in that condition.
+		const prev = process.env.NODE_ENV;
+		delete process.env.NODE_ENV;
+		try {
+			expect(() => createAuth({ DATABASE_URL: 'postgresql://x' })).toThrow(/BETTER_AUTH_SECRET/);
+		} finally {
+			if (prev === undefined) delete process.env.NODE_ENV;
+			else process.env.NODE_ENV = prev;
+		}
+	});
+
 	it('refuses to start without BETTER_AUTH_SECRET in production', () => {
 		const prev = process.env.NODE_ENV;
 		process.env.NODE_ENV = 'production';

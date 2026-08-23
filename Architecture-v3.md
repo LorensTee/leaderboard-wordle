@@ -277,6 +277,8 @@ Second review round (fresh `tool:review` + `tool:security_review` scoped to c907
 - `onErrorHandler` preserves `HTTPException` responses only for `status === 408` (the single intentional payload; anything else stays sanitized).
 - `verify:bundle` additionally fails if the dev fallback secret literal appears in build output (NODE_ENV fold regression guard — verified absent).
 
+**Correction (same round, third review pass):** the fold assumption was wrong. The expanded bundle walk (now covering `.svelte-kit/output/server`, where the app code actually lives — `_worker.js` is only the ~4 KB adapter shell) found `process.env.NODE_ENV === 'production'` emitted **dynamically** in the SSR chunk with `DEV_SECRET` intact — on a deployed Worker `NODE_ENV` is never set, so the previous check would have selected the dev secret. Replaced with **runtime-conditional, fold-independent** policy: production is the default; the dev fallback is allowed only when `process.env.NODE_ENV ∈ {development, test}` (tooling-controlled: vite dev / vitest). Unit test covers the unset-NODE_ENV (deployed Worker) condition. The bundle literal scan became advisory (literal presence is expected; the effective-secret policy is runtime-enforced + tested). `verify:bundle` now scans client + server bundles for answer-pool words.
+
 ## Hono
 
 Use **Hono** as the dedicated API/business boundary beneath SvelteKit's `/api/*` routes.
