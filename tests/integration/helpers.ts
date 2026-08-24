@@ -11,6 +11,7 @@
 //                             against Neon; requires a Neon DATABASE_URL)
 //
 // The Neon WebSocket transport itself is verified at the B7 external gate.
+import { sql } from 'drizzle-orm';
 import * as schema from '../../src/server/db/schema';
 import type { Db as AppDb } from '../../src/server/db/client';
 
@@ -53,4 +54,39 @@ export async function connectClient(db: Db): Promise<{
 		query: (q: string) => client.query(q) as Promise<{ rows: unknown[] }>,
 		release: () => client.release()
 	};
+}
+
+/**
+ * Wait until at least `expected` backends are blocked waiting for a
+ * `daily_puzzles … FOR UPDATE` row lock (pg_stat_activity). Used by the NG9
+ * lock-order tests to make interleavings deterministic across ANY latency —
+ * the transactions are only released (sentinel COMMIT) once the caller has
+ * observed that exactly the wanted services are queued, instead of relying
+ * on fixed sleeps (which break when DB round-trip latency exceeds the sleep).
+ * Throws with a descriptive message on timeout (fail fast, never hang).
+ */
+export async function waitForLockWaiters(
+	db: Db,
+	expected: number,
+	timeoutMs = 20_000,
+	intervalMs = 50
+): Promise<void> {
+	const deadline = Date.now() + timeoutMs;
+	let seen = 0;
+	for (;;) {
+		const [{ n }] = (
+			await db.execute(
+				sql`SELECT count(*)::int AS n FROM pg_stat_activity
+					WHERE wait_event_type = 'Lock' AND query ILIKE '%daily_puzzles%for update%'`
+			)
+		).rows as { n: number }[];
+		seen = n;
+		if (n >= expected) return;
+		if (Date.now() > deadline) {
+			throw new Error(
+				`timed out after ${timeoutMs}ms waiting for ${expected} lock waiter(s) on the puzzle row (saw ${seen})`
+			);
+		}
+		await new Promise((r) => setTimeout(r, intervalMs));
+	}
 }

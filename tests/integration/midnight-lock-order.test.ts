@@ -5,13 +5,17 @@
 // after lock wait) is preserved exactly.
 //
 // Determinism: a sentinel connection holds the puzzle-row FOR UPDATE lock;
-// the two service transactions queue behind it in a known order (PostgreSQL
-// grants row locks in request order). The sentinel then commits, releasing
-// the queue in the requested order:
-//   A — guess queued first → wins the lock → completes; finalize then sees
-//       the COMPLETED game and converts only remaining ACTIVE games.
-//   B — finalize queued first → commits FINALIZED; the guess then acquires
-//       the lock, re-reads (READ COMMITTED), observes FINALIZED, is rejected
+// the two service transactions queue behind it in a PROVEN order. Instead of
+// sleep-based ordering (which breaks when DB round-trip latency exceeds the
+// sleep), the tests watch pg_stat_activity until the wanted number of
+// services is blocked on the puzzle lock (waitForLockWaiters), then release
+// the sentinel — PostgreSQL grants row locks in request order:
+//   A — guess queued (observed) → finalize started only after → release →
+//       guess wins the lock → completes; finalize then sees the COMPLETED
+//       game and converts only remaining ACTIVE games.
+//   B — finalize queued first (observed) → guess started only after →
+//       release → finalize commits FINALIZED; the guess then acquires the
+//       lock, re-reads (READ COMMITTED), observes FINALIZED, is rejected
 //       and writes nothing.
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -19,7 +23,7 @@ import * as schema from '../../src/server/db/schema';
 import { AppError, ERROR_CODES } from '../../src/server/lib/errors';
 import { createGameService } from '../../src/server/game/service';
 import { createPuzzleService } from '../../src/server/puzzle/finalize';
-import { closeDb, connectClient, createIntegrationDb, type Db } from './helpers';
+import { closeDb, connectClient, createIntegrationDb, waitForLockWaiters, type Db } from './helpers';
 
 const databaseUrl = process.env.DATABASE_URL;
 const suite = databaseUrl ? describe : describe.skip;
@@ -82,14 +86,16 @@ suite('NG9 midnight lock orders (real services: submitGuess + finalizePuzzle)', 
 			await sentinel.query('BEGIN');
 			await sentinel.query(`SELECT id FROM daily_puzzles WHERE id = '${puzzle.id}' FOR UPDATE`);
 
-			// Guess queues first…
+			// Queue-observed ordering (deterministic at ANY latency — no sleeps):
+			// 1. the guess queues behind the sentinel's lock…
 			const guessPromise = gameService.submitGuess(userId, game.id, 'light');
-			await new Promise((r) => setTimeout(r, 250));
-			// …then finalize queues behind it.
+			await waitForLockWaiters(db, 1);
+			// 2. …only then finalize starts, so the guess is provably first in
+			//    line (PostgreSQL grants row locks in request order)…
 			const finalizePromise = puzzleService.finalizePuzzle(puzzle.id);
-			await new Promise((r) => setTimeout(r, 250));
-
-			await sentinel.query('COMMIT'); // release the queue: guess first
+			await waitForLockWaiters(db, 2);
+			// 3. …release the queue: the guess acquires the lock first.
+			await sentinel.query('COMMIT');
 			const outcome = await guessPromise;
 			const finalize = await finalizePromise;
 
@@ -127,16 +133,16 @@ suite('NG9 midnight lock orders (real services: submitGuess + finalizePuzzle)', 
 			await sentinel.query('BEGIN');
 			await sentinel.query(`SELECT id FROM daily_puzzles WHERE id = '${puzzle.id}' FOR UPDATE`);
 
-			// Finalize queues first…
+			// Queue-observed ordering (mirror of A): finalize queues first…
 			const finalizePromise = puzzleService.finalizePuzzle(puzzle.id);
-			await new Promise((r) => setTimeout(r, 250));
-			// …then the guess queues behind it.
+			await waitForLockWaiters(db, 1);
+			// …only then the guess starts, so it is provably second in line…
 			const guessPromise = gameService.submitGuess(userId, game.id, 'stone').catch((e) => {
 				guessError = e;
 				return null;
 			});
-			await new Promise((r) => setTimeout(r, 250));
-
+			await waitForLockWaiters(db, 2);
+			// …release the queue: finalize acquires the lock first.
 			await sentinel.query('COMMIT');
 			finalizeResult = await finalizePromise;
 			await guessPromise;
