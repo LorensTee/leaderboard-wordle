@@ -6,6 +6,9 @@ import { bodyLimit } from 'hono/body-limit';
 import { HTTPException } from 'hono/http-exception';
 import { timeout } from 'hono/timeout';
 import { getAuth } from './auth/auth';
+import { getDb } from './db/memo';
+import { registerGameRoutes } from './game/handlers';
+import { createGameService } from './game/service';
 import { authContext, requireAuth, type AuthContext } from './middleware/auth';
 import { csrfProtection } from './middleware/csrf';
 import { requestIdMiddleware } from './middleware/request-id';
@@ -108,6 +111,13 @@ app.use('/api/admin/*', requireAuth);
 // actually undefined at runtime (verified; the bridge always passes an
 // object, so production behavior is unchanged).
 app.all('/api/auth/*', (c) => getAuth((c.env ?? {}) as HonoBindings).handler(c.req.raw));
+
+// Phase-1 game vertical slice (protected: requireAuth mounted above on
+// /api/game/*). The service factory resolves the memoized DB client from the
+// Worker bindings; the answers stay inside the service (never serialized).
+registerGameRoutes(app, {
+	getService: (c) => createGameService(getDb(c.env))
+});
 
 // NG21 — centralized error/notFound handling.
 app.onError(onErrorHandler);
