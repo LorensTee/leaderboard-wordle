@@ -6,6 +6,7 @@ import { bodyLimit } from 'hono/body-limit';
 import { HTTPException } from 'hono/http-exception';
 import { timeout } from 'hono/timeout';
 import { getAuth } from './auth/auth';
+import { authContext, requireAuth, type AuthContext } from './middleware/auth';
 import { csrfProtection } from './middleware/csrf';
 import { requestIdMiddleware } from './middleware/request-id';
 import { hstsOnHttps, securityHeadersMiddleware } from './middleware/security-headers';
@@ -24,6 +25,12 @@ export type HonoBindings = {
 
 export type HonoVariables = {
 	requestId: string;
+	/**
+	 * Resolved identity for the current request (Phase 0 B4 Hono auth helper).
+	 * Set by authContext for every request; null when unauthenticated. Future
+	 * application routes read this instead of scattering getSession calls.
+	 */
+	auth: AuthContext;
 };
 
 export type AppEnv = {
@@ -78,10 +85,26 @@ app.use('*', hstsOnHttps);
 // NG4 — CSRF for cookie-authenticated JSON mutations (excludes /api/auth/*).
 app.use('*', csrfProtection);
 
+// Phase 0 B4 — Hono-side authentication helper: resolves the Better Auth
+// session from request cookies/headers for every API request (fast-path:
+// no session cookie → null without a DB round-trip). Application API routes
+// must never trust SvelteKit `event.locals` — the bridge does not pass them.
+app.use('*', authContext);
+
+// Protected application namespaces. requireAuth rejects unauthenticated
+// requests with the standard UNAUTHORIZED envelope BEFORE any handler runs.
+// Routes under these prefixes are registered in later phases (game/me/admin);
+// mounting the guard at Phase 0 locks the boundary in by default.
+app.use('/api/game/*', requireAuth);
+app.use('/api/me/*', requireAuth);
+app.use('/api/admin/*', requireAuth);
+
 // Better Auth — mounted per the current Hono integration docs:
 // `app.all("/api/auth/*", (c) => auth.handler(c.req.raw))`. Runtime values
-// come from Hono bindings (getAuth factory).
-app.all('/api/auth/*', (c) => getAuth(c.env).handler(c.req.raw));
+// come from Hono bindings (getAuth factory). Deliberately NOT behind
+// requireAuth — OAuth callbacks/redirects must stay reachable and Better
+// Auth owns its own session/CSRF handling on these paths.
+app.all('/api/auth/*', (c) => getAuth((c.env ?? {}) as HonoBindings).handler(c.req.raw));
 
 // NG21 — centralized error/notFound handling.
 app.onError(onErrorHandler);

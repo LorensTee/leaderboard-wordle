@@ -1,7 +1,9 @@
-# NG23 — CI pipeline: install → types → check → unit tests → build →
-# bundle-secrecy proof → e2e (Playwright). All DB-dependent integration
-# tests run against a NON-production database (credentials injected as
-# GitHub secrets; see B6 integration job extension).
+# NG23 — CI pipeline: install → lint → word-list → auth-schema parity →
+# check → unit tests → build → types:check → bundle-secrecy proof → e2e
+# (Playwright). All DB-dependent integration tests run against a
+# NON-production database (credentials injected as GitHub secrets; see B6
+# integration job extension — the DB gate is MANDATORY and fails when the
+# secret is missing).
 name: CI
 
 on:
@@ -19,8 +21,15 @@ jobs:
           bun-version: latest
       - name: Install
         run: bun install --frozen-lockfile
+      - name: Lint (ESLint flat config)
+        run: bun run lint
       - name: Word-list artifact (src/lib/shared/data/valid-guesses.json)
         run: bun run word-list
+      - name: Auth schema parity (pinned `auth` CLI regeneration)
+        # Regenerates src/server/db/auth-schema.generated.ts with the pinned
+        # CLI (auth@1.7.1 in bun.lock) and fails on any real drift — the
+        # generator must stay reproducible (Phase-0 post-check finding).
+        run: bun run auth:check
       - name: Typecheck
         run: bun run check
       - name: Unit tests (no DB)
@@ -42,14 +51,17 @@ jobs:
     needs: unit-and-build
     # B6/B7 external gate — runs the DB integration suite (migration applied
     # first) against a NON-production database; exercises the app's real
-    # neon-serverless driver path.
+    # neon-serverless driver path. FINAL Phase-0 policy: the integration gate
+    # is MANDATORY. If the non-production DATABASE_URL secret is not
+    # configured the job FAILS — DB verification must never silently skip.
     #
     # Context rules (docs.github.com contexts reference): `secrets` and `env`
     # are NOT available in `jobs.<job_id>.if` (only github/needs/vars/inputs).
     # `secrets` IS available in job-level `env`, and `env` IS available in
     # step-level `if` — so the secret is injected as a job env var and the
-    # gate lives on the DB steps. Without the secret the steps skip (job
-    # reports success with skipped steps).
+    # gate lives on the DB steps. Without the secret the guard step fails the
+    # job explicitly (no silent skip; fork PRs without the secret fail loudly
+    # so the missing gate cannot be mistaken for a pass).
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
@@ -59,6 +71,11 @@ jobs:
           bun-version: latest
       - name: Install
         run: bun install --frozen-lockfile
+      - name: Fail if DATABASE_URL secret is not configured (mandatory DB gate)
+        if: ${{ env.DATABASE_URL == '' }}
+        run: |
+          echo "::error::DATABASE_URL non-production secret is required for the mandatory integration gate (Phase-0 B6/B7 policy). Configure it in the repository secrets, or the DB verification is lost."
+          exit 1
       # Redacted connection diagnostics: URL facts (no credentials) + the pg
       # driver error (code + first line). Fails before the migration so the
       # runner log carries the actual cause (run-3 failure surfaced no message

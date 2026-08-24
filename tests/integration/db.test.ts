@@ -103,6 +103,30 @@ suite('database foundation (real driver path)', () => {
 		expect(message).toMatch(/duplicate key/);
 	});
 
+	it('B7/token-storage: Better Auth account token columns exist and are nullable (core-schema fields)', async () => {
+		// Architecture decision (Google-token contradiction): the token
+		// columns are Better Auth MANAGED core-schema fields — the 1.7.1
+		// OAuth callback writes access_token/id_token/scope/expiries on every
+		// sign-in regardless of configuration, so the columns must exist or
+		// account creation breaks. The app requests OIDC scopes only and uses
+		// no provider API, so the values are inert Google OAuth session
+		// artifacts — see Architecture-v3 B7/Google-token note.
+		const { rows } = (await db.execute(
+			sql`SELECT column_name, is_nullable FROM information_schema.columns WHERE table_name = 'account' AND column_name IN ('access_token','refresh_token','id_token','access_token_expires_at','refresh_token_expires_at','scope') ORDER BY column_name`
+		)) as { rows: { column_name: string; is_nullable: string }[] };
+		expect(rows.map((r) => r.column_name)).toEqual([
+			'access_token',
+			'access_token_expires_at',
+			'id_token',
+			'refresh_token',
+			'refresh_token_expires_at',
+			'scope'
+		]);
+		// All nullable — Better Auth writes them only when the provider
+		// returns them; refresh_token stays NULL (no access_type=offline).
+		for (const r of rows) expect(r.is_nullable).toBe('YES');
+	});
+
 	it('SELECT ... FOR UPDATE serializes concurrent transactions (real driver)', async () => {
 		const [answer] = await db
 			.insert(schema.answerDictionary)

@@ -1,11 +1,13 @@
 // Auth-schema parity guard — compares a freshly regenerated Better Auth
-// Drizzle schema against the previously committed one after normalizing the
-// known TEMPLATE FINGERPRINTS of the unpinned `auth@latest` CLI:
-//   - `.defaultNow()` on auth-managed `created_at`/`updated_at` columns
-//   - esbuild `/* @__PURE__ */` annotations inside `$onUpdate(...)`
-// These vary between fetches of the same CLI version and are semantically
-// inert (Better Auth sets timestamps in-app; the DB-side column defaults
-// come from the migration). ANY other difference fails the check.
+// Drizzle schema against the previously committed one. The generator CLI is
+// PINNED (devDependency `auth@1.7.1`, in bun.lock) so regeneration is
+// deterministic and byte-identical in practice (`bun run auth:schema` →
+// `bun run auth:check`; CI gate). The normalizer below tolerates the
+// semantically inert fingerprints once observed between different fetches of
+// the then-unpinned `auth@latest` CLI (`.defaultNow()` markers, esbuild
+// `/* @__PURE__ */` annotations — Better Auth sets timestamps in-app; the
+// DB-side defaults come from the migration). It is kept so the guard is
+// robust to packaging cosmetics — ANY other difference fails the check.
 //
 // Usage: bun ./scripts/check-auth-schema.ts <before> <after>
 //   (wired as `bun run auth:check`; regenerate with `bun run auth:schema`)
