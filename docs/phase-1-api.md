@@ -60,8 +60,13 @@ Submit exactly one guess.
 - **Request body:** `{ word: string }` — strict Zod schema (client-supplied
   timing/score/state fields are **rejected** with 400). Malformed JSON → 400.
 - **Auth:** required. **Ownership:** the game row's `user_id` must match the
-  authenticated user, checked under the game lock: `403 FORBIDDEN` otherwise
-  (a nonexistent game id → `404 GAME_NOT_FOUND`; no existence oracle).
+  authenticated user, checked under the game lock: `403 FORBIDDEN` otherwise.
+  A uuid-shaped id that matches no game → `404 GAME_NOT_FOUND`; a
+  non-uuid-shaped id short-circuits to 404 without a DB round-trip.
+  (Existence surface: game ids are unguessable `gen_random_uuid` values the
+  caller can only know by owning them, and the 403 path is mandated by the
+  Phase-1 spec — the exact 404-vs-403 difference for a foreign valid uuid is
+  accepted.)
 - **Server authority (in one transaction, puzzle lock FIRST):**
   1. `transaction_timestamp()` establishes the eligibility anchor;
   2. the puzzle row is locked `FOR UPDATE`, re-read after the lock
