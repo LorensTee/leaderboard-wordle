@@ -29,17 +29,29 @@ bun run dev        # http://localhost:5173 (requires .env + .dev.vars)
 
 ```sh
 bun run check            # svelte-check
+bun run lint             # ESLint (flat config)
 bun run test:unit        # unit tests (DB-free)
 bun run test:integration # Neon integration tests (requires DATABASE_URL, non-prod)
 bun run build            # Cloudflare Workers build
 bun run verify:bundle    # answer-pool secrecy proof (run after build)
-bun run types:check      # wrangler.toml ↔ worker-configuration.d.ts (no .env/.dev.vars)
-bun run auth:check       # Better Auth schema regeneration parity guard
+bun run types:check      # wrangler.toml ↔ worker-configuration.d.ts (run without .env/.dev.vars — those fold into local generation by design)
+bun run auth:check       # Better Auth schema regeneration parity guard (pinned auth@1.7.1 CLI)
+bun run word-list        # regenerate src/lib/shared/data/valid-guesses.json from the canonical source
 bun run db:generate      # drizzle-kit migration generation
 ```
 
+## API authentication
+
+Hono resolves Better Auth sessions itself — `src/server/middleware/auth.ts` (`authContext`
+per-request resolution, `requireAuth` guard, typed `c.get('auth')`). Application routes
+under `/api/game/*`, `/api/me/*`, `/api/admin/*` are protected; `/api/auth/*` belongs to
+Better Auth. SvelteKit `event.locals` (hooks) is for page composition only — the bridge
+never passes it to Hono.
+
 ## CI
 
-`.github/workflows/ci.yml` — `unit-and-build`, `integration` (gated on the non-prod `DATABASE_URL` secret), `e2e` (Playwright).
+`.github/workflows/ci.yml` — `unit-and-build` (lint → word-list → auth:check → check →
+unit → build → types:check → verify:bundle), `integration` (mandatory — fails if the
+non-prod `DATABASE_URL` secret is missing), `e2e` (Playwright).
 
 **Phase 1 handoff prompt: `docs/phase-1-handoff-prompt.md`**

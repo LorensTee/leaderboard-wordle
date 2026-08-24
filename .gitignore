@@ -34,5 +34,5 @@ vite.config.ts.timestamp-*
 # Private answer-pool seed inputs (NC3) — never commit
 scripts/seed/*.txt
 
-# Private answer-pool seed inputs (NC3) — never commit
-scripts/seed/*.txt
+# Not needed markdown Files
+/docs/gpt-replies/
