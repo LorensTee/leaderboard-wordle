@@ -68,8 +68,14 @@ export function createAuthContext(resolver: SessionResolver = resolveAuthSession
 	return async function authContext(c: Context<AuthMiddlewareEnv>, next: Next) {
 		// Fast path: without the session cookie there is nothing to resolve
 		// (mirrors hooks.server.ts; keeps logged-out API calls DB-free).
+		// Boundary match on the parsed cookie list — a lookalike cookie name
+		// must not trigger a resolver call (the signed-cookie verification
+		// remains authoritative either way).
 		const cookie = c.req.header('cookie') ?? '';
-		if (!cookie.includes(SESSION_COOKIE_NAME)) {
+		const hasSessionCookie = cookie
+			.split(';')
+			.some((pair) => pair.trim().startsWith(`${SESSION_COOKIE_NAME}=`));
+		if (!hasSessionCookie) {
 			c.set('auth', null);
 			return next();
 		}
