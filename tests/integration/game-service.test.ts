@@ -96,6 +96,21 @@ suite('game service (real Neon, interactive transactions)', () => {
 			expect(second.guessCount).toBe(0);
 		});
 
+		it('idempotent resume returns the stored guesses (full board reconstruction)', async () => {
+			const today = await todayManilaDate();
+			await insertActivePuzzle(today, 'light');
+			const user = await insertUser('u-idem-guesses');
+
+			const game = await gameService.startGame(user.id);
+			await gameService.submitGuess(user.id, game.id, 'about');
+
+			const resumed = await gameService.startGame(user.id);
+			expect(resumed.id).toBe(game.id);
+			expect(resumed.guesses).toHaveLength(1);
+			expect(resumed.guesses[0].word).toBe('about');
+			expect(resumed.guessCount).toBe(1);
+		});
+
 		it('concurrent starts converge to ONE game (UNIQUE(user_id, puzzle_id) final guard)', async () => {
 			const today = await todayManilaDate();
 			await insertActivePuzzle(today, 'river');

@@ -153,17 +153,17 @@ describe('POST /api/game/:gameId/guess', () => {
 	it('accepts a valid guess and returns feedback + safe state', async () => {
 		const service = fakeService();
 		const app = makeApp(service);
-		const res = await post(app, '/api/game/game-1/guess', { word: 'light' }, 'better-auth.session_token=signed');
+		const res = await post(app, '/api/game/11111111-1111-4111-8111-111111111111/guess', { word: 'light' }, 'better-auth.session_token=signed');
 		expect(res.status).toBe(200);
 		const body = await res.json();
 		expect(body.guess.word).toBe('light');
-		expect(service.submitGuess).toHaveBeenCalledWith('user-1', 'game-1', 'light');
+		expect(service.submitGuess).toHaveBeenCalledWith('user-1', '11111111-1111-4111-8111-111111111111', 'light');
 	});
 
 	it('rejects words that are not 5 lowercase letters (400 + issues)', async () => {
 		const app = makeApp(fakeService());
 		for (const word of ['LIGHT', 'light1', 'four', '']) {
-			const res = await post(app, '/api/game/game-1/guess', { word }, 'better-auth.session_token=signed');
+			const res = await post(app, '/api/game/11111111-1111-4111-8111-111111111111/guess', { word }, 'better-auth.session_token=signed');
 			expect(res.status).toBe(400);
 			const body = await res.json();
 			expect(body.error.code).toBe('BAD_REQUEST');
@@ -176,7 +176,7 @@ describe('POST /api/game/:gameId/guess', () => {
 		const app = makeApp(service);
 		const res = await post(
 			app,
-			'/api/game/game-1/guess',
+			'/api/game/11111111-1111-4111-8111-111111111111/guess',
 			{ word: 'light', startedAt: '2020-01-01', completionTimeMs: 42, status: 'COMPLETED' },
 			'better-auth.session_token=signed'
 		);
@@ -186,7 +186,7 @@ describe('POST /api/game/:gameId/guess', () => {
 
 	it('rejects malformed JSON bodies', async () => {
 		const app = makeApp(fakeService());
-		const res = await app.request(`${BASE}/api/game/game-1/guess`, {
+		const res = await app.request(`${BASE}/api/game/11111111-1111-4111-8111-111111111111/guess`, {
 			method: 'POST',
 			headers: { origin: BASE, 'content-type': 'application/json', cookie: 'better-auth.session_token=signed' },
 			body: '{not json'
@@ -195,13 +195,22 @@ describe('POST /api/game/:gameId/guess', () => {
 		expect((await res.json()).error.code).toBe('BAD_REQUEST');
 	});
 
+	it('rejects non-uuid game ids with 404 without consulting the service', async () => {
+		const service = fakeService();
+		const app = makeApp(service);
+		const res = await post(app, '/api/game/not-a-uuid/guess', { word: 'light' }, 'better-auth.session_token=signed');
+		expect(res.status).toBe(404);
+		expect((await res.json()).error.code).toBe('GAME_NOT_FOUND');
+		expect(service.submitGuess).not.toHaveBeenCalled();
+	});
+
 	it('maps ownership failure to 403 FORBIDDEN', async () => {
 		const app = makeApp(fakeService({
 			submitGuess: vi.fn(async () => {
 				throw new AppError(ERROR_CODES.FORBIDDEN, 'You do not own this game', 403);
 			})
 		}));
-		const res = await post(app, '/api/game/other-game/guess', { word: 'light' }, 'better-auth.session_token=signed');
+		const res = await post(app, '/api/game/22222222-2222-4222-8222-222222222222/guess', { word: 'light' }, 'better-auth.session_token=signed');
 		expect(res.status).toBe(403);
 		expect((await res.json()).error.code).toBe('FORBIDDEN');
 	});
@@ -216,7 +225,7 @@ describe('POST /api/game/:gameId/guess', () => {
 		];
 		for (const [err, status, code] of cases) {
 			const app = makeApp(fakeService({ submitGuess: vi.fn(async () => { throw err; }) }));
-			const res = await post(app, '/api/game/game-1/guess', { word: 'light' }, 'better-auth.session_token=signed');
+			const res = await post(app, '/api/game/11111111-1111-4111-8111-111111111111/guess', { word: 'light' }, 'better-auth.session_token=signed');
 			expect(res.status).toBe(status);
 			expect((await res.json()).error.code).toBe(code);
 		}

@@ -19,6 +19,9 @@ export const guessBodySchema = z
 
 export type GuessBody = z.infer<typeof guessBodySchema>;
 
+/** uuid shape (gen_random_uuid) — path ids that cannot match a game short-circuit to 404. */
+export const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 /** Validates the JSON body; failures map to the NG21 BAD_REQUEST envelope. */
 export const guessBodyValidator = zValidator('json', guessBodySchema, (result) => {
 	if (!result.success) {
@@ -70,6 +73,13 @@ export function registerGameRoutes<T extends Hono<AppEnv>>(app: T, deps: GameRou
 		.post('/api/game/:gameId/guess', guessBodyValidator, async (c) => {
 			const user = authenticatedUser(c, 'submit a guess');
 			const gameId = c.req.param('gameId');
+			// Game ids are uuid (gen_random_uuid). Reject non-uuid-shaped ids
+			// up front: they cannot match a game, so 404 without a DB round-trip
+			// (no injection surface — ids are parameterized anyway; this also
+			// avoids probing noise against nonexistent shapes).
+			if (!UUID_RE.test(gameId)) {
+				throw new AppError(ERROR_CODES.GAME_NOT_FOUND, 'Game not found', 404);
+			}
 			const { word } = c.req.valid('json');
 			const outcome = await deps.getService(c).submitGuess(user.id, gameId, word);
 			return c.json(outcome, 200);

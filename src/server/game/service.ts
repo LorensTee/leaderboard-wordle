@@ -197,7 +197,16 @@ export function createGameService(db: Db): GameService {
 				throw new AppError(ERROR_CODES.INTERNAL, 'Failed to create the game', 500);
 			}
 
-			return serializeGameState(game, puzzle, []);
+			// Idempotent resume: an existing game may already have guesses —
+			// return them so the client can reconstruct the full board (start
+			// and getCurrentGame must agree on the safe state shape).
+			const guessRows = await tx
+				.select()
+				.from(guesses)
+				.where(eq(guesses.gameId, game.id))
+				.orderBy(asc(guesses.guessNumber));
+
+			return serializeGameState(game, puzzle, guessRows);
 		});
 	}
 

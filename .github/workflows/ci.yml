@@ -106,6 +106,10 @@ jobs:
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+      # Explicit opt-in for the authenticated fixture, which TRUNCATEs the
+      # app tables on the designated non-production database (see
+      # tests/e2e/helpers/auth-fixture.ts).
+      ALLOW_DB_WIPE: 'true'
     steps:
       - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2

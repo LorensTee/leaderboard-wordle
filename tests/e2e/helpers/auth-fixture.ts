@@ -9,10 +9,11 @@
 // + hono 4.13.3 sources). Better Auth then resolves the session exactly like
 // a Google sign-in: signed-cookie verification + session-table lookup.
 //
-// Requirements: DATABASE_URL (non-production) + BETTER_AUTH_SECRET. Locally
-// they come from .dev.vars/.env (read without printing); in CI they are
-// injected as job env vars. Without them the gameplay spec skips explicitly —
-// the unauthenticated smoke spec never skips.
+// Requirements: DATABASE_URL (non-production) + BETTER_AUTH_SECRET
+// (locally from .dev.vars/.env, read without printing; in CI injected as job
+// env vars) + ALLOW_DB_WIPE=1/true — an explicit opt-in because the fixture
+// TRUNCATEs the app tables; without any of them the gameplay spec skips
+// explicitly (the unauthenticated smoke spec never skips).
 import { createHmac, randomUUID } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -22,7 +23,7 @@ import { drizzle } from 'drizzle-orm/neon-serverless';
 import * as schema from '../../../src/server/db/schema';
 
 // .dev.vars is parsed for local runs only (gitignored, never printed).
-function loadLocalEnv(): { DATABASE_URL?: string; BETTER_AUTH_SECRET?: string } {
+function loadLocalEnv(): { DATABASE_URL?: string; BETTER_AUTH_SECRET?: string; ALLOW_DB_WIPE?: string } {
 	const vars: Record<string, string> = {};
 	try {
 		for (const line of readFileSync(resolve('.dev.vars'), 'utf8').split('\n')) {
@@ -36,7 +37,8 @@ function loadLocalEnv(): { DATABASE_URL?: string; BETTER_AUTH_SECRET?: string } 
 	}
 	return {
 		DATABASE_URL: process.env.DATABASE_URL ?? vars.DATABASE_URL,
-		BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET ?? vars.BETTER_AUTH_SECRET
+		BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET ?? vars.BETTER_AUTH_SECRET,
+		ALLOW_DB_WIPE: process.env.ALLOW_DB_WIPE ?? vars.ALLOW_DB_WIPE
 	};
 }
 
@@ -47,16 +49,27 @@ export type E2eSession = {
 	databaseUrl: string;
 };
 
-/** True when the deterministic auth fixture can run. */
+/** True when the deterministic auth fixture can run (incl. the wipe opt-in). */
 export function e2eAuthAvailable(): boolean {
 	const env = loadLocalEnv();
-	return Boolean(env.DATABASE_URL && env.BETTER_AUTH_SECRET);
+	return Boolean(
+		env.DATABASE_URL &&
+			env.BETTER_AUTH_SECRET &&
+			(env.ALLOW_DB_WIPE === '1' || env.ALLOW_DB_WIPE === 'true')
+	);
 }
 
 export function requireE2eEnv(): E2eSession {
 	const env = loadLocalEnv();
-	if (!env.DATABASE_URL || !env.BETTER_AUTH_SECRET) {
-		throw new Error('E2E auth fixture requires DATABASE_URL + BETTER_AUTH_SECRET (env or .dev.vars)');
+	if (
+		!env.DATABASE_URL ||
+		!env.BETTER_AUTH_SECRET ||
+		!(env.ALLOW_DB_WIPE === '1' || env.ALLOW_DB_WIPE === 'true')
+	) {
+		throw new Error(
+			'E2E auth fixture requires DATABASE_URL + BETTER_AUTH_SECRET + ALLOW_DB_WIPE=1 ' +
+				'(env, .dev.vars, or CI job env) — ALLOW_DB_WIPE opts into the app-table TRUNCATE'
+		);
 	}
 	return {
 		cookieHeader: '',

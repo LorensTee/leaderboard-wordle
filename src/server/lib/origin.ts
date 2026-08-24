@@ -10,10 +10,11 @@ import type { Context } from 'hono';
 // contexts that cannot compute an origin).
 const ALLOWED_SEC_FETCH_SITE = new Set(['same-origin']);
 
-/** Extra allowed origins (dev servers, etc.). Never '*' in production. */
+/** Extra allowed origins (dev servers, etc.). Never '*' — a wildcard here would
+ * neuter the CSRF gate, so it is filtered out at runtime (fail-closed). */
 export function allowedOrigins(): string[] {
 	const extra = process.env.ALLOWED_ORIGINS?.split(',').map((o) => o.trim()).filter(Boolean) ?? [];
-	return [...new Set(extra)];
+	return [...new Set(extra.filter((o) => o !== '*'))];
 }
 
 /**

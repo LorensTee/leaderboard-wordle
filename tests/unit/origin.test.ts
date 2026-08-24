@@ -59,6 +59,24 @@ describe('isSameOriginRequest (NG4)', () => {
 		}
 	});
 
+	it('never honors a wildcard in ALLOWED_ORIGINS (CSRF gate stays fail-closed)', async () => {
+		const prev = process.env.ALLOWED_ORIGINS;
+		process.env.ALLOWED_ORIGINS = '*,http://dev.local';
+		try {
+			const wildcard = await makeContext('http://localhost:5173/api/game/start', {
+				origin: 'https://evil.example'
+			});
+			expect(isSameOriginRequest(wildcard)).toBe(false);
+			const dev = await makeContext('http://localhost:5173/api/game/start', {
+				origin: 'http://dev.local'
+			});
+			expect(isSameOriginRequest(dev)).toBe(true);
+		} finally {
+			if (prev === undefined) delete process.env.ALLOWED_ORIGINS;
+			else process.env.ALLOWED_ORIGINS = prev;
+		}
+	});
+
 	it('rejects headerless mutations unconditionally (no spoofable heuristic)', async () => {
 		// Neither Sec-Fetch-Site nor Origin present — always reject unsafe
 		// methods (the old x-forwarded-proto-based dev allowance was fail-open).
