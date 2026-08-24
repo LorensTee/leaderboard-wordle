@@ -96,6 +96,16 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     needs: unit-and-build
+    # Phase-1: the authenticated gameplay spec uses the deterministic session
+    # fixture (tests/e2e/helpers/auth-fixture.ts) — real user+session rows on
+    # the non-production DB and the exact Better Auth signed cookie, so no
+    # live Google OAuth round-trip. When these secrets are configured the
+    # full gameplay flow runs; without them the spec skips explicitly (the
+    # unauthenticated smoke spec always runs). The integration job above is
+    # the MANDATORY DB gate; this one stays green either way.
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
     steps:
       - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2

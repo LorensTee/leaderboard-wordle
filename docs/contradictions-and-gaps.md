@@ -194,3 +194,26 @@ Phase 0 is complete: foundation + auth core + test/CI infrastructure; the three 
 | CI integration gate mandatory | ✅ `integration` job fails when the non-prod `DATABASE_URL` secret is missing (no silent skip); `lint` + `auth:check` steps added |
 
 Post-Phase-0 recheck note (2026-08-23): Better Auth schema CLI regeneration was unpinned (`auth@latest`) and drifted (fingerprints only: `defaultNow()` markers + `@__PURE__` annotations). Guard added: `bun run auth:check`. **RESOLVED (2026-08-24, B8):** CLI pinned as devDependency `auth@1.7.1` (in `bun.lock`); `auth:schema` runs the local binary; regeneration is deterministic and byte-identical to the committed canonical file; `auth:check` is a CI gate. The fingerprint tolerant normalizer in `scripts/check-auth-schema.ts` is retained (any real drift still fails).
+
+## Phase 1 resolutions (2026-08-24 — implemented, code-first)
+
+Phase 1 (authenticated game vertical slice) is complete: server services,
+Hono endpoints, typed RPC client, Tailwind/svelte-query UI, re-pointed
+integration suites, authenticated E2E. Every decision below is recorded
+because it either adds a dependency or clarifies architecture wording.
+
+| Decision | Resolution |
+|---|---|
+| **Hono RPC typing requires chained registrations** | Hono accumulates its route Schema in the type of the chained return value (`.post(...)` mutates the same object but returns a new typed instance). `routes.ts` previously discarded every return, so `AppType` was schema-less and `hc<AppType>` resolved `unknown`. Fixed: the whole middleware/auth/game chain is now chained; `registerGameRoutes` returns the composed app and must never be annotated/cast (that erases the schema). Any future route registration must chain or the RPC client silently loses the endpoint. |
+| **`@hono/zod-validator` 0.9.0 added** | hono 4.13.3 no longer bundles `hono/zod-validator` (it moved out of core). Peer range `hono >=4.11.2`, `zod ^3.25 || ^4` — verified against the registry. Needed so the RPC client's `json` input is typed (`$post({ json })`) instead of manual response declarations. Validation failures map to the NG21 `BAD_REQUEST` envelope via the hook; the malformed-JSON path (a raw `HTTPException(400)` that never reaches the hook) is mapped in `onErrorHandler` — a deliberate, sanitized extension of the "only 408 preserved verbatim" policy. |
+| **Client timing fields: REJECTED, not ignored** | The guess body schema is `.strict()` — any client-supplied `startedAt`/`completedAt`/`completionTimeMs`/`status` field fails with 400. (Prompt §10 allowed either; rejection is the stronger posture and is unit-tested.) |
+| **Endpoint names** | `POST /api/game/start`, `GET /api/game/current`, `POST /api/game/:gameId/guess` — contract documented in `docs/phase-1-api.md`; Hono RPC types are the wire source of truth. |
+| **Server dictionary artifact** | `scripts/build-word-list.ts` now also emits `src/server/data/valid-guesses.generated.ts` (`VALID_GUESS_SET` — authoritative server validation). Parity tests pin source ↔ server ↔ client equality (NG7 "server + client artifacts" finally implemented). |
+| **E2E deterministic auth fixture** | `tests/e2e/helpers/auth-fixture.ts`: inserts a real user + session row on the non-production DB and constructs the exact Better Auth session cookie (Hono signed-cookie format `token.signature`, base64 HMAC-SHA256 — verified against better-auth 1.7.1 + hono 4.13.3). CI e2e job takes `DATABASE_URL` + `BETTER_AUTH_SECRET`; without them the gameplay spec skips explicitly and the smoke spec still runs (integration remains the mandatory DB gate). No live Google OAuth in CI. |
+| **shadcn-svelte CLI init deferred** | `shadcn-svelte@1.5.0` is installed (devDep, as intended), but `init` requires an interactive design-system preset (no non-interactive preset name exists — `--preset new-york` rejected). Phase-1 UI is custom Wordle tiles/keys and needs no shadcn components; the CLI can be run later for Phase-2 onboarding UI without touching Phase-1 code. Non-blocking. |
+| **`TS5112`/type-boundary board constants** | Board dimensions live client-side (`BOARD_ROWS`/`BOARD_COLS` in `src/lib/shared/lib/wordle-ux.ts`) rather than importing `$server/game/evaluate` at runtime into the bundle; a unit test pins parity with the server constants. |
+| **Play page gate** | `src/routes/play/+page.server.ts` redirects unauthenticated SSR to `/`; Hono `requireAuth` remains the authoritative API gate (unit + E2E proven). |
+| **smoke.spec.ts updated** | The scaffold heading (`Welcome to SvelteKit`) no longer exists; the smoke expectation now targets the real landing page. |
+| **Preview env** | `vite preview` loads `.dev.vars` into the Worker bindings ("Using secrets defined in .dev.vars") — verified empirically; the E2E suite runs against preview, not wrangler dev. |
+| **Finalization service shipped in Phase 1** | `finalizePuzzle` (src/server/puzzle/finalize.ts) is implemented because the NG9 lock-order tests must drive the REAL service (Phase-0 B6 mandate); the cron trigger wiring remains Phase 3. |
+| **Client GAME_EXPIRED handling** | On a `409 GAME_EXPIRED` from a guess, the play page disables the board and shows the ended-puzzle message (local ephemeral state; server truth unchanged). |

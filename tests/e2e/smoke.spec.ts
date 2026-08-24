@@ -7,7 +7,7 @@ test('homepage renders and the API returns the NG21 envelope for unknown routes'
 	request
 }) => {
 	await page.goto('/');
-	await expect(page.locator('h1')).toContainText('Welcome to SvelteKit');
+	await expect(page.locator('h1')).toContainText('Leaderboard Wordle');
 
 	const res = await request.get('/api/definitely-not-a-route');
 	expect(res.status()).toBe(404);
