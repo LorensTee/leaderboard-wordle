@@ -11,18 +11,11 @@
 //                             against Neon; requires a Neon DATABASE_URL)
 //
 // The Neon WebSocket transport itself is verified at the B7 external gate.
-import type { NeonDatabase } from 'drizzle-orm/neon-serverless';
 import * as schema from '../../src/server/db/schema';
+import type { Db as AppDb } from '../../src/server/db/client';
 
-export type Db = NeonDatabase<typeof schema> & {
-	$client: {
-		end(): Promise<void>;
-		connect(): Promise<{
-			query(q: string): Promise<{ rows: unknown[] }>;
-			release(): Promise<void>;
-		}>;
-	};
-};
+// The app's Db type (NeonDatabase + Neon Pool) — services accept exactly this.
+export type Db = AppDb;
 
 export async function createIntegrationDb(): Promise<Db> {
 	const url = process.env.DATABASE_URL;
@@ -53,7 +46,7 @@ export async function closeDb(db: Db): Promise<void> {
  */
 export async function connectClient(db: Db): Promise<{
 	query(q: string): Promise<{ rows: unknown[] }>;
-	release(): Promise<void>;
+	release(): Promise<void> | void;
 }> {
 	const client = await db.$client.connect();
 	return {
