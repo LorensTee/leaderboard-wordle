@@ -21,13 +21,14 @@ describe('signInOutcome (no false error on successful OAuth initiation)', () => 
 		expect(signInOutcome(successResponse)).toEqual({ ok: true });
 	});
 
-	it('a genuine initiation failure (error populated) is ok:false with the server message', () => {
+	it('a genuine initiation failure (error populated) is ok:false — sanitized generic message', () => {
+		// The server-side detail ('Provider not found…') must NOT reach the UI
+		// (NG21-style sanitization); it is only console-logged for diagnosis.
 		expect(
-			signInOutcome({ error: { message: 'Provider not found. Make sure to add the provider in your auth config' } })
-		).toEqual({
-			ok: false,
-			message: 'Provider not found. Make sure to add the provider in your auth config'
-		});
+			signInOutcome({
+				error: { message: 'Provider not found. Make sure to add the provider in your auth config' }
+			})
+		).toEqual({ ok: false, message: DEFAULT_SIGN_IN_ERROR });
 	});
 
 	it('an error without a message falls back to the default message', () => {

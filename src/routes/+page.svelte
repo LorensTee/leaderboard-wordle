@@ -12,6 +12,12 @@
 
 	async function handleSignIn() {
 		signingIn = true;
+		// Safety release: if the OAuth navigation does not actually leave the
+		// page (captive portal, blocked redirect, shape drift), the button
+		// must not stay stuck — reset loading without a false error toast.
+		const failsafe = setTimeout(() => {
+			signingIn = false;
+		}, 8000);
 		try {
 			const outcome = signInOutcome(await signInWithGoogle());
 			if (outcome.ok) {
@@ -24,9 +30,11 @@
 			}
 			// Genuine initiation failure (e.g. provider misconfiguration) —
 			// surface it and release the loading state.
+			clearTimeout(failsafe);
 			signingIn = false;
 			toast.error(outcome.message);
 		} catch {
+			clearTimeout(failsafe);
 			signingIn = false;
 			toast.error('Sign-in failed — please try again.');
 		}

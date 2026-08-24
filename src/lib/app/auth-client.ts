@@ -31,11 +31,18 @@ export const DEFAULT_SIGN_IN_ERROR = 'Sign-in could not start — please try aga
  * Decide what to tell the user about a `signIn.social()` resolution.
  * A normal successful OAuth initiation must NOT produce an error (regression
  * for the false-error toast bug); only a populated `error` field does.
+ * The server-side error details are deliberately NOT surfaced to the user
+ * (sanitized NG21-style: internal adapter/config messages must not reach the
+ * UI) — a generic failure message is returned and the raw detail is logged
+ * for diagnosis.
  */
 export function signInOutcome(res: SocialSignInResponse): SignInOutcome {
 	if (res.error) {
-		return { ok: false, message: res.error.message?.trim() || DEFAULT_SIGN_IN_ERROR };
+		console.warn('[sign-in] initiation failed:', res.error);
+		return { ok: false, message: DEFAULT_SIGN_IN_ERROR };
 	}
+	// No error → the client's redirect plugin has (or will) navigate to the
+	// provider authorize URL. Never treat this as a failure.
 	return { ok: true };
 }
 
