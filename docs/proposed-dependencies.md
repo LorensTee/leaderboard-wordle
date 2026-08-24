@@ -63,6 +63,8 @@ Verified corrections (v18 §8 minimum set): `@lucide/svelte` ✅, `svelte-sonner
 | `wrangler` | Cloudflare Workers | Dev server and deployment CLI |
 | `@playwright/test` | Playwright | E2E and security regression tests |
 | `vitest` | Vitest | Unit and integration test runner |
+| `eslint` + `typescript-eslint` + `eslint-plugin-svelte` + `@eslint/js` + `globals` | NG23 lint gate | ESLint 9 flat config (`eslint.config.js`); `bun run lint`; CI step. `svelte-check` remains the type checker (B8, 2026-08-24) |
+| `auth` (Better Auth CLI) | Better Auth schema generation | Pinned `1.7.1` so `bun run auth:schema` is reproducible and `auth:check` parity is deterministic (B8, 2026-08-24) |
 
 ## Packages NOT explicitly named in Architecture-v3 (data/config decisions)
 
