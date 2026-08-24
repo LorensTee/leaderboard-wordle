@@ -51,8 +51,10 @@
 	function keyClass(letter: string): string {
 		const state = keyStates.get(letter);
 		if (state === 'green') return 'bg-tile-green text-white';
-		if (state === 'yellow') return 'bg-tile-yellow text-white';
-		if (state === 'gray') return 'bg-tile-gray/60 text-white';
+		// Yellow uses dark letters (16px key labels need ≥4.5:1; white on
+		// #c9b458 is only ~2.1:1 — matches the tile treatment).
+		if (state === 'yellow') return 'bg-tile-yellow text-key-fg';
+		if (state === 'gray') return 'bg-tile-gray text-white';
 		return 'bg-key-bg text-key-fg dark:bg-white/15 dark:text-white';
 	}
 </script>

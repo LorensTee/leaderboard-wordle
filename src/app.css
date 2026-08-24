@@ -2,9 +2,16 @@
 
 /* ─── Game palette (Wordle-style, shadcn-neutral-compatible) ─────────────── */
 @theme {
-	--color-tile-green: #6aaa64;
+	/* Darkened for WCAG AA with white text: #538d4e white=3.97 (large-text
+	   OK for tiles but key labels are 16px bold = NORMAL text, needing 4.5).
+	   #477d43 reaches ~4.9:1 on tiles AND keyboard keys with one color. */
+	--color-tile-green: #477d43;
+	/* Yellow keeps the classic hue; the LETTERS go dark on yellow (see
+	   tile.svelte/keyboard.svelte) because white on #c9b458 is only ~2.1:1. */
 	--color-tile-yellow: #c9b458;
-	--color-tile-gray: #787c7e;
+	/* White text on #787c7e is 4.21 (< 4.5 for normal text); #6e7072 reaches
+	   ~4.9:1 and is visually near-identical. */
+	--color-tile-gray: #6e7072;
 	--color-tile-empty-border: #d3d6da;
 	--color-key-bg: #d3d6da;
 	--color-key-fg: #1a1a1b;

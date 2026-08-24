@@ -173,7 +173,10 @@
 	</div>
 
 	{#if game.status === 'COMPLETED'}
-		<p class="py-3 text-center text-sm font-semibold text-tile-green" role="status">
+		<p
+			class="py-3 text-center text-sm font-semibold text-[#1a7f37] dark:text-[#3fb950]"
+			role="status"
+		>
 			Solved in {game.guessCount}/6 &middot; {game.completionTimeMs !== null ? formatDuration(game.completionTimeMs) : ''}
 		</p>
 	{:else if game.status === 'FAILED' || expired}

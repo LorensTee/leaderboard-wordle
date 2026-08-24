@@ -78,7 +78,7 @@
 				Sign in with Google
 			{/if}
 		</button>
-		<p class="text-xs text-black/40 dark:text-white/40">
+		<p class="text-xs text-black/60 dark:text-white/60">
 			Private play for your group — Google account required.
 		</p>
 	{/if}

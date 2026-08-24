@@ -22,7 +22,9 @@
 		state === 'green'
 			? 'bg-tile-green text-white'
 			: state === 'yellow'
-				? 'bg-tile-yellow text-white'
+				? // Dark letters on the classic yellow: white on #c9b458 is only
+					// ~2.1:1, dark text reaches ~8.4:1 (tile color keeps its hue).
+					'bg-tile-yellow text-key-fg'
 				: state === 'gray'
 					? 'bg-tile-gray text-white'
 					: state === 'tbd'
