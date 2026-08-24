@@ -1,0 +1,88 @@
+@import 'tailwindcss';
+
+/* ─── Game palette (Wordle-style, shadcn-neutral-compatible) ─────────────── */
+@theme {
+	--color-tile-green: #6aaa64;
+	--color-tile-yellow: #c9b458;
+	--color-tile-gray: #787c7e;
+	--color-tile-empty-border: #d3d6da;
+	--color-key-bg: #d3d6da;
+	--color-key-fg: #1a1a1b;
+	--color-board-bg-light: #ffffff;
+	--color-board-bg-dark: #121213;
+}
+
+:root {
+	color-scheme: light dark;
+}
+
+body {
+	margin: 0;
+	font-family:
+		'Helvetica Neue', 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+	background: var(--color-board-bg-light);
+	color: #1a1a1b;
+	-webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background: var(--color-board-bg-dark);
+		color: #f8f8f8;
+	}
+}
+
+/* ─── Tile animations ───────────────────────────────────────────────────── */
+/* Invalid-word shake (trivial transition → CSS). */
+@keyframes tile-shake {
+	0%,
+	100% {
+		transform: translateX(0);
+	}
+	20% {
+		transform: translateX(-6px);
+	}
+	40% {
+		transform: translateX(6px);
+	}
+	60% {
+		transform: translateX(-4px);
+	}
+	80% {
+		transform: translateX(4px);
+	}
+}
+
+.shake {
+	animation: tile-shake 0.4s ease-in-out;
+}
+
+@keyframes tile-pop {
+	0% {
+		transform: scale(0.9);
+	}
+	50% {
+		transform: scale(1.06);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+.pop {
+	animation: tile-pop 0.18s ease-out;
+}
+
+/* Keyboard buttons: minimal press feedback. */
+.key-button {
+	transition:
+		filter 0.12s ease,
+		transform 0.06s ease;
+	touch-action: manipulation;
+	user-select: none;
+}
+
+.key-button:active {
+	transform: translateY(1px);
+	filter: brightness(0.92);
+}

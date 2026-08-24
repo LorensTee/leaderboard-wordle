@@ -44,6 +44,7 @@
 		"eslint-plugin-svelte": "^3.23.0",
 		"globals": "^17.11.0",
 		"pg": "^8.23.0",
+		"shadcn-svelte": "^1.5.0",
 		"svelte": "^5.56.1",
 		"svelte-check": "^4.6.0",
 		"typescript": "^6.0.3",
@@ -53,11 +54,18 @@
 		"wrangler": "^4.125.0"
 	},
 	"dependencies": {
+		"@hono/zod-validator": "^0.9.0",
+		"@lucide/svelte": "^1.34.0",
 		"@neondatabase/serverless": "^1.1.0",
+		"@tailwindcss/vite": "^4.3.3",
+		"@tanstack/svelte-query": "^6.1.42",
+		"animejs": "^4.5.0",
 		"better-auth": "^1.7.1",
 		"drizzle-orm": "^0.45.2",
 		"drizzle-zod": "^0.8.3",
 		"hono": "^4.13.3",
+		"svelte-sonner": "^1.2.1",
+		"tailwindcss": "^4.3.3",
 		"zod": "^4.4.3"
 	}
 }

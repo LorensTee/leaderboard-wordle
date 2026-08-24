@@ -78,13 +78,24 @@ export function resolveError(err: unknown, requestId: string): { status: number;
 
 /** Centralized onError: JSON envelope for every thrown error (NG21). */
 export function onErrorHandler(err: Error, c: Context): Response {
-	// Custom onError replaces Hono's default. The ONLY intentional
-	// HTTPException payload is the NG19 408 timeout envelope (routes.ts) —
-	// preserve exactly that; anything else stays on the sanitized envelope
-	// (a future user-controlled HTTPException must not bypass it).
-	if (err instanceof HTTPException && err.status === 408) return err.getResponse();
-
 	const requestId = c.get('requestId') ?? 'unknown';
+	// Custom onError replaces Hono's default. The ONLY intentional raw
+	// HTTPException payload is the NG19 408 timeout envelope (routes.ts) —
+	// preserve exactly that. A 400 HTTPException (hono/zod-validator
+	// malformed-JSON case, which never reaches the validation hook) is an
+	// intentional client-error signal: map it to the standard BAD_REQUEST
+	// envelope (still sanitized — no raw content). Any other HTTPException
+	// stays on the sanitized internal envelope.
+	if (err instanceof HTTPException) {
+		if (err.status === 408) return err.getResponse();
+		if (err.status === 400) {
+			return c.json(
+				errorEnvelope(ERROR_CODES.BAD_REQUEST, 'Invalid request', requestId),
+				400
+			);
+		}
+	}
+
 	const { status, body } = resolveError(err, requestId);
 	// Internal errors keep a server-side trace via the requestId.
 	if (status >= 500) console.error(`[internal] requestId=${requestId}`, err);

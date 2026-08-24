@@ -1,6 +1,12 @@
 // The fully composed Hono application (proposed-repo-tree: routes.ts).
 // Platform bridge = src/routes/api/[...path]/+server.ts (SvelteKit) — the
 // ONLY place platform bindings are translated into Hono's environment.
+//
+// Composition note: Hono accumulates its route Schema in the TYPE of the
+// chained return value (`app.post(...)` returns a new typed instance while
+// mutating the same object at runtime). AppType (used by `hc<AppType>` RPC
+// client) is only useful when every registration is chained — discarding
+// the return value silently kills the client typing.
 import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { HTTPException } from 'hono/http-exception';
@@ -41,90 +47,73 @@ export type AppEnv = {
 	Variables: HonoVariables;
 };
 
-export const app = new Hono<AppEnv>();
-
 // NG21 — requestId FIRST (every downstream envelope references it).
-app.use('*', requestIdMiddleware);
-
 // NG19 — 30s timeout → JSON 408 envelope (via HTTPException carrying the response).
-const TIMEOUT_MS = 30_000;
-app.use(
-	'*',
-	timeout(TIMEOUT_MS, (c) =>
-		new HTTPException(408, {
-			res: c.json(
-				errorEnvelope(
-					ERROR_CODES.REQUEST_TIMEOUT,
-					'Request timed out',
-					c.get('requestId') ?? 'unknown'
-				),
-				408
-			)
+// NG20 — 64 KB request-body cap → JSON 413 envelope (pre-validation).
+// NG22 — secure-header baseline (+ production-only HSTS over TLS).
+// NG4  — CSRF for cookie-authenticated JSON mutations (excludes /api/auth/*).
+// Phase 0 B4 — Hono-side authentication helper (fast-path: no session cookie
+//              → null without a DB round-trip). Never trusts event.locals.
+// Protected namespaces: requireAuth rejects unauthenticated requests with
+// the standard UNAUTHORIZED envelope BEFORE any handler runs.
+const base = new Hono<AppEnv>()
+	.use('*', requestIdMiddleware)
+	.use(
+		'*',
+		timeout(30_000, (c) =>
+			new HTTPException(408, {
+				res: c.json(
+					errorEnvelope(
+						ERROR_CODES.REQUEST_TIMEOUT,
+						'Request timed out',
+						c.get('requestId') ?? 'unknown'
+					),
+					408
+				)
+			})
+		)
+	)
+	.use(
+		'*',
+		bodyLimit({
+			maxSize: 64 * 1024,
+			onError: (c) =>
+				c.json(
+					errorEnvelope(
+						ERROR_CODES.PAYLOAD_TOO_LARGE,
+						'Request body exceeds 64 KB',
+						c.get('requestId') ?? 'unknown'
+					),
+					413
+				)
 		})
 	)
-);
-
-// NG20 — 64 KB request-body cap → JSON 413 envelope (pre-validation).
-app.use(
-	'*',
-	bodyLimit({
-		maxSize: 64 * 1024,
-		onError: (c) =>
-			c.json(
-				errorEnvelope(
-					ERROR_CODES.PAYLOAD_TOO_LARGE,
-					'Request body exceeds 64 KB',
-					c.get('requestId') ?? 'unknown'
-				),
-				413
-			)
-	})
-);
-
-// NG22 — secure-header baseline (+ production-only HSTS over TLS).
-app.use('*', securityHeadersMiddleware);
-app.use('*', hstsOnHttps);
-
-// NG4 — CSRF for cookie-authenticated JSON mutations (excludes /api/auth/*).
-app.use('*', csrfProtection);
-
-// Phase 0 B4 — Hono-side authentication helper: resolves the Better Auth
-// session from request cookies/headers for every API request (fast-path:
-// no session cookie → null without a DB round-trip). Application API routes
-// must never trust SvelteKit `event.locals` — the bridge does not pass them.
-app.use('*', authContext);
-
-// Protected application namespaces. requireAuth rejects unauthenticated
-// requests with the standard UNAUTHORIZED envelope BEFORE any handler runs.
-// Routes under these prefixes are registered in later phases (game/me/admin);
-// mounting the guard at Phase 0 locks the boundary in by default.
-app.use('/api/game/*', requireAuth);
-app.use('/api/me/*', requireAuth);
-app.use('/api/admin/*', requireAuth);
-
-// Better Auth — mounted per the current Hono integration docs:
-// `app.all("/api/auth/*", (c) => auth.handler(c.req.raw))`. Runtime values
-// come from Hono bindings (getAuth factory). Deliberately NOT behind
-// requireAuth — OAuth callbacks/redirects must stay reachable and Better
-// Auth owns its own session/CSRF handling on these paths.
-// `?? {}` guards Hono's `app.request(url)` test path, where `c.env` is
-// actually undefined at runtime (verified; the bridge always passes an
-// object, so production behavior is unchanged).
-app.all('/api/auth/*', (c) => getAuth((c.env ?? {}) as HonoBindings).handler(c.req.raw));
+	.use('*', securityHeadersMiddleware)
+	.use('*', hstsOnHttps)
+	.use('*', csrfProtection)
+	.use('*', authContext)
+	.use('/api/game/*', requireAuth)
+	.use('/api/me/*', requireAuth)
+	.use('/api/admin/*', requireAuth)
+	// Better Auth — mounted per the current Hono integration docs:
+	// `app.all("/api/auth/*", (c) => auth.handler(c.req.raw))`. Runtime values
+	// come from Hono bindings (getAuth factory). Deliberately NOT behind
+	// requireAuth — OAuth callbacks/redirects must stay reachable and Better
+	// Auth owns its own session/CSRF handling on these paths.
+	// `?? {}` guards Hono's `app.request(url)` test path, where `c.env` is
+	// actually undefined at runtime (verified; the bridge always passes an
+	// object, so production behavior is unchanged).
+	.all('/api/auth/*', (c) => getAuth((c.env ?? {}) as HonoBindings).handler(c.req.raw));
 
 // Phase-1 game vertical slice (protected: requireAuth mounted above on
 // /api/game/*). The service factory resolves the memoized DB client from the
 // Worker bindings; the answers stay inside the service (never serialized).
-registerGameRoutes(app, {
+export const app = registerGameRoutes(base, {
 	getService: (c) => createGameService(getDb(c.env))
-});
-
-// NG21 — centralized error/notFound handling.
-app.onError(onErrorHandler);
-app.notFound(notFoundHandler);
-
-// Route mounting: Better Auth handler at /api/auth (Phase 0 B4), then
-// application routes (Phase 1+). Keep this file the only composition point.
+})
+	// NG21 — centralized error/notFound handling.
+	.onError(onErrorHandler)
+	.notFound(notFoundHandler);
 
 export type AppType = typeof app;
 export default app;
