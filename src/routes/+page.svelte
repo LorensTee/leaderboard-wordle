@@ -9,17 +9,25 @@
 
 	const user = $derived(page.data.user);
 	let signingIn = $state(false);
+	// Monotonic attempt counter: stale resolutions/rejections from a previous
+	// click (e.g. a flow whose 8s failsafe already released the button) must
+	// never toast or mutate state for the CURRENT attempt.
+	let signInAttempt = 0;
 
 	async function handleSignIn() {
+		const attempt = ++signInAttempt;
 		signingIn = true;
 		// Safety release: if the OAuth navigation does not actually leave the
 		// page (captive portal, blocked redirect, shape drift), the button
 		// must not stay stuck — reset loading without a false error toast.
 		const failsafe = setTimeout(() => {
-			signingIn = false;
+			if (attempt === signInAttempt) signingIn = false;
 		}, 8000);
 		try {
 			const outcome = signInOutcome(await signInWithGoogle());
+			clearTimeout(failsafe);
+			// A newer attempt owns the UI — ignore this stale settlement.
+			if (attempt !== signInAttempt) return;
 			if (outcome.ok) {
 				// Success: better-auth's client redirect plugin has already
 				// started the OAuth navigation (window.location = authorize
@@ -30,11 +38,11 @@
 			}
 			// Genuine initiation failure (e.g. provider misconfiguration) —
 			// surface it and release the loading state.
-			clearTimeout(failsafe);
 			signingIn = false;
 			toast.error(outcome.message);
 		} catch {
 			clearTimeout(failsafe);
+			if (attempt !== signInAttempt) return;
 			signingIn = false;
 			toast.error('Sign-in failed — please try again.');
 		}
