@@ -43,6 +43,7 @@
 			gameApi.submitGuess(vars.gameId, vars.word),
 		onSuccess: (outcome) => {
 			queryClient.setQueryData([...CURRENT_GAME_KEY], { game: outcome.game });
+			currentInput = '';
 			lastSubmittedIndex = outcome.guess.guessNumber - 1;
 			if (outcome.terminal && outcome.solved) celebrate(outcome.guess.guessNumber - 1);
 		},
