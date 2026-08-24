@@ -5,7 +5,7 @@
 	import { resolve } from '$app/paths';
 	import { toast } from 'svelte-sonner';
 	import { Play, Sparkles } from '@lucide/svelte';
-	import { signInWithGoogle } from '$lib/app/auth-client';
+	import { signInOutcome, signInWithGoogle } from '$lib/app/auth-client';
 
 	const user = $derived(page.data.user);
 	let signingIn = $state(false);
@@ -13,11 +13,19 @@
 	async function handleSignIn() {
 		signingIn = true;
 		try {
-			await signInWithGoogle();
-			// The OAuth redirect takes over; if it returns without navigating,
-			// surface a failure instead of a silent stall.
-			toast.error('Sign-in could not start — please try again.');
+			const outcome = signInOutcome(await signInWithGoogle());
+			if (outcome.ok) {
+				// Success: better-auth's client redirect plugin has already
+				// started the OAuth navigation (window.location = authorize
+				// URL) before the promise resolved — a resolution is the
+				// NORMAL successful initiation, never a failure signal
+				// (see signInOutcome; regression-tested). No toast.
+				return;
+			}
+			// Genuine initiation failure (e.g. provider misconfiguration) —
+			// surface it and release the loading state.
 			signingIn = false;
+			toast.error(outcome.message);
 		} catch {
 			signingIn = false;
 			toast.error('Sign-in failed — please try again.');

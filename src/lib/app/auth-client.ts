@@ -6,9 +6,42 @@ import { createAuthClient } from 'better-auth/svelte';
 
 export const authClient = createAuthClient();
 
-/** Google OIDC sign-in; returns to /play when the flow completes. */
-export async function signInWithGoogle(): Promise<void> {
-	await authClient.signIn.social({
+/**
+ * The minimal response signal that matters for OAuth initiation. The full
+ * client response also carries `data`; only `error` distinguishes a genuine
+ * initiation failure — a successful initiation RESOLVES normally (the
+ * client's redirect plugin has already started `window.location` navigation
+ * to the provider authorize URL by the time the promise settles; verified
+ * against better-auth 1.7.1 `client/fetch-plugins.mjs` redirectPlugin +
+ * `api/routes/sign-in.mjs` signInSocial: success → `{ url, redirect: true }`,
+ * failure → thrown APIError surfaced as `{ error }`).
+ */
+export type SocialSignInResponse = {
+	/** Non-null on genuine initiation failure (APIError surfaced by the client). */
+	error?: { message?: string; status?: number } | null;
+	/** Success payload (e.g. `{ url, redirect: true }`) — irrelevant to the outcome decision. */
+	data?: unknown;
+};
+
+export type SignInOutcome = { ok: true } | { ok: false; message: string };
+
+export const DEFAULT_SIGN_IN_ERROR = 'Sign-in could not start — please try again.';
+
+/**
+ * Decide what to tell the user about a `signIn.social()` resolution.
+ * A normal successful OAuth initiation must NOT produce an error (regression
+ * for the false-error toast bug); only a populated `error` field does.
+ */
+export function signInOutcome(res: SocialSignInResponse): SignInOutcome {
+	if (res.error) {
+		return { ok: false, message: res.error.message?.trim() || DEFAULT_SIGN_IN_ERROR };
+	}
+	return { ok: true };
+}
+
+/** Google OAuth sign-in; returns to /play when the flow completes. */
+export async function signInWithGoogle(): Promise<SocialSignInResponse> {
+	return authClient.signIn.social({
 		provider: 'google',
 		callbackURL: '/play',
 		newUserCallbackURL: '/play'
