@@ -104,6 +104,9 @@ app.use('/api/admin/*', requireAuth);
 // come from Hono bindings (getAuth factory). Deliberately NOT behind
 // requireAuth — OAuth callbacks/redirects must stay reachable and Better
 // Auth owns its own session/CSRF handling on these paths.
+// `?? {}` guards Hono's `app.request(url)` test path, where `c.env` is
+// actually undefined at runtime (verified; the bridge always passes an
+// object, so production behavior is unchanged).
 app.all('/api/auth/*', (c) => getAuth((c.env ?? {}) as HonoBindings).handler(c.req.raw));
 
 // NG21 — centralized error/notFound handling.

@@ -4,7 +4,7 @@
 // Rules enforced at build time (fails the build on violations):
 //   - one word per line (blank lines and `#` comments ignored)
 //   - lowercase a-z only, exactly 5 letters
-//   - no duplicates (case-insensitive), output sorted
+//   - no duplicates, output sorted
 // The answer pool is a SEPARATE private pipeline (scripts/seed/, gitignored)
 // and must never enter this artifact (NC3/NG16 provenance recorded there).
 //
