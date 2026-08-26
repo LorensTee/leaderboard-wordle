@@ -20,7 +20,7 @@ Determine:
 
 - current HEAD
 - current working-tree-relevant repository state
-- actual dependency versions from `../../bun.lock`
+- actual dependency versions from `../../../bun.lock`
 - actual source tree
 - actual Phase-1 implementation
 - actual tests
@@ -36,11 +36,11 @@ Determine:
 The authoritative hierarchy is:
 
 1. actual repository code/state
-2. `../contradictions-and-gaps.md`
-3. `../../Architecture-v3.md`
-4. `../../Specifications-v1.md`
-5. `../proposed-repo-tree.md`
-6. `../proposed-dependencies.md`
+2. `../../contradictions-and-gaps.md`
+3. `../../../Architecture-v3.md`
+4. `../../../Specifications-v1.md`
+5. `../../proposed-repo-tree.md`
+6. `../../proposed-dependencies.md`
 7. historical handoff documents / commit messages
 
 When documents conflict with the current repository, document the discrepancy instead of silently guessing.
@@ -75,11 +75,11 @@ Produce a concise Phase-1 closure assessment:
 
 Read in full:
 
-- `../../Architecture-v3.md`
-- `../../Specifications-v1.md`
-- `../contradictions-and-gaps.md`
-- `../proposed-repo-tree.md`
-- `../proposed-dependencies.md`
+- `../../../Architecture-v3.md`
+- `../../../Specifications-v1.md`
+- `../../contradictions-and-gaps.md`
+- `../../proposed-repo-tree.md`
+- `../../proposed-dependencies.md`
 
 Extract ONLY the requirements relevant to Phase 2.
 
@@ -210,7 +210,7 @@ Do not assume that installing `shadcn-svelte` means it is initialized.
 Report:
 
 - whether shadcn-svelte is initialized
-- whether `components.json` exists
+- whether `../../../components.json` exists
 - which shadcn components are actually present
 - which current UI components are custom
 - which Phase-2 components genuinely benefit from shadcn-svelte
@@ -349,7 +349,7 @@ Use deterministic authentication fixtures where practical. Do not introduce live
 
 Any Phase-2 decision that changes or clarifies an existing architecture/specification rule must be recorded in:
 
-`../contradictions-and-gaps.md`
+`../../contradictions-and-gaps.md`
 
 Do not hide architectural decisions only in the new Phase-2 files.
 

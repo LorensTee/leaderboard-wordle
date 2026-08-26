@@ -110,7 +110,7 @@ The implementation MUST perform these checkpoints:
   inspect onboarding, profile, authenticated shell, placeholders, and the
   existing `/play` surface for unintended regressions.
 
-Temporary screenshots belong in `../../.cache/ui-shots` and must not be committed.
+Temporary screenshots belong in `../../../.cache/ui-shots` and must not be committed.
 
 A screenshot counts as visual verification only when it was actually opened
 and inspected. Capturing a screenshot without viewing it does NOT satisfy the
@@ -145,12 +145,12 @@ Functional and visual verification must remain separate:
 |---|---|
 | HEAD | `2fc1be1` (working tree: only user's `` reorganization + `.idea`) |
 | Framework | SvelteKit 2.70.3 / Svelte 5.56.10 (runes) / Vite 8.2.2 / TS 6.0.3 |
-| API | Hono 4.13.3 (single composition point `../../src/server/routes.ts`, chained schema, `hc<AppType>` RPC) |
+| API | Hono 4.13.3 (single composition point `../../../src/server/routes.ts`, chained schema, `hc<AppType>` RPC) |
 | Auth | Better Auth 1.7.1 (Google OIDC; `/api/auth/*`); Hono `authContext`/`requireAuth` independent of SvelteKit locals |
 | DB | Drizzle 0.45.2 + Neon WebSocket; 8 tables; migration `0000_init.sql` |
 | UI | Tailwind v4 CSS-first; custom board/keyboard/tile/timer/header; svelte-sonner; @lucide/svelte; animejs |
 | Server state | @tanstack/svelte-query 6.1.42 (`['game','current']` + start/guess mutations, `setQueryData`) |
-| shadcn | `shadcn-svelte@1.5.0` installed as devDependency; **NOT initialized** (no `../../components.json`) |
+| shadcn | `shadcn-svelte@1.5.0` installed as devDependency; **NOT initialized** (no `../../../components.json`) |
 | Theme | **None** — dark mode is pure `prefers-color-scheme` CSS media queries |
 | Onboarding cols | `avatarEmoji` (text, default `'🙂'`), `role` (text, `'player'`), `display_name_normalized` (nullable UNIQUE), `onboarding_completed_at` (nullable) — all present in generated schema + migration |
 | Admin bootstrap | **Not implemented** (`ADMIN_EMAIL` exists only as a binding type) |
@@ -167,13 +167,13 @@ Functional and visual verification must remain separate:
 3. contradictions-and-gaps NG5 (theme), NG6 (display-name normalization +
    moderation keys), NG9–NG25 (unchanged guards), NC3 (data provenance),
    NG18 (admin bootstrap), M1/M4 (config paths).
-4. proposed-repo-tree: `../../src/lib/shared/config` (avatar-emojis, banned-words),
-   `../../src/lib/shared/lib` (canonicalizeDisplayName, moderationKeyForDisplayName),
-   `src/lib/app/theme`, `../../src/server/profile` (Phase-2 home), `src/routes/play|profile|admin|leaderboard`.
+4. proposed-repo-tree: `../../../src/lib/shared/config` (avatar-emojis, banned-words),
+   `../../../src/lib/shared/lib` (canonicalizeDisplayName, moderationKeyForDisplayName),
+   `src/lib/app/theme`, `../../../src/server/profile` (Phase-2 home), `src/routes/play|profile|admin|leaderboard`.
 
 ## 5. Decisions made
 
-Architecture decisions are also recorded in `../contradictions-and-gaps.md`
+Architecture decisions are also recorded in `../../contradictions-and-gaps.md`
 (§Phase-2 planning resolutions).
 
 ### D1 — Onboarding gating (user-facing)
@@ -200,7 +200,7 @@ Architecture decisions are also recorded in `../contradictions-and-gaps.md`
 
 - Raw input → trim → collapse internal whitespace runs → validate charset
   `[a-z0-9 _-]` (case-insensitive) → canonical form length **2–15**.
-- `canonicalizeDisplayName(s)` (in `../../src/lib/shared/lib/display-name.ts`):
+- `canonicalizeDisplayName(s)` (in `../../../src/lib/shared/lib/display-name.ts`):
   lowercase, trim, collapse spaces → uniqueness key stored in
   `display_name_normalized`. UNIQUE constraint is the final guard.
 - `moderationKeyForDisplayName(s)` (same module, deliberately separate):
@@ -237,7 +237,7 @@ Architecture decisions are also recorded in `../contradictions-and-gaps.md`
 
 ### D3 — Moderation baseline (user decision)
 
-- Baseline authored directly in `../../src/lib/shared/config/banned-words.json`:
+- Baseline authored directly in `../../../src/lib/shared/config/banned-words.json`:
   `{ "version": "1.0", "source": "curated baseline", "license": "project-owned",
   "importedAt": "2026-08-25", "words": [...] }` (~60–100 common profanities/slurs
   + common embedded evasion variants). Provenance fields live IN the JSON.
@@ -245,11 +245,11 @@ Architecture decisions are also recorded in `../contradictions-and-gaps.md`
 
 ### D4 — Avatar
 
-- Canonical curated list in `../../src/server/data/avatar-emojis.ts`
+- Canonical curated list in `../../../src/server/data/avatar-emojis.ts`
   (`readonly { emoji: string; label: string }[]`, ~24 entries, stable order,
   a11y labels), mirrored to a **generated client artifact**
-  `../../src/lib/shared/config/avatar-emojis.generated.ts` via a new
-  `../../scripts/build-avatar-list.ts` + `bun run avatar-list` (mirrors the word-list
+  `../../../src/lib/shared/config/avatar-emojis.generated.ts` via a new
+  `../../../scripts/build-avatar-list.ts` + `bun run avatar-list` (mirrors the word-list
   pipeline; parity unit test; CI step `git diff --exit-code` after generation).
 - Server allow-list validation `isValidAvatarEmoji()`; DB stores the emoji string
   only. Not a DB table (Spec §15).
@@ -265,14 +265,14 @@ Architecture decisions are also recorded in `../contradictions-and-gaps.md`
 
 - Binary `light | dark`; stored as `localStorage['theme']`; default = system via
   `prefers-color-scheme`; explicit choice persists and wins.
-- Pre-paint inline script in `../../src/app.html` `<head>` sets
+- Pre-paint inline script in `../../../src/app.html` `<head>` sets
   `document.documentElement.dataset.theme` before first paint (CSP-compatible
   single script; NG17 note for Phase 5).
 - Tailwind v4 dark variant switched from media query to the data attribute via
   `@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));` in
-  `../../src/app.css`; the existing `@media (prefers-color-scheme: dark)` blocks move
+  `../../../src/app.css`; the existing `@media (prefers-color-scheme: dark)` blocks move
   to `[data-theme='dark']`-driven rules.
-- `../../src/lib/app/theme.ts`: `applyTheme`, `initTheme`, `themeAtom`/store for the
+- `../../../src/lib/app/theme.ts`: `applyTheme`, `initTheme`, `themeAtom`/store for the
   toggle. Toggle lives in header and/or profile (spec §2: profile switch).
 
 ### D6 — Shell/navigation (user decision)
@@ -311,8 +311,8 @@ Architecture decisions are also recorded in `../contradictions-and-gaps.md`
 
 - Phase 2 initializes the CLI (interactive preset — the implementation chat
   must handle the non-interactive constraint; fallback: hand-rolled components
-  with the documented deferral re-recorded). `../../components.json` + Tailwind v4
-  shadcn tokens land in `../../src/app.css`.
+  with the documented deferral re-recorded). `../../../components.json` + Tailwind v4
+  shadcn tokens land in `../../../src/app.css`.
 - Real shadcn use: **Input, Button, Badge** (profile/onboarding form, shell),
   **Dropdown Menu** (header user menu if used), **Sheet** only if the 390px
   shell needs it (do not force). Board/keyboard/tiles stay custom (documented).
@@ -403,13 +403,13 @@ only (reuse `canonicalizeDisplayName`/charset helpers from shared lib).
 
 ## 11. Validation/moderation strategy (recap)
 
-`../../src/lib/shared/lib/display-name.ts`: `validateDisplayName(input)` →
+`../../../src/lib/shared/lib/display-name.ts`: `validateDisplayName(input)` →
 `{ ok: true, canonical, moderationKey } | { ok: false, code }` (pure, unit-tested).
 Server service re-runs everything; shared pure functions imported by the server
-via a server-side copy? **Boundary note:** `../../src/server` must not import FSD
-`../../src/lib`. Resolution: the pure display-name module lives in
-`../../src/server/profile/display-name.ts` (authoritative) and the client re-uses a
-mirrored implementation in `../../src/lib/shared/lib/display-name.ts` with a parity
+via a server-side copy? **Boundary note:** `../../../src/server` must not import FSD
+`../../../src/lib`. Resolution: the pure display-name module lives in
+`../../../src/server/profile/display-name.ts` (authoritative) and the client re-uses a
+mirrored implementation in `../../../src/lib/shared/lib/display-name.ts` with a parity
 unit test (same pattern as `BOARD_ROWS` vs server constants) — OR the module is
 duplicated deliberately with a parity test. Choose the parity-tested twin to
 preserve both boundary rules; start server-authoritative.
@@ -420,7 +420,7 @@ the shared module from the server — do NOT decide silently.)
 
 ## 12. Test plan (Phase 2)
 
-### Unit (extend `../../tests/unit`)
+### Unit (extend `../../../tests/unit`)
 
 - display-name: charset/length/trim/collapse; canonicalization determinism;
   moderation key leet/confusable/separator cases; banned substring detection;
@@ -434,7 +434,7 @@ the shared module from the server — do NOT decide silently.)
 - theme helpers: storage round-trip, default resolution, applyTheme idempotence
 - profile service validation branches (pure logic) with fake user input
 
-### Integration (live Neon; extend `../../tests/integration`)
+### Integration (live Neon; extend `../../../tests/integration`)
 
 - `GET /api/me` authenticated shape; 401 unauthenticated
 - PATCH: complete onboarding (both fields) persists
@@ -468,11 +468,11 @@ Use the multimodal model's image input at each checkpoint when available. The im
 **Checkpoint C — final Phase-2 regression pass**
 - Capture final light and dark screenshots at approximately `1440x900` and `390x844` for `/onboarding`, `/profile`, and the normal authenticated shell (plus `/play` to verify Phase-1 UI was not visually regressed).
 - Inspect: responsive behavior, horizontal overflow, navigation fit, typography, spacing, focus/hover/disabled states, avatar target size, and consistency between custom and shadcn-svelte components.
-- Keep temporary screenshots in a gitignored location such as `../../.cache/ui-shots`; do not commit screenshots unless the repository explicitly requires them.
+- Keep temporary screenshots in a gitignored location such as `../../../.cache/ui-shots`; do not commit screenshots unless the repository explicitly requires them.
 
 The visual pass should complement, not replace, automated checks for accessibility, contrast, routing, and behavior. When a visual finding is discovered, fix the underlying implementation and re-run the relevant automated tests.
 
-### E2E (deterministic fixture; extend `../../tests/e2e`)
+### E2E (deterministic fixture; extend `../../../tests/e2e`)
 
 1. unauthenticated user reaches Google sign-in
 2. authenticated incomplete user is sent to onboarding
@@ -489,7 +489,7 @@ The visual pass should complement, not replace, automated checks for accessibili
 13. Phase-1 gameplay remains reachable after onboarding (full game flow)
 14. no Phase-1 game regressions (smoke + game-flow suites stay green)
 
-Fixture change: `../../tests/e2e/helpers/auth-fixture.ts` gains an `onboarded`
+Fixture change: `../../../tests/e2e/helpers/auth-fixture.ts` gains an `onboarded`
 flag/step (create users with or without profile fields); Phase-1 gameplay
 specs use onboarded users. No live Google OAuth in CI.
 

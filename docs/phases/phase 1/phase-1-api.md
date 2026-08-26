@@ -1,9 +1,9 @@
 # Phase-1 Game API Contract
 
 Settled before the UI became dependent on it (Phase-1 prompt §7). The Hono
-RPC types (`hc<AppType>`, `src/lib/shared/api/client.ts`) are the source of
+RPC types (`hc<AppType>`, `../../../src/lib/shared/api/client.ts`) are the source of
 truth for wire shapes; this document records the contract semantics. All
-endpoints are registered in `src/server/routes.ts` (the single composition
+endpoints are registered in `../../../src/server/routes.ts` (the single composition
 point) behind the Phase-0 middleware chain: requestId → timeout → bodyLimit
 → secure headers → CSRF → authContext → requireAuth (`/api/game/*`).
 
@@ -100,7 +100,7 @@ Submit exactly one guess.
 
 ## Client usage
 
-`src/lib/shared/api/game.ts` wraps the RPC client (`hc<AppType>`); TanStack
-Query calls it from `src/routes/play/+page.svelte` (query key
+`../../../src/lib/shared/api/game.ts` wraps the RPC client (`hc<AppType>`); TanStack
+Query calls it from `../../../src/routes/play/+page.svelte` (query key
 `['game','current']`; start/guess mutations update the cache from the server
 response). No parallel fetch wrappers exist for these endpoints.

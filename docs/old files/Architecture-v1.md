@@ -120,7 +120,7 @@ bun add <package>
 bun run dev
 ```
 
-The repository uses Bun's `bun.lock`. An empty project with no dependencies does not need an empty lockfile committed.
+The repository uses Bun's `../../bun.lock`. An empty project with no dependencies does not need an empty lockfile committed.
 
 ## Hono
 

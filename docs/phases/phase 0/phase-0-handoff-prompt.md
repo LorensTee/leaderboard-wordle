@@ -34,9 +34,9 @@ Everything in the handoff must be based on:
 - the final Phase-0 implementation
 - actual verification results
 - current Architecture-v3
-- current `../contradictions-and-gaps.md`
+- current `../../contradictions-and-gaps.md`
 - current `docs/phase-1-handoff-prompt.md`
-- actual package versions from `../../bun.lock`
+- actual package versions from `../../../bun.lock`
 
 If something was not verified, explicitly say it was not verified.
 
@@ -111,37 +111,37 @@ For each file/path give:
 
 At minimum include:
 
-`../../src/server/routes.ts`
+`../../../src/server/routes.ts`
 
-`../../src/server/middleware/auth.ts`
+`../../../src/server/middleware/auth.ts`
 
-`../../src/server/middleware/csrf.ts`
+`../../../src/server/middleware/csrf.ts`
 
-`../../src/server/lib/errors.ts`
+`../../../src/server/lib/errors.ts`
 
-`../../src/server/auth/auth.ts`
+`../../../src/server/auth/auth.ts`
 
-`../../src/hooks.server.ts`
+`../../../src/hooks.server.ts`
 
 `src/routes/api/[...path]/+server.ts`
 
-`../../src/server/db/schema.ts`
+`../../../src/server/db/schema.ts`
 
-`../../src/server/db/client.ts`
+`../../../src/server/db/client.ts`
 
-`../../src/server/db/auth-schema.generated.ts`
+`../../../src/server/db/auth-schema.generated.ts`
 
-`../../src/server/db/migrations`
+`../../../src/server/db/migrations`
 
-`../../tests/integration`
+`../../../tests/integration`
 
-`../../tests/unit`
+`../../../tests/unit`
 
-`../../.github/workflows/ci.yml`
+`../../../.github/workflows/ci.yml`
 
-`../../scripts/build-word-list.ts`
+`../../../scripts/build-word-list.ts`
 
-`../../scripts/verify-bundle-secrecy.ts`
+`../../../scripts/verify-bundle-secrecy.ts`
 
 and the relevant shared frontend directories.
 
@@ -157,7 +157,7 @@ Explain:
 - Google OIDC
 - SvelteKit hooks use session resolution for page behavior
 - Hono independently resolves sessions
-- `../../src/server/middleware/auth.ts`
+- `../../../src/server/middleware/auth.ts`
 - `authContext`
 - `requireAuth`
 - `c.get('auth')`
@@ -244,7 +244,7 @@ Specifically cover:
 
 ## 8. Package/dependency handoff
 
-Record the actual versions from the current `../../bun.lock` for packages that Phase 1 will use.
+Record the actual versions from the current `../../../bun.lock` for packages that Phase 1 will use.
 
 Do not guess versions.
 
@@ -281,7 +281,7 @@ Do not instruct the new AI to upgrade packages unless the architecture requires 
 
 Document:
 
-- `../../.env`
+- `../../../.env`
 - `.dev.vars`
 - Wrangler/platformProxy behavior
 - `NODE_ENV` auth behavior
@@ -317,11 +317,11 @@ Explicitly explain that the Phase-1 game client may know the public valid-guess 
 
 Explain exactly:
 
-- what belongs in `../../src/server`
-- what belongs in `../../src/lib`
+- what belongs in `../../../src/server`
+- what belongs in `../../../src/lib`
 - what belongs in SvelteKit routes
 - what `src/routes/api/[...path]/+server.ts` must NOT contain
-- what `../../src/server/routes.ts` owns
+- what `../../../src/server/routes.ts` owns
 - where game logic should go
 - where puzzle lifecycle logic should go
 - how RPC typing should work
@@ -375,9 +375,9 @@ Give the new AI a practical starting checklist.
 
 It should include:
 
-1. read `../../Architecture-v3.md`
-2. read `../contradictions-and-gaps.md`
-3. read `phase-1-handoff-prompt.md`
+1. read `../../../Architecture-v3.md`
+2. read `../../contradictions-and-gaps.md`
+3. read `phase 1/phase-1-handoff-prompt.md`
 4. read this handoff
 5. inspect current Git status
 6. verify current HEAD
@@ -468,7 +468,7 @@ Make the document:
 
 Do NOT copy the entire Architecture-v3 into the handoff.
 
-The handoff should describe **current implementation state and practical context**, while `../../Architecture-v3.md` remains authoritative for the architecture.
+The handoff should describe **current implementation state and practical context**, while `../../../Architecture-v3.md` remains authoritative for the architecture.
 
 After creating the file:
 

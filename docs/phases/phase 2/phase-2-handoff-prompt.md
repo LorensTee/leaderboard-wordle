@@ -19,18 +19,18 @@ Do NOT trust historical handoff prose, commit messages, or the statements in
 this prompt as authoritative. The actual repository state outranks every
 document. Before any implementation:
 
-1. Read `../../Architecture-v3.md` in full (architecture is authoritative).
-2. Read `../../Specifications-v1.md` in full (product spec).
-3. Read `../contradictions-and-gaps.md` (decision log — record every new
+1. Read `../../../Architecture-v3.md` in full (architecture is authoritative).
+2. Read `../../../Specifications-v1.md` in full (product spec).
+3. Read `../../contradictions-and-gaps.md` (decision log — record every new
    Phase-2 decision here).
 4. Read `phase-2-plan.md` (the authoritative Phase-2 plan: decisions,
    API contract, test matrix, definition of done).
 5. Read `../phase-2-implementation-handoff.md` (state transfer; describes
    the repository as it was at planning time).
-6. Inspect the ACTUAL repository: `git log -5`, `git status`, `../../bun.lock`,
+6. Inspect the ACTUAL repository: `git log -5`, `git status`, `../../../bun.lock`,
    source tree, tests, CI.
 7. Verify the planning assumptions: HEAD, shadcn-not-initialized state, empty
-   `../../src/server/profile`, missing theme, existing DB columns
+   `../../../src/server/profile`, missing theme, existing DB columns
    (`avatarEmoji`/`role`/`display_name_normalized`/`onboarding_completed_at`).
 8. Run the pre-implementation gates that are practical:
 
@@ -55,7 +55,7 @@ bun run test:integration
 9. If any mandatory Phase-1 requirement is broken, fix Phase 1 first and
    record it. Do not paper over failures by weakening tests or gates.
 10. If a documentation contradiction blocks a decision, resolve it in
-    `../contradictions-and-gaps.md` BEFORE coding.
+    `../../contradictions-and-gaps.md` BEFORE coding.
 
 ## 1. Scope — implement exactly this
 
@@ -69,23 +69,23 @@ application shell, per `phase-2-plan.md`:
    canonical characters; `canonicalizeDisplayName` (uniqueness) SEPARATE from
    `moderationKeyForDisplayName` (aggressive leet/confusable/separator key);
    banned-word substring detection against the curated baseline in
-   `../../src/lib/shared/config/banned-words.json` (provenance fields inside);
+   `../../../src/lib/shared/config/banned-words.json` (provenance fields inside);
    reserved names (admin, wordle, leaderboard, moderator, system) rejected
    with the same `NAME_TAKEN` 409 as duplicates; generic `NAME_MODERATED`
    message (never reveal the offending word).
-3. Avatar: canonical curated list `../../src/server/data/avatar-emojis.ts`
+3. Avatar: canonical curated list `../../../src/server/data/avatar-emojis.ts`
    (`{ emoji, label }[]`, ~24, stable order) + generated client artifact
-   `../../src/lib/shared/config/avatar-emojis.generated.ts` via
-   `../../scripts/build-avatar-list.ts` (`bun run avatar-list`) with a parity unit
+   `../../../src/lib/shared/config/avatar-emojis.generated.ts` via
+   `../../../scripts/build-avatar-list.ts` (`bun run avatar-list`) with a parity unit
    test and a CI `git diff --exit-code` step (mirror the word-list pipeline).
    Server allow-list validation; picker with a11y labels, 48px+ targets,
    keyboard-native, mobile grid. **Commit and document the EXACT chosen set
    (emoji + label + ordering) in the artifact and the decision log — tuning
    is allowed, an undocumented set is not.**
 4. Theme: binary light/dark; `localStorage['theme']`; default from
-   `prefers-color-scheme`; pre-paint inline script in `../../src/app.html` setting
+   `prefers-color-scheme`; pre-paint inline script in `../../../src/app.html` setting
    `document.documentElement.dataset.theme`; Tailwind v4 dark variant switched
-   to the data attribute via `@custom-variant dark` in `../../src/app.css` (replace
+   to the data attribute via `@custom-variant dark` in `../../../src/app.css` (replace
    the current `@media (prefers-color-scheme: dark)` blocks); toggle in header
    and/or profile; verify no FOUC and all existing `dark:` surfaces.
 5. Shell: Play | Leaderboard | Profile nav tabs (+ Admin for `role ===
@@ -94,8 +94,8 @@ application shell, per `phase-2-plan.md`:
    not-onboarded users see a header without tabs; logout in header and on the
    profile page.
 6. `GET /api/me` and `PATCH /api/me/profile` (contract in plan §9) registered
-   only through `../../src/server/routes.ts` (chained — never break AppType/RPC).
-   Services live in `../../src/server/profile`.
+   only through `../../../src/server/routes.ts` (chained — never break AppType/RPC).
+   Services live in `../../../src/server/profile`.
 7. Admin bootstrap (NG18): promote-only step inside the Hono `authContext`
    middleware keyed on the `ADMIN_EMAIL` binding (`UPDATE ... SET
    role='admin' WHERE id=$id AND role <> 'admin'`, then refresh the context
@@ -117,8 +117,8 @@ Phase 2 is UI-heavy. Use the installed `make-ui-not-ai` skill from:
 https://github.com/nanfei892/ship-it-skills/tree/master/make-ui-not-ai
 
 Treat this skill as the required visual-design and visual-QA workflow for
-Phase 2 UI work. It is subordinate to the repository, `../../Architecture-v3.md`,
-`../../Specifications-v1.md`, `../contradictions-and-gaps.md`, the Phase-2 plan,
+Phase 2 UI work. It is subordinate to the repository, `../../../Architecture-v3.md`,
+`../../../Specifications-v1.md`, `../../contradictions-and-gaps.md`, the Phase-2 plan,
 security invariants, and this implementation handoff.
 
 ### Required workflow
@@ -175,7 +175,7 @@ security invariants, and this implementation handoff.
   inspect onboarding, profile, authenticated shell, placeholders, and the
   existing `/play` surface for unintended Phase-1 regressions.
 
-Store temporary screenshots in `../../.cache/ui-shots` (gitignored).
+Store temporary screenshots in `../../../.cache/ui-shots` (gitignored).
 
 A screenshot only counts as visual verification when it was actually opened
 and inspected. Capturing a screenshot without viewing it does NOT satisfy
@@ -224,9 +224,9 @@ Report these separately:
   authorization source.
 - The answer and answer pool never reach the browser; `verify:bundle` stays
   green; type-only server imports in client code only.
-- `../../src/server/routes.ts` remains the single Hono composition point,
-  chain-typed; the bridge stays thin; `../../src/server` never imports SvelteKit
-  `RequestEvent` and does NOT import FSD `../../src/lib` (use the parity-tested
+- `../../../src/server/routes.ts` remains the single Hono composition point,
+  chain-typed; the bridge stays thin; `../../../src/server` never imports SvelteKit
+  `RequestEvent` and does NOT import FSD `../../../src/lib` (use the parity-tested
   twin for shared display-name logic — or record a documented deviation, never
   a silent one).
 - CSRF stays fail-closed; `/api/auth/*` exemptions unchanged.
@@ -305,7 +305,7 @@ After profile editing and theme switching exist, capture and inspect the same fo
 Before declaring Phase 2 complete, capture final light + dark screenshots at approximately `1440x900` and `390x844` for `/onboarding`, `/profile`, and the authenticated shell, plus `/play` to verify no Phase-1 visual regression.
 Inspect responsive behavior, typography, spacing, navigation fit, focus/hover/disabled states, avatar target size, custom-vs-shadcn visual consistency, and overflow.
 
-Keep temporary screenshots in a gitignored location such as `../../.cache/ui-shots`. Do not commit screenshots unless the repository explicitly requires them.
+Keep temporary screenshots in a gitignored location such as `../../../.cache/ui-shots`. Do not commit screenshots unless the repository explicitly requires them.
 
 A visual checkpoint complements automated tests; it does not replace unit/integration/E2E/accessibility verification. Any visual issue discovered is a blocker until fixed and the relevant automated checks are re-run.
 
@@ -350,7 +350,7 @@ you cannot push, say so plainly.
 7. Command verification (each command above with actual result)
 8. Visual QA results for checkpoints A/B/C, including viewport/theme combinations inspected and any fixes made
 9. Decision-log updates (exact entries added to
-   `../contradictions-and-gaps.md`)
+   `../../contradictions-and-gaps.md`)
 10. Remaining issues (blockers / non-blocking / deferred)
 
 ## Final working rules
@@ -359,7 +359,7 @@ you cannot push, say so plainly.
 2. The repository outranks every handoff claim.
 3. Implement ONLY Phase 2; do not start Phase 3/4/5 features.
 4. Do not weaken Phase-1 tests, security, or invariants.
-5. Record every architectural decision in `../contradictions-and-gaps.md`.
+5. Record every architectural decision in `../../contradictions-and-gaps.md`.
 6. No schema changes; no generated-schema hand-edits; `auth:check` green
    (prove it with `git diff --exit-code` on schema + migrations).
 7. Client UI validation is UX-only; the server re-validates everything.

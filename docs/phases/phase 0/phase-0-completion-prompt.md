@@ -4,7 +4,7 @@ You are working on the GitHub repository:
 
 `https://github.com/LorensTee/leaderboard-wordle`
 
-I have uploaded the authoritative **Architecture-v3** document for this project. Treat the repository's current `../../Architecture-v3.md` and especially `../contradictions-and-gaps.md` as the implementation authority. Do not replace architectural decisions with your own preferences unless you discover a genuine contradiction, security flaw, or impossibility. When there is a conflict, investigate it and preserve the latest documented decision.
+I have uploaded the authoritative **Architecture-v3** document for this project. Treat the repository's current `../../../Architecture-v3.md` and especially `../../contradictions-and-gaps.md` as the implementation authority. Do not replace architectural decisions with your own preferences unless you discover a genuine contradiction, security flaw, or impossibility. When there is a conflict, investigate it and preserve the latest documented decision.
 
 ## Objective
 
@@ -21,7 +21,7 @@ Phase 0 is defined as:
 - Drizzle ORM + Neon using the WebSocket-capable driver
 - `wrangler.toml` with `nodejs_compat`
 - TypeScript configuration
-- `../../src/app.d.ts` with `App.Locals`
+- `../../../src/app.d.ts` with `App.Locals`
 - Basic dev/build pipeline
 - CI pipeline including lint/check/unit/integration tests against a non-production DB
 - Environment/config management
@@ -54,7 +54,7 @@ The current repository already contains:
 - live Google OAuth verification
 - security review fixes
 
-The latest Phase-0 verification is recorded in `../../Architecture-v3.md`, including B1–B7.
+The latest Phase-0 verification is recorded in `../../../Architecture-v3.md`, including B1–B7.
 
 Do **not** assume that the Architecture's recorded PASS statuses automatically mean the current repository is still correct. Verify the actual current `HEAD`.
 
@@ -80,8 +80,8 @@ Architecture-v3 explicitly requires:
 
 The current repository has:
 
-- `../../src/server/auth/auth.ts`
-- `../../src/server/auth/auth.generate.ts`
+- `../../../src/server/auth/auth.ts`
+- `../../../src/server/auth/auth.generate.ts`
 
 and `hooks.server.ts` resolves Better Auth sessions for SvelteKit.
 
@@ -126,8 +126,8 @@ The Phase 0 definition explicitly includes a CI pipeline with lint/check/unit/in
 
 Inspect the current repository:
 
-- `../../package.json`
-- `../../.github/workflows/ci.yml`
+- `../../../package.json`
+- `../../../.github/workflows/ci.yml`
 
 Determine whether a real linting solution is already intended by the project's dependency/architecture documents.
 
@@ -208,7 +208,7 @@ Requirements:
 
 - Do not use an unpinned `auth@latest` generator.
 - Pin the Better Auth CLI version used to generate the schema.
-- Ensure the pinned CLI version is represented reproducibly in `../../bun.lock`.
+- Ensure the pinned CLI version is represented reproducibly in `../../../bun.lock`.
 - Preserve the application's Better Auth dependency version alignment.
 - Run the schema generation.
 - Run `bun run auth:check`.
@@ -220,10 +220,10 @@ Requirements:
 
 Inspect the existing:
 
-- `../../scripts/check-auth-schema.ts`
-- `../../src/server/auth/auth.generate.ts`
-- `../../package.json`
-- `../../bun.lock`
+- `../../../scripts/check-auth-schema.ts`
+- `../../../src/server/auth/auth.generate.ts`
+- `../../../package.json`
+- `../../../bun.lock`
 
 and improve them rather than creating a parallel generator mechanism.
 
@@ -271,19 +271,19 @@ At minimum, inspect:
 
 ## Infrastructure
 
-- `../../package.json`
-- `../../bun.lock`
-- `../../vite.config.ts`
-- `../../tsconfig.json`
+- `../../../package.json`
+- `../../../bun.lock`
+- `../../../vite.config.ts`
+- `../../../tsconfig.json`
 - `wrangler.toml`
-- `../../worker-configuration.d.ts`
-- `../../.env.example`
-- `../../.gitignore`
+- `../../../worker-configuration.d.ts`
+- `../../../.env.example`
+- `../../../.gitignore`
 
 ## SvelteKit
 
-- `../../src/app.d.ts`
-- `../../src/hooks.server.ts`
+- `../../../src/app.d.ts`
+- `../../../src/hooks.server.ts`
 - SvelteKit configuration
 - Cloudflare adapter configuration
 - alias configuration
@@ -291,7 +291,7 @@ At minimum, inspect:
 ## Hono
 
 - `src/routes/api/[...path]/+server.ts`
-- `../../src/server/routes.ts`
+- `../../../src/server/routes.ts`
 - middleware ordering
 - error handling
 - request IDs
@@ -304,8 +304,8 @@ At minimum, inspect:
 
 ## Authentication
 
-- `../../src/server/auth/auth.ts`
-- `../../src/server/auth/auth.generate.ts`
+- `../../../src/server/auth/auth.ts`
+- `../../../src/server/auth/auth.generate.ts`
 - generated auth schema
 - Better Auth migration
 - hooks integration
@@ -317,9 +317,9 @@ At minimum, inspect:
 
 ## Database
 
-- `../../src/server/db/schema.ts`
-- `../../src/server/db/auth-schema.generated.ts`
-- `../../src/server/db/client.ts`
+- `../../../src/server/db/schema.ts`
+- `../../../src/server/db/auth-schema.generated.ts`
+- `../../../src/server/db/client.ts`
 - migration SQL
 - migration journal/snapshot
 - Drizzle configuration
@@ -331,7 +331,7 @@ At minimum, inspect:
 - valid guess source
 - generated public artifact
 - private answer-pool path
-- `../../.gitignore`
+- `../../../.gitignore`
 - bundle-secrecy script
 - unit tests
 - repository contents
@@ -358,7 +358,7 @@ Re-run or independently verify every applicable gate.
 
 These include:
 
-1. package installation / `../../bun.lock`
+1. package installation / `../../../bun.lock`
 2. TypeScript check
 3. Cloudflare production build
 4. Wrangler configuration validation
@@ -579,7 +579,7 @@ Owns:
 
 Before declaring Phase 0 complete:
 
-- no `../../.env`
+- no `../../../.env`
 - no `.dev.vars`
 - no credentials
 - no Google secrets
@@ -606,7 +606,7 @@ Update documentation after implementation, not before.
 At minimum, make sure:
 
 - Architecture-v3's Phase-0 status is accurate
-- `../contradictions-and-gaps.md` no longer claims a resolved item is still unresolved if you actually closed it
+- `../../contradictions-and-gaps.md` no longer claims a resolved item is still unresolved if you actually closed it
 - remaining open items are clearly distinguished from Phase-0 blockers
 - the Better Auth CLI reproducibility situation is accurately documented
 - the Hono authentication helper is documented
@@ -691,10 +691,10 @@ Use the safest interpretation consistent with the architecture and existing CI d
 
 After making the changes, compare:
 
-- `../../Architecture-v3.md`
-- `../contradictions-and-gaps.md`
-- `../proposed-repo-tree.md`
-- `../proposed-dependencies.md`
+- `../../../Architecture-v3.md`
+- `../../contradictions-and-gaps.md`
+- `../../proposed-repo-tree.md`
+- `../../proposed-dependencies.md`
 - current implementation
 
 Look specifically for:
@@ -721,7 +721,7 @@ You may declare Phase 0 complete only when all of these are true:
 ## Architecture
 
 - [ ] Every Phase-0 requirement in Architecture-v3 is either implemented and verified or explicitly justified as intentionally deferred to a later phase.
-- [ ] No unresolved Phase-0 blocker remains in `../contradictions-and-gaps.md`.
+- [ ] No unresolved Phase-0 blocker remains in `../../contradictions-and-gaps.md`.
 - [ ] Architecture and implementation agree.
 
 ## Infrastructure
@@ -859,7 +859,7 @@ Only answer that Phase 1 is ready if Phase 0 genuinely satisfies the architectur
 10. **Do not invent undocumented architecture merely because it seems cleaner.**
 11. **Prefer the smallest change that closes the actual gap.**
 12. **When uncertain about an existing library behavior, inspect the installed/pinned version and verify it empirically.**
-13. **Use the actual current repository state as the source of truth for implementation, while using Architecture-v3 and `../contradictions-and-gaps.md` as the specification.**
+13. **Use the actual current repository state as the source of truth for implementation, while using Architecture-v3 and `../../contradictions-and-gaps.md` as the specification.**
 14. **Do not declare completion unless the evidence supports it.**
 
 The intended result is not merely "tests pass." The intended result is:

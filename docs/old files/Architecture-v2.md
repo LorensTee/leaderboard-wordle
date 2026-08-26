@@ -90,9 +90,9 @@ Use `@tanstack/svelte-form` for forms that benefit from structured state/validat
 
 # Frontend architecture: Feature-Sliced Design (FSD)
 
-Use **Feature-Sliced Design (FSD) v2.1** for application code under `src/lib/`, adapted to SvelteKit rather than forcing SvelteKit into a React-oriented directory structure. The `feature-sliced/skills` skill should be used by coding agents when deciding frontend code placement and import boundaries.
+Use **Feature-Sliced Design (FSD) v2.1** for application code under `../../src/lib`, adapted to SvelteKit rather than forcing SvelteKit into a React-oriented directory structure. The `feature-sliced/skills` skill should be used by coding agents when deciding frontend code placement and import boundaries.
 
-FSD applies to `src/lib`; **`src/routes/` remains SvelteKit-owned routing/composition**. Do not create a second routing architecture inside FSD.
+FSD applies to `../../src/lib`; **`../../src/routes` remains SvelteKit-owned routing/composition**. Do not create a second routing architecture inside FSD.
 
 Follow FSD's core rule: **start simple, extract when needed**. Do not create every FSD layer at project initialization. Extract into `features/` or `entities/` only when code is genuinely reused and has a stable responsibility. The `widgets/` layer is discouraged.
 
@@ -126,7 +126,7 @@ entities/
 
 These are examples, not a mandate to create all of them immediately. Page-specific code may remain in the relevant SvelteKit route/page until real reuse justifies extraction.
 
-FSD import-direction rules apply within `src/lib`: higher layers may import lower layers; same-layer slice cross-imports should be avoided. Keep each slice's public API explicit. Do not create speculative entities/features simply to satisfy a folder pattern.
+FSD import-direction rules apply within `../../src/lib`: higher layers may import lower layers; same-layer slice cross-imports should be avoided. Keep each slice's public API explicit. Do not create speculative entities/features simply to satisfy a folder pattern.
 
 **Do not apply FSD directory rules to the Hono backend.** The backend is organized by server/domain responsibility instead.
 
@@ -162,7 +162,7 @@ bun add <package>
 bun run dev
 ```
 
-The repository uses Bun's `bun.lock`. An empty project with no dependencies does not need an empty lockfile committed.
+The repository uses Bun's `../../bun.lock`. An empty project with no dependencies does not need an empty lockfile committed.
 
 ## Hono
 
@@ -757,7 +757,7 @@ Deploy to Cloudflare Workers + Neon Singapore. Measure real behavior and optimiz
 5. Do not use SvelteKit form actions as a second business-mutation API; route application/domain mutations through Hono.
 6. Zod and Drizzle-Zod solve different validation problems and should be used together.
 7. Use TanStack's Svelte integrations where they provide real value.
-8. Apply FSD v2.1 to `src/lib` conservatively; keep `src/routes` as SvelteKit routing and do not force FSD onto the Hono backend.
+8. Apply FSD v2.1 to `../../src/lib` conservatively; keep `../../src/routes` as SvelteKit routing and do not force FSD onto the Hono backend.
 9. Keep future answers server-side; a public repository may contain the valid-guess dictionary.
 10. Store raw game facts so ranking rules can evolve without rewriting history.
 11. Keep roles and authorization explicit from the start.
