@@ -25,9 +25,11 @@
 </svelte:head>
 
 <QueryClientProvider client={queryClient}>
-	<Header user={data.user} />
-	<main class="mx-auto flex min-h-[calc(100dvh-3.5rem)] w-full max-w-xl flex-col px-3 pb-4 pt-2">
-		{@render children()}
-	</main>
+	<div class="flex min-h-dvh flex-col">
+		<Header user={data.user} />
+		<main class="mx-auto flex w-full max-w-xl flex-1 flex-col px-3 pb-4 pt-2">
+			{@render children()}
+		</main>
+	</div>
 	<Toaster position="top-center" richColors closeButton />
 </QueryClientProvider>

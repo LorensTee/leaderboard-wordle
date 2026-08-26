@@ -156,7 +156,7 @@
 	{@const game = currentQuery.data.game}
 
 	{#if game.status === 'ACTIVE' && !expired}
-		<div class="mb-2 flex items-center justify-center gap-2 text-sm text-black/60 dark:text-white/60">
+		<div class="mb-1 flex items-center justify-center gap-2 text-sm text-black/60 dark:text-white/60">
 			<span class="rounded-full border border-black/10 px-3 py-0.5 dark:border-white/15">
 				Hint letter: <span class="font-bold uppercase">{game.puzzle.hintLetter}</span>
 			</span>
@@ -190,13 +190,15 @@
 	{/if}
 
 	{#if game.status === 'ACTIVE' && !expired}
-		<Keyboard
-			keyStates={computeKeyStates(game.guesses)}
-			disabled={!editing}
-			onKey={handleKey}
-			onEnter={handleEnter}
-			onBackspace={handleBackspace}
-		/>
+		<div class="mt-3">
+			<Keyboard
+				keyStates={computeKeyStates(game.guesses)}
+				disabled={!editing}
+				onKey={handleKey}
+				onEnter={handleEnter}
+				onBackspace={handleBackspace}
+			/>
+		</div>
 	{/if}
 {:else if currentQuery.data.puzzle}
 	<div class="flex flex-1 flex-col items-center justify-center gap-4 text-center">

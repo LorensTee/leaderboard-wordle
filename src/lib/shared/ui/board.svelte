@@ -55,7 +55,7 @@
 
 <div
 	{id}
-	class="mx-auto grid w-full max-w-90 grid-rows-6 gap-1.5"
+	class="mx-auto grid w-full max-w-105 grid-rows-6 gap-1.5"
 	role="grid"
 	aria-label="Wordle board"
 	aria-busy={pending}
