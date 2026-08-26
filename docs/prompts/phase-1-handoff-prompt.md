@@ -1,5 +1,9 @@
 # Phase 1 — Authenticated Game Vertical Slice: START PROMPT
 
+> ⚠️ **HISTORICAL.** Phase-1 start prompt. Phase 1 is complete (`2fc1be1`,
+> 2026-08-25). For current state read the repository +
+> `docs/phase-2-implementation-handoff.md`.
+
 Paste the entire contents of this file into a **NEW chat**. Do not include this
 header line — start from `You are implementing Phase 1`.
 
@@ -12,8 +16,8 @@ private group of friends, in the repository at:
 
 Branch: `main`
 
-The authoritative architecture is the repository's current `Architecture-v3.md`,
-with `docs/contradictions-and-gaps.md` governing any superseding decisions.
+The authoritative architecture is the repository's current `../../Architecture-v3.md`,
+with `../contradictions-and-gaps.md` governing any superseding decisions.
 
 ## 0. Phase-0 handoff gate — mandatory before Phase-1 coding
 
@@ -23,13 +27,13 @@ Therefore, do **not** blindly trust stale Phase-0 claims in this handoff file.
 
 Before writing Phase-1 application code:
 
-1. Read `Architecture-v3.md` in full, especially the Phase-1 section and the
+1. Read `../../Architecture-v3.md` in full, especially the Phase-1 section and the
    database/concurrency/expiry/auth sections.
-2. Read `docs/contradictions-and-gaps.md` and identify the final Phase-0
+2. Read `../contradictions-and-gaps.md` and identify the final Phase-0
    resolutions and any remaining intentionally deferred items.
 3. Inspect the actual current repository state, not historical commit messages.
 4. Verify the Phase-0 foundation is actually complete, including the Hono-side
-   authentication helper required by Architecture-v3 (`src/server/middleware/auth.ts`:
+   authentication helper required by Architecture-v3 (`../../src/server/middleware/auth.ts`:
    `authContext` + `requireAuth` + typed `c.get('auth')`).
 5. Run the Phase-0 sanity checks that are practical in the current environment:
 
@@ -69,28 +73,28 @@ incomplete foundation.
 
 Read these before making implementation decisions:
 
-1. `Architecture-v3.md` — full architecture; especially the `Phase 1 —
+1. `../../Architecture-v3.md` — full architecture; especially the `Phase 1 —
    Authenticated game vertical slice` section and the database sections covering
    schema, invariants, concurrency, expiry, answer secrecy, and authentication.
-2. `docs/contradictions-and-gaps.md` — decision log. Record every new Phase-1
+2. `../contradictions-and-gaps.md` — decision log. Record every new Phase-1
    decision here. If the architecture and this document differ, follow the
    latest documented decision.
-3. `docs/proposed-repo-tree.md` — directory ownership rules:
-   - `src/routes` = SvelteKit routing/composition only
-   - `src/lib` = frontend/application code using the minimal FSD structure
-   - `src/server` = Hono/domain/backend code
-4. `src/server/routes.ts` — the single Hono composition point. New API routes are
+3. `../proposed-repo-tree.md` — directory ownership rules:
+   - `../../src/routes` = SvelteKit routing/composition only
+   - `../../src/lib` = frontend/application code using the minimal FSD structure
+   - `../../src/server` = Hono/domain/backend code
+4. `../../src/server/routes.ts` — the single Hono composition point. New API routes are
    registered here.
-5. `src/server/db/schema.ts` + `src/server/db/client.ts` — database schema and
+5. `../../src/server/db/schema.ts` + `../../src/server/db/client.ts` — database schema and
    Neon WebSocket client/transaction path.
-6. `src/server/auth/auth.ts` plus the Phase-0 Hono auth helper/middleware,
-   `src/hooks.server.ts`, and `src/routes/api/[...path]/+server.ts` — preserve the
+6. `../../src/server/auth/auth.ts` plus the Phase-0 Hono auth helper/middleware,
+   `../../src/hooks.server.ts`, and `src/routes/api/[...path]/+server.ts` — preserve the
    established authentication boundaries.
 7. `tests/integration/*` — especially the transaction-contract tests that must be
    re-pointed at the real application services.
-8. `docs/proposed-dependencies.md` — package intent; `bun.lock` is authoritative
+8. `../proposed-dependencies.md` — package intent; `../../bun.lock` is authoritative
    for actual installed versions.
-9. `docs/phase-1-handoff-prompt.md` — this file, but treat the repository and
+9. `phase-1-handoff-prompt.md` — this file, but treat the repository and
    authoritative docs as higher-trust than historical statements in this prompt.
 
 ---
@@ -98,7 +102,7 @@ Read these before making implementation decisions:
 # 2. Stack and environment rules
 
 Do not assume package versions from memory. Use the versions actually resolved in
-`bun.lock` after the Phase-0 gate. Do not upgrade dependencies opportunistically.
+`../../bun.lock` after the Phase-0 gate. Do not upgrade dependencies opportunistically.
 Only add a dependency when Phase 1 genuinely needs it and record the exact version
 and reason.
 
@@ -233,7 +237,7 @@ Architecture-v3:
 
 12. **Typed API client**
     - use Hono RPC via `hc<AppType>`
-    - keep the client in `src/lib/shared/api/`
+    - keep the client in `../../src/lib/shared/api`
     - do not create a parallel manually typed fetch wrapper for the same endpoints
 
 ---
@@ -305,7 +309,7 @@ helper/middleware rather than trusting `event.locals` or duplicating session log
 
 Do not create a second session system.
 
-Do not import SvelteKit `RequestEvent` into `src/server`.
+Do not import SvelteKit `RequestEvent` into `../../src/server`.
 
 ## 6.3 Answer secrecy
 
@@ -427,10 +431,10 @@ Do not add a GET endpoint that changes game state.
 
 - SvelteKit routes compose pages and navigation.
 - `src/routes/api/[...path]/+server.ts` remains the thin platform bridge.
-- `src/server/routes.ts` remains the single Hono composition point.
-- `src/server/game/` owns game domain logic.
-- `src/server/puzzle/` owns puzzle lifecycle logic.
-- `src/server/db/` owns database access/schema/migration concerns.
+- `../../src/server/routes.ts` remains the single Hono composition point.
+- `../../src/server/game` owns game domain logic.
+- `../../src/server/puzzle` owns puzzle lifecycle logic.
+- `../../src/server/db` owns database access/schema/migration concerns.
 - frontend code may import server **types** where explicitly allowed, but must never
   import server runtime code into the browser bundle.
 
@@ -644,8 +648,8 @@ Phase 1 must prove that the **actual application services preserve those semanti
 
 Rework:
 
-- `tests/integration/midnight-lock-order.test.ts`
-- `tests/integration/lazy-activation.test.ts`
+- `../../tests/integration/midnight-lock-order.test.ts`
+- `../../tests/integration/lazy-activation.test.ts`
 
 so they call the real game/puzzle/application services rather than reproducing the
 business behavior directly with raw SQL.
@@ -770,7 +774,7 @@ The private approved-answer source remains gitignored.
 Do not:
 
 - create a public answer pool
-- import answer data into `src/lib`
+- import answer data into `../../src/lib`
 - put future answers into fixtures that ship to clients
 - use the public guess list as proof that a value is a valid answer
 
@@ -809,8 +813,8 @@ Do not commit secrets, private answer pools, caches, build output, or debug arti
 
 When a meaningful architecture decision is made:
 
-- update `docs/contradictions-and-gaps.md`
-- update `Architecture-v3.md` only when the implementation/decision genuinely
+- update `../contradictions-and-gaps.md`
+- update `../../Architecture-v3.md` only when the implementation/decision genuinely
   changes the architecture
 
 Do not create documentation noise for trivial implementation choices.
@@ -823,7 +827,7 @@ These are safeguards, not invitations to repeat Phase-0 work unnecessarily.
 
 - `types:check` must run after `build` because of the project's Wrangler-generated
   main-module typing behavior.
-- The migration journal/snapshot under `src/server/db/migrations/meta/` is versioned.
+- The migration journal/snapshot under `../../src/server/db/migrations/meta` is versioned.
 - Neon transaction tests that span `BEGIN`/`COMMIT` require a dedicated connection;
   do not accidentally use a pooled dispatch pattern that can move statements across
   connections.

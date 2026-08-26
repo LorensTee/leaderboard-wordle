@@ -1,5 +1,12 @@
 # Phase-1 Implementation Handoff — State Transfer Document
 
+> ⚠️ **HISTORICAL DOCUMENT.** This is the Phase-0 → Phase-1 state-transfer
+> document. **Phase 1 is complete** (verified at `2fc1be1`, 2026-08-25).
+> Do not treat claims in this file ("Phase 0 is complete; Phase 1 is the next
+> implementation phase", "No Phase-1 gameplay code exists") as current state.
+> The authoritative current state is the repository itself plus
+> `docs/phase-2-implementation-handoff.md` (Phase 2).
+
 > State-transfer document, not an architecture specification. `Architecture-v3.md`
 > remains authoritative for the architecture; this file describes what the
 > Phase-0 session actually built, what was verified, and what the Phase-1 agent
@@ -284,7 +291,7 @@ Practical starting checklist for the fresh session:
 
 1. Read `Architecture-v3.md` in full (architecture is authoritative).
 2. Read `docs/contradictions-and-gaps.md` (decision log; record every new decision here).
-3. Read `docs/phase-1-handoff-prompt.md` (the paste-ready Phase-1 implementation prompt — do not rewrite it).
+3. Read `prompts/phase-1-handoff-prompt.md` (the paste-ready Phase-1 implementation prompt — do not rewrite it).
 4. Read this handoff (state transfer).
 5. Inspect current Git status (must be clean except intentional work-in-progress).
 6. Verify current HEAD (should be `ef9a6da` or newer — do NOT trust historical claims; re-verify).
