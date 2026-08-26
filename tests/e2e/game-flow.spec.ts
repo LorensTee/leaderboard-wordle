@@ -18,8 +18,11 @@ test.describe('authenticated gameplay (deterministic session fixture)', () => {
 		context,
 		page
 	}) => {
-		// Fixture: fresh user session + today's ACTIVE puzzle (answer 'light').
-		const { cookie } = await createAuthenticatedUser();
+		// Fixture: fresh ONBOARDED user session (Phase-2: unfinished onboarding
+		// redirects application routes to /onboarding) + today's ACTIVE puzzle.
+		const { cookie } = await createAuthenticatedUser(undefined, 'E2E Player', {
+			onboarded: true
+		});
 		await seedTodayPuzzle('light');
 		await context.addCookies([
 			{ name: 'better-auth.session_token', value: cookie, url: 'http://127.0.0.1:4173' }

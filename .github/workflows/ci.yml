@@ -29,6 +29,12 @@ jobs:
         # The generator is deterministic; if a stale artifact were committed
         # the regeneration would change it here — fail loudly instead.
         run: git diff --exit-code -- src/lib/shared/data/valid-guesses.json src/server/data/valid-guesses.generated.ts
+      - name: Avatar-list artifact (src/lib/shared/config/avatar-emojis.generated.ts)
+        # Phase-2 D4: mirrors the word-list pipeline — regeneration must be
+        # byte-identical to the committed client artifact.
+        run: bun run avatar-list
+      - name: Avatar-list artifact matches the committed file (no silent drift)
+        run: git diff --exit-code -- src/lib/shared/config/avatar-emojis.generated.ts
       - name: Auth schema parity (pinned `auth` CLI regeneration)
         # Regenerates src/server/db/auth-schema.generated.ts with the pinned
         # CLI (auth@1.7.1 in bun.lock) and fails on any real drift — the

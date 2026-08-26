@@ -81,27 +81,49 @@ export function requireE2eEnv(): E2eSession {
 
 /**
  * Reset the app tables and create a session for `email` (fresh user).
+ * Phase-2: `onboarded` inserts the profile fields so the user skips
+ * onboarding (Phase-1 gameplay specs run as onboarded users — unfinished
+ * onboarding now redirects every application route to /onboarding).
  * Returns the session cookie value for Playwright `context.addCookies`.
  */
 export async function createAuthenticatedUser(
 	email = `e2e-${randomUUID()}@test.dev`,
-	displayName = 'E2E Player'
+	displayName = 'E2E Player',
+	opts: { onboarded?: boolean; avatarEmoji?: string; role?: string; fresh?: boolean } = {}
 ): Promise<{ cookie: string; userId: string }> {
 	const { databaseUrl, secret } = requireE2eEnv();
 	const pool = new Pool({ connectionString: databaseUrl });
 	try {
 		const db = drizzle(pool, { schema });
-		await db.execute(
-			sql`TRUNCATE TABLE guesses, games, daily_puzzles, answer_dictionary, "user" RESTART IDENTITY CASCADE`
-		);
+		// `fresh` (default) wipes the app tables so every spec starts clean;
+		// `fresh: false` skips the TRUNCATE so a second user can coexist with
+		// an existing one (e.g. the duplicate-name scenario).
+		if (opts.fresh !== false) {
+			await db.execute(
+				sql`TRUNCATE TABLE guesses, games, daily_puzzles, answer_dictionary, "user" RESTART IDENTITY CASCADE`
+			);
+		}
 
 		const [user] = await db
 			.insert(schema.user)
 			.values({
 				id: `e2e-${randomUUID()}`,
-				name: displayName,
+				// Production parity: the app stores the CANONICAL name
+				// (PATCH /api/me/profile canonicalizes before writing).
+				name: displayName.trim().replace(/\s+/g, ' ').toLowerCase(),
 				email,
-				emailVerified: true
+				emailVerified: true,
+				// Phase-2 profile fields (onboarded users only). The canonical
+				// display_name_normalized mirrors the app's canonicalization so
+				// UNIQUE stays consistent with product rules.
+				...(opts.onboarded
+					? {
+							display_name_normalized: displayName.trim().replace(/\s+/g, ' ').toLowerCase(),
+							onboarding_completed_at: new Date(),
+							avatarEmoji: opts.avatarEmoji ?? '🦊'
+						}
+					: {}),
+				...(opts.role ? { role: opts.role } : {})
 			})
 			.returning();
 
