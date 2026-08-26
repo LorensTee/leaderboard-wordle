@@ -13,13 +13,13 @@
 | Branch | `main` |
 | HEAD (at planning) | `2fc1be1` (`fix(ui): ignore stale sign-in settlements (security-review LOW)`) |
 | Phase status | **Phase 1 complete. Phase 2 planning complete (this document + `docs/phase-2-plan.md`). Phase 2 implementation is next.** |
-| Working tree | Clean except: user's `docs/prompts/` reorganization (in progress), `.idea/` IDE file |
+| Working tree | Clean except: user's `` reorganization (in progress), `../../.idea` IDE file |
 
-Note: the user has reorganized prompts into `docs/prompts/` (uncommitted moves:
-`phase-1-handoff-prompt.md` → `docs/prompts/phase-1-handoff-prompt.md`, plus
+Note: the user has reorganized prompts into `` (uncommitted moves:
+`phase-1-handoff-prompt.md` → `phase-1-handoff-prompt.md`, plus
 this planning prompt and phase-0 prompts). Keep those moves; new Phase-2
-prompt artifacts also belong under `docs/prompts/`-consistent paths — the
-plan says `docs/phase-2-plan.md`, `docs/phase-2-implementation-handoff.md`,
+prompt artifacts also belong under ``-consistent paths — the
+plan says `docs/phase-2-plan.md`, `phase-2-implementation-handoff.md`,
 `docs/phase-2-handoff-prompt.md` (existing convention per the planning prompt;
 reconcile with the user's reorganization when committing).
 
@@ -39,8 +39,8 @@ reconcile with the user's reorganization when committing).
   - sign-in hardening: sanitized generic error message, 8s failsafe,
     stale-settlement protection (attempt counter) — `b49f883`, `2fc1be1`
   - WCAG AA contrast pass on tiles/keys/banner/microcopy — `a640506`
-  - regression tests: `tests/unit/sign-in.test.ts` (4), UI audit harness
-    (removed after use; screenshots kept in gitignored `.cache/ui-shots/`)
+  - regression tests: `../../tests/unit/sign-in.test.ts` (4), UI audit harness
+    (removed after use; screenshots kept in gitignored `../../.cache/ui-shots`)
 - Verified at `2fc1be1`: unit **75** (12 files), integration **24** (4 files),
   E2E **3** (2 files), `check` 0/0, `lint` clean, `build` OK, `verify:bundle`
   0 private words/59 files, `auth:check` OK, `types:check` OK (clean clone).
@@ -60,8 +60,8 @@ reconcile with the user's reorganization when committing).
 
 ### Stale documentation (fixed at planning)
 
-- `docs/phase-1-implementation-handoff.md` and
-  `docs/prompts/phase-1-handoff-prompt.md` are now **marked historical** at
+- `phase-1-implementation-handoff.md` and
+  `phase-1-handoff-prompt.md` are now **marked historical** at
   the top (Phase 1 complete; do not treat as current state).
 
 ## 3. Exact repository state (verified)
@@ -79,23 +79,23 @@ reconcile with the user's reorganization when committing).
 
 ### Source tree (Phase-2-relevant)
 
-- `src/server/routes.ts` — single Hono composition point (chained; AppType
+- `../../src/server/routes.ts` — single Hono composition point (chained; AppType
   schema must stay chained — do not break RPC typing).
-- `src/server/middleware/auth.ts` — `authContext`/`requireAuth` (+ Phase-2
+- `../../src/server/middleware/auth.ts` — `authContext`/`requireAuth` (+ Phase-2
   admin-bootstrap step goes HERE).
-- `src/server/middleware/csrf.ts`, `request-id.ts`, `security-headers.ts`,
+- `../../src/server/middleware/csrf.ts`, `request-id.ts`, `security-headers.ts`,
   `src/server/lib/{errors,origin}.ts` — NG21 envelope; `ERROR_CODES` extended
   only by adding codes.
 - `src/server/game/*`, `src/server/puzzle/*`, `src/server/db/*` — Phase-1
   domain; do not modify casually.
-- `src/server/profile/` — **empty** (Phase-2 home for profile service +
+- `../../src/server/profile` — **empty** (Phase-2 home for profile service +
   display-name module).
 - `src/lib/app/{auth-client,query-client}.ts`, `src/lib/shared/api/{client,game}.ts`
   (hc RPC), `src/lib/shared/lib/{format-duration,wordle-ux}.ts`,
   `src/lib/shared/ui/{board,keyboard,tile,timer,header}.svelte` (all custom).
-- `src/lib/shared/config/` — **empty** (Phase-2: avatar-emojis generated twin,
+- `../../src/lib/shared/config` — **empty** (Phase-2: avatar-emojis generated twin,
   banned-words.json).
-- `src/server/data/` — `valid-guesses.source.txt` + `valid-guesses.generated.ts`
+- `../../src/server/data` — `valid-guesses.source.txt` + `valid-guesses.generated.ts`
   (word-list pipeline; avatar list follows the same pattern).
 - Routes: `+layout.server.ts` (locals.user), `+layout.svelte` (shell),
   `+page.svelte` (landing/auth), `play/+page.server.ts` (auth gate) +
@@ -121,7 +121,7 @@ No Phase-2 migration needed. Existing user columns: `name`, `email`,
 
 ### API architecture
 
-Hono RPC (`hc<AppType>` from `src/lib/shared/api/client.ts`); responses
+Hono RPC (`hc<AppType>` from `../../src/lib/shared/api/client.ts`); responses
 inferred from server types; `unwrapOk`-style error mapping via
 `apiErrorFromResponse`. New `/api/me/*` handlers registered ONLY in
 `routes.ts` (or a chainable register function — see Phase-1 pattern
@@ -129,7 +129,7 @@ inferred from server types; `unwrapOk`-style error mapping via
 
 ### UI architecture
 
-Tailwind v4 (CSS-first, `src/app.css`), custom components, `data-theme` NOT
+Tailwind v4 (CSS-first, `../../src/app.css`), custom components, `data-theme` NOT
 yet used (dark via `prefers-color-scheme` media blocks — Phase-2 changes this
 to a `data-theme`-driven `@custom-variant dark`). No theme toggle yet.
 
@@ -149,7 +149,7 @@ Required checkpoints:
 - **C — final regression:** onboarding, profile, shell, placeholders, and
   `/play` regression at desktop/mobile + light/dark where applicable.
 
-Temporary screenshots live under `.cache/ui-shots/` and must not be committed.
+Temporary screenshots live under `../../.cache/ui-shots` and must not be committed.
 
 A screenshot only counts as visual verification when it was actually opened
 and inspected. Functional verification and visual verification must be
@@ -163,19 +163,19 @@ and conventions unless a documented Phase-2 decision requires a change.
 
 ### TanStack Query
 
-`QueryClient` in `src/lib/app/query-client.ts` (staleTime 30s, no window
+`QueryClient` in `../../src/lib/app/query-client.ts` (staleTime 30s, no window
 focus refetch, retry 1); `['game','current']` query + start/guess mutations
 with `setQueryData`; no optimistic mutations (deliberate — server
 authoritative). Phase 2 adds `['me']` + profile mutation.
 
 ### shadcn-svelte
 
-Installed (`^1.5.0`) but **NOT initialized**: no `components.json`, no
+Installed (`^1.5.0`) but **NOT initialized**: no `../../components.json`, no
 shadcn components anywhere. Phase 2 must initialize the CLI (interactive
 preset — plan a non-interactive fallback) and use it for Input/Button/Badge/
 Dropdown where genuinely useful; the board/keyboard/tiles stay custom.
 
-## 4. Phase-2 decisions (authoritative — see `docs/phase-2-plan.md` §5 for details)
+## 4. Phase-2 decisions (authoritative — see `phase-2-plan.md` §5 for details)
 
 1. Onboarding gating: ANY authenticated user with incomplete onboarding is
    redirected to `/onboarding` from EVERY application route (`/play`,
@@ -190,8 +190,8 @@ Dropdown where genuinely useful; the board/keyboard/tiles stay custom.
    reserved set `['admin','wordle','leaderboard','moderator','system']` →
    same 409 `NAME_TAKEN` as duplicates; no change cooldown.
 3. Moderation baseline: curated list authored in
-   `src/lib/shared/config/banned-words.json` with provenance fields.
-4. Avatar: canonical `src/server/data/avatar-emojis.ts` → generated client
+   `../../src/lib/shared/config/banned-words.json` with provenance fields.
+4. Avatar: canonical `../../src/server/data/avatar-emojis.ts` → generated client
    artifact + parity test + `avatar-list` script; server allow-list
    validation; required in onboarding; a11y labels; 48px+ targets.
 5. Theme: binary light/dark, `localStorage['theme']`, system default,
@@ -214,9 +214,9 @@ Dropdown where genuinely useful; the board/keyboard/tiles stay custom.
 - Answer secrecy unchanged: `verify:bundle` stays green; no server runtime
   imports in the client bundle (type-only only); today's answer never in
   client payloads.
-- `src/server/routes.ts` stays the only composition point; the bridge stays
-  thin; `src/server` never imports SvelteKit `RequestEvent` and **does not
-  import FSD `src/lib`** (display-name twin with parity test — or record a
+- `../../src/server/routes.ts` stays the only composition point; the bridge stays
+  thin; `../../src/server` never imports SvelteKit `RequestEvent` and **does not
+  import FSD `../../src/lib`** (display-name twin with parity test — or record a
   documented deviation).
 - **`user.name` + `display_name_normalized` are application-owned after
   onboarding**: only `PATCH /api/me/profile` writes them; Google re-auth /
@@ -228,7 +228,7 @@ Dropdown where genuinely useful; the board/keyboard/tiles stay custom.
   `auth:check` parity stays green.
 - New error codes only via `ERROR_CODES` (NG21 envelope).
 - Client-supplied timing/score/state fields never accepted.
-- Every Phase-2 decision recorded in `docs/contradictions-and-gaps.md`.
+- Every Phase-2 decision recorded in `../contradictions-and-gaps.md`.
 
 ## 6. Phase-2 API contract (summary — full detail in plan §9)
 
@@ -241,13 +241,13 @@ Dropdown where genuinely useful; the board/keyboard/tiles stay custom.
 
 ## 7. Files that must not be modified casually
 
-- `src/server/db/auth-schema.generated.ts`, `src/server/db/schema.ts`
-- `src/server/routes.ts` (only additive, chained registration)
-- `src/server/middleware/auth.ts` (only the documented bootstrap seam)
-- `src/routes/api/[...path]/+server.ts`, `src/hooks.server.ts` (auth boundary)
-- `src/server/game/*`, `src/server/puzzle/*`, `scripts/verify-bundle-secrecy.ts`,
-  `scripts/check-auth-schema.ts`
-- `.env`/`.dev.vars` (never commit/print).
+- `../../src/server/db/auth-schema.generated.ts`, `../../src/server/db/schema.ts`
+- `../../src/server/routes.ts` (only additive, chained registration)
+- `../../src/server/middleware/auth.ts` (only the documented bootstrap seam)
+- `src/routes/api/[...path]/+server.ts`, `../../src/hooks.server.ts` (auth boundary)
+- `src/server/game/*`, `src/server/puzzle/*`, `../../scripts/verify-bundle-secrecy.ts`,
+  `../../scripts/check-auth-schema.ts`
+- `../../.env`/`.dev.vars` (never commit/print).
 
 ## 8. Testing contract (plan §12)
 
@@ -267,14 +267,14 @@ Phase 2 is UI-heavy and the implementation chat must use multimodal visual inspe
 - **B — profile + theme:** light/dark at ~1440x900 and ~390x844.
 - **C — final regression:** `/onboarding`, `/profile`, authenticated shell, and `/play` in light/dark at ~1440x900 and ~390x844.
 
-At each checkpoint the agent should run the application, capture screenshots, inspect the rendered UI, fix issues, and re-run relevant automated checks. Temporary screenshots belong in a gitignored location such as `.cache/ui-shots/`. Visual validation is required for Phase-2 completion; it does not replace automated tests.
+At each checkpoint the agent should run the application, capture screenshots, inspect the rendered UI, fix issues, and re-run relevant automated checks. Temporary screenshots belong in a gitignored location such as `../../.cache/ui-shots`. Visual validation is required for Phase-2 completion; it does not replace automated tests.
 
 ## 10. Known risks
 
 - shadcn CLI interactivity; theme variant switch scope (verify all `dark:`
   surfaces); FSD-vs-shared-module duplication; admin promotion page-level lag;
   fixture accounts must be onboarded for Phase-1 gameplay specs; user's
-  uncommitted `docs/prompts/` reorganization (reconcile on commit).
+  uncommitted `` reorganization (reconcile on commit).
 
 ## 11. Verification commands (implementation phase)
 

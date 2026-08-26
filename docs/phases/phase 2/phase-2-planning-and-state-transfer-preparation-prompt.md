@@ -359,7 +359,7 @@ Use the existing conventions in that document.
 
 After the investigation, create/update the following markdown artifacts:
 
-### A. `docs/phase-2-plan.md`
+### A. `phase-2-plan.md`
 
 This is the authoritative Phase-2 implementation plan.
 
@@ -387,7 +387,7 @@ It must contain:
 - rollback/risk notes
 - definition of done
 
-### B. `docs/phase-2-implementation-handoff.md`
+### B. `phase-2-implementation-handoff.md`
 
 This is a state-transfer document for the future implementation chat.
 
@@ -416,7 +416,7 @@ Include:
 
 Do not copy stale Phase-1 handoff prose wholesale.
 
-### C. `docs/phase-2-handoff-prompt.md`
+### C. `phase-2-handoff-prompt.md`
 
 This is the prompt for a NEW implementation chat.
 

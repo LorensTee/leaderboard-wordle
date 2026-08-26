@@ -73,8 +73,18 @@ export async function applyAdminBootstrap(
 	// `c.env` can be undefined in Hono's app.request() test path (routes.ts
 	// guards the same case for /api/auth/*) — a missing env means no
 	// bootstrap to apply.
-	const adminEmail = env?.ADMIN_EMAIL;
-	if (!adminEmail || auth.user.email !== adminEmail || auth.user.role === 'admin') {
+	// Email identity is case-insensitive (better-auth's own account linking
+	// compares lowercased emails; Google Workspace identities may be stored
+	// mixed-case verbatim) — compare trimmed + lowercased on BOTH sides so a
+	// mixed-case ADMIN_EMAIL binding still promotes (review finding).
+	const configured = env?.ADMIN_EMAIL?.trim();
+	const userEmail = auth.user.email?.trim().toLowerCase();
+	if (
+		!configured ||
+		!env ||
+		userEmail !== configured.toLowerCase() ||
+		auth.user.role === 'admin'
+	) {
 		return auth;
 	}
 	await getDb(env).execute(

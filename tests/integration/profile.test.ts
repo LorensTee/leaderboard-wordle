@@ -244,6 +244,29 @@ suite('Phase-2 profile domain (live Neon)', () => {
 		// 5. No ADMIN_EMAIL configured → nobody promoted.
 		const noConf = await applyAdminBootstrap(appEnv(undefined), { session: {} as never, user: { ...adminUser, role: 'player' } as never });
 		expect(noConf.user.role).toBe('player');
+
+		// 6. Email identity is case-insensitive + whitespace-tolerant (review
+		// finding): a mixed-case / padded ADMIN_EMAIL still promotes the
+		// operator's account (better-auth stores the provider email verbatim;
+		// Google Workspace identities may be mixed-case).
+		const mixed = await insertUser({ email: `Mixed.Case.Admin-${randomUUID()}@test.dev`, role: 'player' });
+		const mixedConfig = `  ${mixed.email.toUpperCase()}  `;
+		const promotedMixed = await applyAdminBootstrap(appEnv(mixedConfig), {
+			session: {} as never,
+			user: { id: mixed.id, email: mixed.email, name: 'Mixed', role: 'player' } as never
+		});
+		expect(promotedMixed.user.role).toBe('admin');
+		const [rowMixed] = await db.select().from(schema.user).where(sql`${schema.user.id} = ${mixed.id}`).limit(1);
+		expect(rowMixed.role).toBe('admin');
+
+		// 7. Still never demotes, and non-matching emails remain untouched
+		// under the case-insensitive comparison.
+		const nonMatchMixed = await insertUser({ role: 'player' });
+		const untouchedMixed = await applyAdminBootstrap(appEnv(mixedConfig), {
+			session: {} as never,
+			user: { id: nonMatchMixed.id, email: nonMatchMixed.email, name: 'Other', role: 'player' } as never
+		});
+		expect(untouchedMixed.user.role).toBe('player');
 	});
 
 	it('Google re-auth name preservation (v22): fresh session resolution after onboarding never rewrites application-owned name', async () => {
