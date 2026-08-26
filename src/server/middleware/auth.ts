@@ -15,8 +15,10 @@
 // the resolved session as a typed context value (`c.get('auth')`); roles and
 // route-level authorization stay application-owned.
 import type { Context, Next } from 'hono';
+import { sql } from 'drizzle-orm';
 import type { SessionData } from '../auth/auth';
 import { getAuth, type AuthBindings } from '../auth/auth';
+import { getDb } from '../db/memo';
 import { ERROR_CODES, errorEnvelope } from '../lib/errors';
 
 // Session cookie owned by Better Auth (same name `hooks.server.ts` fast-path
@@ -34,7 +36,7 @@ export type AuthContext =
 
 /** env/variables subset this middleware needs (satisfied by AppEnv). */
 export type AuthMiddlewareEnv = {
-	Bindings: AuthBindings;
+	Bindings: AuthBindings & { ADMIN_EMAIL?: string };
 	Variables: {
 		requestId: string;
 		auth: AuthContext;
@@ -55,6 +57,32 @@ export const resolveAuthSession: SessionResolver = async (env, headers) => {
 	if (!session) return null;
 	return { session: session.session, user: session.user };
 };
+
+/**
+ * NG18 admin bootstrap — promote-only, idempotent, keyed on the verified
+ * email (Architecture §Admin bootstrap). Runs from authContext on every
+ * resolved session for the configured email; the WHERE clause makes it a
+ * no-op after the first promotion. NEVER demotes: changing ADMIN_EMAIL
+ * demotes nobody; a no-admin state is a manual operator bootstrap.
+ * Exported for the integration suite (real DB semantics against Neon).
+ */
+export async function applyAdminBootstrap(
+	env: (AuthBindings & { ADMIN_EMAIL?: string }) | undefined,
+	auth: NonNullable<AuthContext>
+): Promise<NonNullable<AuthContext>> {
+	// `c.env` can be undefined in Hono's app.request() test path (routes.ts
+	// guards the same case for /api/auth/*) — a missing env means no
+	// bootstrap to apply.
+	const adminEmail = env?.ADMIN_EMAIL;
+	if (!adminEmail || auth.user.email !== adminEmail || auth.user.role === 'admin') {
+		return auth;
+	}
+	await getDb(env).execute(
+		sql`UPDATE "user" SET role = 'admin' WHERE id = ${auth.user.id} AND role <> 'admin'`
+	);
+	// Refresh the context user — the promotion is visible to THIS request.
+	return { session: auth.session, user: { ...auth.user, role: 'admin' } };
+}
 
 /**
  * Session-resolution middleware. Runs app-wide (including /api/auth/* — it is
@@ -83,7 +111,14 @@ export function createAuthContext(resolver: SessionResolver = resolveAuthSession
 		// expired, revoked, or DB unreachable), the request is unauthenticated
 		// or errors out — it is never granted identity.
 		const auth = await resolver(c.env as AuthBindings, c.req.raw.headers);
-		c.set('auth', auth);
+		if (auth) {
+			// NG18: the bootstrap is the ONLY user write this middleware ever
+			// performs (name/display_name_normalized are application-owned and
+			// written ONLY by PATCH /api/me/profile — v22 regression).
+			c.set('auth', await applyAdminBootstrap(c.env, auth));
+		} else {
+			c.set('auth', null);
+		}
 		return next();
 	};
 }

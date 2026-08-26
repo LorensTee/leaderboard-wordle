@@ -43,6 +43,14 @@ export function createAuth(env: AuthBindings) {
 		appName: 'Leaderboard Wordle',
 		secret,
 		baseURL: env.BETTER_AUTH_URL ?? 'http://localhost:5173',
+		// Phase-2 (scenario 12) finding: better-auth's origin check rejects
+		// state-changing requests whose Origin is not the baseURL origin —
+		// the local preview/E2E host (127.0.0.1:4173) differs from the dev
+		// baseURL (localhost:5173), so the header sign-out returned 403
+		// INVALID_ORIGIN. Both local hosts are trusted; production origins
+		// are covered by BETTER_AUTH_URL itself (CSRF stays fail-closed
+		// against arbitrary origins).
+		trustedOrigins: ['http://localhost:5173', 'http://127.0.0.1:4173'],
 		database: drizzleAdapter(
 			createDb(env.DATABASE_URL || INERT_DB_URL),
 			{ provider: 'pg' }

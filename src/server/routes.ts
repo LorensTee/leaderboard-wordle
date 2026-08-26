@@ -17,6 +17,8 @@ import { registerGameRoutes } from './game/handlers';
 import { createGameService } from './game/service';
 import { authContext, requireAuth, type AuthContext } from './middleware/auth';
 import { csrfProtection } from './middleware/csrf';
+import { registerProfileRoutes } from './profile/handlers';
+import { createProfileService } from './profile/service';
 import { requestIdMiddleware } from './middleware/request-id';
 import { hstsOnHttps, securityHeadersMiddleware } from './middleware/security-headers';
 import { ERROR_CODES, errorEnvelope, notFoundHandler, onErrorHandler } from './lib/errors';
@@ -108,9 +110,16 @@ const base = new Hono<AppEnv>()
 // Phase-1 game vertical slice (protected: requireAuth mounted above on
 // /api/game/*). The service factory resolves the memoized DB client from the
 // Worker bindings; the answers stay inside the service (never serialized).
-export const app = registerGameRoutes(base, {
-	getService: (c) => createGameService(getDb(c.env))
-})
+// Phase-2 profile routes chain AFTER the game routes so the Hono AppType
+// accumulates both schemas (chain-preserved RPC typing).
+export const app = registerProfileRoutes(
+	registerGameRoutes(base, {
+		getService: (c) => createGameService(getDb(c.env))
+	}),
+	{
+		getService: (c) => createProfileService(getDb(c.env))
+	}
+)
 	// NG21 — centralized error/notFound handling.
 	.onError(onErrorHandler)
 	.notFound(notFoundHandler);
