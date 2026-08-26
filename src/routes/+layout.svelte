@@ -1,14 +1,22 @@
 <script lang="ts">
 	// App shell: theme reset, server-state provider, header, toast surface.
 	import '../app.css';
+	import { onMount } from 'svelte';
 	import { QueryClientProvider } from '@tanstack/svelte-query';
 	import { Toaster } from 'svelte-sonner';
 	import { queryClient } from '$lib/app/query-client';
+	import { initTheme } from '$lib/app/theme';
 	import Header from '$lib/shared/ui/header.svelte';
 
 	import favicon from '$lib/assets/favicon.svg';
 
 	let { children, data } = $props();
+
+	// The pre-paint script in app.html already applied the theme before first
+	// paint; sync the reactive store + native color-scheme on the client.
+	onMount(() => {
+		initTheme();
+	});
 </script>
 
 <svelte:head>
