@@ -1,0 +1,192 @@
+{
+	"version": "1.0",
+	"source": "curated baseline authored for Leaderboard Wordle (private friend-group moderation, V1)",
+	"license": "project-owned",
+	"importedAt": "2026-08-25",
+	"notes": "Detection rule: `moderationKeyForDisplayName` (lowercase → leet/confusable map → strip separators and duplicate runs) then literal substring containment against the key forms below. Evasion variants (f.u.c.k via separators, f4ck, fuuck, a55hole, sh1thead) are caught by the key transform + the embedded variant entries (fuk, fuq, fck, fack, phuck, kunt). PER-DATASET RULE (decision log, Phase-2 planning v23): entries whose moderation key is a common substring of common benign vocabulary are EXCLUDED below rather than weakening the detector — their evasions pass deliberately and are documented residual (e.g. a55, sh1t, c0m, b0b, sp1c, m1ck, j4p, p4k, j3w, h0e, s3x, an4l, t1t). Residual collisions accepted: rape/grape, fuck-key/fukushima, cunt/scunthorpe, nigger-key/niger, dick/Dick, bitch-key/bichon, boobs/bobsleigh. The benign-name acceptance set in tests/unit/display-name.test.ts is the acceptance gate for this dataset.",
+	"excluded": [
+		{
+			"word": "ass",
+			"reason": "key 'as' is a substring of common benign vocabulary (class, glass, pass, was, has, ask, gas)"
+		},
+		{
+			"word": "arse",
+			"reason": "key 'arse' is a substring of common benign vocabulary (sparse, parsec, parse)"
+		},
+		{
+			"word": "shit",
+			"reason": "key 'sit' is a substring of common benign vocabulary (visit, site, sitting, situated, sita)"
+		},
+		{
+			"word": "tit",
+			"reason": "key 'tit' is a substring of common benign vocabulary (title, constitute, settings)"
+		},
+		{
+			"word": "cum",
+			"reason": "key 'cum' is a substring of common benign vocabulary (document, documentary, cumulative, circumvent)"
+		},
+		{
+			"word": "boob",
+			"reason": "key 'bob' collides with the common name Bob / Bobby / Bobcat"
+		},
+		{
+			"word": "fag",
+			"reason": "key 'fag' collides with Fagan/Fagin and appears in compound words; faggot/fagot entry still catches the main form and its leet/separator evasions"
+		},
+		{
+			"word": "sex",
+			"reason": "key 'sex' is a substring of common benign vocabulary (sussex, essex, sexy, sextant)"
+		},
+		{
+			"word": "anal",
+			"reason": "key 'anal' is a substring of common benign vocabulary (analog, analyst, analysis)"
+		},
+		{
+			"word": "spic",
+			"reason": "key 'spic' is a substring of common benign vocabulary (spice, spicy)"
+		},
+		{
+			"word": "mick",
+			"reason": "key 'mick' collides with the common name Mickey"
+		},
+		{
+			"word": "paddy",
+			"reason": "key 'paddy' collides with the common name Paddy (Patrick)"
+		},
+		{
+			"word": "cock",
+			"reason": "key 'cock' is a substring of common benign vocabulary (peacock, cocktail, cockpit, cockerel); cocksucker entry keeps the unambiguous deep form"
+		},
+		{
+			"word": "jap",
+			"reason": "key 'jap' is a substring of Japan"
+		},
+		{
+			"word": "pak",
+			"reason": "key 'pak' is a substring of Pakistan"
+		},
+		{
+			"word": "jew",
+			"reason": "key 'jew' is a substring of common benign vocabulary (jewel, jewelry, jewish) and is itself the identity noun"
+		},
+		{
+			"word": "hoe",
+			"reason": "key 'hoe' is a substring of common benign vocabulary (shoe, shoelace, horseshoe)"
+		},
+		{
+			"word": "ho",
+			"reason": "2-character key; substring of many common words"
+		},
+		{
+			"word": "nip",
+			"reason": "key 'nip' is a substring of common benign vocabulary (nipple, snippet, snip)"
+		},
+		{
+			"word": "wop",
+			"reason": "3-character key with no reliable disambiguation"
+		},
+		{
+			"word": "abo",
+			"reason": "3-character key with no reliable disambiguation"
+		}
+	],
+	"words": [
+		"fuck",
+		"fuckhead",
+		"fucktard",
+		"motherfucker",
+		"fuk",
+		"fuq",
+		"fck",
+		"fack",
+		"phuck",
+		"shithead",
+		"shitfaced",
+		"bullshit",
+		"dipshit",
+		"batshit",
+		"apeshit",
+		"horseshit",
+		"dogshit",
+		"bitch",
+		"bitchy",
+		"bastard",
+		"bollocks",
+		"bugger",
+		"wanker",
+		"wank",
+		"tosser",
+		"arsehole",
+		"asshole",
+		"dumbass",
+		"jackass",
+		"fatass",
+		"dick",
+		"dickhead",
+		"cocksucker",
+		"cunt",
+		"kunt",
+		"twat",
+		"pussy",
+		"pussies",
+		"boobs",
+		"boobies",
+		"tits",
+		"titty",
+		"titties",
+		"clitoris",
+		"penis",
+		"vagina",
+		"nigger",
+		"nigga",
+		"kike",
+		"chink",
+		"gook",
+		"wetback",
+		"tranny",
+		"faggot",
+		"fagot",
+		"dyke",
+		"queer",
+		"fudgepacker",
+		"carpetmuncher",
+		"sodomite",
+		"rape",
+		"rapist",
+		"pedo",
+		"paedo",
+		"pedophile",
+		"paedophile",
+		"slut",
+		"whore",
+		"hooker",
+		"porn",
+		"cumshot",
+		"blowjob",
+		"handjob",
+		"rimjob",
+		"jerk",
+		"jerkoff",
+		"jackoff",
+		"gangbang",
+		"bukkake",
+		"bestiality",
+		"necrophilia",
+		"incest",
+		"masturbate",
+		"orgasm",
+		"piss",
+		"crap",
+		"damn",
+		"goddamn",
+		"retard",
+		"spaz",
+		"spastic",
+		"midget",
+		"mongoloid",
+		"milf",
+		"cuck",
+		"hitler",
+		"nazi"
+	]
+}
