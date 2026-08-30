@@ -178,3 +178,78 @@ export async function seedTodayPuzzle(answerWord: string): Promise<void> {
 		await pool.end();
 	}
 }
+
+/**
+ * Phase-3 leaderboard fixtures — insert a plain ONBOARDED user (no session)
+ * as a competition rival, so leaderboard boards can be seeded deterministically.
+ */
+export async function createUserOnly(
+	displayName = 'Rival Player',
+	avatarEmoji = '🐯'
+): Promise<{ userId: string }> {
+	const { databaseUrl } = requireE2eEnv();
+	const pool = new Pool({ connectionString: databaseUrl });
+	try {
+		const db = drizzle(pool, { schema });
+		const canonical = displayName.trim().replace(/\s+/g, ' ').toLowerCase();
+		const [user] = await db
+			.insert(schema.user)
+			.values({
+				id: `e2e-${randomUUID()}`,
+				name: canonical,
+				email: `e2e-${randomUUID()}@test.dev`,
+				emailVerified: true,
+				display_name_normalized: canonical,
+				onboarding_completed_at: new Date(),
+				avatarEmoji
+			})
+			.returning();
+		return { userId: user.id };
+	} finally {
+		await pool.end();
+	}
+}
+
+/**
+ * Phase-3 leaderboard fixtures — insert COMPLETED games for today's ACTIVE
+ * puzzle (Manila date derived in SQL) with explicit server-shaped values.
+ * `seedTodayPuzzle` must run first. Completion instants: rows with the same
+ * (completionTimeMs, guessCount) share ONE instant (full key ties, so dense
+ * ranks are shared); otherwise instants are staggered for deterministic order.
+ */
+export async function seedTodayCompletions(
+	rows: { userId: string; completionTimeMs: number; guessCount: number }[]
+): Promise<void> {
+	const { databaseUrl } = requireE2eEnv();
+	const pool = new Pool({ connectionString: databaseUrl });
+	try {
+		const db = drizzle(pool, { schema });
+		const [puzzle] = (
+			await db.execute(
+				sql`SELECT id::text AS id FROM daily_puzzles WHERE puzzle_date = ((now() AT TIME ZONE 'Asia/Manila')::date)`
+			)
+		).rows as { id: string }[];
+		if (!puzzle) throw new Error('today puzzle not seeded — call seedTodayPuzzle first');
+		const sharedInstants = new Map<string, Date>();
+		for (let i = 0; i < rows.length; i++) {
+			const r = rows[i];
+			const key = `${r.completionTimeMs}:${r.guessCount}`;
+			let finishedAt = sharedInstants.get(key);
+			if (!finishedAt) {
+				finishedAt = new Date(Date.now() - (rows.length - i) * 120_000);
+				sharedInstants.set(key, finishedAt);
+			}
+			await db.insert(schema.games).values({
+				userId: r.userId,
+				puzzleId: puzzle.id,
+				status: 'COMPLETED',
+				completionTimeMs: r.completionTimeMs,
+				guessCount: r.guessCount,
+				completedAt: finishedAt,
+				startedAt: new Date(finishedAt.getTime() - r.completionTimeMs)
+			});
+		}
+	} finally {
+		await pool.end();
+	}
+}

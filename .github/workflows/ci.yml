@@ -46,6 +46,16 @@ jobs:
         run: bun run test:unit
       - name: Production build (Cloudflare Workers)
         run: bun run build
+      # Phase-3 D1 — the schema/migrations must be byte-identical to the
+      # baseline (zero migration). Any drift fails loudly here (mirrors the
+      # local gate `git diff --exit-code -- src/server/db/schema.ts src/server/db/migrations`).
+      - name: Schema purity (Phase 3 — zero migration)
+        run: git diff --exit-code -- src/server/db/schema.ts src/server/db/migrations
+      # Phase-3 D8 — the vite closeBundle hook appends the cron `scheduled`
+      # export post-build; without this assertion a missed hookup silently
+      # ships a cron-less worker (plan §12).
+      - name: Patched-worker assertion (cron `scheduled` export present)
+        run: grep -q "export { scheduled }" .svelte-kit/cloudflare/_worker.js
       # types:check compares against the committed worker-configuration.d.ts,
       # whose Cloudflare.GlobalProps.mainModule block is only emitted when
       # .svelte-kit/cloudflare/_worker.js exists (post-build) — on a fresh

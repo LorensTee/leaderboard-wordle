@@ -5,9 +5,24 @@
 // The suite skips explicitly when DATABASE_URL / BETTER_AUTH_SECRET are
 // unavailable (CI injects them; the unauthenticated smoke spec never skips).
 import { expect, test } from '@playwright/test';
-import { createAuthenticatedUser, e2eAuthAvailable, seedTodayPuzzle } from './helpers/auth-fixture';
+import {
+	createAuthenticatedUser,
+	createUserOnly,
+	e2eAuthAvailable,
+	seedTodayCompletions,
+	seedTodayPuzzle
+} from './helpers/auth-fixture';
 
 const authAvailable = e2eAuthAvailable();
+
+async function addSessionCookie(
+	context: import('@playwright/test').BrowserContext,
+	cookie: string
+): Promise<void> {
+	await context.addCookies([
+		{ name: 'better-auth.session_token', value: cookie, url: 'http://127.0.0.1:4173' }
+	]);
+}
 
 test.describe('authenticated gameplay (deterministic session fixture)', () => {
 	// Both tests share the fixture database (TRUNCATE per setup) — serial only.
@@ -82,5 +97,94 @@ test.describe('authenticated gameplay (deterministic session fixture)', () => {
 		expect(body.error.code).toBe('UNAUTHORIZED');
 		expect(body.error.requestId).toBeDefined();
 		void context;
+	});
+
+	test('E5+E6: completed game → position block (#N + may-change caption) → View leaderboard lands on the Today tab', async ({
+		context,
+		page
+	}) => {
+		const { cookie } = await createAuthenticatedUser(undefined, 'Position Seeker', {
+			onboarded: true,
+			avatarEmoji: '🙂'
+		});
+		// A rival strictly faster than any human-speed play (200ms) and one
+		// slower (10m) pin the viewer's dense rank at #2 regardless of machine
+		// speed — with the deliberate typing delays below, the real play's
+		// elapsed time is bounded to (200ms, 10m).
+		const fast = await createUserOnly('Turbo Rival', '🐯');
+		const slow = await createUserOnly('Slow Rival', '🐢');
+		await seedTodayPuzzle('light');
+		await seedTodayCompletions([
+			{ userId: fast.userId, completionTimeMs: 200, guessCount: 4 },
+			{ userId: slow.userId, completionTimeMs: 600_000, guessCount: 6 }
+		]);
+		await addSessionCookie(context, cookie);
+
+		await page.goto('/play');
+		await page.getByRole('button', { name: 'Start' }).click();
+		// Wait for the board to be mounted before typing (a racing keystroke
+		// would be dropped and change the guess count).
+		const board = page.getByRole('grid', { name: 'Wordle board' });
+		await expect(board).toBeVisible();
+		await page.keyboard.type('about', { delay: 120 });
+		await page.keyboard.press('Enter');
+		await page.getByRole('button', { name: 'Letter l' }).click();
+		await page.keyboard.type('ight', { delay: 120 });
+		await page.keyboard.press('Enter');
+
+		// Terminal COMPLETED: Solved line + the position block (dense rank,
+		// explicitly non-final) with the leaderboard navigation action.
+		await expect(page.getByRole('status').filter({ hasText: /Solved in 2\/6/ })).toBeVisible();
+		await expect(page.getByText('Current position: #2')).toBeVisible();
+		await expect(page.getByText('Position may change as others finish today')).toBeVisible();
+
+		// E6: the block's action navigates to /leaderboard, Today tab active,
+		// with the viewer's highlighted row present.
+		await page.getByRole('button', { name: 'View leaderboard' }).click();
+		await expect(page).toHaveURL(/\/leaderboard$/);
+		await expect(page.getByRole('tab', { name: 'Today' })).toHaveAttribute(
+			'aria-selected',
+			'true'
+		);
+		await expect(page.getByRole('row').filter({ hasText: 'position seeker' })).toBeVisible();
+	});
+
+	test('E7: FAILED terminal game → penalty line rendered, NO position block', async ({
+		context,
+		page
+	}) => {
+		const { cookie } = await createAuthenticatedUser(undefined, 'Stuck Player', {
+			onboarded: true,
+			avatarEmoji: '🙂'
+		});
+		const rival = await createUserOnly('Turbo Rival', '🐯');
+		await seedTodayPuzzle('light');
+		await seedTodayCompletions([{ userId: rival.userId, completionTimeMs: 3_000, guessCount: 4 }]);
+		await addSessionCookie(context, cookie);
+
+		// Six real wrong guesses → FAILED (answer is 'light'; all six words
+		// are valid guesses).
+		await page.goto('/play');
+		await page.getByRole('button', { name: 'Start' }).click();
+		const board = page.getByRole('grid', { name: 'Wordle board' });
+		await expect(board).toBeVisible();
+		const words = ['about', 'after', 'again', 'below', 'candy', 'drain'];
+		// Submit one guess at a time: the input is disabled while the guess
+		// mutation is pending — a racing keystroke would be dropped.
+		for (let i = 0; i < words.length; i++) {
+			await page.keyboard.type(words[i]);
+			await page.keyboard.press('Enter');
+			await expect(
+				board.getByRole('row').nth(i).getByRole('gridcell').first()
+			).toHaveAttribute('aria-label', /— (green|yellow|gray)/);
+		}
+
+		await expect(page.getByRole('status').filter({ hasText: /Out of guesses/ })).toBeVisible();
+		// The competitive penalty line (Spec §13) — no position for FAILED.
+		await expect(
+			page.getByText('The daily penalty counts toward weekly and monthly standings')
+		).toBeVisible();
+		await expect(page.getByText(/Current position/)).toHaveCount(0);
+		await expect(page.getByText(/Position may change/)).toHaveCount(0);
 	});
 });

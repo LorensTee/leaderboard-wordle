@@ -2,7 +2,14 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
 	testDir: 'tests/e2e',
-	fullyParallel: true,
+	// The authenticated specs share ONE non-production database and TRUNCATE
+	// the app tables per fixture (tests/e2e/helpers/auth-fixture.ts) — files
+	// must never run in parallel (a second worker's TRUNCATE would wipe the
+	// first worker's state mid-test). Phase-3 added a second fixture file
+	// (leaderboard.spec.ts); the runner is therefore explicit: one worker,
+	// serial tests.
+	fullyParallel: false,
+	workers: 1,
 	retries: 0,
 	reporter: 'list',
 	use: {
