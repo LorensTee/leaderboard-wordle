@@ -15,6 +15,8 @@ import { getAuth } from './auth/auth';
 import { getDb } from './db/memo';
 import { registerGameRoutes } from './game/handlers';
 import { createGameService } from './game/service';
+import { registerLeaderboardRoutes } from './leaderboard/handlers';
+import { createLeaderboardService } from './leaderboard/service';
 import { authContext, requireAuth, type AuthContext } from './middleware/auth';
 import { csrfProtection } from './middleware/csrf';
 import { registerProfileRoutes } from './profile/handlers';
@@ -97,6 +99,7 @@ const base = new Hono<AppEnv>()
 	.use('/api/game/*', requireAuth)
 	.use('/api/me/*', requireAuth)
 	.use('/api/admin/*', requireAuth)
+	.use('/api/leaderboard/*', requireAuth)
 	// Better Auth — mounted per the current Hono integration docs:
 	// `app.all("/api/auth/*", (c) => auth.handler(c.req.raw))`. Runtime values
 	// come from Hono bindings (getAuth factory). Deliberately NOT behind
@@ -107,17 +110,20 @@ const base = new Hono<AppEnv>()
 	// object, so production behavior is unchanged).
 	.all('/api/auth/*', (c) => getAuth((c.env ?? {}) as HonoBindings).handler(c.req.raw));
 
-// Phase-1 game vertical slice (protected: requireAuth mounted above on
-// /api/game/*). The service factory resolves the memoized DB client from the
-// Worker bindings; the answers stay inside the service (never serialized).
 // Phase-2 profile routes chain AFTER the game routes so the Hono AppType
-// accumulates both schemas (chain-preserved RPC typing).
-export const app = registerProfileRoutes(
-	registerGameRoutes(base, {
-		getService: (c) => createGameService(getDb(c.env))
-	}),
+// accumulates both schemas (chain-preserved RPC typing). Phase-3 leaderboard
+// routes chain last with the same pattern.
+export const app = registerLeaderboardRoutes(
+	registerProfileRoutes(
+		registerGameRoutes(base, {
+			getService: (c) => createGameService(getDb(c.env))
+		}),
+		{
+			getService: (c) => createProfileService(getDb(c.env))
+		}
+	),
 	{
-		getService: (c) => createProfileService(getDb(c.env))
+		getService: (c) => createLeaderboardService(getDb(c.env))
 	}
 )
 	// NG21 — centralized error/notFound handling.

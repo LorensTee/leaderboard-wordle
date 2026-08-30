@@ -1,7 +1,28 @@
 import tailwindcss from '@tailwindcss/vite';
 import adapter from '@sveltejs/adapter-cloudflare';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
+import { patchWorker } from './scripts/patch-worker-scheduled';
+
+/** Phase-3 cron wiring (plan §7.3/D8): after every production build, emit the
+ * `scheduled` export on the adapter-generated worker (which only exports
+ * `fetch` — the adapter has no entrypoint option). Registered AFTER the
+ * sveltekit plugin so closeBundle runs after the adapter has written
+ * `_worker.js`; `vite preview` (E2E) does not load `_worker.js` and never
+ * fires crons, so the hook only affects real builds.
+ */
+const patchWorkerOnBuild: Plugin = {
+	name: 'patch-worker-scheduled',
+	apply: 'build',
+	async closeBundle() {
+		try {
+			await patchWorker();
+		} catch (err: unknown) {
+			console.error('[patch-worker-scheduled] failed to patch the built worker', err);
+			process.exitCode = 1;
+		}
+	}
+};
 
 export default defineConfig({
 	plugins: [
@@ -22,6 +43,8 @@ export default defineConfig({
 			alias: {
 				$server: './src/server'
 			}
-		})
+		}),
+		// AFTER sveltekit — closeBundle must run once _worker.js exists.
+		patchWorkerOnBuild
 	]
 });
