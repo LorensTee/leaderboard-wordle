@@ -7,10 +7,15 @@
 	import { animate, stagger } from 'animejs';
 	import { toast } from 'svelte-sonner';
 	import { RefreshCw } from '@lucide/svelte';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import Board from '$lib/shared/ui/board.svelte';
 	import Keyboard from '$lib/shared/ui/keyboard.svelte';
 	import Timer from '$lib/shared/ui/timer.svelte';
+	import PositionCallout from '$lib/features/leaderboard/position-callout.svelte';
+	import { penaltyLineCopy, positionBlockCopy } from '$lib/features/leaderboard/position-copy';
 	import { gameApi } from '$lib/shared/api/game';
+	import { leaderboardApi, leaderboardKeys } from '$lib/shared/api/leaderboard';
 	import { ApiError } from '$lib/shared/api/client';
 	import { queryClient } from '$lib/app/query-client';
 	import { BOARD_COLS, computeKeyStates, isValidGuessWord } from '$lib/shared/lib/wordle-ux';
@@ -26,6 +31,23 @@
 		queryKey: CURRENT_GAME_KEY,
 		queryFn: () => gameApi.getCurrentGame()
 	}));
+
+	const currentGame = $derived(currentQuery.data?.game ?? null);
+
+	// Result position (plan §9.2/D13): the today board is fetched ONLY for a
+	// terminal COMPLETED game, reusing the shared `['leaderboard','today']`
+	// key (the /leaderboard page cache). Fetch failure or an uncompleted/
+	// unranked viewer hides the block silently — never blocks the result.
+	const todayBoardQuery = createQuery(() => ({
+		queryKey: leaderboardKeys.period('today'),
+		queryFn: () => leaderboardApi.getBoard('today'),
+		enabled: currentGame?.status === 'COMPLETED'
+	}));
+
+	const todayPosition = $derived(todayBoardQuery.data?.currentUser.entry ?? null);
+	const todayPositionCopy = $derived(
+		positionBlockCopy(todayBoardQuery.data?.currentUser.rank ?? null)
+	);
 
 	const startMutation = createMutation(() => ({
 		mutationFn: () => gameApi.startGame(),
@@ -179,13 +201,42 @@
 		>
 			Solved in {game.guessCount}/6 &middot; {game.completionTimeMs !== null ? formatDuration(game.completionTimeMs) : ''}
 		</p>
+		<!-- Result position (plan §9.2): dense rank over today's completions —
+		     explicitly non-final; hides silently unless the rank is available. -->
+		{#if todayPosition && todayPositionCopy}
+			<div class="mx-auto w-full max-w-sm pb-3">
+				<PositionCallout
+					entry={todayPosition}
+					heading={todayPositionCopy.heading}
+					note={todayPositionCopy.note}
+				>
+					{#snippet actions()}
+						<button
+							type="button"
+							class="inline-flex h-11 w-full items-center justify-center rounded-xl bg-tile-green px-6 font-semibold text-white hover:brightness-105"
+							onclick={() => goto(resolve('/leaderboard'))}
+						>
+							View leaderboard
+						</button>
+					{/snippet}
+				</PositionCallout>
+			</div>
+		{/if}
 	{:else if game.status === 'FAILED' || expired}
 		<p class="py-3 text-center text-sm text-black/60 dark:text-white/60" role="status">
 			Out of guesses &mdash; tomorrow&rsquo;s puzzle is waiting.
 		</p>
+		{#if game.status === 'FAILED'}
+			<p class="pb-3 text-center text-xs text-black/50 dark:text-white/50">
+				{penaltyLineCopy()}
+			</p>
+		{/if}
 	{:else if game.status === 'FORFEITED'}
 		<p class="py-3 text-center text-sm text-black/60 dark:text-white/60" role="status">
 			This puzzle ended &mdash; see you tomorrow.
+		</p>
+		<p class="pb-3 text-center text-xs text-black/50 dark:text-white/50">
+			{penaltyLineCopy()}
 		</p>
 	{/if}
 
