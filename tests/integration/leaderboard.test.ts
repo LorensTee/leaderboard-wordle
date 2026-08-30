@@ -96,6 +96,22 @@ suite('leaderboard (real Neon: boards, aggregation, qualification)', () => {
 		return row.d;
 	}
 
+	/**
+	 * `count` consecutive Manila dates ending `offsetDays` ago, OLDEST first —
+	 * derived in ONE round trip (the month fixtures seed up to 30 days; a
+	 * per-day round trip at CI latency took I9 past the 30s test budget).
+	 */
+	async function manilaDatesBack(offsetDays: number, count: number): Promise<string[]> {
+		if (count <= 0) return [];
+		const rows = (
+			await db.execute(sql`
+				SELECT ((transaction_timestamp() AT TIME ZONE 'Asia/Manila')::date - s)::text AS d
+				FROM generate_series(${offsetDays + count - 1}::int, ${offsetDays}::int, -1) AS s
+			`)
+		).rows as { d: string }[];
+		return rows.map((r) => r.d);
+	}
+
 	async function puzzleIdForDate(date: string): Promise<string> {
 		const [row] = (
 			await db.execute(sql`SELECT id::text AS id FROM daily_puzzles WHERE puzzle_date = ${date}`)
@@ -186,6 +202,9 @@ suite('leaderboard (real Neon: boards, aggregation, qualification)', () => {
 	/**
 	 * Seed `count` finalized in-frame days ending at yesterday, each with the
 	 * given frozen average (+ penalty). `count` must fit the period frame.
+	 * BATCHED: one answer insert + one puzzle insert (multi-row VALUES) —
+	 * the month fixtures seed up to dayOfMonth-1 days, and per-day round trips
+	 * at CI latency blew the test timeout (I9 CI failure #3).
 	 * Returns the puzzle ids in chronological order (oldest first; the last
 	 * element is yesterday).
 	 */
@@ -194,17 +213,54 @@ suite('leaderboard (real Neon: boards, aggregation, qualification)', () => {
 		count: number,
 		averageCompletionTimeMs: number
 	): Promise<string[]> {
-		const ids: string[] = [];
-		for (let i = count; i >= 1; i--) {
-			const date = await manilaDateOffset(-i);
-			const puzzle = await insertPuzzle(date, {
-				status: 'FINALIZED',
-				averageCompletionTimeMs,
-				nonCompletionPenaltyMs: averageCompletionTimeMs + NON_COMPLETION_PENALTY_MS
-			});
-			ids.push(puzzle.id);
-		}
-		return ids;
+		if (count <= 0) return [];
+		const dates = await manilaDatesBack(1, count);
+		const words = dates.map(() => `g${String(++wordCounter).padStart(4, '0')}`);
+		// Batched multi-row INSERTs (parameterized) — one round trip each.
+		const answers = (await db.execute(sql`
+			INSERT INTO answer_dictionary (word, normalized_word)
+			VALUES ${sql.join(words.map((w) => sql`(${w}, ${w})`), sql`, `)}
+			RETURNING id::text AS id
+		`)) as unknown as { rows: { id: string }[] };
+		const puzzles = (await db.execute(sql`
+			INSERT INTO daily_puzzles
+			  (puzzle_date, answer_id, hint_letter, status, expires_at,
+			   average_completion_time_ms, non_completion_penalty_ms, finalized_at)
+			VALUES ${sql.join(
+				dates.map(
+					(date, i) => sql`(${date}, ${answers.rows[i].id}, ${words[i][0].toUpperCase()},
+					  'FINALIZED', ${new Date('2099-12-31T00:00:00Z')}, ${averageCompletionTimeMs},
+					  ${averageCompletionTimeMs + NON_COMPLETION_PENALTY_MS}, transaction_timestamp())`
+				),
+				sql`, `
+			)}
+			RETURNING id::text AS id
+		`)) as unknown as { rows: { id: string }[] };
+		return puzzles.rows.map((p) => p.id);
+	}
+
+	/** Multi-row game insert (one round trip) — same shapes as insertGame. */
+	async function insertGamesBatched(
+		rows: {
+			userId: string;
+			puzzleId: string;
+			status?: 'ACTIVE' | 'COMPLETED' | 'FAILED' | 'FORFEITED';
+			completionTimeMs?: number | null;
+			guessCount?: number;
+			completedAt?: ReturnType<typeof sql> | Date | null;
+		}[]
+	): Promise<void> {
+		if (rows.length === 0) return;
+		await db.execute(sql`
+			INSERT INTO games (user_id, puzzle_id, status, completion_time_ms, guess_count, completed_at)
+			VALUES ${sql.join(
+				rows.map(
+					(r) => sql`(${r.userId}, ${r.puzzleId}, ${r.status ?? 'ACTIVE'},
+					  ${r.completionTimeMs ?? null}, ${r.guessCount ?? 0}, ${r.completedAt ?? null})`
+				),
+				sql`, `
+			)}
+		`);
 	}
 
 	/** In-frame past days for a period (DB-clock derived). */
@@ -354,14 +410,16 @@ suite('leaderboard (real Neon: boards, aggregation, qualification)', () => {
 
 		// A: completes days [missDay ? 1 : 0 .. past-1] at 24000/4; when
 		// missDay, the oldest day has NO game row (MISSED by absence).
-		for (let i = missDay ? 1 : 0; i < past; i++) {
-			await insertGame('A', puzzleIds[i], {
+		await insertGamesBatched(
+			puzzleIds.slice(missDay ? 1 : 0).map((pid) => ({
+				userId: 'A',
+				puzzleId: pid,
 				status: 'COMPLETED',
 				completionTimeMs: frozenAvg,
 				guessCount: 4,
 				completedAt: sql`transaction_timestamp() - interval '10 hours'`
-			});
-		}
+			}))
+		);
 		// B: one completed day (yesterday), one FAILED, one FORFEITED (when
 		// days allow) + a FAILED game TODAY (ignored — no slot until finalization).
 		await insertGame('B', puzzleIds[past - 1], {
@@ -452,14 +510,16 @@ suite('leaderboard (real Neon: boards, aggregation, qualification)', () => {
 		for (const id of ['A', 'B']) await insertUser(id);
 
 		// A: completes every in-frame past day (24000/4) + today (36000/6).
-		for (let i = 0; i < past; i++) {
-			await insertGame('A', puzzleIds[i], {
+		await insertGamesBatched(
+			puzzleIds.map((pid) => ({
+				userId: 'A',
+				puzzleId: pid,
 				status: 'COMPLETED',
 				completionTimeMs: frozenAvg,
 				guessCount: 4,
 				completedAt: sql`transaction_timestamp() - interval '10 hours'`
-			});
-		}
+			}))
+		);
 		await insertGame('A', todayPuzzle.id, {
 			status: 'COMPLETED',
 			completionTimeMs: 36_000,
@@ -528,21 +588,28 @@ suite('leaderboard (real Neon: boards, aggregation, qualification)', () => {
 
 		// Q completes ALL days (past + today); U completes exactly
 		// threshold - 1 of the most recent days → below threshold.
-		for (let i = 0; i < past; i++) {
-			await insertGame('Q', puzzleIds[i], {
+		await insertGamesBatched(
+			puzzleIds.map((pid) => ({
+				userId: 'Q',
+				puzzleId: pid,
 				status: 'COMPLETED',
 				completionTimeMs: 30_000,
 				guessCount: 4,
 				completedAt: sql`transaction_timestamp() - interval '11 hours'`
-			});
-			if (i < threshold - 1) {
-				await insertGame('U', puzzleIds[i], {
+			}))
+		);
+		if (threshold - 1 > 0) {
+			// U uses the OLDEST threshold-1 days (index order preserved).
+			await insertGamesBatched(
+				puzzleIds.slice(0, threshold - 1).map((pid) => ({
+					userId: 'U',
+					puzzleId: pid,
 					status: 'COMPLETED',
 					completionTimeMs: 30_000,
 					guessCount: 4,
 					completedAt: sql`transaction_timestamp() - interval '11 hours'`
-				});
-			}
+				}))
+			);
 		}
 		await insertGame('Q', todayPuzzleId, {
 			status: 'COMPLETED',
@@ -614,14 +681,16 @@ suite('leaderboard (real Neon: boards, aggregation, qualification)', () => {
 		];
 		for (const p of players) await insertUser(p.id);
 		for (const p of players) {
-			for (let i = 0; i < past; i++) {
-				await insertGame(p.id, puzzleIds[i], {
+			await insertGamesBatched(
+				puzzleIds.map((pid) => ({
+					userId: p.id,
+					puzzleId: pid,
 					status: 'COMPLETED',
 					completionTimeMs: 30_000,
 					guessCount: 4,
 					completedAt: sql`transaction_timestamp() - interval '20 hours'`
-				});
-			}
+				}))
+			);
 			await insertGame(p.id, todayPuzzleId, {
 				status: 'COMPLETED',
 				completionTimeMs: 30_000,
@@ -687,20 +756,26 @@ suite('leaderboard (real Neon: boards, aggregation, qualification)', () => {
 		await insertPuzzle(stats.today, { status: 'ACTIVE' });
 		const todayPuzzleId = await puzzleIdForDate(stats.today);
 		for (const id of ['A', 'B']) await insertUser(id);
-		for (let i = 0; i < past; i++) {
-			await insertGame('A', puzzleIds[i], {
+		await insertGamesBatched(
+			puzzleIds.map((pid, i) => ({
+				userId: 'A',
+				puzzleId: pid,
 				status: 'COMPLETED',
 				completionTimeMs: pastValues[past - 1 - i],
 				guessCount: 4,
 				completedAt: A_TS
-			});
-			await insertGame('B', puzzleIds[i], {
+			}))
+		);
+		await insertGamesBatched(
+			puzzleIds.map((pid, i) => ({
+				userId: 'B',
+				puzzleId: pid,
 				status: 'COMPLETED',
 				completionTimeMs: pastValues[past - 1 - i],
 				guessCount: 4,
 				completedAt: B_PAST_TS
-			});
-		}
+			}))
+		);
 		await insertGame('B', todayPuzzleId, {
 			status: 'COMPLETED',
 			completionTimeMs: todayValue,

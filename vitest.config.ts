@@ -32,6 +32,10 @@ export default defineConfig({
 		// Integration tests that need a real database set this themselves.
 		// Unit tests are deliberately DB-free.
 		hookTimeout: 30_000,
-		testTimeout: 30_000
+		// 60s (was 30s): the leaderboard month fixtures seed up to 30 days and
+		// the sequential Neon suites legitimately run long; CI runners far from
+		// the Neon region added ~2× latency and blew the old budget (I9 CI
+		// failure #3). Fixtures are batched too; this is headroom, not a mask.
+		testTimeout: 60_000
 	}
 });
