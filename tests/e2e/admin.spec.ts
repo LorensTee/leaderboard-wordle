@@ -127,11 +127,10 @@ test.describe('admin page (deterministic session + seeded puzzles)', () => {
 		if (!sameMonthAsToday(target)) {
 			await page.getByRole('button', { name: 'Next month' }).click();
 		}
-		// The target cell of the visible month offers "Schedule".
-		await page
-			.locator(`[data-date="${target}"]`)
-			.getByRole('button', { name: /Schedule a puzzle/ })
-			.click();
+		// The target cell of the visible month is an empty future day — the
+		// whole cell is a clickable "Schedule a puzzle for DATE" button that
+		// opens the schedule form (word-only cells; user direction).
+		await page.locator(`[data-date="${target}"]`).click();
 		// Preset date input, word + hint (prefilled from the word's first letter).
 		const dateInput = page.getByLabel('Date');
 		await expect(dateInput).toHaveValue(target);
@@ -163,7 +162,7 @@ test.describe('admin page (deterministic session + seeded puzzles)', () => {
 		// Any EMPTY future cell opens the schedule form (the target date is
 		// already occupied by 'light' — the duplicate case). At month end
 		// the current frame may have no future cells → move to next month.
-		const scheduleButton = page.locator('[data-date] button[aria-label*="Schedule a puzzle"]').first();
+		const scheduleButton = page.getByRole('button', { name: /Schedule a puzzle/ }).first();
 		if ((await scheduleButton.count()) === 0) {
 			await page.getByRole('button', { name: 'Next month' }).click();
 		}
@@ -199,19 +198,25 @@ test.describe('admin page (deterministic session + seeded puzzles)', () => {
 		await addSessionCookie(context, cookie);
 
 		await page.goto('/admin');
-		// Future SCHEDULED row: delete requires the explicit confirmation.
-		await page.getByRole('button', { name: `Delete puzzle for ${future}` }).click();
+		// Future SCHEDULED day: click the cell → day-detail modal with the
+		// word + Edit/Delete; delete requires the explicit confirmation.
+		await page.getByRole('button', { name: new RegExp(`${future} — Scheduled`) }).click();
+		await expect(page.getByRole('dialog')).toBeVisible();
+		await expect(page.getByRole('dialog').getByText('below', { exact: true })).toBeVisible();
+		await page.getByRole('dialog').getByRole('button', { name: 'Delete puzzle', exact: true }).click();
 		await expect(page.getByRole('alertdialog')).toBeVisible();
-		await page.getByRole('button', { name: 'Delete puzzle', exact: true }).click();
+		await page.getByRole('alertdialog').getByRole('button', { name: 'Delete puzzle', exact: true }).click();
 		await expect(page.getByText('Puzzle deleted')).toBeVisible();
 		await expect(page.getByText('below', { exact: true })).toHaveCount(0);
 		// Missing-puzzle gap warning surfaces the vacated date (D7).
 		await expect(page.getByText(new RegExp(`no puzzle scheduled for\\s*${future}`))).toBeVisible();
 
-		// Today's ACTIVE cell → no delete, no edit, immutable badge only.
+		// Today's ACTIVE cell → detail modal shows the live state but NO delete.
 		const todayCell = page.locator('[aria-current="date"]').first();
-		await expect(todayCell.getByRole('button', { name: /Delete/ })).toHaveCount(0);
-		await expect(todayCell.getByText('Live')).toBeVisible();
+		await todayCell.click();
+		await expect(page.getByRole('dialog').getByText(/Live\b/)).toBeVisible();
+		await expect(page.getByRole('dialog').getByRole('button', { name: /Delete/ })).toHaveCount(0);
+		await expect(page.getByRole('dialog').getByRole('button', { name: /Edit/ })).toHaveCount(0);
 	});
 
 	test('E-A5: same-day replacement for a seeded today-SCHEDULED puzzle — word updates in the calendar', async ({

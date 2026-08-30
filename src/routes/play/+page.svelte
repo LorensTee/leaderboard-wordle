@@ -227,7 +227,7 @@
 			Out of guesses &mdash; tomorrow&rsquo;s puzzle is waiting.
 		</p>
 		{#if game.status === 'FAILED'}
-			<p class="pb-3 text-center text-xs text-black/50 dark:text-white/50">
+			<p class="pb-3 text-center text-sm text-black/65 dark:text-white/65">
 				{penaltyLineCopy()}
 			</p>
 		{/if}
@@ -235,7 +235,7 @@
 		<p class="py-3 text-center text-sm text-black/60 dark:text-white/60" role="status">
 			This puzzle ended &mdash; see you tomorrow.
 		</p>
-		<p class="pb-3 text-center text-xs text-black/50 dark:text-white/50">
+		<p class="pb-3 text-center text-sm text-black/65 dark:text-white/65">
 			{penaltyLineCopy()}
 		</p>
 	{/if}

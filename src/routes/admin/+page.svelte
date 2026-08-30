@@ -23,6 +23,7 @@
 	import type { AdminPuzzle, ReplaceTodayInput, UpdatePatch } from '$server/admin/service';
 	import PuzzleCalendar from './puzzle-calendar.svelte';
 	import PuzzleForm from './puzzle-form.svelte';
+	import DayDetail from './day-detail.svelte';
 	import { Button } from '$lib/components/ui/button';
 
 	type FormState =
@@ -40,6 +41,8 @@
 	let activeForm = $state<FormState>(null);
 	let confirmDelete = $state<AdminPuzzle | null>(null);
 	let gapsWarning = $state<string[]>([]);
+	/** Open day cell (word-only cells → detail modal; user direction). */
+	let detail = $state<{ date: string; puzzle: AdminPuzzle | null } | null>(null);
 
 	const from = $derived(startOfMonth(monthView).toString());
 	const to = $derived(endOfMonth(monthView).toString());
@@ -187,7 +190,7 @@
 			<Shield size={26} />
 		</span>
 		<div>
-			<h1 class="text-2xl font-bold tracking-tight">Admin — puzzle scheduling</h1>
+			<h1 class="text-xl font-bold tracking-tight">Admin — puzzle scheduling</h1>
 			<p class="text-sm text-black/50 dark:text-white/50">
 				Queue approved words ahead of time; the server validates everything.
 			</p>
@@ -213,7 +216,7 @@
 			<div>
 				<Button
 					size="sm"
-					variant="secondary"
+					variant="green"
 					onclick={() => activeForm = { mode: 'replace', puzzle: todayPuzzle! }}
 				>
 					Replace today's puzzle
@@ -224,12 +227,12 @@
 
 	{#if gapsWarning.length > 0}
 		<div
-			class="mb-5 flex items-start gap-2 rounded-xl border border-black/10 bg-black/5 p-4 dark:border-white/10 dark:bg-white/5"
+			class="mb-5 flex items-start gap-2 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4"
 			role="status"
 		>
-			<TriangleAlert size={16} class="mt-0.5 shrink-0 text-black/60 dark:text-white/60" />
-			<p class="text-sm text-black/70 dark:text-white/70">
-				<span class="font-semibold">Missing puzzle alert:</span>
+			<TriangleAlert size={16} class="mt-0.5 shrink-0 text-amber-600 dark:text-amber-400" />
+			<p class="text-sm text-amber-700/90 dark:text-amber-300/90">
+				<span class="font-semibold text-amber-700 dark:text-amber-300">Missing puzzle alert:</span>
 				no puzzle scheduled for
 				{#each gapsWarning as d, i (d)}
 					<span class="font-mono text-xs"> {d}{i < gapsWarning.length - 1 ? ',' : ''}</span>
@@ -273,13 +276,37 @@
 			onNext={() => {
 				monthView = monthView.add({ months: 1 });
 			}}
+			onOpenDay={(date, puzzle) => (detail = { date, puzzle })}
 			onSchedule={(date) => (activeForm = { mode: 'schedule', date })}
-			onEdit={(puzzle) => (activeForm = { mode: 'edit', puzzle })}
-			onDelete={(puzzle) => (confirmDelete = puzzle)}
-			onReplace={(puzzle) => (activeForm = { mode: 'replace', puzzle })}
 		/>
 	{/if}
 </section>
+
+{#if detail}
+	<DayDetail
+		date={detail.date}
+		puzzle={detail.puzzle}
+		{today}
+		busy={anyBusy}
+		onEdit={(puzzle) => {
+			detail = null;
+			activeForm = { mode: 'edit', puzzle };
+		}}
+		onDelete={(puzzle) => {
+			detail = null;
+			confirmDelete = puzzle;
+		}}
+		onReplace={(puzzle) => {
+			detail = null;
+			activeForm = { mode: 'replace', puzzle };
+		}}
+		onSchedule={(date) => {
+			detail = null;
+			activeForm = { mode: 'schedule', date };
+		}}
+		onClose={() => (detail = null)}
+	/>
+{/if}
 
 {#if activeForm}
 	{#if activeForm.mode === 'schedule'}
@@ -331,7 +358,13 @@
 				<Button type="button" variant="outline" onclick={() => (confirmDelete = null)} disabled={anyBusy}>
 					Cancel
 				</Button>
-				<Button type="button" variant="destructive" onclick={handleDelete} disabled={anyBusy}>
+				<Button
+					type="button"
+					variant="destructive"
+					class="bg-destructive text-white hover:bg-destructive/90 dark:bg-destructive dark:text-[#121213] dark:hover:bg-destructive/80"
+					onclick={handleDelete}
+					disabled={anyBusy}
+				>
 					Delete puzzle
 				</Button>
 			</div>

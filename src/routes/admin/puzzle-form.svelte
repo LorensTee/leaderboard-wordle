@@ -244,7 +244,7 @@
 				<Button type="button" variant="outline" onclick={onCancel} disabled={submitting}>
 					Cancel
 				</Button>
-				<Button type="submit" disabled={submitting}>
+				<Button type="submit" variant="green" disabled={submitting}>
 					{mode === 'schedule' ? 'Schedule' : mode === 'edit' ? 'Save changes' : 'Replace now'}
 				</Button>
 			</div>

@@ -15,6 +15,7 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import PositionCallout from '$lib/features/leaderboard/position-callout.svelte';
 	import RankRow from '$lib/features/leaderboard/rank-row.svelte';
+	import { positionBlockCopy } from '$lib/features/leaderboard/position-copy';
 	import { leaderboardApi, leaderboardKeys } from '$lib/shared/api/leaderboard';
 	import { meApi, meKeys } from '$lib/shared/api/me';
 	import {
@@ -74,6 +75,12 @@
 	);
 
 	const completedDays = $derived(board?.currentUser.completedDays ?? 0);
+	// Period-aware callout note (F3-2): multi-day boards get the "as the
+	// period progresses" copy; the today board keeps the "others finish" note.
+	const calloutNote = $derived(
+		positionBlockCopy(viewerEntry?.rank ?? null, value)?.note ??
+			'Position may change as others finish'
+	);
 	const emptyCopy = $derived(
 		value === 'today'
 			? 'No completed results yet today'
@@ -151,6 +158,19 @@
 				{/if}
 			{:else}
 				<div class="flex flex-col gap-1" role="table" aria-label="Leaderboard rows">
+					<!-- Column hints (visual, not ARIA rows — the values carry
+					     their own aria-labels; a hint row must not change
+					     row semantics). -->
+					<div
+						class="flex items-center justify-between px-2 pb-0.5 text-[11px] font-medium uppercase tracking-wider text-black/45 dark:text-white/45"
+					>
+						<span>Player</span>
+						<span>
+							{value === 'week' || value === 'month'
+								? 'Avg time · Avg guesses · Days'
+								: 'Time · Guesses'}
+						</span>
+					</div>
 					{#each board.entries as entry (entry.userId)}
 						<RankRow {entry} isCurrentUser={entry.userId === viewerId} />
 					{/each}
@@ -162,7 +182,7 @@
 					<PositionCallout
 						entry={viewerEntry}
 						heading={`Your position: #${viewerEntry.rank}`}
-						note="Position may change as others finish"
+						note={calloutNote}
 					/>
 				{/if}
 
