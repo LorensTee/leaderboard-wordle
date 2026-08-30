@@ -13,7 +13,7 @@ import * as schema from '../../src/server/db/schema';
 import { createGameService } from '../../src/server/game/service';
 import { createPuzzleService } from '../../src/server/puzzle/finalize';
 import { activateToday, finalizeExpired, missingPuzzleMarker, runSettlement } from '../../src/server/puzzle/settlement';
-import { closeDb, createIntegrationDb, type Db } from './helpers';
+import { closeDb, connectClient, createIntegrationDb, type Db } from './helpers';
 
 const databaseUrl = process.env.DATABASE_URL;
 const suite = databaseUrl ? describe : describe.skip;
@@ -299,33 +299,60 @@ suite('settlement (real Neon: finalize/activate/sweep)', () => {
 		expect(row?.status).toBe('ACTIVE');
 	});
 
-	it('I5c: concurrent sweep + guess serialize on the puzzle row (SKIP LOCKED sweep + idempotent finalizePuzzle — NG9 discipline preserved)', async () => {
+	it('I5c: concurrent sweep + guess serialize on the puzzle row (SKIP LOCKED + idempotent finalizePuzzle); a raced-away sweep never loses the day', async () => {
 		const today = await todayManila();
 		const puzzle = await insertPuzzle(today, { expiresAt: sql`transaction_timestamp() - interval '1 minute'` });
 		await insertUser('u1');
 		const game = await insertGame('u1', puzzle.id, { status: 'ACTIVE' });
 
-		// Two concurrent sweeps + a concurrent guess: the sweep's SKIP LOCKED
-		// selection and finalizePuzzle's puzzle-row serialization guarantee
-		// exactly ONE real finalization; the guess can never succeed against
-		// an expired/FINALIZED puzzle (it serializes behind the same lock).
+		// 1. DETERMINISTIC pin of the skip behavior (the CI-observed race):
+		//    while ANOTHER transaction holds the puzzle row lock, the sweep's
+		//    FOR UPDATE SKIP LOCKED selection legitimately skips the row.
+		const sentinel = await connectClient(db);
+		try {
+			await sentinel.query('BEGIN');
+			await sentinel.query(`SELECT id FROM daily_puzzles WHERE id = '${puzzle.id}' FOR UPDATE`);
+			expect(await finalizeExpired(db)).toEqual([]);
+			await sentinel.query('COMMIT');
+		} finally {
+			await sentinel.release();
+		}
+		const [stillActive] = await db.select().from(schema.dailyPuzzles).where(sql`id = ${puzzle.id}`);
+		expect(stillActive.status).toBe('ACTIVE');
+
+		// 2. Two concurrent sweeps + a concurrent guess, all racing for the
+		//    SAME row (genuinely nondeterministic interleavings):
+		//    - the guess holds the puzzle lock during its (short) rejection
+		//      round-trip; during it BOTH sweeps may skip (skip-locked by
+		//      design — the guess won the serialization point);
+		//    - when a sweep does select the row, finalizePuzzle's puzzle-row
+		//      serialization allows exactly ONE real finalization.
 		const [a, b, guessOutcome] = await Promise.all([
 			finalizeExpired(db),
 			finalizeExpired(db),
 			createGameService(db).submitGuess('u1', game.id, 'light').catch((e: unknown) => e)
 		]);
 
+		// 3. Deterministic product guarantees:
+		//    - the guess can NEVER succeed against an expired/FINALIZED
+		//      puzzle (NG9 discipline — writes nothing);
+		//    - at most ONE real finalization across the two sweeps.
+		expect(guessOutcome).toBeInstanceOf(Error);
 		const finalizations = [...a, ...b];
-		expect(finalizations.length).toBeGreaterThanOrEqual(1);
-		expect(new Set(finalizations.map((r) => r.puzzleId))).toEqual(new Set([puzzle.id]));
-		expect(finalizations.filter((r) => !r.alreadyFinalized)).toHaveLength(1);
+		for (const r of finalizations) expect(r.puzzleId).toBe(puzzle.id);
+		expect(finalizations.filter((r) => !r.alreadyFinalized).length).toBeLessThanOrEqual(1);
 
+		// 4. A raced-away sweep never loses the day: reconciliation is
+		//    self-healing — the NEXT sweep run finalizes the row.
+		await finalizeExpired(db);
 		const [row] = await db.select().from(schema.dailyPuzzles).where(sql`id = ${puzzle.id}`);
 		expect(row?.status).toBe('FINALIZED');
 
-		// The guess observed the expired/FINALIZED puzzle under the lock and
-		// was rejected — an AppError (GAME_EXPIRED), never a completion.
-		expect(guessOutcome).toBeInstanceOf(Error);
+		// Raw facts untouched: only status ACTIVE → FORFEITED (I16 discipline).
+		const [gameRow] = await db.select().from(schema.games).where(sql`id = ${game.id}`);
+		expect(gameRow.status).toBe('FORFEITED');
+		expect(gameRow.guessCount).toBe(0);
+		expect(gameRow.completionTimeMs).toBeNull();
 	});
 
 	// ─── I15: midnight boundary (one run) ──────────────────────────────────────

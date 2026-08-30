@@ -93,10 +93,8 @@ see the Actions tab for the post-commit runs.
 See the git log after the final commits (implementation commits are on `main`;
 the exact new HEAD is reported in the implementation chat summary).
 
-Post-handoff fix: **`929ec44 fix(phase3): worker patch defers on the client-build
-closeBundle (fresh checkout)`** — the first GitHub Actions `unit-and-build` run
-failed because vite 8 fires `closeBundle` once per build environment and the
-client phase runs before the adapter writes `_worker.js`; `patchWorker` now
-defers (with a U5 regression test) and `vite.config.ts` imports carry the `.ts`
-extension. Cause + fix recorded in the Phase 3 implementation deviations table
-in `docs/contradictions-and-gaps.md`.
+Post-handoff fixes:
+- **`929ec44 fix(phase3): worker patch defers on the client-build closeBundle (fresh checkout)`** — the first GitHub Actions `unit-and-build` run failed because vite 8 fires `closeBundle` once per build environment and the client phase runs before the adapter writes `_worker.js`; `patchWorker` now defers (with a U5 regression test) and `vite.config.ts` imports carry the `.ts` extension.
+- **I5c rewrite (integration job failure #2)** — the concurrent sweep + guess test asserted "≥1 finalization" from two sweeps racing an expired-puzzle guess; under SKIP LOCKED both sweeps may legitimately skip the row while the guess holds the lock. Now asserted deterministically: sentinel-pinned skip behavior, the guess never succeeds, ≤1 real finalization, and self-healing (the next sweep finalizes the row). Re-run 6× plus the full 55-test suite.
+
+Both causes + fixes are recorded in the Phase 3 implementation deviations table in `docs/contradictions-and-gaps.md`.
