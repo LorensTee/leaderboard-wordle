@@ -106,4 +106,20 @@ describe('worker patch (U5)', () => {
 		expect(patchWorkerFile(tmp)).toBe('skipped');
 		expect(readFileSync(tmp, 'utf8').split(PATCH_MARKER).length - 1).toBe(1);
 	});
+
+	it('patchWorker DEFERS (skipped, reason=deferred) when the worker output is missing — fresh-checkout/client-build-phase regression (CI failure #1)', async () => {
+		// vite fires closeBundle once per build environment; the client phase
+		// runs BEFORE the adapter writes .svelte-kit/cloudflare/_worker.js.
+		// On a fresh checkout the output does not exist yet — the patch must
+		// defer, not fail the build (the final phase is authoritative).
+		const missing = join(dir, 'no-such-output');
+		const outcome = await patchWorker(missing, undefined, undefined, { failIfMissing: false });
+		expect(outcome.status).toBe('skipped');
+		expect(outcome.reason).toBe('deferred');
+
+		// Direct operator runs still fail loudly without a build output.
+		await expect(
+			patchWorker(missing, undefined, undefined, { failIfMissing: true })
+		).rejects.toThrow(/not found/);
+	});
 });

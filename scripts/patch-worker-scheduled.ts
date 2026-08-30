@@ -27,7 +27,13 @@ export const CHUNK_RELATIVE = '.svelte-kit/cloudflare/_settlement.js';
 export const PATCH_MARKER = 'export { scheduled }';
 export const PATCH_SUFFIX = `\nimport { scheduled } from "./_settlement.js";\nexport { scheduled };\n`;
 
-export type PatchOutcome = { status: 'patched' | 'skipped'; workerPath: string; chunkPath: string };
+export type PatchOutcome = {
+	status: 'patched' | 'skipped';
+	workerPath: string;
+	chunkPath: string;
+	/** Present when the patch was deferred because the worker output isn't ready yet. */
+	reason?: 'deferred';
+};
 
 /**
  * Bundle the settlement cron entry into the worker output directory.
@@ -65,22 +71,32 @@ export function patchWorkerFile(workerPath: string): 'patched' | 'skipped' {
 	return 'patched';
 }
 
-/** Full patch: chunk build + worker append. Throws when the build output is missing. */
+/** Full patch: chunk build + worker append. */
 export async function patchWorker(
 	workerDir = resolve('.svelte-kit/cloudflare'),
 	entryPoint: string = SETTLEMENT_ENTRY,
-	onBuild?: (options: BuildOptions) => Promise<unknown>
+	onBuild?: (options: BuildOptions) => Promise<unknown>,
+	opts: { failIfMissing?: boolean } = {}
 ): Promise<PatchOutcome> {
-	if (!existsSync(workerDir)) {
-		throw new Error(
-			`[patch-worker-scheduled] ${relative(resolve('.'), workerDir)} not found — run this after \`bun run build\``
-		);
-	}
 	const workerPath = join(workerDir, '_worker.js');
-	if (!existsSync(workerPath)) {
-		throw new Error(
-			`[patch-worker-scheduled] ${relative(resolve('.'), workerPath)} not found — run this after \`bun run build\``
+	if (!existsSync(workerDir) || !existsSync(workerPath)) {
+		// DEFER (not fail): vite runs closeBundle once per build environment —
+		// the client build's closeBundle fires BEFORE the adapter has written
+		// .svelte-kit/cloudflare/_worker.js, and the final (server) build phase
+		// is the authoritative patch point. The CI patched-worker assertion
+		// (`grep -q "export { scheduled }" …/_worker.js`) is the safety net
+		// against a silently missed patch. Direct operator runs pass
+		// failIfMissing so a manual patch without a build still fails loudly.
+		if (opts.failIfMissing) {
+			throw new Error(
+				`[patch-worker-scheduled] ${relative(resolve('.'), workerDir)} not found — run this after \`bun run build\``
+			);
+		}
+		console.warn(
+			`[patch-worker-scheduled] worker output not present yet (${relative(resolve('.'), workerDir)}) — ` +
+				'deferring to the final build phase'
 		);
+		return { status: 'skipped', workerPath, chunkPath: join(workerDir, '_settlement.js'), reason: 'deferred' };
 	}
 	const chunkPath = join(workerDir, '_settlement.js');
 	await buildSettlementChunk(chunkPath, entryPoint, onBuild);
@@ -93,13 +109,13 @@ export async function patchWorker(
 }
 
 // Direct execution (`bun ./scripts/patch-worker-scheduled.ts`): runs the full
-// patch. When imported (vite.config.ts hook, unit tests) the script path is
-// not the process entry — no side effects. (import.meta.main is a Bun-only
-// API; this check is portable across Bun and Node.)
+// patch — fails loudly when the build output is missing. When imported
+// (vite.config.ts hook, unit tests) the script path is not the process
+// entry — no side effects.
 const isDirectRun =
 	typeof process.argv[1] === 'string' && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isDirectRun) {
-	void patchWorker().catch((err: unknown) => {
+	void patchWorker(undefined, undefined, undefined, { failIfMissing: true }).catch((err: unknown) => {
 		console.error(err);
 		process.exit(1);
 	});
