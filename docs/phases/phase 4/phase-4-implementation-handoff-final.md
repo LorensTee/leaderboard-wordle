@@ -13,7 +13,7 @@
 | Item | Value |
 |---|---|
 | Branch | `main` (tracks `origin/main`) |
-| **Exact new HEAD (implementation)** | `3d2251910eebd770f3951cc5dc92198b55124548` — `feat(phase4): admin puzzle scheduling & management` (the final docs commit below updates the working tree; the requirement's exact HEAD is this implementation commit) |
+| **Exact new HEAD (implementation)** | `3d2251910eebd770f3951cc5dc92198b55124548` — `feat(phase4): admin puzzle scheduling & management` (the commit that contains ALL Phase-4 code/tests; docs-only commits follow — see §7) |
 | Phase-4 baseline (pre-implementation) | `b2bca18685520d7975add8a559ade726601020d8` — `docs(phase3): final-state handoff for the Phase-4 planning chat` |
 | Working tree | Only the user-owned IDE file `.idea/material_theme_project_new.xml` remains modified (user-owned, never committed). |
 
@@ -191,9 +191,11 @@ Phase-4 changes are committed on `main` as:
 
 - `3d2251910eebd770f3951cc5dc92198b55124548` — `feat(phase4): admin puzzle
   scheduling & management` (S1–S6 source/tests/docs; 28 files, +5110/−41).
-- `18bd91da852de4044c22a7fa6e57eb5ce4e9ed0c` — `docs(phase4): final
-  implementation handoff` (this document).
-- **Exact new HEAD:** `18bd91da852de4044c22a7fa6e57eb5ce4e9ed0c`.
+- Docs-only tail on top of it (this document + its HEAD-citation fixes):
+  `18bd91d` (handoff) → `3d972a7` (receipt contents) → `8f8316f` (exact HEAD
+  record, amended). The exact final commit of the Phase-4 work is the one this
+  file is committed in; `git log --oneline -5` from the HEAD of `main` shows
+  the full lineage.
 - CI: the workflow is unchanged; a full green GitHub Actions run requires pushing
   `main` (three jobs, schema-purity + patched-worker assertions intact).
 
