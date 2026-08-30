@@ -7,6 +7,13 @@
 > executable prompt), `phase-4-planning-state-handoff.md` (planning-time state), and
 > `docs/contradictions-and-gaps.md` (DECISIONS + DEVIATIONS — authoritative log;
 > D1–D10 recorded FIRST, deviations recorded before their code).
+>
+> **Supersession note (2026-08-30):** a post-implementation `make-ui-not-ai` visual
+> review made UI-only corrections AFTER this handoff was written (`1de4c02`).
+> Where §2–§3 describe Phase-4 UI, see §1.1 below (and
+> `docs/phases/phase 3 + 4 vision/phase-3-and-4-visual-review-final.md`) for the
+> current state. Domain, API, schema, and test-level statements in this document
+> remain accurate.
 
 ## 1. Exact repository identity (final)
 
@@ -14,8 +21,31 @@
 |---|---|
 | Branch | `main` (tracks `origin/main`) |
 | **Exact new HEAD (implementation)** | `3d2251910eebd770f3951cc5dc92198b55124548` — `feat(phase4): admin puzzle scheduling & management` (the commit that contains ALL Phase-4 code/tests; docs-only commits follow — see §7) |
+| Post-implementation visual review | `1de4c02` — `fix(ui): phase 3+4 visual review fixes (make-ui-not-ai)` + `4a06987` — `docs(phase3+4): multimodal visual review prompt` — **repository HEAD at audit time: `4a06987…`** (see §1.1) |
 | Phase-4 baseline (pre-implementation) | `b2bca18685520d7975add8a559ade726601020d8` — `docs(phase3): final-state handoff for the Phase-4 planning chat` |
 | Working tree | Only the user-owned IDE file `.idea/material_theme_project_new.xml` remains modified (user-owned, never committed). |
+
+## 1.1 Post-implementation UI update (make-ui-not-ai visual review, 2026-08-30)
+
+Phase 4 implementation finished at `3d22519`; a subsequent multimodal visual review
+(`docs/phases/phase 3 + 4 vision/phase-3-and-4-visual-review-final.md`) produced
+UI-only corrections in `1de4c02` (no domain/API/schema changes; D6/D7/D8/D9, NG9
+discipline and the §8 contract untouched). Current state of the Phase-4 UI:
+
+- **Calendar day cells are word-only** (day number + word, plus a lock icon when
+  locked). State is communicated by cell color — faint neutral = Finalized, green
+  tint = future Scheduled, solid green = Live today, amber tint = today-SCHEDULED
+  (Replace needed) — with a **text legend** under the grid (never color-only).
+- **Click a cell → day-detail modal**: formatted date, state, word, hint letter,
+  lock note, and state-appropriate actions (Edit + Delete for future SCHEDULED;
+  "Replace today's puzzle" for today-SCHEDULED + unlocked; "Schedule puzzle" for
+  empty future; view-only for ACTIVE/FINALIZED). Empty future cells open the
+  schedule form directly. The top "cron missed" panel remains as a shortcut.
+- **The seven-column month grid fits 390px** (no swipe; wider words elide).
+- Gap-warning banner is amber; primary actions use the product-green Button variant;
+  delete confirmation uses a solid destructive button; page-title scale aligned.
+
+E2E coverage was updated to this interaction (admin.spec.ts E-A2/E-A3/E-A4).
 
 ## 2. Phase-4 scope — COMPLETE
 
@@ -196,8 +226,14 @@ Phase-4 changes are committed on `main` as:
   record, amended). The exact final commit of the Phase-4 work is the one this
   file is committed in; `git log --oneline -5` from the HEAD of `main` shows
   the full lineage.
-- CI: the workflow is unchanged; a full green GitHub Actions run requires pushing
-  `main` (three jobs, schema-purity + patched-worker assertions intact).
+- **Post-implementation visual review (UI-only):** `1de4c02` —
+  `fix(ui): phase 3+4 visual review fixes (make-ui-not-ai)` (admin calendar
+  redesign incl. new `src/routes/admin/day-detail.svelte`, leaderboard headers,
+  result/contrast fixes, updated admin E2E), then `4a06987` —
+  `docs(phase3+4): multimodal visual review prompt`. **Current `main` HEAD:
+  `4a06987…`** at the time of this update; see §1.1 and the visual-review receipt.
+- CI: the workflow is unchanged; GitHub Actions run **#26** (after `1de4c02`) is
+  green for all three jobs (unit-and-build, integration, e2e).
 
 ## 8. Remaining product decisions — P1–P6 (NOT resolved; do not silently resolve)
 

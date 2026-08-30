@@ -11,6 +11,12 @@
 > `phase-3-planning-state-handoff.md` (planning-time state — historical),
 > `phase-3-implementation-handoff-final.md` (implementation receipts — historical),
 > `docs/contradictions-and-gaps.md` (DECISIONS + DEVIATIONS — authoritative log).
+>
+> **Post-implementation UI note (2026-08-30):** a `make-ui-not-ai` visual review
+> made UI-only corrections after this handoff (`1de4c02`): leaderboard column
+> headers, period-aware callout captions, FAILED/FORFEITED penalty-line contrast,
+> and a long-name truncation verification. Domain/API/test statements below remain
+> accurate; full record: `docs/phases/phase 3 + 4 vision/phase-3-and-4-visual-review-final.md`.
 
 ## 1. Exact repository identity (final)
 
