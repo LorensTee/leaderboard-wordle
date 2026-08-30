@@ -191,9 +191,9 @@ Phase-4 changes are committed on `main` as:
 
 - `3d2251910eebd770f3951cc5dc92198b55124548` — `feat(phase4): admin puzzle
   scheduling & management` (S1–S6 source/tests/docs; 28 files, +5110/−41).
-- The final docs commit (this handoff) follows immediately after.
-- **Exact new HEAD:** `COMMIT_PLACEHOLDER2` (the docs commit below this handoff —
-  see `git rev-parse HEAD`; the implementation commit is §1/§7 above).
+- `18bd91da852de4044c22a7fa6e57eb5ce4e9ed0c` — `docs(phase4): final
+  implementation handoff` (this document).
+- **Exact new HEAD:** `18bd91da852de4044c22a7fa6e57eb5ce4e9ed0c`.
 - CI: the workflow is unchanged; a full green GitHub Actions run requires pushing
   `main` (three jobs, schema-purity + patched-worker assertions intact).
 
