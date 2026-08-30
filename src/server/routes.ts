@@ -13,11 +13,13 @@ import { HTTPException } from 'hono/http-exception';
 import { timeout } from 'hono/timeout';
 import { getAuth } from './auth/auth';
 import { getDb } from './db/memo';
+import { registerAdminRoutes } from './admin/handlers';
+import { createAdminPuzzleService } from './admin/service';
 import { registerGameRoutes } from './game/handlers';
 import { createGameService } from './game/service';
 import { registerLeaderboardRoutes } from './leaderboard/handlers';
 import { createLeaderboardService } from './leaderboard/service';
-import { authContext, requireAuth, type AuthContext } from './middleware/auth';
+import { authContext, requireAdmin, requireAuth, type AuthContext } from './middleware/auth';
 import { csrfProtection } from './middleware/csrf';
 import { registerProfileRoutes } from './profile/handlers';
 import { createProfileService } from './profile/service';
@@ -99,6 +101,9 @@ const base = new Hono<AppEnv>()
 	.use('/api/game/*', requireAuth)
 	.use('/api/me/*', requireAuth)
 	.use('/api/admin/*', requireAuth)
+	// D1 — the admin role gate: after requireAuth (401 when logged out),
+	// requireAdmin rejects authenticated non-admins with 403 FORBIDDEN.
+	.use('/api/admin/*', requireAdmin)
 	.use('/api/leaderboard/*', requireAuth)
 	// Better Auth — mounted per the current Hono integration docs:
 	// `app.all("/api/auth/*", (c) => auth.handler(c.req.raw))`. Runtime values
@@ -112,18 +117,23 @@ const base = new Hono<AppEnv>()
 
 // Phase-2 profile routes chain AFTER the game routes so the Hono AppType
 // accumulates both schemas (chain-preserved RPC typing). Phase-3 leaderboard
-// routes chain last with the same pattern.
-export const app = registerLeaderboardRoutes(
-	registerProfileRoutes(
-		registerGameRoutes(base, {
-			getService: (c) => createGameService(getDb(c.env))
-		}),
+// and Phase-4 admin routes chain last with the same pattern.
+export const app = registerAdminRoutes(
+	registerLeaderboardRoutes(
+		registerProfileRoutes(
+			registerGameRoutes(base, {
+				getService: (c) => createGameService(getDb(c.env))
+			}),
+			{
+				getService: (c) => createProfileService(getDb(c.env))
+			}
+		),
 		{
-			getService: (c) => createProfileService(getDb(c.env))
+			getService: (c) => createLeaderboardService(getDb(c.env))
 		}
 	),
 	{
-		getService: (c) => createLeaderboardService(getDb(c.env))
+		getService: (c) => createAdminPuzzleService(getDb(c.env))
 	}
 )
 	// NG21 — centralized error/notFound handling.

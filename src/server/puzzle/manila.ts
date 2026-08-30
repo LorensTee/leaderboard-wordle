@@ -19,7 +19,16 @@ export const todayManilaDateExpr = sql`(transaction_timestamp() AT TIME ZONE 'As
 /**
  * SQL expression for a puzzle's expiry instant: midnight (start of the next
  * day) in Asia/Manila (NG1). `puzzleDate` is an ISO 'YYYY-MM-DD' string.
+ *
+ * NOTE (Phase-4 deviation, 2026-08-30): the naive form `(date + 1) AT TIME
+ * ZONE 'Asia/Manila'` resolves to `timestamp WITHOUT time zone` (date values
+ * coerce to plain `timestamp` first; `date AT TIME ZONE zone` yields GTM
+ * wall time as a naive value), so a naive insert into the TIMESTAMPTZ
+ * column interprets it in the SESSION timezone — 8h late on Neon (GMT).
+ * The explicit `::timestamp` cast selects the
+ * `timestamp AT TIME ZONE zone → timestamptz` operator, producing the NG1
+ * instant (Manila midnight = 16:00Z). Verified against Neon.
  */
 export function expiresAtExpr(puzzleDate: string): ReturnType<typeof sql> {
-	return sql`(${puzzleDate}::date + 1) AT TIME ZONE 'Asia/Manila'`;
+	return sql`((${puzzleDate}::date + 1)::timestamp AT TIME ZONE 'Asia/Manila')`;
 }

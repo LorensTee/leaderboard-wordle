@@ -154,3 +154,38 @@ export async function requireAuth(c: Context<AuthMiddlewareEnv>, next: Next): Pr
 	}
 	return next();
 }
+
+/**
+ * D1 — admin role gate for /api/admin/*. Composed AFTER requireAuth in
+ * routes.ts (`.use('/api/admin/*', requireAuth)` then
+ * `.use('/api/admin/*', requireAdmin)`). Rejects any authenticated
+ * NON-admin user with the NG21 403 FORBIDDEN envelope. The PAGE guard
+ * (src/lib/app/guards.ts) checks independently — page and API never share
+ * an authorization source.
+ */
+export async function requireAdmin(c: Context<AuthMiddlewareEnv>, next: Next): Promise<Response | void> {
+	const auth = c.get('auth');
+	if (!auth) {
+		// Defense in depth: requireAuth already guards /api/admin/* — a route
+		// accidentally moved outside the guard still fails closed.
+		return c.json(
+			errorEnvelope(
+				ERROR_CODES.UNAUTHORIZED,
+				'Authentication required',
+				c.get('requestId') ?? 'unknown'
+			),
+			401
+		);
+	}
+	if (auth.user.role !== 'admin') {
+		return c.json(
+			errorEnvelope(
+				ERROR_CODES.FORBIDDEN,
+				'Admin access required',
+				c.get('requestId') ?? 'unknown'
+			),
+			403
+		);
+	}
+	return next();
+}

@@ -24,6 +24,7 @@
 		"db:migrate": "drizzle-kit migrate",
 		"word-list": "bun ./scripts/build-word-list.ts",
 		"avatar-list": "bun ./scripts/build-avatar-list.ts",
+		"seed:answers": "bun ./scripts/seed/import-answer-pool.ts",
 		"verify:bundle": "bun ./scripts/verify-bundle-secrecy.ts",
 		"test:unit": "vitest run",
 		"test:integration": "vitest run tests/integration",

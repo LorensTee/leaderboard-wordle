@@ -180,6 +180,67 @@ export async function seedTodayPuzzle(answerWord: string): Promise<void> {
 }
 
 /**
+ * Phase-4 admin fixture — insert a SCHEDULED puzzle for `date` (an ISO
+ * 'YYYY-MM-DD' string; when omitted, TODAY's Asia/Manila date is computed
+ * in SQL — never fabricated). `word` is inserted into answer_dictionary as
+ * an approved answer (test fixture — the non-production DB is reset-safe;
+ * the word must be a member of the public valid-guess list so the schedule
+ * flows are realistic).
+ */
+export async function seedScheduledPuzzle(
+	date: string | undefined,
+	word: string
+): Promise<{ puzzleId: string; date: string }> {
+	const { databaseUrl } = requireE2eEnv();
+	const pool = new Pool({ connectionString: databaseUrl });
+	try {
+		const db = drizzle(pool, { schema });
+		const [{ d }] = (await db.execute(
+			sql`SELECT ((now() AT TIME ZONE 'Asia/Manila')::date)::text AS d`
+		)).rows as { d: string }[];
+		const puzzleDate = date ?? d;
+		const [answer] = await db
+			.insert(schema.answerDictionary)
+			.values({ word, normalizedWord: word })
+			.onConflictDoNothing({ target: schema.answerDictionary.word })
+			.returning();
+		const [puzzle] = await db
+			.insert(schema.dailyPuzzles)
+			.values({
+				puzzleDate,
+				answerId: answer.id,
+				hintLetter: word[0].toUpperCase(),
+				status: 'SCHEDULED',
+				expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+			})
+			.returning();
+		return { puzzleId: puzzle.id, date: puzzleDate };
+	} finally {
+		await pool.end();
+	}
+}
+
+/**
+ * Phase-4 admin fixture — insert a single approved answer into
+ * `answer_dictionary` (dictionary-only; no puzzle row). Used by the admin
+ * schedule-flow specs so a word can be approved-but-unscheduled.
+ */
+export async function seedApprovedAnswer(word: string): Promise<void> {
+	const { databaseUrl } = requireE2eEnv();
+	const pool = new Pool({ connectionString: databaseUrl });
+	try {
+		const db = drizzle(pool, { schema });
+		await db
+			.insert(schema.answerDictionary)
+			.values({ word, normalizedWord: word })
+			.onConflictDoNothing({ target: schema.answerDictionary.word })
+			.returning();
+	} finally {
+		await pool.end();
+	}
+}
+
+/**
  * Phase-3 leaderboard fixtures — insert a plain ONBOARDED user (no session)
  * as a competition rival, so leaderboard boards can be seeded deterministically.
  */

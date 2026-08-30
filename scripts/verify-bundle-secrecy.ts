@@ -26,6 +26,18 @@ for (const file of readdirSync(SEED_DIR)) {
 	}
 }
 
+// The PUBLIC guesses list is client-side by design (the keyboard validates
+// against it), and the subset rule demands pool ⊆ guesses — so a compliant
+// pool word is EXPECTED in the bundle via the public artifact and a raw
+// whole-build substring scan could never pass with any populated pool
+// (Phase-4 deviation recorded 2026-08-30 in docs/contradictions-and-gaps.md).
+// The meaningful scan target is a pool word that is NOT in the public list:
+// that would be a genuinely private word leaking into build output.
+const PUBLIC_GUESSES: ReadonlySet<string> = new Set(
+	JSON.parse(readFileSync(resolve('src/lib/shared/data/valid-guesses.json'), 'utf8')) as string[]
+);
+const scannedPoolWords = new Set([...poolWords].filter((w) => !PUBLIC_GUESSES.has(w)));
+
 function walk(dir: string): string[] {
 	return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
 		const p = resolve(dir, e.name);
@@ -37,7 +49,7 @@ const files = [...walk(BUILD_DIR), ...walk(SERVER_BUNDLE_DIR)];
 const hits: string[] = [];
 for (const file of files) {
 	const content = readFileSync(file, 'utf8');
-	for (const word of poolWords) {
+	for (const word of scannedPoolWords) {
 		if (content.includes(word)) hits.push(`${word} → ${file}`);
 	}
 	// Advisory: secret literals in build output are now EXPECTED (the dev
@@ -61,5 +73,10 @@ if (hits.length > 0) {
 	for (const h of hits) console.error(`  ${h}`);
 	process.exit(1);
 }
-console.log(`bundle secrecy OK: ${poolWords.size} private word(s) absent from ${files.length} build files`);
+console.log(
+	`bundle secrecy OK: ${scannedPoolWords.size} non-public pool word(s) absent from ${files.length} build files` +
+		(poolWords.size > scannedPoolWords.size
+			? ` (${poolWords.size - scannedPoolWords.size} public-list word(s) expected in the bundle by design)`
+			: '')
+);
 console.log('public valid-guesses artifact is client-side by design (checked in unit tests)');
