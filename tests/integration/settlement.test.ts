@@ -13,6 +13,7 @@ import * as schema from '../../src/server/db/schema';
 import { createGameService } from '../../src/server/game/service';
 import { createPuzzleService } from '../../src/server/puzzle/finalize';
 import { activateToday, finalizeExpired, missingPuzzleMarker, runSettlement } from '../../src/server/puzzle/settlement';
+import { NON_COMPLETION_PENALTY_MS } from '../../src/server/puzzle/manila';
 import { closeDb, connectClient, createIntegrationDb, type Db } from './helpers';
 
 const databaseUrl = process.env.DATABASE_URL;
@@ -353,6 +354,53 @@ suite('settlement (real Neon: finalize/activate/sweep)', () => {
 		expect(gameRow.status).toBe('FORFEITED');
 		expect(gameRow.guessCount).toBe(0);
 		expect(gameRow.completionTimeMs).toBeNull();
+	});
+
+	// ─── I5d: concurrent sweeps (Concern A audit pin) ──────────────────────────
+
+	it('I5d: concurrent sweeps never double-finalize — SKIP LOCKED selection is a soft filter; idempotent finalizePuzzle is the authoritative guard', async () => {
+		// Two sweeps race for the SAME expired ACTIVE puzzle (no guess). The
+		// sweep SELECT's SKIP LOCKED runs in autocommit, so both sweeps may
+		// select the row (soft filter) — the guarantee that holds in EVERY
+		// interleaving is asserted directly: at most ONE real finalization
+		// (finalizePuzzle re-locks puzzle-first and already-FINALIZED re-entry
+		// is a write-free no-op), and the end state is exactly one FROZEN
+		// finalization with raw game facts untouched.
+		const today = await todayManila();
+		const puzzle = await insertPuzzle(today, { expiresAt: sql`transaction_timestamp() - interval '1 minute'` });
+		await insertUser('u1');
+		await insertUser('u2');
+		const completed = await insertGame('u1', puzzle.id, {
+			status: 'COMPLETED',
+			completionTimeMs: 30_000,
+			guessCount: 4,
+			completedAt: sql`transaction_timestamp() - interval '5 minutes'`
+		});
+		const active = await insertGame('u2', puzzle.id, { status: 'ACTIVE', guessCount: 2 });
+
+		const [a, b] = await Promise.all([finalizeExpired(db), finalizeExpired(db)]);
+
+		const finalizations = [...a, ...b];
+		for (const r of finalizations) {
+			expect(r.puzzleId).toBe(puzzle.id);
+		}
+		expect(finalizations.filter((r) => !r.alreadyFinalized).length).toBeLessThanOrEqual(1);
+
+		const [row] = await db.select().from(schema.dailyPuzzles).where(sql`id = ${puzzle.id}`);
+		expect(row?.status).toBe('FINALIZED');
+		// Exactly one real finalization's frozen values: avg over the single
+		// COMPLETED game + 20-minute penalty (0 completed would be NULL).
+		expect(row.averageCompletionTimeMs).toBe(30_000);
+		expect(row.nonCompletionPenaltyMs).toBe(30_000 + NON_COMPLETION_PENALTY_MS);
+
+		// Raw facts untouched (I16 discipline): only ACTIVE → FORFEITED.
+		const [completedRow] = await db.select().from(schema.games).where(sql`id = ${completed.id}`);
+		expect(completedRow.status).toBe('COMPLETED');
+		expect(completedRow.completionTimeMs).toBe(30_000);
+		const [activeRow] = await db.select().from(schema.games).where(sql`id = ${active.id}`);
+		expect(activeRow.status).toBe('FORFEITED');
+		expect(activeRow.guessCount).toBe(2);
+		expect(activeRow.completionTimeMs).toBeNull();
 	});
 
 	// ─── I15: midnight boundary (one run) ──────────────────────────────────────

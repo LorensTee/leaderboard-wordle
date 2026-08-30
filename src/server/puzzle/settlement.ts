@@ -5,10 +5,25 @@
 // Semantics:
 //  - finalizeExpired — reconciliation sweep: every expired ACTIVE puzzle is
 //    finalized through the existing idempotent finalizePuzzle (puzzle-row
-//    lock first, transaction_timestamp() anchor — NG9 preserved). The sweep
-//    selection uses FOR UPDATE SKIP LOCKED so concurrent sweep invocations
-//    never double-process; per-puzzle idempotency covers the rest. One
-//    failing finalize must not stop the sweep (error isolation — plan U4).
+//    lock first, transaction_timestamp() anchor — NG9 preserved).
+//    LOCKING MODEL (plan §6, audit-resolved): the sweep SELECT applies
+//    `FOR UPDATE SKIP LOCKED` at SELECTION time — because it runs in
+//    autocommit (db.execute), that row lock is released when the SELECT
+//    ends, so SKIP LOCKED is a SOFT FILTER: rows locked by another
+//    transaction at that instant are skipped for this run. It reduces
+//    contention and overlap, but it is NOT a held lock: the authoritative
+//    guard against double-processing is finalizePuzzle itself — every
+//    selected row is re-locked puzzle-first inside its OWN transaction
+//    (plan-mandated), and its already-FINALIZED re-entry is a no-op, so in
+//    EVERY interleaving of concurrent sweeps at most ONE real finalization
+//    happens and the losers observe the frozen record. Rows skipped because
+//    another transaction held their lock are never lost: the next sweep run
+//    (cron retry or a week/month read's lazy finalization) picks them up —
+//    self-healing by design. Holding the sweep's SELECT locks across
+//    finalization was evaluated and REJECTED: per-row own-transaction
+//    finalizePuzzle (the plan's structure) with a pooled driver would run on
+//    a different connection than the held lock and deadlock. One failing
+//    finalize must not stop the sweep (error isolation — plan U4).
 //  - activateToday — cron-side lazy activation: today's SCHEDULED puzzle →
 //    ACTIVE under the puzzle lock with the same guards as startGame (today's
 //    date, no other ACTIVE for today). A missing row FAILS CLOSED with a
@@ -95,10 +110,16 @@ export function createSettlementService(db: Db, deps: SettlementDeps = {}): Sett
 
 /**
  * Finalize every expired non-finalized puzzle (plan §7.4: any depth of
- * missed runs). Selection is per-sweep: `FOR UPDATE SKIP LOCKED` on the
- * puzzle row prevents concurrent sweeps from double-processing; each puzzle
- * is then finalized in its OWN transaction via the existing idempotent
- * finalizePuzzle (already-FINALIZED re-entry is a no-op).
+ * missed runs). Selection is per-sweep: `FOR UPDATE SKIP LOCKED` filters the
+ * row set at selection time (autocommit — the statement's lock ends with the
+ * SELECT, so it is a SOFT FILTER, not a held lock; see the module header for
+ * the audited locking model). The authoritative anti-double-processing guard
+ * is finalizePuzzle: each selected puzzle is re-locked puzzle-first (NG9) and
+ * finalized in its OWN transaction, and its already-FINALIZED re-entry is a
+ * write-free no-op — in every interleaving of concurrent sweeps exactly one
+ * real finalization happens. Rows skipped because another transaction held
+ * their lock are never lost: the next sweep (cron retry or week/month lazy
+ * finalization) picks them up (self-healing).
  *
  * Expired-but-SCHEDULED puzzles are untouched (only ACTIVE is swept — a
  * missed activation is recovered by activateToday, a missed finalization by

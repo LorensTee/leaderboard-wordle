@@ -37,10 +37,21 @@ export type ExportedHandlerScheduledHandler<Env = unknown> = (
 ) => void | Promise<void>;
 
 /**
- * Cron entry: reconcile expired puzzles, activate today, report. Errors are
- * caught and logged — a thrown error would still mark the run failed in the
- * dashboard, but the structured log keeps the cause correlatable either way.
- * Retry-safe by construction: SKIP LOCKED + idempotent operations (D10).
+ * Cron entry: reconcile expired puzzles, activate today, report.
+ *
+ * FAILURE SURFACING (audit-resolved): failures are structured-logged AND
+ * rethrown. A scheduled handler that resolves successfully looks successful
+ * to the platform even when nothing settled; rethrowing marks the invocation
+ * FAILED in the Cloudflare dashboard so operations sees it (the parenthetical
+ * in plan §7.3 — "a thrown error still marks the run failed in the
+ * dashboard" — is the operative intent; the literal "errors are caught and
+ * logged" wording is recorded as a deviation). Rethrowing adds no risk: cron
+ * deliveries are at-most-once (no auto-retry duplication), and runSettlement
+ * is retry-safe by construction anyway (SKIP LOCKED selection + idempotent
+ * finalizePuzzle/activateToday — D10), so a manual re-invocation or the next
+ * run is always harmless. Self-healing (next sweep, week/month lazy
+ * finalization, startGame lazy activation) is unchanged.
+ *
  * The awaited work itself keeps the worker alive (no ctx.wrap needed for the
  * settled work — the handler promise covers it).
  */
@@ -67,5 +78,8 @@ export const scheduled: ExportedHandlerScheduledHandler<HonoBindings> = async (
 			{ cron: controller.cron, startedAt, error: err instanceof Error ? err.message : String(err) },
 			err
 		);
+		// Surface the failure: the invocation must be marked FAILED (see the
+		// failure-surfacing note above). Never swallow.
+		throw err;
 	}
 };

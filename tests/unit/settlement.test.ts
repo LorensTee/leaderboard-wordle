@@ -114,4 +114,26 @@ describe('settlement orchestration (U4, DB-free)', () => {
 		expect(second).toEqual(first);
 		expect(second.finalized[0].alreadyFinalized).toBe(true);
 	});
+
+	it('scheduled (platform shell): a settlement failure is structured-logged AND rethrown so the invocation is marked FAILED (audit resolution)', async () => {
+		const { scheduled } = await import('../../src/server/puzzle/scheduled-entry');
+		const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+		try {
+			const controller = {
+				cron: '0 16 * * *',
+				scheduledTime: 0,
+				noRetry: () => undefined
+			};
+			// Env without DATABASE_URL → runSettlement's getDb fails closed
+			// (INTERNAL: DATABASE_URL is not configured) — DB-free.
+			await expect(scheduled(controller, {} as never, {} as never)).rejects.toThrow(
+				'DATABASE_URL is not configured'
+			);
+			expect(errorSpy).toHaveBeenCalled();
+			expect(String(errorSpy.mock.calls[0][0])).toContain('[settlement] run failed');
+			expect(JSON.stringify(errorSpy.mock.calls[0][1])).toContain('cron');
+		} finally {
+			errorSpy.mockRestore();
+		}
+	});
 });
