@@ -59,6 +59,12 @@ export function e2eAuthAvailable(): boolean {
 	);
 }
 
+/** The fixture database URL (env or .dev.vars) — used by the e2e globalSetup
+ * (db-mutex) without printing credentials. */
+export function e2eDatabaseUrl(): string | undefined {
+	return loadLocalEnv().DATABASE_URL;
+}
+
 export function requireE2eEnv(): E2eSession {
 	const env = loadLocalEnv();
 	if (

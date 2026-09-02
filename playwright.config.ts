@@ -2,6 +2,9 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
 	testDir: 'tests/e2e',
+	// CI-2 — hold the shared-DB advisory-lock mutex for the whole e2e run
+	// (the auth fixture TRUNCATEs the shared non-production Neon).
+	globalSetup: './tests/e2e/global-setup.ts',
 	// The authenticated specs share ONE non-production database and TRUNCATE
 	// the app tables per fixture (tests/e2e/helpers/auth-fixture.ts) — files
 	// must never run in parallel (a second worker's TRUNCATE would wipe the

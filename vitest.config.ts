@@ -19,6 +19,10 @@ export default defineConfig({
 			$lib: resolve('src/lib')
 		}
 	},
+	// CI-2 — the integration suite holds the shared-DB advisory-lock mutex
+	// for the whole run (tests/integration/db-mutex.ts). No-op without
+	// DATABASE_URL (unit runs stay DB-free).
+	globalSetup: './tests/integration/global-setup.ts',
 	test: {
 		include: [
 			'tests/unit/**/*.test.ts',

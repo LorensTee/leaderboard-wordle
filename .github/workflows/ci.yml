@@ -80,6 +80,12 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     needs: unit-and-build
+    # CI-3 — the integration + e2e jobs TRUNCATE the SHARED non-production
+    # Neon database; only main pushes execute them (a dependabot/PR run's
+    # e2e job wiped a concurrent main-push integration run — contradictions
+    # log CI-1). PRs keep the DB-free unit-and-build job; the mandatory
+    # secret gate below stays binding for every push to main.
+    if: github.event_name == 'push'
     # B6/B7 external gate — runs the DB integration suite (migration applied
     # first) against a NON-production database; exercises the app's real
     # neon-serverless driver path. FINAL Phase-0 policy: the integration gate
@@ -126,6 +132,9 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
+    # CI-3 — see the integration job: only main pushes run DB-truncating
+    # suites against the shared non-production database.
+    if: github.event_name == 'push'
     # Serialized AFTER integration: both jobs TRUNCATE the app tables on the
     # same non-production database — running them in parallel would race the
     # fixtures (a job can wipe the other's rows mid-run).

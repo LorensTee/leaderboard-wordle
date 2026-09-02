@@ -59,7 +59,7 @@ Confirmed on the final diff (`git diff --name-only 40210c3..HEAD`):
 | G1 | `bun run lint` | **0 errors / 0 warnings** (final run exit 0) |
 | G2 | `bun run check` | **0 errors / 0 warnings**; `bun run types:check` hermetic (`.env`/`.dev.vars` stashed — "✨ Types at worker-configuration.d.ts are up to date") |
 | G3 | `bun run test:unit` | **233 passed** / 89 skipped (206 baseline + 27 new: page-headers 5, security-baseline 4, rate-limit 11, csp 4, security-cookie 3) — 0 failures |
-| G4 | `bun run test:integration` | **89/89** against live non-production Neon (`ALLOW_DB_WIPE=1`, `DATABASE_URL` from `.dev.vars`) — all 8 files, incl. I-A1…I-A10 lock-order races |
+| G4 | `bun run test:integration` | **89/89** against live non-production Neon (`ALLOW_DB_WIPE=1`, `DATABASE_URL` from `.dev.vars`; now guarded by the shared-DB advisory-lock mutex — CI-2/CI-3) — all 8 files, incl. I-A1…I-A10 lock-order races. Note: the 2026-09-02 15:11 UTC CI integration run failed 25 tests from a CONCURRENT dependabot-PR e2e run truncating the shared DB (root-caused: non-deterministic, reproduced 89/89 locally with the same SHA; fixed via the db-mutex + main-push job gating — contradictions log CI-1…CI-4) |
 | G5 | `bun run test:e2e` | **42/42** (30 baseline + 4 csp.spec + 8 security.spec), incl. console-clean + theme + header assertions. One transient onboarding-3 failure observed mid-sweep (non-reproducing; suite re-verified 42/42 twice on the final tree — recorded) |
 | G6 | `bun run build` + patched-worker | ✔ + `grep -c "export { scheduled }" .svelte-kit/cloudflare/_worker.js` = **1** |
 | G7 | `bun run verify:bundle` | OK — 119 build files; 0 non-public pool words; public-list by-design; dev-secret advisory expected |
