@@ -1,0 +1,27 @@
+# Phase-5 S6 (F4) — dependency vulnerability automation.
+# - npm ecosystem covers both package.json and the bun.lock lockfile
+#   (GitHub Dependabot documentation; fallback recorded in the
+#   contradictions-and-gaps log S6b).
+# - Weekly cadence; devDependencies grouped into ONE PR (production
+#   dependencies keep individual PRs so the small runtime surface stays
+#   reviewable); max 5 open PRs.
+# - Security updates: GitHub-default ON, automatic merge OFF.
+# - github-actions ecosystem keeps the SHA-pinned actions fresh (S6c).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      development-dependencies:
+        applies-to: version-updates
+        patterns:
+          - '*'
+        dependency-type: development
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

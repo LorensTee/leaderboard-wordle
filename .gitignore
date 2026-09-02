@@ -36,3 +36,6 @@ scripts/seed/*.txt
 
 # Not needed markdown Files
 /docs/gpt-replies/
+
+# ZAP scan output (Phase-5 S5) — the TRIAGE table is the committed artifact
+scripts/zap/reports/
