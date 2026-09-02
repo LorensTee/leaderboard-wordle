@@ -38,8 +38,8 @@
 | V13 | HTTP method handling (405s/404s) | ✅ | Route-inventory + method probes (`security-baseline.test.ts`): mutation paths GET/HEAD → 404/401/403 envelope, never a mutation; `/api/auth/sign-out` GET/HEAD → 404 | S0 |
 | V14 config | Header baseline | ✅ | Shared contract constants `security-headers.ts:15-21`; pages `hooks.server.ts:43-51`; API `securityHeadersMiddleware`; curl probes (page + 401 API envelope carry nosniff/XFO/Referrer; HSTS https-gated) — contradictions log S0 rows | S0 |
 | V14 | CSP | ✅ | Shared builder `middleware/csp.ts` (pre-paint hash pinned `:12`); Kit hash mode (`vite.config.ts`); API `security-headers.ts` CSP middleware (`routes.ts:120`); hash pin unit `tests/unit/csp.test.ts`; e2e console-clean + theme on six routes light+dark + exact API equality `tests/e2e/csp.spec.ts`; G10/G11 curl probes in S2 commit | S2 |
-| V14 | Dependency scanning | ⏳ | S6 deliverable (Dependabot + CI audit step); final evidence appended at S7 | S6 |
-| V14 | Dynamic scanning | ⏳ | S5 deliverable (ZAP baseline + triage); final evidence appended at S7 | S5 |
+| V14 | Dependency scanning | ✅ | **S6**: `.github/dependabot.yml` (npm — bun.lock covered + github-actions; weekly; dev-grouped; limit 5) + CI audit step `bun audit --audit-level=high` (green on the final tree: "No vulnerabilities found… 2 below --audit-level=high"), documented `--ignore` allowlist; Actions SHA-pinned; `permissions: contents: read` | S6 (commit d6eaf4d) |
+| V14 | Dynamic scanning | ✅ | **S5**: local baseline run executed (ZAP 2.17.0, spider 54 URLs, passive only) → 0 High; triage committed in `docs/phases/phase 5/zap-baseline-triage.md` (Medium ACAO rejected as miniflare emulation artifact — zero ACAO in the deployed `_worker.js`; Low nosniff on assets mitigated via root `_headers`; Informational rejected). Harness: `scripts/zap/zap-baseline.sh` + `scripts/zap/README.md` | S5 (this commit) |
 | V10/V13 | No unsafe GET mutations (incl. Better Auth) | ✅ | `tests/unit/security-baseline.test.ts` route inventory + probes; Better Auth 1.7.1 registers sign-out `method:'POST'` (verified `dist/api/routes/sign-out.mjs`) | S0 |
 
 ## Sign-off
