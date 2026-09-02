@@ -28,14 +28,24 @@ describe('session-cookie contract (S3a)', () => {
 	it('the fixture signature scheme matches Better Auth’s own HMAC serializer', async () => {
 		const secret = 'unit-test-secret-0123456789abcdef';
 		const token = randomUUID();
-		// The fixture/e2e path: node:crypto HMAC-SHA256, standard base64.
+		// The fixture/e2e path: node:crypto HMAC-SHA256, STANDARD base64
+		// (alphabet +/). Better Auth's own serializer encodes URL-SAFE
+		// base64 (alphabet -_) — the same HMAC bytes, different alphabets.
+		// The runtime (cookie VERIFICATION) decodes both (proven by the e2e
+		// fixture sessions resolving with standard-base64 cookies), so the
+		// contract is BYTE equality, not string equality. (This pin was
+		// originally written as a string comparison — flaky: ~50% of random
+		// tokens produce HMACs whose two encodings coincide. CI caught it.)
 		const fixtureSignature = createHmac('sha256', secret).update(token).digest('base64');
-		// Better Auth’s own serializer (same algorithm/encoding the app uses
-		// to VERIFY the cookie on every request).
 		const hmac = createHMAC('SHA-256', 'base64');
 		const key = await hmac.importKey(secret, 'sign');
 		const betterAuthSignature = await hmac.sign(key, token);
-		expect(fixtureSignature).toBe(betterAuthSignature);
+		const toStandard = (s: string) => s.replace(/-/g, '+').replace(/_/g, '/');
+		expect(
+			Buffer.from(toStandard(fixtureSignature), 'base64').equals(
+				Buffer.from(toStandard(betterAuthSignature), 'base64')
+			)
+		).toBe(true);
 		expect(`${token}.${fixtureSignature}`).toMatch(/^[0-9a-f-]+\.[A-Za-z0-9+/=]+$/);
 	});
 
