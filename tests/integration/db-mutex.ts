@@ -7,10 +7,16 @@
 // fixtures, TRUNCATE deadlocks; recorded in the contradictions log CI-1).
 //
 // Design: a PostgreSQL SESSION advisory lock held for the entire suite run.
+// - The lock is taken on a DEDICATED pool client (not bare pool.query):
+//   `SET lock_timeout` and `pg_advisory_lock` are both session-scoped, so
+//   they must run on the SAME physical connection — otherwise a second pool
+//   session could run the blocking lock WITHOUT the timeout (Luna v27
+//   review point, 2026-09-02; the dedicated client makes the session
+//   affinity explicit and the wait bounded).
 // - `pg_advisory_lock` BLOCKS until free; `SET lock_timeout` converts a
 //   busy DB into a loud, retryable failure (never a silent skip).
-// - Release is `pool.end()` only — advisory locks die with their session,
-//   so there is no unlock-on-the-wrong-connection race.
+// - Release is client.release() + pool.end() only — advisory locks die with
+//   their session, so there is no unlock-on-the-wrong-connection race.
 import { Pool } from '@neondatabase/serverless';
 
 /** Arbitrary but fixed application-wide key (documented in the log). */
@@ -27,12 +33,16 @@ export async function acquireDbMutex(
 	databaseUrl: string,
 	timeoutMs: number = DB_MUTEX_TIMEOUT_MS
 ): Promise<() => Promise<void>> {
-	const pool = new Pool({ connectionString: databaseUrl });
+	// max: 1 — the mutex pool owns exactly one session; the dedicated client
+	// below is that session, held for the whole suite.
+	const pool = new Pool({ connectionString: databaseUrl, max: 1 });
+	const client = await pool.connect();
 	try {
-		// One dedicated session holds the lock; lock_timeout bounds the wait.
-		await pool.query(`SET lock_timeout = '${timeoutMs}ms'`);
-		await pool.query('SELECT pg_advisory_lock($1)', [DB_MUTEX_KEY]);
+		// Same session for BOTH statements (session-scoped semantics).
+		await client.query(`SET lock_timeout = '${timeoutMs}ms'`);
+		await client.query('SELECT pg_advisory_lock($1)', [DB_MUTEX_KEY]);
 	} catch (err) {
+		releaseClient(client);
 		await pool.end().catch(() => {});
 		const detail = err instanceof Error ? err.message : String(err);
 		throw new Error(
@@ -46,6 +56,16 @@ export async function acquireDbMutex(
 		if (released) return;
 		released = true;
 		// Closing the session auto-releases the advisory lock.
+		releaseClient(client);
 		await pool.end().catch(() => {});
 	};
+}
+
+/** PoolClient.release() is sync (void) — guard the teardown path anyway. */
+function releaseClient(client: { release(err?: unknown): void }): void {
+	try {
+		client.release();
+	} catch {
+		// The session dies with pool.end() regardless.
+	}
 }

@@ -16,7 +16,8 @@
 |---|---|
 | Branch | `main` |
 | Phase-5 baseline HEAD | `40210c3` — `docs(phase3+4): final visual review receipt + handoff synchronization` |
-| **Phase-5 implementation commits** | `35a0e02` (S0) · `9672eeb` (S1) · `e849a28` (S2) · `27c2188` (S3) · `42d200f` (S4) · `383ac51` (S5) · `d6eaf4d` (S6) → **final Phase-5 HEAD = the commit this handoff is committed in** (Phase-4 precedent: `git log --oneline -1` from `main` shows the full lineage) |
+| **Phase-5 implementation commits** | `35a0e02` (S0) · `9672eeb` (S1) · `e849a28` (S2) · `27c2188` (S3) · `42d200f` (S4) · `383ac51` (S5) · `d6eaf4d` (S6) · `8d3d859` (S7 handoff) · `b969413` (planning package) |
+| **TRUE final Phase 5 HEAD (post-S7 correction)** | **`3ace2ac`** — `fix(ci): serialize shared-DB suites with an advisory-lock mutex (CI-1…CI-4)`. CI run **#33 on `3ace2ac` passed all three jobs** (unit-and-build, integration incl. DB probe + migrations + Neon suite, e2e). The `if: github.event_name == 'push'` gating + db-mutex (CI-2/CI-3) were discovered and fixed after the initial S7 receipt and re-applied on `main` after the dependabot checkout PR merge (`29f00f1`, v7.0.1 SHA pins); the S3a cookie-pin byte fix (`11d5d18`) is included. A subsequent review-hardening commit (dedicated-session mutex, Luna v27 point) lands on `main` after this handoff's S7 receipt — final HEAD = the commit this file is committed in (Phase-4 precedent) |
 | Working tree | Only the user-owned IDE file `.idea/material_theme_project_new.xml` remains modified; `docs/phases/phase 5/` committed; `.cache/` holds sandbox scratch (gitignored) |
 
 ## 2. Per-slice receipts
