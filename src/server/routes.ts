@@ -7,6 +7,7 @@
 // mutating the same object at runtime). AppType (used by `hc<AppType>` RPC
 // client) is only useful when every registration is chained — discarding
 // the return value silently kills the client typing.
+import type { Context } from 'hono';
 import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { HTTPException } from 'hono/http-exception';
@@ -21,6 +22,11 @@ import { registerLeaderboardRoutes } from './leaderboard/handlers';
 import { createLeaderboardService } from './leaderboard/service';
 import { authContext, requireAdmin, requireAuth, type AuthContext } from './middleware/auth';
 import { csrfProtection } from './middleware/csrf';
+import {
+	createRateLimitMiddleware,
+	RATE_LIMIT_CLASSES,
+	type RateLimitBinding
+} from './middleware/rate-limit';
 import { registerProfileRoutes } from './profile/handlers';
 import { createProfileService } from './profile/service';
 import { requestIdMiddleware } from './middleware/request-id';
@@ -36,7 +42,19 @@ export type HonoBindings = {
 	BETTER_AUTH_URL?: string;
 	GOOGLE_CLIENT_ID?: string;
 	GOOGLE_CLIENT_SECRET?: string;
+	// Phase-5 S1 (F1) — rate-limit bindings (one per class). Optional: when
+	// absent (local dev / tests / preview) the middleware passes through.
+	AUTH_RATE_LIMITER?: RateLimitBinding;
+	GAME_RATE_LIMITER?: RateLimitBinding;
+	ME_RATE_LIMITER?: RateLimitBinding;
+	ADMIN_RATE_LIMITER?: RateLimitBinding;
 };
+
+/** Rate-limit binding resolver: undefined (→ pass-through) when absent. */
+const getRateLimitBinding =
+	(name: string) =>
+	(c: Context): RateLimitBinding | undefined =>
+		(c.env as Record<string, RateLimitBinding | undefined>)[name];
 
 export type HonoVariables = {
 	requestId: string;
@@ -97,6 +115,17 @@ const base = new Hono<AppEnv>()
 	.use('*', securityHeadersMiddleware)
 	.use('*', hstsOnHttps)
 	.use('*', csrfProtection)
+	// Phase-5 S1 (F1) — rate limiting (plan §D.1 normative order). CSRF ran
+	// already (cross-site floods keep the canonical 403); the auth class runs
+	// BEFORE the Better Auth handler (per-IP, no identity needed); session
+	// classes run AFTER their guards (identity known, 401 fast-path intact).
+	// Missing binding ⇒ pass-through (local/tests/preview).
+	.use(
+		'/api/auth/*',
+		createRateLimitMiddleware('auth', {
+			getBinding: getRateLimitBinding(RATE_LIMIT_CLASSES.auth.bindingName)
+		})
+	)
 	.use('*', authContext)
 	.use('/api/game/*', requireAuth)
 	.use('/api/me/*', requireAuth)
@@ -104,6 +133,24 @@ const base = new Hono<AppEnv>()
 	// D1 — the admin role gate: after requireAuth (401 when logged out),
 	// requireAdmin rejects authenticated non-admins with 403 FORBIDDEN.
 	.use('/api/admin/*', requireAdmin)
+	.use(
+		'/api/game/*',
+		createRateLimitMiddleware('game', {
+			getBinding: getRateLimitBinding(RATE_LIMIT_CLASSES.game.bindingName)
+		})
+	)
+	.use(
+		'/api/me/*',
+		createRateLimitMiddleware('me', {
+			getBinding: getRateLimitBinding(RATE_LIMIT_CLASSES.me.bindingName)
+		})
+	)
+	.use(
+		'/api/admin/*',
+		createRateLimitMiddleware('admin', {
+			getBinding: getRateLimitBinding(RATE_LIMIT_CLASSES.admin.bindingName)
+		})
+	)
 	.use('/api/leaderboard/*', requireAuth)
 	// Better Auth — mounted per the current Hono integration docs:
 	// `app.all("/api/auth/*", (c) => auth.handler(c.req.raw))`. Runtime values
