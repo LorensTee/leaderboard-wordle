@@ -30,7 +30,11 @@ import {
 import { registerProfileRoutes } from './profile/handlers';
 import { createProfileService } from './profile/service';
 import { requestIdMiddleware } from './middleware/request-id';
-import { hstsOnHttps, securityHeadersMiddleware } from './middleware/security-headers';
+import {
+	contentSecurityPolicyHeaders,
+	hstsOnHttps,
+	securityHeadersMiddleware
+} from './middleware/security-headers';
 import { ERROR_CODES, errorEnvelope, notFoundHandler, onErrorHandler } from './lib/errors';
 
 // Runtime bindings delivered by the Worker environment (secrets/vars).
@@ -113,6 +117,7 @@ const base = new Hono<AppEnv>()
 		})
 	)
 	.use('*', securityHeadersMiddleware)
+	.use('*', contentSecurityPolicyHeaders)
 	.use('*', hstsOnHttps)
 	.use('*', csrfProtection)
 	// Phase-5 S1 (F1) — rate limiting (plan §D.1 normative order). CSRF ran

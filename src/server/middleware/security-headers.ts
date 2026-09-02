@@ -1,9 +1,12 @@
 // NG22 — secure-header baseline.
 // Explicit subset: X-Content-Type-Options (nosniff), X-Frame-Options (DENY),
 // Referrer-Policy. HSTS is emitted on HTTPS responses only (production
-// behavior; http responses can't carry it). CSP is deliberately NOT set here
-// — reserved for the Phase 5 hardening pass (Slice 2, csp.ts).
+// behavior; http responses can't carry it). CSP is emitted on the API
+// surface from the SHARED directive builder (csp.ts — Phase-5 S2, plan §G/H)
+// so the page and API contracts cannot drift.
+import type { Context, MiddlewareHandler, Next } from 'hono';
 import { secureHeaders } from 'hono/secure-headers';
+import { buildCspDirectives, isCspReportOnly, serializeCsp } from './csp';
 
 // Single source for the NG22 header contract shared by BOTH response
 // surfaces (plan §H): the Hono API surface (below) and SvelteKit page
@@ -29,8 +32,8 @@ export const securityHeadersMiddleware = secureHeaders({
 // void when no downstream handler produced a response — then there is nothing
 // to decorate (Hono composes the chain result itself).
 export async function hstsOnHttps(
-	c: import('hono').Context,
-	next: import('hono').Next
+	c: Context,
+	next: Next
 ): Promise<Response | undefined> {
 	const res = (await next()) as Response | undefined;
 	if (res?.headers) {
@@ -41,3 +44,18 @@ export async function hstsOnHttps(
 	}
 	return res;
 }
+
+// Phase-5 S2 (F3) — CSP on the API surface, emitted from the shared builder
+// (csp.ts). Report-only in dev (CSP_REPORT_ONLY=1 toggle), enforced otherwise
+// (build/preview/production = the E2E gate, plan §G.1). Set via c.header()
+// BEFORE next() so error envelopes (401/403/429…) carry the header too (the
+// secureHeaders pattern — a post-next decorator would miss thrown errors).
+export const contentSecurityPolicyHeaders: MiddlewareHandler = async (c, next) => {
+	const reportOnly = isCspReportOnly(c.env as Record<string, unknown> | undefined);
+	const value = serializeCsp(buildCspDirectives({ dev: reportOnly }));
+	c.header(
+		reportOnly ? 'content-security-policy-report-only' : 'content-security-policy',
+		value
+	);
+	await next();
+};
