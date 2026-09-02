@@ -374,3 +374,23 @@ changes; the fix commit is `1de4c02`.
 E2E (admin.spec.ts E-A2/E-A3/E-A4) was updated to the click-cell → modal interaction;
 no existing assertion was weakened. Visual findings, the 21 reviewed screenshots, and
 the final READY verdict are recorded in the visual-review receipt.
+
+## Phase 5 resolutions (2026-09-02 — decisions recorded BEFORE code, Phase-4 discipline)
+
+Decisions and verification results for the Phase-5 security hardening pass
+(plan: `docs/phases/phase 5/phase-5-plan.md`). Every row below was decided or
+verified during the S0 audit; the code that implements the plan-mandated
+remediations follows these records.
+
+| # | Decision / verification result | Resolution |
+|---|---|---|
+| **D2/F6 — RLS decision record** | Row-level security on `answer_dictionary`/`daily_puzzles` is **NOT implemented** (no schema change; plan §O.3 zero-migration invariant). Compensating controls verified in place: server-only DB access path (bridge passes no client role), `verify:bundle` post-build scan, admin-role exposure gate, answer pool gitignored. Defer to an explicit product+operator decision (plan §N D2); a schema change would require a new migration + a new decision. |
+| **D9/F7 — `cookieCache` assessment** | Better Auth 1.7.1 `session.cookieCache` is **opt-in** (`session?.cookieCache?.enabled` — verified in `node_modules/better-auth/dist/cookies/index.mjs:77`) and **NOT adopted**: default off; the 5-minute staleness window would delay session revocation and sign-out invalidation, which the app pins today (e2e scenario 12). Assessment recorded: adoption only if performance data demands it, with revocation-semantics trade-off reviewed (plan §N D9 — default NOT adopted). |
+| **Page `X-Request-Id` NOT added** | Plan §H: pages do not get `X-Request-Id` (API-only; correlation via access logs, avoiding duplicate header semantics). Page surfaces carry nosniff / XFO DENY / Referrer-Policy / HSTS-on-https only. |
+| **Hooks `/api/*` header skip (verified no duplication/conflict)** | The SvelteKit hooks wrapper applies the page baseline ONLY to non-`/api` responses. The bridge (`src/routes/api/[...path]/+server.ts`) passes the Hono response through hooks; Hono already emits the identical contract via `securityHeadersMiddleware` (`routes.ts:97`), so a second set() would be a duplicate owner. Verified at implementation: `/api/*` responses keep exactly the Hono header set. |
+| **HSTS https-only on pages** | Pages gate HSTS exactly like the API `hstsOnHttps` middleware (`url.protocol === 'https:'`); the local `curl`/preview probe (http) therefore shows nosniff/XFO/Referrer but NOT HSTS — HSTS presence is unit-tested via a fake `https:` URL (plan G10 nuance, §H "over HTTPS [NEW S0]"). |
+| **S0 verification task — raw SQL** | `grep -rn 'sql\`' src/server` → **NONE**. All queries parameterized (Drizzle); no string interpolation of user input. |
+| **S0 verification task — handler audit** | All mutation bodies are zod `.strict()` (admin: 4 schemas; game: 1; profile: 1) — unknown fields rejected 400. `UUID_RE` short-circuit present in game + admin handlers (404 without DB round-trip). GET registrations are read-only by construction: `/api/game/current`, `/api/me`, `/api/leaderboard/{today,yesterday,week,month}`, `GET /api/admin/puzzles` (list). |
+| **S0 verification task — GET-reachability (F8)** | Better Auth 1.7.1 registers `sign-out` with `method: "POST"` only (verified `node_modules/better-auth/dist/api/routes/sign-out.mjs`); `GET`/`HEAD` probes → 404 (no session invalidation possible). Registered mutation routes probe → 401 (guard) / 404 (no GET handler). Pinned by the new route-inventory unit test (`tests/unit/security-baseline.test.ts`). |
+| **S0 verification task — `RATE_LIMITED` consumers** | `grep -rn 'RATE_LIMITED' src/` → only the definition at `src/server/lib/errors.ts:25`; zero consumers pre-S1 (S1 adds the 429 envelope path). |
+| **S0 verification task — `{@html}`/`innerHTML`** | `grep` across `src/` → **no `{@html}` and no `innerHTML`** anywhere. No raw-HTML sinks (Svelte auto-escaping is the only rendering path). |
