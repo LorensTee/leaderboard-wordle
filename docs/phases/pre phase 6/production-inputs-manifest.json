@@ -1,0 +1,58 @@
+{
+  "project": "leaderboard-wordle",
+  "phase": "pre-phase-6",
+  "status": "production-inputs-finalized-for-phase-6-planning",
+  "admin_emails": [
+    "tee.johnlor@gmail.com",
+    "leaderboardwordle@gmail.com"
+  ],
+  "leaderboard_thresholds": {
+    "weekly_completed_days": 3,
+    "monthly_completed_days": 8
+  },
+  "word_lists": {
+    "valid_guesses": {
+      "count": 12972,
+      "decision": "Use the original/pre-NYT Wordle 12,972-word valid-guess dictionary snapshot.",
+      "primary_source_repo": "deedy/wordle-solver",
+      "primary_source_file": "data/official_wordle_all.txt",
+      "source_url": "https://github.com/deedy/wordle-solver/blob/main/data/official_wordle_all.txt",
+      "source_basis": "The repository documents this file as all 12,972 official valid 5-letter words taken from the original Wordle website source main.c1506a22.js.",
+      "reproducibility": "Pin the imported bytes to the exact upstream commit used during import; do not use a moving branch reference as the provenance record."
+    },
+    "valid_answers": {
+      "count": 2315,
+      "decision": "Use the original/pre-NYT Wordle 2,315-answer pool corresponding to the same source snapshot.",
+      "primary_source_repo": "deedy/wordle-solver",
+      "primary_source_file": "data/official_wordle_common.txt",
+      "source_url": "https://github.com/deedy/wordle-solver/blob/main/data/official_wordle_common.txt",
+      "source_basis": "The repository documents this file as the official 2,315 common/answer words taken from the same original Wordle website source.",
+      "reproducibility": "Pin the imported bytes to the exact upstream commit used during import; keep the answer source private in this application."
+    },
+    "relationship": "VALID_ANSWERS must be a strict subset of VALID_GUESSES; pre-phase-6 verification must prove 2315/2315 membership."
+  },
+  "emoji_policy": {
+    "decision": "Use standard Unicode RGI emoji corresponding to Discord's standard/default emoji, not Discord server/custom emoji.",
+    "unicode_version": "17.0.0",
+    "unicode_source": "https://www.unicode.org/Public/17.0.0/emoji/emoji-test.txt",
+    "discord_reference": "https://docs.discord.com/developers/reference",
+    "renderer_reference": "https://github.com/jdecked/twemoji",
+    "selection_rule": [
+      "Include only fully-qualified RGI emoji sequences from Unicode Emoji 17.0.",
+      "Exclude standalone emoji components that are not themselves RGI emoji.",
+      "Exclude Discord custom/server emoji and animated custom emoji.",
+      "Store the Unicode sequence itself in the database.",
+      "Do not copy Discord's proprietary artwork.",
+      "Do not manually curate down to the current 24-item list; replace that curated set.",
+      "Include standard gender/skin-tone RGI sequences only when they are themselves fully-qualified RGI emoji in the Unicode test data."
+    ],
+    "important_note": "Discord's API identifies standard emoji as Unicode characters and custom emoji separately. Discord documents Twemoji for Desktop/Android and native Apple emoji on iOS. Therefore the stable app-level identifier should be the Unicode sequence, not a Discord image."
+  },
+  "repo_notes": {
+    "current_avatar_file": "src/server/data/avatar-emojis.ts",
+    "current_avatar_state": "24 curated entries; this is the existing product decision to replace.",
+    "current_guess_source_file": "src/server/data/valid-guesses.source.txt",
+    "current_guess_source_state": "Sample data; repository comments explicitly say it must be replaced with the real imported list.",
+    "answer_pool_rule": "Keep answer data out of public client artifacts and follow the existing private seed pipeline."
+  }
+}

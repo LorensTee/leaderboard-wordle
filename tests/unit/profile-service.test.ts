@@ -162,8 +162,10 @@ describe('profile service — validation branches (fake db)', () => {
 		).rejects.toMatchObject({ code: ERROR_CODES.NAME_TAKEN, status: 409 });
 	});
 
-	it('non-curated avatar → INVALID_AVATAR 400', async () => {
-		for (const bad of ['🙂', '😀', 'not-an-emoji', '']) {
+	it('non-allow-list avatar → INVALID_AVATAR 400', async () => {
+		// Non-RGI strings only: standalone component, unqualified form,
+		// non-RGI combination, prose.
+		for (const bad of ['🏽', '©', '🦊🏽', 'not-an-emoji', '']) {
 			const { service, db } = makeService([baseUser()], baseUser());
 			await expect(
 				service.updateProfile('user-1', { displayName: 'alex', avatarEmoji: bad })

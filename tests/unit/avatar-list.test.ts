@@ -7,9 +7,10 @@ import { AVATAR_EMOJIS as CLIENT_LIST } from '../../src/lib/shared/config/avatar
 import { renderAvatarArtifact, validateAvatarList } from '../../scripts/build-avatar-list';
 
 describe('avatar allow-list', () => {
-	it('has the documented curated size and stable shape', () => {
-		expect(SERVER_LIST.length).toBeGreaterThanOrEqual(20);
-		expect(SERVER_LIST.length).toBeLessThanOrEqual(30);
+	it('has the documented production size (Unicode Emoji 17.0 RGI) and stable shape', () => {
+		// Pre-phase-6 production policy: every fully-qualified RGI emoji in
+		// Unicode Emoji 17.0 (emoji-test.txt 2025-08-04) = 3,944 entries.
+		expect(SERVER_LIST.length).toBe(3944);
 		for (const entry of SERVER_LIST) {
 			expect(typeof entry.emoji).toBe('string');
 			expect(entry.emoji.length).toBeGreaterThan(0);
@@ -29,14 +30,21 @@ describe('avatar allow-list', () => {
 		expect(CLIENT_LIST).toEqual(SERVER_LIST);
 	});
 
-	it('server allow-list validation accepts curated entries and rejects everything else', () => {
+	it('server allow-list validation accepts RGI emoji (incl. gender/skin-tone sequences) and rejects non-RGI forms', () => {
 		for (const entry of SERVER_LIST) {
 			expect(isValidAvatarEmoji(entry.emoji)).toBe(true);
 		}
-		expect(isValidAvatarEmoji('🙂')).toBe(false); // default fallback is NOT in the set
-		expect(isValidAvatarEmoji('😀')).toBe(false);
+		// Fully-qualified RGI sequences ARE allowed by the production policy —
+		// including standard gender and skin-tone sequences (manifest rule).
+		expect(isValidAvatarEmoji('👍🏽')).toBe(true); // thumbs up: medium skin tone
+		expect(isValidAvatarEmoji('🧑‍💻')).toBe(true); // technologist (gender-neutral)
+		expect(isValidAvatarEmoji('😀')).toBe(true);
+		expect(isValidAvatarEmoji('🙂')).toBe(true);
+		// Rejected: standalone components, unqualified forms, non-RGI sequences.
+		expect(isValidAvatarEmoji('🏽')).toBe(false); // standalone skin-tone component
+		expect(isValidAvatarEmoji('©')).toBe(false); // bare copyright, no VS16 (unqualified form)
+		expect(isValidAvatarEmoji('🦊🏽')).toBe(false); // non-RGI combination (fox has no skin tones)
 		expect(isValidAvatarEmoji('')).toBe(false);
-		expect(isValidAvatarEmoji('🦊🏽')).toBe(false); // skin-tone sequence not allowed
 		expect(isValidAvatarEmoji('abc')).toBe(false);
 	});
 

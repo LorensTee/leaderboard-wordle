@@ -162,12 +162,15 @@ suite('Phase-2 profile domain (live Neon)', () => {
 		}
 	});
 
-	it('avatar allow-list enforcement surface: non-curated emoji → INVALID_AVATAR 400', async () => {
+	it('avatar allow-list enforcement surface: non-RGI emoji → INVALID_AVATAR 400', async () => {
 		// Unique names per iteration: 'alex' is already taken on this DB from
 		// the uniqueness test, and the name rules run BEFORE avatar validation.
 		const names = ['alpha', 'bravo', 'charlie'];
 		let i = 0;
-		for (const bad of ['🙂', '😀', '🦊🏽']) {
+		// Non-RGI strings only ('🙂'/'😀' became valid under the pre-phase-6
+		// Unicode 17.0 RGI policy): standalone component, unqualified form,
+		// non-RGI combination.
+		for (const bad of ['🏽', '©', '🦊🏽']) {
 			const user = await insertUser();
 			const err = await errOf(
 				profile.updateProfile(user.id, { displayName: `${names[i++]}${user.id.slice(-4)}`, avatarEmoji: bad })
