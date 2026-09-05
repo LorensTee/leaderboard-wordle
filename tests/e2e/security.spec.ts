@@ -44,6 +44,7 @@ test.describe('security regression (S3)', () => {
 			'/api/game/current',
 			'/api/me',
 			'/api/admin/puzzles',
+			'/api/admin/puzzles/search?q=about',
 			'/api/leaderboard/today'
 		]) {
 			const res = await request.get(path);
@@ -169,6 +170,12 @@ test.describe('security regression (S3)', () => {
 			data: JSON.stringify({ word: 'crane' })
 		});
 		expect(denied.status()).toBe(403);
+
+		// Phase-6 S3: the answer-search endpoint is admin-only too — a player
+		// must never enumerate/search the private answer dictionary.
+		const search = await ctx.request.get('/api/admin/puzzles/search?q=about');
+		expect(search.status()).toBe(403);
+		expect((await search.json()).error.code).toBe('FORBIDDEN');
 
 		// Page level: /admin redirects (role guard). Admin TAB absence + the
 		// redirect matrix are pinned by admin.spec E-A1 — not duplicated here.
