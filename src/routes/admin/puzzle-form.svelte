@@ -10,6 +10,7 @@
 	import type { AdminPuzzle, ValidateWordResult } from '$server/admin/service';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
+	import AnswerSearch, { type AnswerSelection } from './answer-search.svelte';
 
 	type Mode = 'schedule' | 'edit' | 'replace';
 
@@ -105,6 +106,27 @@
 		scheduleCheck(value);
 	}
 
+	// Phase-6 S3/S4 — an answer was picked from the bounded server search.
+	// The word came from the dictionary query and its usedOn is server-computed,
+	// so the chip reflects approved/used immediately (no trust change: the final
+	// mutation still calls resolveApprovedAnswer server-side). Typing afterwards
+	// falls back to the existing debounced validate path via onWordInput.
+	function onWordSelect(
+		field: { handleChange: (value: string) => void },
+		selection: AnswerSelection
+	) {
+		field.handleChange(selection.word);
+		if (!hintTouched) {
+			const first = selection.word.trim().charAt(0).toUpperCase();
+			if (first) {
+				form.setFieldValue('hintLetter', first);
+			}
+		}
+		chip = selection.usedOn
+			? { kind: 'used', usedOn: selection.usedOn }
+			: { kind: 'approved' };
+	}
+
 	const titles = {
 		schedule: 'Schedule a puzzle',
 		edit: 'Edit puzzle',
@@ -183,16 +205,11 @@
 				{#snippet children(field)}
 					<div class="flex flex-col gap-1.5">
 						<label for="admin-puzzle-word" class="text-sm font-medium">Answer word</label>
-						<Input
+						<AnswerSearch
 							id="admin-puzzle-word"
-							type="text"
-							name={field.name}
 							value={field.state.value}
-							oninput={(e) => onWordInput(field, e.currentTarget.value)}
-							onblur={field.handleBlur}
-							maxlength={64}
-							autocomplete="off"
-							spellcheck="false"
+							onselect={(selection) => onWordSelect(field, selection)}
+							oninput={(value) => onWordInput(field, value)}
 							aria-invalid={field.state.meta.errors.length > 0}
 						/>
 						{#if field.state.meta.errors.length > 0}

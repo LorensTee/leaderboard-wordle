@@ -279,6 +279,107 @@ test.describe('admin page (deterministic session + seeded puzzles)', () => {
 		await expect(page.getByText('river', { exact: true }).first()).toBeVisible();
 	});
 
+	test('E-A8: answer search combobox — search → pick (click + keyboard Enter) → schedule', async ({
+		context,
+		page
+	}) => {
+		const { cookie } = await createAuthenticatedUser(undefined, 'Admin Eight', {
+			onboarded: true,
+			role: 'admin'
+		});
+		await seedApprovedAnswer('below');
+		await seedApprovedAnswer('about');
+		await seedApprovedAnswer('above');
+		await addSessionCookie(context, cookie);
+
+		await page.goto('/admin');
+		const scheduleButton = page.getByRole('button', { name: /Schedule a puzzle/ }).first();
+		if ((await scheduleButton.count()) === 0) {
+			await page.getByRole('button', { name: 'Next month' }).click();
+		}
+		await scheduleButton.click();
+
+		const wordInput = page.getByLabel('Answer word');
+		// Click-select: type a fragment, wait for the bounded server results,
+		// pick the option with the mouse.
+		await wordInput.fill('bel');
+		const belowOption = page.getByRole('option', { name: /below/ });
+		await expect(belowOption).toBeVisible();
+		await belowOption.click();
+		await expect(wordInput).toHaveValue('below');
+		// D3 hint prefill from the selected word + approved chip.
+		await expect(page.getByLabel('Hint letter')).toHaveValue('B');
+		await expect(page.getByText('✓ Approved answer')).toBeVisible();
+		await page.getByRole('button', { name: 'Schedule', exact: true }).click();
+		await expect(page.getByText('Puzzle scheduled')).toBeVisible();
+		await expect(page.getByText('below', { exact: true })).toBeVisible();
+
+		// Keyboard select: open the next empty cell, ArrowDown highlights the
+		// first option, Enter picks it (then submit).
+		const nextSchedule = page.getByRole('button', { name: /Schedule a puzzle/ }).first();
+		await expect(nextSchedule).toBeVisible();
+		await nextSchedule.click();
+		await wordInput.fill('abo');
+		const aboutOption = page.getByRole('option', { name: /about/ });
+		await expect(aboutOption).toBeVisible();
+		await expect(page.getByRole('option', { name: /above/ })).toBeVisible();
+		// ArrowDown moves the highlight to the second result; Enter picks it.
+		await wordInput.press('ArrowDown');
+		await wordInput.press('Enter');
+		await expect(wordInput).toHaveValue('above');
+		await expect(page.getByLabel('Hint letter')).toHaveValue('A');
+		await expect(page.getByText('✓ Approved answer')).toBeVisible();
+		await page.getByRole('button', { name: 'Schedule', exact: true }).click();
+		await expect(page.getByText('Puzzle scheduled')).toBeVisible();
+	});
+
+	test('E-A9: combobox states — used marker, no-match empty state, Escape dismisses', async ({
+		context,
+		page
+	}) => {
+		const { cookie } = await createAuthenticatedUser(undefined, 'Admin Nine', {
+			onboarded: true,
+			role: 'admin'
+		});
+		// 'light' is approved AND already scheduled → its option shows the
+		// "used {date}" marker but stays selectable (server stays authoritative).
+		const target = futureInFrame();
+		await seedScheduledPuzzle(target, 'light');
+		await addSessionCookie(context, cookie);
+
+		await page.goto('/admin');
+		const scheduleButton = page.getByRole('button', { name: /Schedule a puzzle/ }).first();
+		if ((await scheduleButton.count()) === 0) {
+			await page.getByRole('button', { name: 'Next month' }).click();
+		}
+		await scheduleButton.click();
+
+		const wordInput = page.getByLabel('Answer word');
+		const listbox = page.getByRole('listbox', { name: 'Approved answers' });
+
+		// Used answer is marked inline in the results (server-computed usedOn).
+		await wordInput.fill('ligh');
+		const usedOption = page.getByRole('option', { name: /light/ });
+		await expect(usedOption).toBeVisible();
+		await expect(usedOption.getByText(/⚠ used \d{4}-\d{2}-\d{2}/)).toBeVisible();
+
+		// Escape closes the list without clearing the typed text.
+		await wordInput.press('Escape');
+		await expect(listbox).toHaveCount(0);
+		await expect(wordInput).toHaveValue('ligh');
+
+		// No-match query → explicit empty state (after a successful response).
+		await wordInput.fill('zzzzz');
+		await expect(page.getByText('No matching approved answers')).toBeVisible();
+		await expect(page.getByRole('option')).toHaveCount(0);
+
+		// Transient network error → quiet fallback, listbox stays usable.
+		await page.route('**/api/admin/puzzles/search**', (route) => route.abort());
+		await wordInput.fill('about');
+		await expect(page.getByText('Search unavailable — type the full word')).toBeVisible();
+		await page.unroute('**/api/admin/puzzles/search**');
+	});
+
 	test('E-A7 (guard): unauthenticated /admin redirects to the landing page', async ({ page }) => {
 		// SSR guard (requireOnboarded → redirect '/') — no session at all.
 		await page.goto('/admin');
