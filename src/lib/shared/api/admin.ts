@@ -10,13 +10,16 @@ import { api, apiErrorFromResponse } from './client';
 import type { AdminPuzzle, ValidateWordResult } from '$server/admin/service';
 import type { ScheduleInput, ReplaceTodayInput } from '$server/admin/service';
 import type { UpdatePatch } from '$server/admin/service';
+import type { AnswerSearchResponse } from '$server/admin/service';
 
 export const adminKeys = {
 	all: ['admin'] as const,
 	/** Family key — invalidated by every mutation (prefix invalidation). */
 	puzzles: ['admin', 'puzzles'] as const,
 	/** Windowed list key (D4: from/to per displayed month). */
-	window: (from: string, to: string) => ['admin', 'puzzles', from, to] as const
+	window: (from: string, to: string) => ['admin', 'puzzles', from, to] as const,
+	/** Answer-search key (Phase-6 S3) — per normalized query, no cross-query leakage. */
+	search: (q: string) => ['admin', 'search', q] as const
 };
 
 export const adminApi = {
@@ -34,6 +37,16 @@ export const adminApi = {
 	/** POST /api/admin/puzzles/validate — D5 live validation (never mutates). */
 	async validate(word: string): Promise<ValidateWordResult> {
 		const res = await api.api.admin.puzzles.validate.$post({ json: { word } });
+		if (!res.ok) throw await apiErrorFromResponse(res);
+		return res.json();
+	},
+
+	/** GET /api/admin/puzzles/search — bounded admin answer search (Phase-6 S3). */
+	async searchAnswers(q: string, limit?: number): Promise<AnswerSearchResponse> {
+		// hc serializes query params as strings; the server z.coerce parses back.
+		const query: { q: string; limit?: string } = { q };
+		if (limit !== undefined) query.limit = String(limit);
+		const res = await api.api.admin.puzzles.search.$get({ query });
 		if (!res.ok) throw await apiErrorFromResponse(res);
 		return res.json();
 	},

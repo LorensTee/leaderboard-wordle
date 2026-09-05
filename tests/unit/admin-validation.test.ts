@@ -7,11 +7,19 @@ import {
 	assertAnswerWordShape,
 	assertFutureDate,
 	editGuardViolation,
+	escapeLikePattern,
 	isValidIsoDate,
 	normalizeAnswerWord,
+	normalizeSearchQuery,
 	replaceTodayGuardViolation,
 	validateDateWindow,
-	validateHintLetter
+	validateHintLetter,
+	validateSearchParams,
+	SEARCH_LIMIT_DEFAULT,
+	SEARCH_LIMIT_MAX,
+	SEARCH_LIMIT_MIN,
+	SEARCH_QUERY_MAX,
+	SEARCH_QUERY_MIN
 } from '../../src/server/admin/validation';
 
 describe('word normalization (S2)', () => {
@@ -145,5 +153,57 @@ describe('D8 replace-today guard matrix (replaceTodayGuardViolation)', () => {
 
 	it('not today → INVALID_STATE', () => {
 		expect(replaceTodayGuardViolation({ ...base, puzzleDate: '2026-08-31' })?.code).toBe('INVALID_STATE');
+	});
+});
+
+describe('Phase-6 S3 answer search (normalize/escape/params)', () => {
+	it('normalizeSearchQuery trims + lowercases', () => {
+		expect(normalizeSearchQuery('  ABOUT ')).toBe('about');
+		expect(normalizeSearchQuery('AbOuT')).toBe('about');
+		expect(normalizeSearchQuery('  ')).toBe('');
+	});
+
+	it('escapeLikePattern escapes backslash, percent, and underscore literally', () => {
+		expect(escapeLikePattern('about')).toBe('about');
+		expect(escapeLikePattern('100%')).toBe('100\\%');
+		expect(escapeLikePattern('a_b')).toBe('a\\_b');
+		expect(escapeLikePattern('a\\b')).toBe('a\\\\b');
+		expect(escapeLikePattern('%_\\')).toBe('\\%\\_\\\\');
+	});
+
+	it('validateSearchParams normalizes and applies defaults (limit 20)', () => {
+		expect(validateSearchParams('  About ')).toEqual({ q: 'about', limit: SEARCH_LIMIT_DEFAULT });
+		expect(validateSearchParams('about', 5)).toEqual({ q: 'about', limit: 5 });
+		expect(validateSearchParams('a', 1)).toEqual({ q: 'a', limit: 1 });
+		expect(validateSearchParams('a', SEARCH_LIMIT_MAX)).toEqual({ q: 'a', limit: 50 });
+	});
+
+	it('validateSearchParams rejects empty/whitespace and over-long queries (400 BAD_REQUEST)', () => {
+		expect(() => validateSearchParams('')).toThrow(AppError);
+		expect(() => validateSearchParams('   ')).toThrow(AppError);
+		expect(() => validateSearchParams('a'.repeat(SEARCH_QUERY_MIN - 1))).toThrow(AppError);
+		expect(() => validateSearchParams('a'.repeat(SEARCH_QUERY_MAX + 1))).toThrow(AppError);
+		// Trim happens BEFORE the length check (raw 66 chars, trimmed 64 → ok).
+		expect(validateSearchParams(` ${'a'.repeat(SEARCH_QUERY_MAX)} `)).toEqual({
+			q: 'a'.repeat(SEARCH_QUERY_MAX),
+			limit: SEARCH_LIMIT_DEFAULT
+		});
+		const caught = (() => {
+			try {
+				return validateSearchParams('');
+			} catch (e) {
+				return e;
+			}
+		})() as AppError;
+		expect(caught.status).toBe(400);
+		expect(caught.code).toBe('BAD_REQUEST');
+	});
+
+	it('validateSearchParams rejects non-integer and out-of-range limits (400 BAD_REQUEST)', () => {
+		expect(() => validateSearchParams('about', 2.5)).toThrow(AppError);
+		expect(() => validateSearchParams('about', 0)).toThrow(AppError);
+		expect(() => validateSearchParams('about', SEARCH_LIMIT_MIN - 1)).toThrow(AppError);
+		expect(() => validateSearchParams('about', SEARCH_LIMIT_MAX + 1)).toThrow(AppError);
+		expect(() => validateSearchParams('about', Number.NaN)).toThrow(AppError);
 	});
 });

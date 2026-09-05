@@ -21,11 +21,13 @@ import {
 	assertAnswerWordShape,
 	assertFutureDate,
 	editGuardViolation,
+	escapeLikePattern,
 	mapUniqueViolation,
 	normalizeAnswerWord,
 	replaceTodayGuardViolation,
 	validateDateWindow,
 	validateHintLetter,
+	validateSearchParams,
 	ANSWER_WORD_RE
 } from './validation';
 
@@ -54,6 +56,22 @@ export type ValidateWordResult = {
 	usedOn: string | null;
 };
 
+// ─── Phase-6 S3 — bounded answer search (P6-2/P6-3/P6-14) ───────────────────
+
+export type AnswerSearchResult = {
+	/** The dictionary's canonical word text (normalized lowercase). */
+	word: string;
+	/** ISO date of the puzzle already using this answer, or null. */
+	usedOn: string | null;
+};
+
+export type AnswerSearchResponse = {
+	/** Bounded result set — never more than the requested limit (≤ 50). */
+	results: AnswerSearchResult[];
+	/** Pre-limit match count (`COUNT(*) OVER ()`) — "x of y" feedback only. */
+	total: number;
+};
+
 export type ScheduleInput = { puzzleDate: string; word: string; hintLetter: string };
 
 /** POST /api/admin/puzzles/:id/replace-today body (plan §8.1 — no date field). */
@@ -70,6 +88,8 @@ export type AdminPuzzleService = {
 	listPuzzles(from?: string, to?: string): Promise<AdminPuzzle[]>;
 	/** POST /api/admin/puzzles/validate — D5 (never mutates). */
 	validateWord(word: string): Promise<ValidateWordResult>;
+	/** GET /api/admin/puzzles/search — bounded, read-only, dictionary only (P6-14). */
+	searchAnswers(rawQuery: string, limit: number): Promise<AnswerSearchResponse>;
 	/** POST /api/admin/puzzles — schedule a FUTURE puzzle. */
 	schedulePuzzle(input: ScheduleInput): Promise<AdminPuzzle>;
 	/** PATCH /api/admin/puzzles/:id — edit/move a FUTURE SCHEDULED puzzle (D6/D9). */
@@ -95,6 +115,7 @@ export function createAdminPuzzleService(
 	return {
 		listPuzzles,
 		validateWord,
+		searchAnswers,
 		schedulePuzzle,
 		updatePuzzle,
 		deletePuzzle,
@@ -270,6 +291,41 @@ export function createAdminPuzzleService(
 			approved: true,
 			previouslyUsed: row.usedOn !== null,
 			usedOn: row.usedOn ?? null
+		};
+	}
+
+	/**
+	 * Phase-6 S3 — bounded admin answer search (P6-2/P6-3/P6-14).
+	 * Read-only, single query: `answer_dictionary` LEFT JOIN `daily_puzzles`
+	 * (UNIQUE answer_id ⇒ ≤1 use row per answer) with a LIKE filter over the
+	 * normalized word, exact → prefix → substring ranking (then alphabetical),
+	 * `COUNT(*) OVER ()` as the pre-limit total, and a hard SQL LIMIT (the
+	 * response never exceeds the caller's bound). Queries `answer_dictionary`
+	 * ONLY — never `valid-guesses` (12,972 public guesses ≠ approved answers).
+	 * User input is LIKE-escaped so `%`/`_`/`\` match literally. Mirrors
+	 * `validateWord`'s read-only discipline — never mutates.
+	 */
+	async function searchAnswers(rawQuery: string, limit: number): Promise<AnswerSearchResponse> {
+		const { q, limit: bound } = validateSearchParams(rawQuery, limit);
+		const escaped = escapeLikePattern(q);
+		const rows = await db
+			.select({
+				word: answerDictionary.word,
+				usedOn: dailyPuzzles.puzzleDate,
+				total: sql<number>`count(*) over ()::int`
+			})
+			.from(answerDictionary)
+			.leftJoin(dailyPuzzles, eq(dailyPuzzles.answerId, answerDictionary.id))
+			.where(sql`${answerDictionary.normalizedWord} LIKE ${`%${escaped}%`} ESCAPE '\\'`)
+			.orderBy(
+				sql`(${answerDictionary.normalizedWord} = ${q}) DESC`,
+				sql`(${answerDictionary.normalizedWord} LIKE ${`${escaped}%`} ESCAPE '\\') DESC`,
+				asc(answerDictionary.normalizedWord)
+			)
+			.limit(bound);
+		return {
+			results: rows.map((r) => ({ word: r.word, usedOn: r.usedOn ?? null })),
+			total: rows[0]?.total ?? 0
 		};
 	}
 

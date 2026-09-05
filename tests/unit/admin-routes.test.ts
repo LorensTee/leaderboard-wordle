@@ -15,6 +15,7 @@ import { registerAdminRoutes } from '../../src/server/admin/handlers';
 import type {
 	AdminPuzzle,
 	AdminPuzzleService,
+	AnswerSearchResponse,
 	ValidateWordResult
 } from '../../src/server/admin/service';
 import type { SessionData } from '../../src/server/auth/auth';
@@ -88,6 +89,12 @@ function fakeService(overrides: Partial<AdminPuzzleService> = {}): {
 			record('validateWord')(word);
 			return { approved: true, previouslyUsed: false, usedOn: null };
 		}),
+		searchAnswers: vi.fn(
+			async (rawQuery: string, limit: number): Promise<AnswerSearchResponse> => {
+				record('searchAnswers')(rawQuery, limit);
+				return { results: [{ word: 'about', usedOn: null }], total: 1 };
+			}
+		),
 		schedulePuzzle: vi.fn(async () => {
 			record('schedulePuzzle')();
 			return SAMPLE_PUZZLE;
@@ -236,6 +243,61 @@ describe('admin routes (wire contract, DB-free)', () => {
 		expect(calls[0]).toEqual({ method: 'validateWord', args: ['river'] });
 	});
 
+	it('GET /api/admin/puzzles/search → 200 bounded response with the default limit (20)', async () => {
+		const { service, calls } = fakeService();
+		const app = makeApp(service);
+		const res = await req(app, '/api/admin/puzzles/search?q=about');
+		expect(res.status).toBe(200);
+		expect(await res.json()).toEqual({ results: [{ word: 'about', usedOn: null }], total: 1 });
+		expect(calls[0]).toEqual({ method: 'searchAnswers', args: ['about', 20] });
+	});
+
+	it('GET search passes an explicit limit through', async () => {
+		const { service, calls } = fakeService();
+		const app = makeApp(service);
+		const res = await req(app, '/api/admin/puzzles/search?q=ab&limit=5');
+		expect(res.status).toBe(200);
+		expect(calls[0].args).toEqual(['ab', 5]);
+	});
+
+	it('GET search with a limit of 50 (max) is accepted; the SQL LIMIT stays the real bound', async () => {
+		const { service } = fakeService();
+		const app = makeApp(service);
+		const res = await req(app, '/api/admin/puzzles/search?q=ab&limit=50');
+		expect(res.status).toBe(200);
+	});
+
+	it.each([
+		['missing q', '/api/admin/puzzles/search'],
+		['blank q', '/api/admin/puzzles/search?q=%20%20'],
+		['too-long q', `/api/admin/puzzles/search?q=${'a'.repeat(65)}`],
+		['non-integer limit', '/api/admin/puzzles/search?q=ab&limit=2.5'],
+		['limit 0', '/api/admin/puzzles/search?q=ab&limit=0'],
+		['limit 51', '/api/admin/puzzles/search?q=ab&limit=51'],
+		['unknown param', '/api/admin/puzzles/search?q=ab&extra=x']
+	])('GET search with %s → 400 BAD_REQUEST (service never reached)', async (_label, path) => {
+		const { service, calls } = fakeService();
+		const app = makeApp(service);
+		const res = await req(app, path);
+		expect(res.status).toBe(400);
+		const body = await res.json();
+		expect(body.error.code).toBe('BAD_REQUEST');
+		expect(body.error.requestId).toBeDefined();
+		expect(calls).toEqual([]);
+	});
+
+	it('GET search with a service error maps to its NG21 envelope status', async () => {
+		const { service } = fakeService({
+			searchAnswers: vi.fn(async () => {
+				throw new AppError('BAD_REQUEST', 'Search query must be 1–64 characters after trimming', 400);
+			})
+		});
+		const app = makeApp(service);
+		const res = await req(app, '/api/admin/puzzles/search?q=ab');
+		expect(res.status).toBe(400);
+		expect((await res.json()).error.code).toBe('BAD_REQUEST');
+	});
+
 	it('non-UUID :id short-circuits to 404 WITHOUT a DB round-trip', async () => {
 		const { service, calls } = fakeService();
 		const app = makeApp(service);
@@ -262,7 +324,8 @@ describe('admin routes (wire contract, DB-free)', () => {
 			[`/api/admin/puzzles/${FUZZY_UUID}`, { method: 'PATCH', body: JSON.stringify({ hintLetter: 'V' }) }],
 			[`/api/admin/puzzles/${FUZZY_UUID}`, { method: 'DELETE' }],
 			[`/api/admin/puzzles/${FUZZY_UUID}/replace-today`, { method: 'POST', body: JSON.stringify({ word: 'about', hintLetter: 'A' }) }],
-			['/api/admin/puzzles/validate', { method: 'POST', body: JSON.stringify({ word: 'river' }) }]
+			['/api/admin/puzzles/validate', { method: 'POST', body: JSON.stringify({ word: 'river' }) }],
+			['/api/admin/puzzles/search?q=about']
 		];
 		for (const [path, init] of endpoints) {
 			const res = await req(app, path, init);

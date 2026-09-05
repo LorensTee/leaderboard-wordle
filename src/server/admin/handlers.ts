@@ -76,6 +76,15 @@ const listQuerySchema = z
 	})
 	.strict();
 
+// Phase-6 S3 (P6-1/P6-2) — bounded search: trimmed q 1..64, integer limit
+// 1..50 (default 20). The SQL LIMIT in the service is the real bound.
+const searchQuerySchema = z
+	.object({
+		q: z.string().trim().min(1).max(64),
+		limit: z.coerce.number().int().min(1).max(50).default(20)
+	})
+	.strict();
+
 /** Shared zValidator hook → NG21 BAD_REQUEST envelope (game-handler pattern). */
 function badRequestError(what: string, issues: { path: PropertyKey[]; message: string }[]): never {
 	throw new AppError(
@@ -138,6 +147,22 @@ export function registerAdminRoutes<S extends Schema = BlankSchema>(
 				authenticatedAdmin(c, 'validate a word');
 				const { word } = c.req.valid('json');
 				const result = await deps.getService(c).validateWord(word);
+				return c.json(result, 200);
+			}
+		)
+		.get(
+			'/api/admin/puzzles/search',
+			zValidator('query', searchQuerySchema, (result) => {
+				if (!result.success) badRequestError('search query', result.error.issues);
+			}),
+			async (c) => {
+				// Static path — no `:id` conflict (no GET on :id); inherits the
+				// full admin chain (requireAuth → requireAdmin → rate limiter).
+				authenticatedAdmin(c, 'search approved answers');
+				const { q, limit } = c.req.valid('query');
+				const result = await deps.getService(c).searchAnswers(q, limit);
+				// No return annotation — the TypedResponse must reach the RPC
+				// client schema (leaderboard handler discipline).
 				return c.json(result, 200);
 			}
 		)

@@ -203,3 +203,54 @@ export function mapUniqueViolation(
 	if (err instanceof AppError) throw err;
 	throw new AppError(ERROR_CODES.INTERNAL, 'An unexpected error occurred', 500);
 }
+
+// ─── Phase-6 S3 — answer-search parameter rules (P6-2) ─────────────────────
+
+export const SEARCH_QUERY_MIN = 1;
+export const SEARCH_QUERY_MAX = 64;
+export const SEARCH_LIMIT_MIN = 1;
+export const SEARCH_LIMIT_MAX = 50;
+export const SEARCH_LIMIT_DEFAULT = 20;
+
+export type SearchParams = { q: string; limit: number };
+
+/** Normalize a search query the same way as answer words: trim + lowercase. */
+export function normalizeSearchQuery(raw: string): string {
+	return raw.trim().toLowerCase();
+}
+
+/**
+ * Escape LIKE metacharacters so user input matches LITERALLY: `\` → `\\`,
+ * `%` → `\%`, `_` → `\_` (PostgreSQL LIKE, ESCAPE '\'). Answer words are
+ * a–z only, so this is purely a correctness/safety guarantee for arbitrary
+ * query text — never a wildcard carrier.
+ */
+export function escapeLikePattern(value: string): string {
+	return value.replace(/[\\%_]/g, (ch) => `\\${ch}`);
+}
+
+/**
+ * Phase-6 S3 — bounded search params: trimmed lowercase q of 1..64 chars
+ * and an integer limit 1..50 (default 20). Throws 400 BAD_REQUEST outside
+ * those bounds. The SQL LIMIT below is the real bound — this helper mirrors
+ * the zod route schema at the service seam (defense in depth, P6-2/P6-13).
+ */
+export function validateSearchParams(q: string, limit?: number): SearchParams {
+	const normalized = normalizeSearchQuery(q);
+	if (normalized.length < SEARCH_QUERY_MIN || normalized.length > SEARCH_QUERY_MAX) {
+		throw new AppError(
+			ERROR_CODES.BAD_REQUEST,
+			'Search query must be 1–64 characters after trimming',
+			400
+		);
+	}
+	const bound = limit ?? SEARCH_LIMIT_DEFAULT;
+	if (!Number.isInteger(bound) || bound < SEARCH_LIMIT_MIN || bound > SEARCH_LIMIT_MAX) {
+		throw new AppError(
+			ERROR_CODES.BAD_REQUEST,
+			'Search limit must be an integer between 1 and 50',
+			400
+		);
+	}
+	return { q: normalized, limit: bound };
+}
