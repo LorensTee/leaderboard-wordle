@@ -235,7 +235,7 @@ Behaviors:
 
 - **Keyboard**: search input (standard); category tabs (existing Tabs keyboard model); grid: roving `tabindex` (one focusable per visible page), Arrow keys move within the visible window (Left/Right/Up/Down), Home/End jump, Enter/Space select (native button), "Show more" is a focusable button. Focus never lands on unmounted items.
 - **Screen reader**: container `role="group" aria-label="Choose an avatar"` (kept — e2e pin), per-button `aria-label="{label} avatar"` (kept — e2e pin), `aria-pressed` (kept), search input labeled, results count announced (`aria-live="polite"` status "12 results"), category tabs labeled.
-- **Responsive**: picker lives inside the existing onboarding/profile forms (not a modal on onboarding; profile already uses the form). Ensure the container scrolls internally (max-height + overflow-y-auto) at both breakpoints; grid `grid-cols-6 sm:grid-cols-8` kept (48px+ targets); no page-level horizontal overflow; category tabs wrap (horizontal scroll within the tabs row on mobile, not the page).
+- **Responsive**: picker lives inside the existing onboarding/profile forms (not a modal on onboarding; profile already uses the form). Ensure the container scrolls internally (max-height + overflow-y-auto) at both breakpoints; grid `grid-cols-6 sm:grid-cols-8` kept (48px+ targets); **no page-level horizontal overflow**. Category tabs may approach mobile: the shipped implementation lets the tabs row WRAP (`flex-wrap` on `TabsList`) — page-level horizontal overflow must never occur (there is no horizontal scroll of the tabs row; wrapping is the accepted behavior).
 - Existing a11y standards/tests preserved; only concrete improvements (arrow keys, live regions) are added.
 
 ### 4.5 Shared component design

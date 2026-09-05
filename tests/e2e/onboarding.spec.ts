@@ -158,7 +158,9 @@ test('7. avatar search is keyboard-accessible; production set is windowed (never
 	await addSessionCookie(context, cookie);
 	await page.goto('/onboarding');
 
-	const grid = page.getByRole('group', { name: 'Choose an avatar' });
+	// The picker group is labelled by the "Avatar" field label via
+	// aria-labelledby (the label id is NOT duplicated onto the picker root).
+	const grid = page.getByRole('group', { name: 'Avatar' });
 	// Phase-6 windowed rendering: exactly one 96-item page is mounted (96
 	// emoji buttons + the "Show more" control = 97) — the 3,944-entry
 	// production set never mounts thousands of buttons at once.

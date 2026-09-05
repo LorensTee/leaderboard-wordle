@@ -23,13 +23,18 @@
 	let {
 		value,
 		onselect,
-		id
+		labelledby
 	}: {
 		/** Currently selected emoji ('' = nothing selected). */
 		value: string;
 		onselect: (emoji: string) => void;
-		/** Optional id for the group label association. */
-		id?: string;
+		/**
+		 * id of an element that LABELS this picker (e.g. a form field label).
+		 * Wired via `aria-labelledby` on the picker root — the id is never
+		 * copied onto the picker's own DOM (no duplicate ids). Falls back to
+		 * the built-in `aria-label="Choose an avatar"` when omitted.
+		 */
+		labelledby?: string;
 	} = $props();
 
 	// ─── Recently used (localStorage; P6-8 enhancement) ──────────────────────
@@ -153,7 +158,7 @@
 			data-avatar-grid
 			role="group"
 			aria-label="Choose an avatar"
-			{id}
+			aria-labelledby={labelledby ?? undefined}
 		>
 			<div class="grid grid-cols-6 gap-2 sm:grid-cols-8">
 				{#each visible as avatar, i (avatar.emoji)}

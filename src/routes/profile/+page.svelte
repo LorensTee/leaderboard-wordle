@@ -161,7 +161,7 @@
 					<div class="flex flex-col gap-2">
 						<span class="text-sm font-medium" id="profile-avatar-label">Avatar</span>
 						<AvatarPicker
-							id="profile-avatar-label"
+							labelledby="profile-avatar-label"
 							value={field.state.value}
 							onselect={(emoji) => field.handleChange(emoji)}
 						/>

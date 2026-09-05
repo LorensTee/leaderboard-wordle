@@ -15,7 +15,7 @@ Authoritative plan: [`docs/phases/pre phase 6/pre-phase-6-plan.md`](./pre-phase-
 | S5 — secrecy/security verification | **DONE** | see §5 |
 | S6 — documentation + final gates | **DONE (this file)** | receipts in §6 |
 
-No schema change, no new dependency. All work remains **uncommitted in the working tree** (see §7; nothing has been committed for the pre-phase-6 work yet).
+No schema change, no new dependency. All pre-phase-6 work is **committed on `main`** (see §7 for the commit list; the working tree is clean apart from a pre-existing non-project file).
 
 ## 1. S1 — avatar data pipeline (done, verified)
 
@@ -29,9 +29,10 @@ No schema change, no new dependency. All work remains **uncommitted in the worki
 ## 2. S2 — avatar picker redesign (done, verified)
 
 - `src/lib/shared/lib/avatar-search.ts` (pure) — normalize/scoring (exact 0 / prefix 1 / substring 2 / -1), deterministic codepoint ordering, `entriesByGroup`, `pageEntries`, `AVATAR_PAGE_SIZE = 96`.
-- `src/lib/shared/ui/avatar-picker.svelte` (rewritten, props `{ value, onselect, id }` unchanged) — search input, category Tabs (9 Unicode groups), windowed grid 96/page + "Show more", flat search results with `aria-live` count, Recently Used (localStorage `avatar-recent`, cap 24), roving arrow-key nav, `data-avatar-grid`, internal scroll.
+- `src/lib/shared/ui/avatar-picker.svelte` (rewritten; props `{ value, onselect, labelledby? }` — `labelledby` wires the form label via `aria-labelledby`; the label id is never duplicated onto the picker root) — search input, category Tabs (9 Unicode groups), windowed grid 96/page + "Show more", flat search results with `aria-live` count, Recently Used (localStorage `avatar-recent`, cap 24), roving arrow-key nav, `data-avatar-grid`, internal scroll.
 - `tests/unit/avatar-search.test.ts` (8 tests); `tests/e2e/onboarding.spec.ts` / `profile.spec.ts` updated to search-first flows + windowed-count + keyboard pins.
 - Perf probe (S2, real browser): default category **97 buttons**, People & Body 97→193 after "Show more"; **total page buttons 109** (vs 3,944 mounted before); no page-level overflow at 390×844.
+- Visual review material: 32 screenshots covering every pre-phase-6 UI state (avatar picker on onboarding/profile, admin answer combobox) at 1440×900 + 390×844, light + dark, are captured in `.cache/ui-shots/prephase6/` (gitignored) with manifest + reproducer `.cache/capture-prephase6.ts`. **Pixel-level multimodal inspection is still outstanding** — see [`pre-phase-6-visual-review-handoff.md`](./pre-phase-6-visual-review-handoff.md) for the review chat's instructions.
 
 ## 3. S3 — admin answer search API (done, verified)
 
@@ -78,13 +79,20 @@ All commands run in this handoff's session against the non-production Neon DB (`
 
 CI-only (unchanged; run in CI with the advisory-lock mutex): `bun run test:integration` via vitest (needs `DATABASE_URL`) and the modal/e2e suites against fresh `main` — the S3/S4 assertions are already part of the e2e files that CI runs.
 
-## 7. Working-tree changes (uncommitted)
+## 7. Commits / repository state
 
-Modified: `package.json` (S1 script), `scripts/build-avatar-list.ts`, `src/lib/shared/config/avatar-emojis.generated.ts`, `src/lib/shared/ui/avatar-picker.svelte`, `src/server/data/avatar-emojis.ts`, `src/server/admin/validation.ts` (S3), `src/server/admin/service.ts` (S3), `src/server/admin/handlers.ts` (S3), `src/lib/shared/api/admin.ts` (S3), `src/routes/admin/puzzle-form.svelte` (S4), `tests/e2e/admin.spec.ts` (E-A8/E-A9), `tests/e2e/security.spec.ts` (S3 assertions), `tests/e2e/onboarding.spec.ts`, `tests/e2e/profile.spec.ts`, `tests/unit/avatar-list.test.ts`, `docs/contradictions-and-gaps.md` (C6-1…C6-10), this handoff, plus the plan + addendum files.
-New: `scripts/import-avatar-data.ts`, `src/lib/shared/lib/avatar-search.ts`, `src/server/data/emoji-test.source.txt`, `tests/unit/avatar-search.test.ts`, `tests/integration/admin-search.test.ts`, `src/routes/admin/answer-search.svelte`, `docs/phases/pre phase 6/` (plan, addendum, this handoff).
-Not ours: `.idea/material_theme_project_new.xml` (pre-existing modification).
+All pre-phase-6 work is committed on `main` (6 slices + this documentation; base = `775fa83` production data finalization):
 
-Probe artifacts (`.cache/probe-search.mjs`, `test-results/`) were temporary and are deleted.
+| Commit | Content |
+|---|---|
+| `8597398` | S1 — avatar data pipeline (group metadata + reproducible generator) |
+| `99a3361` | S2 — scalable avatar picker (search/tabs/windowing/a11y) |
+| `3d156e0` | S3 — admin answer search API |
+| `94c847a` | S4 — admin answer-search combobox UI |
+| `66c8c3b` | S5 — answer-search authorization e2e |
+| `c9bd92e` | S6/docs — plan, addendum, implementation handoff, decision log C6-1…C6-11, naming alignment |
+
+Working tree: **clean** apart from `.idea/material_theme_project_new.xml` (pre-existing modification, not ours — intentionally not committed). `.env`, `.dev.vars`, `.cache`, `test-results` are gitignored. Probe artifacts (`.cache/probe-search.mjs`, `test-results/`) are deleted.
 
 ## 8. Operations checklist (not code — deployment time)
 
