@@ -33,6 +33,8 @@ test('10. profile updates allowed fields — name change reflected in the header
 	// Current values load from the ['me'] query.
 	const input = page.getByLabel('Display name');
 	await expect(input).toHaveValue('old name');
+	// Phase-6 picker: the selected avatar is found via search (production set).
+	await page.getByLabel('Search emoji').fill('fox');
 	await expect(page.getByRole('button', { name: 'Fox avatar' })).toHaveAttribute(
 		'aria-pressed',
 		'true'
@@ -46,6 +48,7 @@ test('10. profile updates allowed fields — name change reflected in the header
 
 	// Avatar change; wait on SERVER truth (the first toast can outlive the
 	// second save, so toasts are not a completion signal).
+	await page.getByLabel('Search emoji').fill('panda');
 	await page.getByRole('button', { name: 'Panda avatar' }).click();
 	await save.click();
 	await expect
@@ -68,6 +71,7 @@ test('10. profile updates allowed fields — name change reflected in the header
 	// Reload: SSR + query agree — both edits survived.
 	await page.reload();
 	await expect(page.getByLabel('Display name')).toHaveValue('new handle');
+	await page.getByLabel('Search emoji').fill('panda');
 	await expect(page.getByRole('button', { name: 'Panda avatar' })).toHaveAttribute(
 		'aria-pressed',
 		'true'
