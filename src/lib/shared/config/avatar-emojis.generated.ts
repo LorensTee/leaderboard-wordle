@@ -4,15788 +4,19748 @@
 // Chosen set (pre-phase-6 production policy, documented in
 // docs/phases/pre-phase-6/production-data-finalization.md): every fully-qualified
 // Unicode Emoji 17.0 RGI sequence (3,944 entries), codepoint-sorted; labels are
-// the CLDR short names. Count + ordering are pinned by tests/unit/avatar-list.test.ts
-// and the CI `git diff --exit-code` step.
+// the CLDR short names; each entry carries its Unicode group (Phase-6 category
+// metadata for the picker). Count + ordering are pinned by
+// tests/unit/avatar-list.test.ts and the CI `git diff --exit-code` step.
 export type AvatarEmoji = {
 	emoji: string;
 	label: string;
+	/** Unicode group (UTS #51 `# group:` line) — client category metadata. */
+	group: string;
 };
+
+/** The 9 Unicode emoji groups, in the authoritative file order (deterministic). */
+export const AVATAR_GROUPS: readonly string[] = [
+	'Smileys & Emotion',
+	'People & Body',
+	'Animals & Nature',
+	'Food & Drink',
+	'Travel & Places',
+	'Activities',
+	'Objects',
+	'Symbols',
+	'Flags'
+] as const;
 
 export const AVATAR_EMOJIS: readonly AvatarEmoji[] = [
 	{
 		"emoji": "#️⃣",
-		"label": "Keycap: #"
+		"label": "Keycap: #",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "*️⃣",
-		"label": "Keycap: *"
+		"label": "Keycap: *",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "0️⃣",
-		"label": "Keycap: 0"
+		"label": "Keycap: 0",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "1️⃣",
-		"label": "Keycap: 1"
+		"label": "Keycap: 1",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "2️⃣",
-		"label": "Keycap: 2"
+		"label": "Keycap: 2",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "3️⃣",
-		"label": "Keycap: 3"
+		"label": "Keycap: 3",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "4️⃣",
-		"label": "Keycap: 4"
+		"label": "Keycap: 4",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "5️⃣",
-		"label": "Keycap: 5"
+		"label": "Keycap: 5",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "6️⃣",
-		"label": "Keycap: 6"
+		"label": "Keycap: 6",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "7️⃣",
-		"label": "Keycap: 7"
+		"label": "Keycap: 7",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "8️⃣",
-		"label": "Keycap: 8"
+		"label": "Keycap: 8",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "9️⃣",
-		"label": "Keycap: 9"
+		"label": "Keycap: 9",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "©️",
-		"label": "Copyright"
+		"label": "Copyright",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "®️",
-		"label": "Registered"
+		"label": "Registered",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "‼️",
-		"label": "Double exclamation mark"
+		"label": "Double exclamation mark",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⁉️",
-		"label": "Exclamation question mark"
+		"label": "Exclamation question mark",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "™️",
-		"label": "Trade mark"
+		"label": "Trade mark",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "ℹ️",
-		"label": "Information"
+		"label": "Information",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "↔️",
-		"label": "Left-right arrow"
+		"label": "Left-right arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "↕️",
-		"label": "Up-down arrow"
+		"label": "Up-down arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "↖️",
-		"label": "Up-left arrow"
+		"label": "Up-left arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "↗️",
-		"label": "Up-right arrow"
+		"label": "Up-right arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "↘️",
-		"label": "Down-right arrow"
+		"label": "Down-right arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "↙️",
-		"label": "Down-left arrow"
+		"label": "Down-left arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "↩️",
-		"label": "Right arrow curving left"
+		"label": "Right arrow curving left",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "↪️",
-		"label": "Left arrow curving right"
+		"label": "Left arrow curving right",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⌚",
-		"label": "Watch"
+		"label": "Watch",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⌛",
-		"label": "Hourglass done"
+		"label": "Hourglass done",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⌨️",
-		"label": "Keyboard"
+		"label": "Keyboard",
+		"group": "Objects"
 	},
 	{
 		"emoji": "⏏️",
-		"label": "Eject button"
+		"label": "Eject button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⏩",
-		"label": "Fast-forward button"
+		"label": "Fast-forward button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⏪",
-		"label": "Fast reverse button"
+		"label": "Fast reverse button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⏫",
-		"label": "Fast up button"
+		"label": "Fast up button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⏬",
-		"label": "Fast down button"
+		"label": "Fast down button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⏭️",
-		"label": "Next track button"
+		"label": "Next track button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⏮️",
-		"label": "Last track button"
+		"label": "Last track button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⏯️",
-		"label": "Play or pause button"
+		"label": "Play or pause button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⏰",
-		"label": "Alarm clock"
+		"label": "Alarm clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⏱️",
-		"label": "Stopwatch"
+		"label": "Stopwatch",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⏲️",
-		"label": "Timer clock"
+		"label": "Timer clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⏳",
-		"label": "Hourglass not done"
+		"label": "Hourglass not done",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⏸️",
-		"label": "Pause button"
+		"label": "Pause button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⏹️",
-		"label": "Stop button"
+		"label": "Stop button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⏺️",
-		"label": "Record button"
+		"label": "Record button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "Ⓜ️",
-		"label": "Circled M"
+		"label": "Circled M",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "▪️",
-		"label": "Black small square"
+		"label": "Black small square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "▫️",
-		"label": "White small square"
+		"label": "White small square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "▶️",
-		"label": "Play button"
+		"label": "Play button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "◀️",
-		"label": "Reverse button"
+		"label": "Reverse button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "◻️",
-		"label": "White medium square"
+		"label": "White medium square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "◼️",
-		"label": "Black medium square"
+		"label": "Black medium square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "◽",
-		"label": "White medium-small square"
+		"label": "White medium-small square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "◾",
-		"label": "Black medium-small square"
+		"label": "Black medium-small square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "☀️",
-		"label": "Sun"
+		"label": "Sun",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "☁️",
-		"label": "Cloud"
+		"label": "Cloud",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "☂️",
-		"label": "Umbrella"
+		"label": "Umbrella",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "☃️",
-		"label": "Snowman"
+		"label": "Snowman",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "☄️",
-		"label": "Comet"
+		"label": "Comet",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "☎️",
-		"label": "Telephone"
+		"label": "Telephone",
+		"group": "Objects"
 	},
 	{
 		"emoji": "☑️",
-		"label": "Check box with check"
+		"label": "Check box with check",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "☔",
-		"label": "Umbrella with rain drops"
+		"label": "Umbrella with rain drops",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "☕",
-		"label": "Hot beverage"
+		"label": "Hot beverage",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "☘️",
-		"label": "Shamrock"
+		"label": "Shamrock",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "☝️",
-		"label": "Index pointing up"
+		"label": "Index pointing up",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "☝🏻",
-		"label": "Index pointing up: light skin tone"
+		"label": "Index pointing up: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "☝🏼",
-		"label": "Index pointing up: medium-light skin tone"
+		"label": "Index pointing up: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "☝🏽",
-		"label": "Index pointing up: medium skin tone"
+		"label": "Index pointing up: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "☝🏾",
-		"label": "Index pointing up: medium-dark skin tone"
+		"label": "Index pointing up: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "☝🏿",
-		"label": "Index pointing up: dark skin tone"
+		"label": "Index pointing up: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "☠️",
-		"label": "Skull and crossbones"
+		"label": "Skull and crossbones",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "☢️",
-		"label": "Radioactive"
+		"label": "Radioactive",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "☣️",
-		"label": "Biohazard"
+		"label": "Biohazard",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "☦️",
-		"label": "Orthodox cross"
+		"label": "Orthodox cross",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "☪️",
-		"label": "Star and crescent"
+		"label": "Star and crescent",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "☮️",
-		"label": "Peace symbol"
+		"label": "Peace symbol",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "☯️",
-		"label": "Yin yang"
+		"label": "Yin yang",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "☸️",
-		"label": "Wheel of dharma"
+		"label": "Wheel of dharma",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "☹️",
-		"label": "Frowning face"
+		"label": "Frowning face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "☺️",
-		"label": "Smiling face"
+		"label": "Smiling face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "♀️",
-		"label": "Female sign"
+		"label": "Female sign",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♂️",
-		"label": "Male sign"
+		"label": "Male sign",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♈",
-		"label": "Aries"
+		"label": "Aries",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♉",
-		"label": "Taurus"
+		"label": "Taurus",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♊",
-		"label": "Gemini"
+		"label": "Gemini",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♋",
-		"label": "Cancer"
+		"label": "Cancer",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♌",
-		"label": "Leo"
+		"label": "Leo",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♍",
-		"label": "Virgo"
+		"label": "Virgo",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♎",
-		"label": "Libra"
+		"label": "Libra",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♏",
-		"label": "Scorpio"
+		"label": "Scorpio",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♐",
-		"label": "Sagittarius"
+		"label": "Sagittarius",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♑",
-		"label": "Capricorn"
+		"label": "Capricorn",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♒",
-		"label": "Aquarius"
+		"label": "Aquarius",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♓",
-		"label": "Pisces"
+		"label": "Pisces",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♟️",
-		"label": "Chess pawn"
+		"label": "Chess pawn",
+		"group": "Activities"
 	},
 	{
 		"emoji": "♠️",
-		"label": "Spade suit"
+		"label": "Spade suit",
+		"group": "Activities"
 	},
 	{
 		"emoji": "♣️",
-		"label": "Club suit"
+		"label": "Club suit",
+		"group": "Activities"
 	},
 	{
 		"emoji": "♥️",
-		"label": "Heart suit"
+		"label": "Heart suit",
+		"group": "Activities"
 	},
 	{
 		"emoji": "♦️",
-		"label": "Diamond suit"
+		"label": "Diamond suit",
+		"group": "Activities"
 	},
 	{
 		"emoji": "♨️",
-		"label": "Hot springs"
+		"label": "Hot springs",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "♻️",
-		"label": "Recycling symbol"
+		"label": "Recycling symbol",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♾️",
-		"label": "Infinity"
+		"label": "Infinity",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "♿",
-		"label": "Wheelchair symbol"
+		"label": "Wheelchair symbol",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⚒️",
-		"label": "Hammer and pick"
+		"label": "Hammer and pick",
+		"group": "Objects"
 	},
 	{
 		"emoji": "⚓",
-		"label": "Anchor"
+		"label": "Anchor",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⚔️",
-		"label": "Crossed swords"
+		"label": "Crossed swords",
+		"group": "Objects"
 	},
 	{
 		"emoji": "⚕️",
-		"label": "Medical symbol"
+		"label": "Medical symbol",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⚖️",
-		"label": "Balance scale"
+		"label": "Balance scale",
+		"group": "Objects"
 	},
 	{
 		"emoji": "⚗️",
-		"label": "Alembic"
+		"label": "Alembic",
+		"group": "Objects"
 	},
 	{
 		"emoji": "⚙️",
-		"label": "Gear"
+		"label": "Gear",
+		"group": "Objects"
 	},
 	{
 		"emoji": "⚛️",
-		"label": "Atom symbol"
+		"label": "Atom symbol",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⚜️",
-		"label": "Fleur-de-lis"
+		"label": "Fleur-de-lis",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⚠️",
-		"label": "Warning"
+		"label": "Warning",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⚡",
-		"label": "High voltage"
+		"label": "High voltage",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⚧️",
-		"label": "Transgender symbol"
+		"label": "Transgender symbol",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⚪",
-		"label": "White circle"
+		"label": "White circle",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⚫",
-		"label": "Black circle"
+		"label": "Black circle",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⚰️",
-		"label": "Coffin"
+		"label": "Coffin",
+		"group": "Objects"
 	},
 	{
 		"emoji": "⚱️",
-		"label": "Funeral urn"
+		"label": "Funeral urn",
+		"group": "Objects"
 	},
 	{
 		"emoji": "⚽",
-		"label": "Soccer ball"
+		"label": "Soccer ball",
+		"group": "Activities"
 	},
 	{
 		"emoji": "⚾",
-		"label": "Baseball"
+		"label": "Baseball",
+		"group": "Activities"
 	},
 	{
 		"emoji": "⛄",
-		"label": "Snowman without snow"
+		"label": "Snowman without snow",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⛅",
-		"label": "Sun behind cloud"
+		"label": "Sun behind cloud",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⛈️",
-		"label": "Cloud with lightning and rain"
+		"label": "Cloud with lightning and rain",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⛎",
-		"label": "Ophiuchus"
+		"label": "Ophiuchus",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⛏️",
-		"label": "Pick"
+		"label": "Pick",
+		"group": "Objects"
 	},
 	{
 		"emoji": "⛑️",
-		"label": "Rescue worker’s helmet"
+		"label": "Rescue worker’s helmet",
+		"group": "Objects"
 	},
 	{
 		"emoji": "⛓️",
-		"label": "Chains"
+		"label": "Chains",
+		"group": "Objects"
 	},
 	{
 		"emoji": "⛓️‍💥",
-		"label": "Broken chain"
+		"label": "Broken chain",
+		"group": "Objects"
 	},
 	{
 		"emoji": "⛔",
-		"label": "No entry"
+		"label": "No entry",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⛩️",
-		"label": "Shinto shrine"
+		"label": "Shinto shrine",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⛪",
-		"label": "Church"
+		"label": "Church",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⛰️",
-		"label": "Mountain"
+		"label": "Mountain",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⛱️",
-		"label": "Umbrella on ground"
+		"label": "Umbrella on ground",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⛲",
-		"label": "Fountain"
+		"label": "Fountain",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⛳",
-		"label": "Flag in hole"
+		"label": "Flag in hole",
+		"group": "Activities"
 	},
 	{
 		"emoji": "⛴️",
-		"label": "Ferry"
+		"label": "Ferry",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⛵",
-		"label": "Sailboat"
+		"label": "Sailboat",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⛷️",
-		"label": "Skier"
+		"label": "Skier",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛸️",
-		"label": "Ice skate"
+		"label": "Ice skate",
+		"group": "Activities"
 	},
 	{
 		"emoji": "⛹️",
-		"label": "Person bouncing ball"
+		"label": "Person bouncing ball",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹️‍♀️",
-		"label": "Woman bouncing ball"
+		"label": "Woman bouncing ball",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹️‍♂️",
-		"label": "Man bouncing ball"
+		"label": "Man bouncing ball",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏻",
-		"label": "Person bouncing ball: light skin tone"
+		"label": "Person bouncing ball: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏻‍♀️",
-		"label": "Woman bouncing ball: light skin tone"
+		"label": "Woman bouncing ball: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏻‍♂️",
-		"label": "Man bouncing ball: light skin tone"
+		"label": "Man bouncing ball: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏼",
-		"label": "Person bouncing ball: medium-light skin tone"
+		"label": "Person bouncing ball: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏼‍♀️",
-		"label": "Woman bouncing ball: medium-light skin tone"
+		"label": "Woman bouncing ball: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏼‍♂️",
-		"label": "Man bouncing ball: medium-light skin tone"
+		"label": "Man bouncing ball: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏽",
-		"label": "Person bouncing ball: medium skin tone"
+		"label": "Person bouncing ball: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏽‍♀️",
-		"label": "Woman bouncing ball: medium skin tone"
+		"label": "Woman bouncing ball: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏽‍♂️",
-		"label": "Man bouncing ball: medium skin tone"
+		"label": "Man bouncing ball: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏾",
-		"label": "Person bouncing ball: medium-dark skin tone"
+		"label": "Person bouncing ball: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏾‍♀️",
-		"label": "Woman bouncing ball: medium-dark skin tone"
+		"label": "Woman bouncing ball: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏾‍♂️",
-		"label": "Man bouncing ball: medium-dark skin tone"
+		"label": "Man bouncing ball: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏿",
-		"label": "Person bouncing ball: dark skin tone"
+		"label": "Person bouncing ball: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏿‍♀️",
-		"label": "Woman bouncing ball: dark skin tone"
+		"label": "Woman bouncing ball: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛹🏿‍♂️",
-		"label": "Man bouncing ball: dark skin tone"
+		"label": "Man bouncing ball: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "⛺",
-		"label": "Tent"
+		"label": "Tent",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⛽",
-		"label": "Fuel pump"
+		"label": "Fuel pump",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "✂️",
-		"label": "Scissors"
+		"label": "Scissors",
+		"group": "Objects"
 	},
 	{
 		"emoji": "✅",
-		"label": "Check mark button"
+		"label": "Check mark button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "✈️",
-		"label": "Airplane"
+		"label": "Airplane",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "✉️",
-		"label": "Envelope"
+		"label": "Envelope",
+		"group": "Objects"
 	},
 	{
 		"emoji": "✊",
-		"label": "Raised fist"
+		"label": "Raised fist",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✊🏻",
-		"label": "Raised fist: light skin tone"
+		"label": "Raised fist: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✊🏼",
-		"label": "Raised fist: medium-light skin tone"
+		"label": "Raised fist: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✊🏽",
-		"label": "Raised fist: medium skin tone"
+		"label": "Raised fist: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✊🏾",
-		"label": "Raised fist: medium-dark skin tone"
+		"label": "Raised fist: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✊🏿",
-		"label": "Raised fist: dark skin tone"
+		"label": "Raised fist: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✋",
-		"label": "Raised hand"
+		"label": "Raised hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✋🏻",
-		"label": "Raised hand: light skin tone"
+		"label": "Raised hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✋🏼",
-		"label": "Raised hand: medium-light skin tone"
+		"label": "Raised hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✋🏽",
-		"label": "Raised hand: medium skin tone"
+		"label": "Raised hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✋🏾",
-		"label": "Raised hand: medium-dark skin tone"
+		"label": "Raised hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✋🏿",
-		"label": "Raised hand: dark skin tone"
+		"label": "Raised hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✌️",
-		"label": "Victory hand"
+		"label": "Victory hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✌🏻",
-		"label": "Victory hand: light skin tone"
+		"label": "Victory hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✌🏼",
-		"label": "Victory hand: medium-light skin tone"
+		"label": "Victory hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✌🏽",
-		"label": "Victory hand: medium skin tone"
+		"label": "Victory hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✌🏾",
-		"label": "Victory hand: medium-dark skin tone"
+		"label": "Victory hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✌🏿",
-		"label": "Victory hand: dark skin tone"
+		"label": "Victory hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✍️",
-		"label": "Writing hand"
+		"label": "Writing hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✍🏻",
-		"label": "Writing hand: light skin tone"
+		"label": "Writing hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✍🏼",
-		"label": "Writing hand: medium-light skin tone"
+		"label": "Writing hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✍🏽",
-		"label": "Writing hand: medium skin tone"
+		"label": "Writing hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✍🏾",
-		"label": "Writing hand: medium-dark skin tone"
+		"label": "Writing hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✍🏿",
-		"label": "Writing hand: dark skin tone"
+		"label": "Writing hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "✏️",
-		"label": "Pencil"
+		"label": "Pencil",
+		"group": "Objects"
 	},
 	{
 		"emoji": "✒️",
-		"label": "Black nib"
+		"label": "Black nib",
+		"group": "Objects"
 	},
 	{
 		"emoji": "✔️",
-		"label": "Check mark"
+		"label": "Check mark",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "✖️",
-		"label": "Multiply"
+		"label": "Multiply",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "✝️",
-		"label": "Latin cross"
+		"label": "Latin cross",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "✡️",
-		"label": "Star of David"
+		"label": "Star of David",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "✨",
-		"label": "Sparkles"
+		"label": "Sparkles",
+		"group": "Activities"
 	},
 	{
 		"emoji": "✳️",
-		"label": "Eight-spoked asterisk"
+		"label": "Eight-spoked asterisk",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "✴️",
-		"label": "Eight-pointed star"
+		"label": "Eight-pointed star",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "❄️",
-		"label": "Snowflake"
+		"label": "Snowflake",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "❇️",
-		"label": "Sparkle"
+		"label": "Sparkle",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "❌",
-		"label": "Cross mark"
+		"label": "Cross mark",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "❎",
-		"label": "Cross mark button"
+		"label": "Cross mark button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "❓",
-		"label": "Red question mark"
+		"label": "Red question mark",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "❔",
-		"label": "White question mark"
+		"label": "White question mark",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "❕",
-		"label": "White exclamation mark"
+		"label": "White exclamation mark",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "❗",
-		"label": "Red exclamation mark"
+		"label": "Red exclamation mark",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "❣️",
-		"label": "Heart exclamation"
+		"label": "Heart exclamation",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "❤️",
-		"label": "Red heart"
+		"label": "Red heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "❤️‍🔥",
-		"label": "Heart on fire"
+		"label": "Heart on fire",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "❤️‍🩹",
-		"label": "Mending heart"
+		"label": "Mending heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "➕",
-		"label": "Plus"
+		"label": "Plus",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "➖",
-		"label": "Minus"
+		"label": "Minus",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "➗",
-		"label": "Divide"
+		"label": "Divide",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "➡️",
-		"label": "Right arrow"
+		"label": "Right arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "➰",
-		"label": "Curly loop"
+		"label": "Curly loop",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "➿",
-		"label": "Double curly loop"
+		"label": "Double curly loop",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⤴️",
-		"label": "Right arrow curving up"
+		"label": "Right arrow curving up",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⤵️",
-		"label": "Right arrow curving down"
+		"label": "Right arrow curving down",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⬅️",
-		"label": "Left arrow"
+		"label": "Left arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⬆️",
-		"label": "Up arrow"
+		"label": "Up arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⬇️",
-		"label": "Down arrow"
+		"label": "Down arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⬛",
-		"label": "Black large square"
+		"label": "Black large square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⬜",
-		"label": "White large square"
+		"label": "White large square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "⭐",
-		"label": "Star"
+		"label": "Star",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "⭕",
-		"label": "Hollow red circle"
+		"label": "Hollow red circle",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "〰️",
-		"label": "Wavy dash"
+		"label": "Wavy dash",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "〽️",
-		"label": "Part alternation mark"
+		"label": "Part alternation mark",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "㊗️",
-		"label": "Japanese “congratulations” button"
+		"label": "Japanese “congratulations” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "㊙️",
-		"label": "Japanese “secret” button"
+		"label": "Japanese “secret” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🀄",
-		"label": "Mahjong red dragon"
+		"label": "Mahjong red dragon",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🃏",
-		"label": "Joker"
+		"label": "Joker",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🅰️",
-		"label": "A button (blood type)"
+		"label": "A button (blood type)",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🅱️",
-		"label": "B button (blood type)"
+		"label": "B button (blood type)",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🅾️",
-		"label": "O button (blood type)"
+		"label": "O button (blood type)",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🅿️",
-		"label": "P button"
+		"label": "P button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🆎",
-		"label": "AB button (blood type)"
+		"label": "AB button (blood type)",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🆑",
-		"label": "CL button"
+		"label": "CL button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🆒",
-		"label": "COOL button"
+		"label": "COOL button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🆓",
-		"label": "FREE button"
+		"label": "FREE button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🆔",
-		"label": "ID button"
+		"label": "ID button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🆕",
-		"label": "NEW button"
+		"label": "NEW button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🆖",
-		"label": "NG button"
+		"label": "NG button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🆗",
-		"label": "OK button"
+		"label": "OK button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🆘",
-		"label": "SOS button"
+		"label": "SOS button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🆙",
-		"label": "UP! button"
+		"label": "UP! button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🆚",
-		"label": "VS button"
+		"label": "VS button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🇦🇨",
-		"label": "Flag: Ascension Island"
+		"label": "Flag: Ascension Island",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇩",
-		"label": "Flag: Andorra"
+		"label": "Flag: Andorra",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇪",
-		"label": "Flag: United Arab Emirates"
+		"label": "Flag: United Arab Emirates",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇫",
-		"label": "Flag: Afghanistan"
+		"label": "Flag: Afghanistan",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇬",
-		"label": "Flag: Antigua & Barbuda"
+		"label": "Flag: Antigua & Barbuda",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇮",
-		"label": "Flag: Anguilla"
+		"label": "Flag: Anguilla",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇱",
-		"label": "Flag: Albania"
+		"label": "Flag: Albania",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇲",
-		"label": "Flag: Armenia"
+		"label": "Flag: Armenia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇴",
-		"label": "Flag: Angola"
+		"label": "Flag: Angola",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇶",
-		"label": "Flag: Antarctica"
+		"label": "Flag: Antarctica",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇷",
-		"label": "Flag: Argentina"
+		"label": "Flag: Argentina",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇸",
-		"label": "Flag: American Samoa"
+		"label": "Flag: American Samoa",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇹",
-		"label": "Flag: Austria"
+		"label": "Flag: Austria",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇺",
-		"label": "Flag: Australia"
+		"label": "Flag: Australia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇼",
-		"label": "Flag: Aruba"
+		"label": "Flag: Aruba",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇽",
-		"label": "Flag: Åland Islands"
+		"label": "Flag: Åland Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇦🇿",
-		"label": "Flag: Azerbaijan"
+		"label": "Flag: Azerbaijan",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇦",
-		"label": "Flag: Bosnia & Herzegovina"
+		"label": "Flag: Bosnia & Herzegovina",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇧",
-		"label": "Flag: Barbados"
+		"label": "Flag: Barbados",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇩",
-		"label": "Flag: Bangladesh"
+		"label": "Flag: Bangladesh",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇪",
-		"label": "Flag: Belgium"
+		"label": "Flag: Belgium",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇫",
-		"label": "Flag: Burkina Faso"
+		"label": "Flag: Burkina Faso",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇬",
-		"label": "Flag: Bulgaria"
+		"label": "Flag: Bulgaria",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇭",
-		"label": "Flag: Bahrain"
+		"label": "Flag: Bahrain",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇮",
-		"label": "Flag: Burundi"
+		"label": "Flag: Burundi",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇯",
-		"label": "Flag: Benin"
+		"label": "Flag: Benin",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇱",
-		"label": "Flag: St. Barthélemy"
+		"label": "Flag: St. Barthélemy",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇲",
-		"label": "Flag: Bermuda"
+		"label": "Flag: Bermuda",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇳",
-		"label": "Flag: Brunei"
+		"label": "Flag: Brunei",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇴",
-		"label": "Flag: Bolivia"
+		"label": "Flag: Bolivia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇶",
-		"label": "Flag: Caribbean Netherlands"
+		"label": "Flag: Caribbean Netherlands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇷",
-		"label": "Flag: Brazil"
+		"label": "Flag: Brazil",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇸",
-		"label": "Flag: Bahamas"
+		"label": "Flag: Bahamas",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇹",
-		"label": "Flag: Bhutan"
+		"label": "Flag: Bhutan",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇻",
-		"label": "Flag: Bouvet Island"
+		"label": "Flag: Bouvet Island",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇼",
-		"label": "Flag: Botswana"
+		"label": "Flag: Botswana",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇾",
-		"label": "Flag: Belarus"
+		"label": "Flag: Belarus",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇧🇿",
-		"label": "Flag: Belize"
+		"label": "Flag: Belize",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇦",
-		"label": "Flag: Canada"
+		"label": "Flag: Canada",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇨",
-		"label": "Flag: Cocos (Keeling) Islands"
+		"label": "Flag: Cocos (Keeling) Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇩",
-		"label": "Flag: Congo - Kinshasa"
+		"label": "Flag: Congo - Kinshasa",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇫",
-		"label": "Flag: Central African Republic"
+		"label": "Flag: Central African Republic",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇬",
-		"label": "Flag: Congo - Brazzaville"
+		"label": "Flag: Congo - Brazzaville",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇭",
-		"label": "Flag: Switzerland"
+		"label": "Flag: Switzerland",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇮",
-		"label": "Flag: Côte d’Ivoire"
+		"label": "Flag: Côte d’Ivoire",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇰",
-		"label": "Flag: Cook Islands"
+		"label": "Flag: Cook Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇱",
-		"label": "Flag: Chile"
+		"label": "Flag: Chile",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇲",
-		"label": "Flag: Cameroon"
+		"label": "Flag: Cameroon",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇳",
-		"label": "Flag: China"
+		"label": "Flag: China",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇴",
-		"label": "Flag: Colombia"
+		"label": "Flag: Colombia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇵",
-		"label": "Flag: Clipperton Island"
+		"label": "Flag: Clipperton Island",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇶",
-		"label": "Flag: Sark"
+		"label": "Flag: Sark",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇷",
-		"label": "Flag: Costa Rica"
+		"label": "Flag: Costa Rica",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇺",
-		"label": "Flag: Cuba"
+		"label": "Flag: Cuba",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇻",
-		"label": "Flag: Cape Verde"
+		"label": "Flag: Cape Verde",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇼",
-		"label": "Flag: Curaçao"
+		"label": "Flag: Curaçao",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇽",
-		"label": "Flag: Christmas Island"
+		"label": "Flag: Christmas Island",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇾",
-		"label": "Flag: Cyprus"
+		"label": "Flag: Cyprus",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇨🇿",
-		"label": "Flag: Czechia"
+		"label": "Flag: Czechia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇩🇪",
-		"label": "Flag: Germany"
+		"label": "Flag: Germany",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇩🇬",
-		"label": "Flag: Diego Garcia"
+		"label": "Flag: Diego Garcia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇩🇯",
-		"label": "Flag: Djibouti"
+		"label": "Flag: Djibouti",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇩🇰",
-		"label": "Flag: Denmark"
+		"label": "Flag: Denmark",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇩🇲",
-		"label": "Flag: Dominica"
+		"label": "Flag: Dominica",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇩🇴",
-		"label": "Flag: Dominican Republic"
+		"label": "Flag: Dominican Republic",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇩🇿",
-		"label": "Flag: Algeria"
+		"label": "Flag: Algeria",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇪🇦",
-		"label": "Flag: Ceuta & Melilla"
+		"label": "Flag: Ceuta & Melilla",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇪🇨",
-		"label": "Flag: Ecuador"
+		"label": "Flag: Ecuador",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇪🇪",
-		"label": "Flag: Estonia"
+		"label": "Flag: Estonia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇪🇬",
-		"label": "Flag: Egypt"
+		"label": "Flag: Egypt",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇪🇭",
-		"label": "Flag: Western Sahara"
+		"label": "Flag: Western Sahara",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇪🇷",
-		"label": "Flag: Eritrea"
+		"label": "Flag: Eritrea",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇪🇸",
-		"label": "Flag: Spain"
+		"label": "Flag: Spain",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇪🇹",
-		"label": "Flag: Ethiopia"
+		"label": "Flag: Ethiopia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇪🇺",
-		"label": "Flag: European Union"
+		"label": "Flag: European Union",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇫🇮",
-		"label": "Flag: Finland"
+		"label": "Flag: Finland",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇫🇯",
-		"label": "Flag: Fiji"
+		"label": "Flag: Fiji",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇫🇰",
-		"label": "Flag: Falkland Islands"
+		"label": "Flag: Falkland Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇫🇲",
-		"label": "Flag: Micronesia"
+		"label": "Flag: Micronesia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇫🇴",
-		"label": "Flag: Faroe Islands"
+		"label": "Flag: Faroe Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇫🇷",
-		"label": "Flag: France"
+		"label": "Flag: France",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇦",
-		"label": "Flag: Gabon"
+		"label": "Flag: Gabon",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇧",
-		"label": "Flag: United Kingdom"
+		"label": "Flag: United Kingdom",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇩",
-		"label": "Flag: Grenada"
+		"label": "Flag: Grenada",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇪",
-		"label": "Flag: Georgia"
+		"label": "Flag: Georgia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇫",
-		"label": "Flag: French Guiana"
+		"label": "Flag: French Guiana",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇬",
-		"label": "Flag: Guernsey"
+		"label": "Flag: Guernsey",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇭",
-		"label": "Flag: Ghana"
+		"label": "Flag: Ghana",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇮",
-		"label": "Flag: Gibraltar"
+		"label": "Flag: Gibraltar",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇱",
-		"label": "Flag: Greenland"
+		"label": "Flag: Greenland",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇲",
-		"label": "Flag: Gambia"
+		"label": "Flag: Gambia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇳",
-		"label": "Flag: Guinea"
+		"label": "Flag: Guinea",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇵",
-		"label": "Flag: Guadeloupe"
+		"label": "Flag: Guadeloupe",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇶",
-		"label": "Flag: Equatorial Guinea"
+		"label": "Flag: Equatorial Guinea",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇷",
-		"label": "Flag: Greece"
+		"label": "Flag: Greece",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇸",
-		"label": "Flag: South Georgia & South Sandwich Islands"
+		"label": "Flag: South Georgia & South Sandwich Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇹",
-		"label": "Flag: Guatemala"
+		"label": "Flag: Guatemala",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇺",
-		"label": "Flag: Guam"
+		"label": "Flag: Guam",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇼",
-		"label": "Flag: Guinea-Bissau"
+		"label": "Flag: Guinea-Bissau",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇬🇾",
-		"label": "Flag: Guyana"
+		"label": "Flag: Guyana",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇭🇰",
-		"label": "Flag: Hong Kong SAR China"
+		"label": "Flag: Hong Kong SAR China",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇭🇲",
-		"label": "Flag: Heard & McDonald Islands"
+		"label": "Flag: Heard & McDonald Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇭🇳",
-		"label": "Flag: Honduras"
+		"label": "Flag: Honduras",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇭🇷",
-		"label": "Flag: Croatia"
+		"label": "Flag: Croatia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇭🇹",
-		"label": "Flag: Haiti"
+		"label": "Flag: Haiti",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇭🇺",
-		"label": "Flag: Hungary"
+		"label": "Flag: Hungary",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇮🇨",
-		"label": "Flag: Canary Islands"
+		"label": "Flag: Canary Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇮🇩",
-		"label": "Flag: Indonesia"
+		"label": "Flag: Indonesia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇮🇪",
-		"label": "Flag: Ireland"
+		"label": "Flag: Ireland",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇮🇱",
-		"label": "Flag: Israel"
+		"label": "Flag: Israel",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇮🇲",
-		"label": "Flag: Isle of Man"
+		"label": "Flag: Isle of Man",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇮🇳",
-		"label": "Flag: India"
+		"label": "Flag: India",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇮🇴",
-		"label": "Flag: British Indian Ocean Territory"
+		"label": "Flag: British Indian Ocean Territory",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇮🇶",
-		"label": "Flag: Iraq"
+		"label": "Flag: Iraq",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇮🇷",
-		"label": "Flag: Iran"
+		"label": "Flag: Iran",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇮🇸",
-		"label": "Flag: Iceland"
+		"label": "Flag: Iceland",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇮🇹",
-		"label": "Flag: Italy"
+		"label": "Flag: Italy",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇯🇪",
-		"label": "Flag: Jersey"
+		"label": "Flag: Jersey",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇯🇲",
-		"label": "Flag: Jamaica"
+		"label": "Flag: Jamaica",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇯🇴",
-		"label": "Flag: Jordan"
+		"label": "Flag: Jordan",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇯🇵",
-		"label": "Flag: Japan"
+		"label": "Flag: Japan",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇰🇪",
-		"label": "Flag: Kenya"
+		"label": "Flag: Kenya",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇰🇬",
-		"label": "Flag: Kyrgyzstan"
+		"label": "Flag: Kyrgyzstan",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇰🇭",
-		"label": "Flag: Cambodia"
+		"label": "Flag: Cambodia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇰🇮",
-		"label": "Flag: Kiribati"
+		"label": "Flag: Kiribati",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇰🇲",
-		"label": "Flag: Comoros"
+		"label": "Flag: Comoros",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇰🇳",
-		"label": "Flag: St. Kitts & Nevis"
+		"label": "Flag: St. Kitts & Nevis",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇰🇵",
-		"label": "Flag: North Korea"
+		"label": "Flag: North Korea",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇰🇷",
-		"label": "Flag: South Korea"
+		"label": "Flag: South Korea",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇰🇼",
-		"label": "Flag: Kuwait"
+		"label": "Flag: Kuwait",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇰🇾",
-		"label": "Flag: Cayman Islands"
+		"label": "Flag: Cayman Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇰🇿",
-		"label": "Flag: Kazakhstan"
+		"label": "Flag: Kazakhstan",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇱🇦",
-		"label": "Flag: Laos"
+		"label": "Flag: Laos",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇱🇧",
-		"label": "Flag: Lebanon"
+		"label": "Flag: Lebanon",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇱🇨",
-		"label": "Flag: St. Lucia"
+		"label": "Flag: St. Lucia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇱🇮",
-		"label": "Flag: Liechtenstein"
+		"label": "Flag: Liechtenstein",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇱🇰",
-		"label": "Flag: Sri Lanka"
+		"label": "Flag: Sri Lanka",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇱🇷",
-		"label": "Flag: Liberia"
+		"label": "Flag: Liberia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇱🇸",
-		"label": "Flag: Lesotho"
+		"label": "Flag: Lesotho",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇱🇹",
-		"label": "Flag: Lithuania"
+		"label": "Flag: Lithuania",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇱🇺",
-		"label": "Flag: Luxembourg"
+		"label": "Flag: Luxembourg",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇱🇻",
-		"label": "Flag: Latvia"
+		"label": "Flag: Latvia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇱🇾",
-		"label": "Flag: Libya"
+		"label": "Flag: Libya",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇦",
-		"label": "Flag: Morocco"
+		"label": "Flag: Morocco",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇨",
-		"label": "Flag: Monaco"
+		"label": "Flag: Monaco",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇩",
-		"label": "Flag: Moldova"
+		"label": "Flag: Moldova",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇪",
-		"label": "Flag: Montenegro"
+		"label": "Flag: Montenegro",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇫",
-		"label": "Flag: St. Martin"
+		"label": "Flag: St. Martin",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇬",
-		"label": "Flag: Madagascar"
+		"label": "Flag: Madagascar",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇭",
-		"label": "Flag: Marshall Islands"
+		"label": "Flag: Marshall Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇰",
-		"label": "Flag: North Macedonia"
+		"label": "Flag: North Macedonia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇱",
-		"label": "Flag: Mali"
+		"label": "Flag: Mali",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇲",
-		"label": "Flag: Myanmar (Burma)"
+		"label": "Flag: Myanmar (Burma)",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇳",
-		"label": "Flag: Mongolia"
+		"label": "Flag: Mongolia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇴",
-		"label": "Flag: Macao SAR China"
+		"label": "Flag: Macao SAR China",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇵",
-		"label": "Flag: Northern Mariana Islands"
+		"label": "Flag: Northern Mariana Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇶",
-		"label": "Flag: Martinique"
+		"label": "Flag: Martinique",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇷",
-		"label": "Flag: Mauritania"
+		"label": "Flag: Mauritania",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇸",
-		"label": "Flag: Montserrat"
+		"label": "Flag: Montserrat",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇹",
-		"label": "Flag: Malta"
+		"label": "Flag: Malta",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇺",
-		"label": "Flag: Mauritius"
+		"label": "Flag: Mauritius",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇻",
-		"label": "Flag: Maldives"
+		"label": "Flag: Maldives",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇼",
-		"label": "Flag: Malawi"
+		"label": "Flag: Malawi",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇽",
-		"label": "Flag: Mexico"
+		"label": "Flag: Mexico",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇾",
-		"label": "Flag: Malaysia"
+		"label": "Flag: Malaysia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇲🇿",
-		"label": "Flag: Mozambique"
+		"label": "Flag: Mozambique",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇳🇦",
-		"label": "Flag: Namibia"
+		"label": "Flag: Namibia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇳🇨",
-		"label": "Flag: New Caledonia"
+		"label": "Flag: New Caledonia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇳🇪",
-		"label": "Flag: Niger"
+		"label": "Flag: Niger",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇳🇫",
-		"label": "Flag: Norfolk Island"
+		"label": "Flag: Norfolk Island",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇳🇬",
-		"label": "Flag: Nigeria"
+		"label": "Flag: Nigeria",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇳🇮",
-		"label": "Flag: Nicaragua"
+		"label": "Flag: Nicaragua",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇳🇱",
-		"label": "Flag: Netherlands"
+		"label": "Flag: Netherlands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇳🇴",
-		"label": "Flag: Norway"
+		"label": "Flag: Norway",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇳🇵",
-		"label": "Flag: Nepal"
+		"label": "Flag: Nepal",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇳🇷",
-		"label": "Flag: Nauru"
+		"label": "Flag: Nauru",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇳🇺",
-		"label": "Flag: Niue"
+		"label": "Flag: Niue",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇳🇿",
-		"label": "Flag: New Zealand"
+		"label": "Flag: New Zealand",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇴🇲",
-		"label": "Flag: Oman"
+		"label": "Flag: Oman",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇵🇦",
-		"label": "Flag: Panama"
+		"label": "Flag: Panama",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇵🇪",
-		"label": "Flag: Peru"
+		"label": "Flag: Peru",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇵🇫",
-		"label": "Flag: French Polynesia"
+		"label": "Flag: French Polynesia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇵🇬",
-		"label": "Flag: Papua New Guinea"
+		"label": "Flag: Papua New Guinea",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇵🇭",
-		"label": "Flag: Philippines"
+		"label": "Flag: Philippines",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇵🇰",
-		"label": "Flag: Pakistan"
+		"label": "Flag: Pakistan",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇵🇱",
-		"label": "Flag: Poland"
+		"label": "Flag: Poland",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇵🇲",
-		"label": "Flag: St. Pierre & Miquelon"
+		"label": "Flag: St. Pierre & Miquelon",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇵🇳",
-		"label": "Flag: Pitcairn Islands"
+		"label": "Flag: Pitcairn Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇵🇷",
-		"label": "Flag: Puerto Rico"
+		"label": "Flag: Puerto Rico",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇵🇸",
-		"label": "Flag: Palestinian Territories"
+		"label": "Flag: Palestinian Territories",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇵🇹",
-		"label": "Flag: Portugal"
+		"label": "Flag: Portugal",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇵🇼",
-		"label": "Flag: Palau"
+		"label": "Flag: Palau",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇵🇾",
-		"label": "Flag: Paraguay"
+		"label": "Flag: Paraguay",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇶🇦",
-		"label": "Flag: Qatar"
+		"label": "Flag: Qatar",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇷🇪",
-		"label": "Flag: Réunion"
+		"label": "Flag: Réunion",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇷🇴",
-		"label": "Flag: Romania"
+		"label": "Flag: Romania",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇷🇸",
-		"label": "Flag: Serbia"
+		"label": "Flag: Serbia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇷🇺",
-		"label": "Flag: Russia"
+		"label": "Flag: Russia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇷🇼",
-		"label": "Flag: Rwanda"
+		"label": "Flag: Rwanda",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇦",
-		"label": "Flag: Saudi Arabia"
+		"label": "Flag: Saudi Arabia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇧",
-		"label": "Flag: Solomon Islands"
+		"label": "Flag: Solomon Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇨",
-		"label": "Flag: Seychelles"
+		"label": "Flag: Seychelles",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇩",
-		"label": "Flag: Sudan"
+		"label": "Flag: Sudan",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇪",
-		"label": "Flag: Sweden"
+		"label": "Flag: Sweden",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇬",
-		"label": "Flag: Singapore"
+		"label": "Flag: Singapore",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇭",
-		"label": "Flag: St. Helena"
+		"label": "Flag: St. Helena",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇮",
-		"label": "Flag: Slovenia"
+		"label": "Flag: Slovenia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇯",
-		"label": "Flag: Svalbard & Jan Mayen"
+		"label": "Flag: Svalbard & Jan Mayen",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇰",
-		"label": "Flag: Slovakia"
+		"label": "Flag: Slovakia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇱",
-		"label": "Flag: Sierra Leone"
+		"label": "Flag: Sierra Leone",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇲",
-		"label": "Flag: San Marino"
+		"label": "Flag: San Marino",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇳",
-		"label": "Flag: Senegal"
+		"label": "Flag: Senegal",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇴",
-		"label": "Flag: Somalia"
+		"label": "Flag: Somalia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇷",
-		"label": "Flag: Suriname"
+		"label": "Flag: Suriname",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇸",
-		"label": "Flag: South Sudan"
+		"label": "Flag: South Sudan",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇹",
-		"label": "Flag: São Tomé & Príncipe"
+		"label": "Flag: São Tomé & Príncipe",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇻",
-		"label": "Flag: El Salvador"
+		"label": "Flag: El Salvador",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇽",
-		"label": "Flag: Sint Maarten"
+		"label": "Flag: Sint Maarten",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇾",
-		"label": "Flag: Syria"
+		"label": "Flag: Syria",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇸🇿",
-		"label": "Flag: Eswatini"
+		"label": "Flag: Eswatini",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇦",
-		"label": "Flag: Tristan da Cunha"
+		"label": "Flag: Tristan da Cunha",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇨",
-		"label": "Flag: Turks & Caicos Islands"
+		"label": "Flag: Turks & Caicos Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇩",
-		"label": "Flag: Chad"
+		"label": "Flag: Chad",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇫",
-		"label": "Flag: French Southern Territories"
+		"label": "Flag: French Southern Territories",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇬",
-		"label": "Flag: Togo"
+		"label": "Flag: Togo",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇭",
-		"label": "Flag: Thailand"
+		"label": "Flag: Thailand",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇯",
-		"label": "Flag: Tajikistan"
+		"label": "Flag: Tajikistan",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇰",
-		"label": "Flag: Tokelau"
+		"label": "Flag: Tokelau",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇱",
-		"label": "Flag: Timor-Leste"
+		"label": "Flag: Timor-Leste",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇲",
-		"label": "Flag: Turkmenistan"
+		"label": "Flag: Turkmenistan",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇳",
-		"label": "Flag: Tunisia"
+		"label": "Flag: Tunisia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇴",
-		"label": "Flag: Tonga"
+		"label": "Flag: Tonga",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇷",
-		"label": "Flag: Türkiye"
+		"label": "Flag: Türkiye",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇹",
-		"label": "Flag: Trinidad & Tobago"
+		"label": "Flag: Trinidad & Tobago",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇻",
-		"label": "Flag: Tuvalu"
+		"label": "Flag: Tuvalu",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇼",
-		"label": "Flag: Taiwan"
+		"label": "Flag: Taiwan",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇹🇿",
-		"label": "Flag: Tanzania"
+		"label": "Flag: Tanzania",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇺🇦",
-		"label": "Flag: Ukraine"
+		"label": "Flag: Ukraine",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇺🇬",
-		"label": "Flag: Uganda"
+		"label": "Flag: Uganda",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇺🇲",
-		"label": "Flag: U.S. Outlying Islands"
+		"label": "Flag: U.S. Outlying Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇺🇳",
-		"label": "Flag: United Nations"
+		"label": "Flag: United Nations",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇺🇸",
-		"label": "Flag: United States"
+		"label": "Flag: United States",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇺🇾",
-		"label": "Flag: Uruguay"
+		"label": "Flag: Uruguay",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇺🇿",
-		"label": "Flag: Uzbekistan"
+		"label": "Flag: Uzbekistan",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇻🇦",
-		"label": "Flag: Vatican City"
+		"label": "Flag: Vatican City",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇻🇨",
-		"label": "Flag: St. Vincent & Grenadines"
+		"label": "Flag: St. Vincent & Grenadines",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇻🇪",
-		"label": "Flag: Venezuela"
+		"label": "Flag: Venezuela",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇻🇬",
-		"label": "Flag: British Virgin Islands"
+		"label": "Flag: British Virgin Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇻🇮",
-		"label": "Flag: U.S. Virgin Islands"
+		"label": "Flag: U.S. Virgin Islands",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇻🇳",
-		"label": "Flag: Vietnam"
+		"label": "Flag: Vietnam",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇻🇺",
-		"label": "Flag: Vanuatu"
+		"label": "Flag: Vanuatu",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇼🇫",
-		"label": "Flag: Wallis & Futuna"
+		"label": "Flag: Wallis & Futuna",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇼🇸",
-		"label": "Flag: Samoa"
+		"label": "Flag: Samoa",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇽🇰",
-		"label": "Flag: Kosovo"
+		"label": "Flag: Kosovo",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇾🇪",
-		"label": "Flag: Yemen"
+		"label": "Flag: Yemen",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇾🇹",
-		"label": "Flag: Mayotte"
+		"label": "Flag: Mayotte",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇿🇦",
-		"label": "Flag: South Africa"
+		"label": "Flag: South Africa",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇿🇲",
-		"label": "Flag: Zambia"
+		"label": "Flag: Zambia",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🇿🇼",
-		"label": "Flag: Zimbabwe"
+		"label": "Flag: Zimbabwe",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🈁",
-		"label": "Japanese “here” button"
+		"label": "Japanese “here” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🈂️",
-		"label": "Japanese “service charge” button"
+		"label": "Japanese “service charge” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🈚",
-		"label": "Japanese “free of charge” button"
+		"label": "Japanese “free of charge” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🈯",
-		"label": "Japanese “reserved” button"
+		"label": "Japanese “reserved” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🈲",
-		"label": "Japanese “prohibited” button"
+		"label": "Japanese “prohibited” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🈳",
-		"label": "Japanese “vacancy” button"
+		"label": "Japanese “vacancy” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🈴",
-		"label": "Japanese “passing grade” button"
+		"label": "Japanese “passing grade” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🈵",
-		"label": "Japanese “no vacancy” button"
+		"label": "Japanese “no vacancy” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🈶",
-		"label": "Japanese “not free of charge” button"
+		"label": "Japanese “not free of charge” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🈷️",
-		"label": "Japanese “monthly amount” button"
+		"label": "Japanese “monthly amount” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🈸",
-		"label": "Japanese “application” button"
+		"label": "Japanese “application” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🈹",
-		"label": "Japanese “discount” button"
+		"label": "Japanese “discount” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🈺",
-		"label": "Japanese “open for business” button"
+		"label": "Japanese “open for business” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🉐",
-		"label": "Japanese “bargain” button"
+		"label": "Japanese “bargain” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🉑",
-		"label": "Japanese “acceptable” button"
+		"label": "Japanese “acceptable” button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🌀",
-		"label": "Cyclone"
+		"label": "Cyclone",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌁",
-		"label": "Foggy"
+		"label": "Foggy",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌂",
-		"label": "Closed umbrella"
+		"label": "Closed umbrella",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌃",
-		"label": "Night with stars"
+		"label": "Night with stars",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌄",
-		"label": "Sunrise over mountains"
+		"label": "Sunrise over mountains",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌅",
-		"label": "Sunrise"
+		"label": "Sunrise",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌆",
-		"label": "Cityscape at dusk"
+		"label": "Cityscape at dusk",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌇",
-		"label": "Sunset"
+		"label": "Sunset",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌈",
-		"label": "Rainbow"
+		"label": "Rainbow",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌉",
-		"label": "Bridge at night"
+		"label": "Bridge at night",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌊",
-		"label": "Water wave"
+		"label": "Water wave",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌋",
-		"label": "Volcano"
+		"label": "Volcano",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌌",
-		"label": "Milky way"
+		"label": "Milky way",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌍",
-		"label": "Globe showing Europe-Africa"
+		"label": "Globe showing Europe-Africa",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌎",
-		"label": "Globe showing Americas"
+		"label": "Globe showing Americas",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌏",
-		"label": "Globe showing Asia-Australia"
+		"label": "Globe showing Asia-Australia",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌐",
-		"label": "Globe with meridians"
+		"label": "Globe with meridians",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌑",
-		"label": "New moon"
+		"label": "New moon",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌒",
-		"label": "Waxing crescent moon"
+		"label": "Waxing crescent moon",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌓",
-		"label": "First quarter moon"
+		"label": "First quarter moon",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌔",
-		"label": "Waxing gibbous moon"
+		"label": "Waxing gibbous moon",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌕",
-		"label": "Full moon"
+		"label": "Full moon",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌖",
-		"label": "Waning gibbous moon"
+		"label": "Waning gibbous moon",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌗",
-		"label": "Last quarter moon"
+		"label": "Last quarter moon",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌘",
-		"label": "Waning crescent moon"
+		"label": "Waning crescent moon",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌙",
-		"label": "Crescent moon"
+		"label": "Crescent moon",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌚",
-		"label": "New moon face"
+		"label": "New moon face",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌛",
-		"label": "First quarter moon face"
+		"label": "First quarter moon face",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌜",
-		"label": "Last quarter moon face"
+		"label": "Last quarter moon face",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌝",
-		"label": "Full moon face"
+		"label": "Full moon face",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌞",
-		"label": "Sun with face"
+		"label": "Sun with face",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌟",
-		"label": "Glowing star"
+		"label": "Glowing star",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌠",
-		"label": "Shooting star"
+		"label": "Shooting star",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌡️",
-		"label": "Thermometer"
+		"label": "Thermometer",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌤️",
-		"label": "Sun behind small cloud"
+		"label": "Sun behind small cloud",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌥️",
-		"label": "Sun behind large cloud"
+		"label": "Sun behind large cloud",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌦️",
-		"label": "Sun behind rain cloud"
+		"label": "Sun behind rain cloud",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌧️",
-		"label": "Cloud with rain"
+		"label": "Cloud with rain",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌨️",
-		"label": "Cloud with snow"
+		"label": "Cloud with snow",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌩️",
-		"label": "Cloud with lightning"
+		"label": "Cloud with lightning",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌪️",
-		"label": "Tornado"
+		"label": "Tornado",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌫️",
-		"label": "Fog"
+		"label": "Fog",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌬️",
-		"label": "Wind face"
+		"label": "Wind face",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🌭",
-		"label": "Hot dog"
+		"label": "Hot dog",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🌮",
-		"label": "Taco"
+		"label": "Taco",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🌯",
-		"label": "Burrito"
+		"label": "Burrito",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🌰",
-		"label": "Chestnut"
+		"label": "Chestnut",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🌱",
-		"label": "Seedling"
+		"label": "Seedling",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🌲",
-		"label": "Evergreen tree"
+		"label": "Evergreen tree",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🌳",
-		"label": "Deciduous tree"
+		"label": "Deciduous tree",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🌴",
-		"label": "Palm tree"
+		"label": "Palm tree",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🌵",
-		"label": "Cactus"
+		"label": "Cactus",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🌶️",
-		"label": "Hot pepper"
+		"label": "Hot pepper",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🌷",
-		"label": "Tulip"
+		"label": "Tulip",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🌸",
-		"label": "Cherry blossom"
+		"label": "Cherry blossom",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🌹",
-		"label": "Rose"
+		"label": "Rose",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🌺",
-		"label": "Hibiscus"
+		"label": "Hibiscus",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🌻",
-		"label": "Sunflower"
+		"label": "Sunflower",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🌼",
-		"label": "Blossom"
+		"label": "Blossom",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🌽",
-		"label": "Ear of corn"
+		"label": "Ear of corn",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🌾",
-		"label": "Sheaf of rice"
+		"label": "Sheaf of rice",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🌿",
-		"label": "Herb"
+		"label": "Herb",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🍀",
-		"label": "Four leaf clover"
+		"label": "Four leaf clover",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🍁",
-		"label": "Maple leaf"
+		"label": "Maple leaf",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🍂",
-		"label": "Fallen leaf"
+		"label": "Fallen leaf",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🍃",
-		"label": "Leaf fluttering in wind"
+		"label": "Leaf fluttering in wind",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🍄",
-		"label": "Mushroom"
+		"label": "Mushroom",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🍄‍🟫",
-		"label": "Brown mushroom"
+		"label": "Brown mushroom",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍅",
-		"label": "Tomato"
+		"label": "Tomato",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍆",
-		"label": "Eggplant"
+		"label": "Eggplant",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍇",
-		"label": "Grapes"
+		"label": "Grapes",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍈",
-		"label": "Melon"
+		"label": "Melon",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍉",
-		"label": "Watermelon"
+		"label": "Watermelon",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍊",
-		"label": "Tangerine"
+		"label": "Tangerine",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍋",
-		"label": "Lemon"
+		"label": "Lemon",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍋‍🟩",
-		"label": "Lime"
+		"label": "Lime",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍌",
-		"label": "Banana"
+		"label": "Banana",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍍",
-		"label": "Pineapple"
+		"label": "Pineapple",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍎",
-		"label": "Red apple"
+		"label": "Red apple",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍏",
-		"label": "Green apple"
+		"label": "Green apple",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍐",
-		"label": "Pear"
+		"label": "Pear",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍑",
-		"label": "Peach"
+		"label": "Peach",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍒",
-		"label": "Cherries"
+		"label": "Cherries",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍓",
-		"label": "Strawberry"
+		"label": "Strawberry",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍔",
-		"label": "Hamburger"
+		"label": "Hamburger",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍕",
-		"label": "Pizza"
+		"label": "Pizza",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍖",
-		"label": "Meat on bone"
+		"label": "Meat on bone",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍗",
-		"label": "Poultry leg"
+		"label": "Poultry leg",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍘",
-		"label": "Rice cracker"
+		"label": "Rice cracker",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍙",
-		"label": "Rice ball"
+		"label": "Rice ball",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍚",
-		"label": "Cooked rice"
+		"label": "Cooked rice",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍛",
-		"label": "Curry rice"
+		"label": "Curry rice",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍜",
-		"label": "Steaming bowl"
+		"label": "Steaming bowl",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍝",
-		"label": "Spaghetti"
+		"label": "Spaghetti",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍞",
-		"label": "Bread"
+		"label": "Bread",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍟",
-		"label": "French fries"
+		"label": "French fries",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍠",
-		"label": "Roasted sweet potato"
+		"label": "Roasted sweet potato",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍡",
-		"label": "Dango"
+		"label": "Dango",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍢",
-		"label": "Oden"
+		"label": "Oden",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍣",
-		"label": "Sushi"
+		"label": "Sushi",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍤",
-		"label": "Fried shrimp"
+		"label": "Fried shrimp",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍥",
-		"label": "Fish cake with swirl"
+		"label": "Fish cake with swirl",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍦",
-		"label": "Soft ice cream"
+		"label": "Soft ice cream",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍧",
-		"label": "Shaved ice"
+		"label": "Shaved ice",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍨",
-		"label": "Ice cream"
+		"label": "Ice cream",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍩",
-		"label": "Doughnut"
+		"label": "Doughnut",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍪",
-		"label": "Cookie"
+		"label": "Cookie",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍫",
-		"label": "Chocolate bar"
+		"label": "Chocolate bar",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍬",
-		"label": "Candy"
+		"label": "Candy",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍭",
-		"label": "Lollipop"
+		"label": "Lollipop",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍮",
-		"label": "Custard"
+		"label": "Custard",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍯",
-		"label": "Honey pot"
+		"label": "Honey pot",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍰",
-		"label": "Shortcake"
+		"label": "Shortcake",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍱",
-		"label": "Bento box"
+		"label": "Bento box",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍲",
-		"label": "Pot of food"
+		"label": "Pot of food",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍳",
-		"label": "Cooking"
+		"label": "Cooking",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍴",
-		"label": "Fork and knife"
+		"label": "Fork and knife",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍵",
-		"label": "Teacup without handle"
+		"label": "Teacup without handle",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍶",
-		"label": "Sake"
+		"label": "Sake",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍷",
-		"label": "Wine glass"
+		"label": "Wine glass",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍸",
-		"label": "Cocktail glass"
+		"label": "Cocktail glass",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍹",
-		"label": "Tropical drink"
+		"label": "Tropical drink",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍺",
-		"label": "Beer mug"
+		"label": "Beer mug",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍻",
-		"label": "Clinking beer mugs"
+		"label": "Clinking beer mugs",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍼",
-		"label": "Baby bottle"
+		"label": "Baby bottle",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍽️",
-		"label": "Fork and knife with plate"
+		"label": "Fork and knife with plate",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍾",
-		"label": "Bottle with popping cork"
+		"label": "Bottle with popping cork",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🍿",
-		"label": "Popcorn"
+		"label": "Popcorn",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🎀",
-		"label": "Ribbon"
+		"label": "Ribbon",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎁",
-		"label": "Wrapped gift"
+		"label": "Wrapped gift",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎂",
-		"label": "Birthday cake"
+		"label": "Birthday cake",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🎃",
-		"label": "Jack-o-lantern"
+		"label": "Jack-o-lantern",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎄",
-		"label": "Christmas tree"
+		"label": "Christmas tree",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎅",
-		"label": "Santa Claus"
+		"label": "Santa Claus",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🎅🏻",
-		"label": "Santa Claus: light skin tone"
+		"label": "Santa Claus: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🎅🏼",
-		"label": "Santa Claus: medium-light skin tone"
+		"label": "Santa Claus: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🎅🏽",
-		"label": "Santa Claus: medium skin tone"
+		"label": "Santa Claus: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🎅🏾",
-		"label": "Santa Claus: medium-dark skin tone"
+		"label": "Santa Claus: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🎅🏿",
-		"label": "Santa Claus: dark skin tone"
+		"label": "Santa Claus: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🎆",
-		"label": "Fireworks"
+		"label": "Fireworks",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎇",
-		"label": "Sparkler"
+		"label": "Sparkler",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎈",
-		"label": "Balloon"
+		"label": "Balloon",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎉",
-		"label": "Party popper"
+		"label": "Party popper",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎊",
-		"label": "Confetti ball"
+		"label": "Confetti ball",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎋",
-		"label": "Tanabata tree"
+		"label": "Tanabata tree",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎌",
-		"label": "Crossed flags"
+		"label": "Crossed flags",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🎍",
-		"label": "Pine decoration"
+		"label": "Pine decoration",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎎",
-		"label": "Japanese dolls"
+		"label": "Japanese dolls",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎏",
-		"label": "Carp streamer"
+		"label": "Carp streamer",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎐",
-		"label": "Wind chime"
+		"label": "Wind chime",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎑",
-		"label": "Moon viewing ceremony"
+		"label": "Moon viewing ceremony",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎒",
-		"label": "Backpack"
+		"label": "Backpack",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎓",
-		"label": "Graduation cap"
+		"label": "Graduation cap",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎖️",
-		"label": "Military medal"
+		"label": "Military medal",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎗️",
-		"label": "Reminder ribbon"
+		"label": "Reminder ribbon",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎙️",
-		"label": "Studio microphone"
+		"label": "Studio microphone",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎚️",
-		"label": "Level slider"
+		"label": "Level slider",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎛️",
-		"label": "Control knobs"
+		"label": "Control knobs",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎞️",
-		"label": "Film frames"
+		"label": "Film frames",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎟️",
-		"label": "Admission tickets"
+		"label": "Admission tickets",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎠",
-		"label": "Carousel horse"
+		"label": "Carousel horse",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🎡",
-		"label": "Ferris wheel"
+		"label": "Ferris wheel",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🎢",
-		"label": "Roller coaster"
+		"label": "Roller coaster",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🎣",
-		"label": "Fishing pole"
+		"label": "Fishing pole",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎤",
-		"label": "Microphone"
+		"label": "Microphone",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎥",
-		"label": "Movie camera"
+		"label": "Movie camera",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎦",
-		"label": "Cinema"
+		"label": "Cinema",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🎧",
-		"label": "Headphone"
+		"label": "Headphone",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎨",
-		"label": "Artist palette"
+		"label": "Artist palette",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎩",
-		"label": "Top hat"
+		"label": "Top hat",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎪",
-		"label": "Circus tent"
+		"label": "Circus tent",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🎫",
-		"label": "Ticket"
+		"label": "Ticket",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎬",
-		"label": "Clapper board"
+		"label": "Clapper board",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎭",
-		"label": "Performing arts"
+		"label": "Performing arts",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎮",
-		"label": "Video game"
+		"label": "Video game",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎯",
-		"label": "Bullseye"
+		"label": "Bullseye",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎰",
-		"label": "Slot machine"
+		"label": "Slot machine",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎱",
-		"label": "Pool 8 ball"
+		"label": "Pool 8 ball",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎲",
-		"label": "Game die"
+		"label": "Game die",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎳",
-		"label": "Bowling"
+		"label": "Bowling",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎴",
-		"label": "Flower playing cards"
+		"label": "Flower playing cards",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎵",
-		"label": "Musical note"
+		"label": "Musical note",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎶",
-		"label": "Musical notes"
+		"label": "Musical notes",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎷",
-		"label": "Saxophone"
+		"label": "Saxophone",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎸",
-		"label": "Guitar"
+		"label": "Guitar",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎹",
-		"label": "Musical keyboard"
+		"label": "Musical keyboard",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎺",
-		"label": "Trumpet"
+		"label": "Trumpet",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎻",
-		"label": "Violin"
+		"label": "Violin",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎼",
-		"label": "Musical score"
+		"label": "Musical score",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🎽",
-		"label": "Running shirt"
+		"label": "Running shirt",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎾",
-		"label": "Tennis"
+		"label": "Tennis",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🎿",
-		"label": "Skis"
+		"label": "Skis",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🏀",
-		"label": "Basketball"
+		"label": "Basketball",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🏁",
-		"label": "Chequered flag"
+		"label": "Chequered flag",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🏂",
-		"label": "Snowboarder"
+		"label": "Snowboarder",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏂🏻",
-		"label": "Snowboarder: light skin tone"
+		"label": "Snowboarder: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏂🏼",
-		"label": "Snowboarder: medium-light skin tone"
+		"label": "Snowboarder: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏂🏽",
-		"label": "Snowboarder: medium skin tone"
+		"label": "Snowboarder: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏂🏾",
-		"label": "Snowboarder: medium-dark skin tone"
+		"label": "Snowboarder: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏂🏿",
-		"label": "Snowboarder: dark skin tone"
+		"label": "Snowboarder: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃",
-		"label": "Person running"
+		"label": "Person running",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃‍♀️",
-		"label": "Woman running"
+		"label": "Woman running",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃‍♀️‍➡️",
-		"label": "Woman running facing right"
+		"label": "Woman running facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃‍♂️",
-		"label": "Man running"
+		"label": "Man running",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃‍♂️‍➡️",
-		"label": "Man running facing right"
+		"label": "Man running facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃‍➡️",
-		"label": "Person running facing right"
+		"label": "Person running facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏻",
-		"label": "Person running: light skin tone"
+		"label": "Person running: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏻‍♀️",
-		"label": "Woman running: light skin tone"
+		"label": "Woman running: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏻‍♀️‍➡️",
-		"label": "Woman running facing right: light skin tone"
+		"label": "Woman running facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏻‍♂️",
-		"label": "Man running: light skin tone"
+		"label": "Man running: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏻‍♂️‍➡️",
-		"label": "Man running facing right: light skin tone"
+		"label": "Man running facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏻‍➡️",
-		"label": "Person running facing right: light skin tone"
+		"label": "Person running facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏼",
-		"label": "Person running: medium-light skin tone"
+		"label": "Person running: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏼‍♀️",
-		"label": "Woman running: medium-light skin tone"
+		"label": "Woman running: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏼‍♀️‍➡️",
-		"label": "Woman running facing right: medium-light skin tone"
+		"label": "Woman running facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏼‍♂️",
-		"label": "Man running: medium-light skin tone"
+		"label": "Man running: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏼‍♂️‍➡️",
-		"label": "Man running facing right: medium-light skin tone"
+		"label": "Man running facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏼‍➡️",
-		"label": "Person running facing right: medium-light skin tone"
+		"label": "Person running facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏽",
-		"label": "Person running: medium skin tone"
+		"label": "Person running: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏽‍♀️",
-		"label": "Woman running: medium skin tone"
+		"label": "Woman running: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏽‍♀️‍➡️",
-		"label": "Woman running facing right: medium skin tone"
+		"label": "Woman running facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏽‍♂️",
-		"label": "Man running: medium skin tone"
+		"label": "Man running: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏽‍♂️‍➡️",
-		"label": "Man running facing right: medium skin tone"
+		"label": "Man running facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏽‍➡️",
-		"label": "Person running facing right: medium skin tone"
+		"label": "Person running facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏾",
-		"label": "Person running: medium-dark skin tone"
+		"label": "Person running: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏾‍♀️",
-		"label": "Woman running: medium-dark skin tone"
+		"label": "Woman running: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏾‍♀️‍➡️",
-		"label": "Woman running facing right: medium-dark skin tone"
+		"label": "Woman running facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏾‍♂️",
-		"label": "Man running: medium-dark skin tone"
+		"label": "Man running: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏾‍♂️‍➡️",
-		"label": "Man running facing right: medium-dark skin tone"
+		"label": "Man running facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏾‍➡️",
-		"label": "Person running facing right: medium-dark skin tone"
+		"label": "Person running facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏿",
-		"label": "Person running: dark skin tone"
+		"label": "Person running: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏿‍♀️",
-		"label": "Woman running: dark skin tone"
+		"label": "Woman running: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏿‍♀️‍➡️",
-		"label": "Woman running facing right: dark skin tone"
+		"label": "Woman running facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏿‍♂️",
-		"label": "Man running: dark skin tone"
+		"label": "Man running: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏿‍♂️‍➡️",
-		"label": "Man running facing right: dark skin tone"
+		"label": "Man running facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏃🏿‍➡️",
-		"label": "Person running facing right: dark skin tone"
+		"label": "Person running facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄",
-		"label": "Person surfing"
+		"label": "Person surfing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄‍♀️",
-		"label": "Woman surfing"
+		"label": "Woman surfing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄‍♂️",
-		"label": "Man surfing"
+		"label": "Man surfing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏻",
-		"label": "Person surfing: light skin tone"
+		"label": "Person surfing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏻‍♀️",
-		"label": "Woman surfing: light skin tone"
+		"label": "Woman surfing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏻‍♂️",
-		"label": "Man surfing: light skin tone"
+		"label": "Man surfing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏼",
-		"label": "Person surfing: medium-light skin tone"
+		"label": "Person surfing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏼‍♀️",
-		"label": "Woman surfing: medium-light skin tone"
+		"label": "Woman surfing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏼‍♂️",
-		"label": "Man surfing: medium-light skin tone"
+		"label": "Man surfing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏽",
-		"label": "Person surfing: medium skin tone"
+		"label": "Person surfing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏽‍♀️",
-		"label": "Woman surfing: medium skin tone"
+		"label": "Woman surfing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏽‍♂️",
-		"label": "Man surfing: medium skin tone"
+		"label": "Man surfing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏾",
-		"label": "Person surfing: medium-dark skin tone"
+		"label": "Person surfing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏾‍♀️",
-		"label": "Woman surfing: medium-dark skin tone"
+		"label": "Woman surfing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏾‍♂️",
-		"label": "Man surfing: medium-dark skin tone"
+		"label": "Man surfing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏿",
-		"label": "Person surfing: dark skin tone"
+		"label": "Person surfing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏿‍♀️",
-		"label": "Woman surfing: dark skin tone"
+		"label": "Woman surfing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏄🏿‍♂️",
-		"label": "Man surfing: dark skin tone"
+		"label": "Man surfing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏅",
-		"label": "Sports medal"
+		"label": "Sports medal",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🏆",
-		"label": "Trophy"
+		"label": "Trophy",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🏇",
-		"label": "Horse racing"
+		"label": "Horse racing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏇🏻",
-		"label": "Horse racing: light skin tone"
+		"label": "Horse racing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏇🏼",
-		"label": "Horse racing: medium-light skin tone"
+		"label": "Horse racing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏇🏽",
-		"label": "Horse racing: medium skin tone"
+		"label": "Horse racing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏇🏾",
-		"label": "Horse racing: medium-dark skin tone"
+		"label": "Horse racing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏇🏿",
-		"label": "Horse racing: dark skin tone"
+		"label": "Horse racing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏈",
-		"label": "American football"
+		"label": "American football",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🏉",
-		"label": "Rugby football"
+		"label": "Rugby football",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🏊",
-		"label": "Person swimming"
+		"label": "Person swimming",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊‍♀️",
-		"label": "Woman swimming"
+		"label": "Woman swimming",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊‍♂️",
-		"label": "Man swimming"
+		"label": "Man swimming",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏻",
-		"label": "Person swimming: light skin tone"
+		"label": "Person swimming: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏻‍♀️",
-		"label": "Woman swimming: light skin tone"
+		"label": "Woman swimming: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏻‍♂️",
-		"label": "Man swimming: light skin tone"
+		"label": "Man swimming: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏼",
-		"label": "Person swimming: medium-light skin tone"
+		"label": "Person swimming: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏼‍♀️",
-		"label": "Woman swimming: medium-light skin tone"
+		"label": "Woman swimming: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏼‍♂️",
-		"label": "Man swimming: medium-light skin tone"
+		"label": "Man swimming: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏽",
-		"label": "Person swimming: medium skin tone"
+		"label": "Person swimming: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏽‍♀️",
-		"label": "Woman swimming: medium skin tone"
+		"label": "Woman swimming: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏽‍♂️",
-		"label": "Man swimming: medium skin tone"
+		"label": "Man swimming: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏾",
-		"label": "Person swimming: medium-dark skin tone"
+		"label": "Person swimming: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏾‍♀️",
-		"label": "Woman swimming: medium-dark skin tone"
+		"label": "Woman swimming: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏾‍♂️",
-		"label": "Man swimming: medium-dark skin tone"
+		"label": "Man swimming: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏿",
-		"label": "Person swimming: dark skin tone"
+		"label": "Person swimming: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏿‍♀️",
-		"label": "Woman swimming: dark skin tone"
+		"label": "Woman swimming: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏊🏿‍♂️",
-		"label": "Man swimming: dark skin tone"
+		"label": "Man swimming: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋️",
-		"label": "Person lifting weights"
+		"label": "Person lifting weights",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋️‍♀️",
-		"label": "Woman lifting weights"
+		"label": "Woman lifting weights",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋️‍♂️",
-		"label": "Man lifting weights"
+		"label": "Man lifting weights",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏻",
-		"label": "Person lifting weights: light skin tone"
+		"label": "Person lifting weights: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏻‍♀️",
-		"label": "Woman lifting weights: light skin tone"
+		"label": "Woman lifting weights: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏻‍♂️",
-		"label": "Man lifting weights: light skin tone"
+		"label": "Man lifting weights: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏼",
-		"label": "Person lifting weights: medium-light skin tone"
+		"label": "Person lifting weights: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏼‍♀️",
-		"label": "Woman lifting weights: medium-light skin tone"
+		"label": "Woman lifting weights: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏼‍♂️",
-		"label": "Man lifting weights: medium-light skin tone"
+		"label": "Man lifting weights: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏽",
-		"label": "Person lifting weights: medium skin tone"
+		"label": "Person lifting weights: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏽‍♀️",
-		"label": "Woman lifting weights: medium skin tone"
+		"label": "Woman lifting weights: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏽‍♂️",
-		"label": "Man lifting weights: medium skin tone"
+		"label": "Man lifting weights: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏾",
-		"label": "Person lifting weights: medium-dark skin tone"
+		"label": "Person lifting weights: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏾‍♀️",
-		"label": "Woman lifting weights: medium-dark skin tone"
+		"label": "Woman lifting weights: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏾‍♂️",
-		"label": "Man lifting weights: medium-dark skin tone"
+		"label": "Man lifting weights: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏿",
-		"label": "Person lifting weights: dark skin tone"
+		"label": "Person lifting weights: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏿‍♀️",
-		"label": "Woman lifting weights: dark skin tone"
+		"label": "Woman lifting weights: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏋🏿‍♂️",
-		"label": "Man lifting weights: dark skin tone"
+		"label": "Man lifting weights: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌️",
-		"label": "Person golfing"
+		"label": "Person golfing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌️‍♀️",
-		"label": "Woman golfing"
+		"label": "Woman golfing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌️‍♂️",
-		"label": "Man golfing"
+		"label": "Man golfing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏻",
-		"label": "Person golfing: light skin tone"
+		"label": "Person golfing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏻‍♀️",
-		"label": "Woman golfing: light skin tone"
+		"label": "Woman golfing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏻‍♂️",
-		"label": "Man golfing: light skin tone"
+		"label": "Man golfing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏼",
-		"label": "Person golfing: medium-light skin tone"
+		"label": "Person golfing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏼‍♀️",
-		"label": "Woman golfing: medium-light skin tone"
+		"label": "Woman golfing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏼‍♂️",
-		"label": "Man golfing: medium-light skin tone"
+		"label": "Man golfing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏽",
-		"label": "Person golfing: medium skin tone"
+		"label": "Person golfing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏽‍♀️",
-		"label": "Woman golfing: medium skin tone"
+		"label": "Woman golfing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏽‍♂️",
-		"label": "Man golfing: medium skin tone"
+		"label": "Man golfing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏾",
-		"label": "Person golfing: medium-dark skin tone"
+		"label": "Person golfing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏾‍♀️",
-		"label": "Woman golfing: medium-dark skin tone"
+		"label": "Woman golfing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏾‍♂️",
-		"label": "Man golfing: medium-dark skin tone"
+		"label": "Man golfing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏿",
-		"label": "Person golfing: dark skin tone"
+		"label": "Person golfing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏿‍♀️",
-		"label": "Woman golfing: dark skin tone"
+		"label": "Woman golfing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏌🏿‍♂️",
-		"label": "Man golfing: dark skin tone"
+		"label": "Man golfing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🏍️",
-		"label": "Motorcycle"
+		"label": "Motorcycle",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏎️",
-		"label": "Racing car"
+		"label": "Racing car",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏏",
-		"label": "Cricket game"
+		"label": "Cricket game",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🏐",
-		"label": "Volleyball"
+		"label": "Volleyball",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🏑",
-		"label": "Field hockey"
+		"label": "Field hockey",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🏒",
-		"label": "Ice hockey"
+		"label": "Ice hockey",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🏓",
-		"label": "Ping pong"
+		"label": "Ping pong",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🏔️",
-		"label": "Snow-capped mountain"
+		"label": "Snow-capped mountain",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏕️",
-		"label": "Camping"
+		"label": "Camping",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏖️",
-		"label": "Beach with umbrella"
+		"label": "Beach with umbrella",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏗️",
-		"label": "Building construction"
+		"label": "Building construction",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏘️",
-		"label": "Houses"
+		"label": "Houses",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏙️",
-		"label": "Cityscape"
+		"label": "Cityscape",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏚️",
-		"label": "Derelict house"
+		"label": "Derelict house",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏛️",
-		"label": "Classical building"
+		"label": "Classical building",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏜️",
-		"label": "Desert"
+		"label": "Desert",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏝️",
-		"label": "Desert island"
+		"label": "Desert island",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏞️",
-		"label": "National park"
+		"label": "National park",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏟️",
-		"label": "Stadium"
+		"label": "Stadium",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏠",
-		"label": "House"
+		"label": "House",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏡",
-		"label": "House with garden"
+		"label": "House with garden",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏢",
-		"label": "Office building"
+		"label": "Office building",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏣",
-		"label": "Japanese post office"
+		"label": "Japanese post office",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏤",
-		"label": "Post office"
+		"label": "Post office",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏥",
-		"label": "Hospital"
+		"label": "Hospital",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏦",
-		"label": "Bank"
+		"label": "Bank",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏧",
-		"label": "ATM sign"
+		"label": "ATM sign",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🏨",
-		"label": "Hotel"
+		"label": "Hotel",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏩",
-		"label": "Love hotel"
+		"label": "Love hotel",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏪",
-		"label": "Convenience store"
+		"label": "Convenience store",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏫",
-		"label": "School"
+		"label": "School",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏬",
-		"label": "Department store"
+		"label": "Department store",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏭",
-		"label": "Factory"
+		"label": "Factory",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏮",
-		"label": "Red paper lantern"
+		"label": "Red paper lantern",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🏯",
-		"label": "Japanese castle"
+		"label": "Japanese castle",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏰",
-		"label": "Castle"
+		"label": "Castle",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🏳️",
-		"label": "White flag"
+		"label": "White flag",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🏳️‍⚧️",
-		"label": "Transgender flag"
+		"label": "Transgender flag",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🏳️‍🌈",
-		"label": "Rainbow flag"
+		"label": "Rainbow flag",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🏴",
-		"label": "Black flag"
+		"label": "Black flag",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🏴‍☠️",
-		"label": "Pirate flag"
+		"label": "Pirate flag",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-		"label": "Flag: England"
+		"label": "Flag: England",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-		"label": "Flag: Scotland"
+		"label": "Flag: Scotland",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🏴󠁧󠁢󠁷󠁬󠁳󠁿",
-		"label": "Flag: Wales"
+		"label": "Flag: Wales",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🏵️",
-		"label": "Rosette"
+		"label": "Rosette",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🏷️",
-		"label": "Label"
+		"label": "Label",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🏸",
-		"label": "Badminton"
+		"label": "Badminton",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🏹",
-		"label": "Bow and arrow"
+		"label": "Bow and arrow",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🏺",
-		"label": "Amphora"
+		"label": "Amphora",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🐀",
-		"label": "Rat"
+		"label": "Rat",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐁",
-		"label": "Mouse"
+		"label": "Mouse",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐂",
-		"label": "Ox"
+		"label": "Ox",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐃",
-		"label": "Water buffalo"
+		"label": "Water buffalo",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐄",
-		"label": "Cow"
+		"label": "Cow",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐅",
-		"label": "Tiger"
+		"label": "Tiger",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐆",
-		"label": "Leopard"
+		"label": "Leopard",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐇",
-		"label": "Rabbit"
+		"label": "Rabbit",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐈",
-		"label": "Cat"
+		"label": "Cat",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐈‍⬛",
-		"label": "Black cat"
+		"label": "Black cat",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐉",
-		"label": "Dragon"
+		"label": "Dragon",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐊",
-		"label": "Crocodile"
+		"label": "Crocodile",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐋",
-		"label": "Whale"
+		"label": "Whale",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐌",
-		"label": "Snail"
+		"label": "Snail",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐍",
-		"label": "Snake"
+		"label": "Snake",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐎",
-		"label": "Horse"
+		"label": "Horse",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐏",
-		"label": "Ram"
+		"label": "Ram",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐐",
-		"label": "Goat"
+		"label": "Goat",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐑",
-		"label": "Ewe"
+		"label": "Ewe",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐒",
-		"label": "Monkey"
+		"label": "Monkey",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐓",
-		"label": "Rooster"
+		"label": "Rooster",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐔",
-		"label": "Chicken"
+		"label": "Chicken",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐕",
-		"label": "Dog"
+		"label": "Dog",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐕‍🦺",
-		"label": "Service dog"
+		"label": "Service dog",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐖",
-		"label": "Pig"
+		"label": "Pig",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐗",
-		"label": "Boar"
+		"label": "Boar",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐘",
-		"label": "Elephant"
+		"label": "Elephant",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐙",
-		"label": "Octopus"
+		"label": "Octopus",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐚",
-		"label": "Spiral shell"
+		"label": "Spiral shell",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐛",
-		"label": "Bug"
+		"label": "Bug",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐜",
-		"label": "Ant"
+		"label": "Ant",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐝",
-		"label": "Honeybee"
+		"label": "Honeybee",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐞",
-		"label": "Lady beetle"
+		"label": "Lady beetle",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐟",
-		"label": "Fish"
+		"label": "Fish",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐠",
-		"label": "Tropical fish"
+		"label": "Tropical fish",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐡",
-		"label": "Blowfish"
+		"label": "Blowfish",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐢",
-		"label": "Turtle"
+		"label": "Turtle",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐣",
-		"label": "Hatching chick"
+		"label": "Hatching chick",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐤",
-		"label": "Baby chick"
+		"label": "Baby chick",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐥",
-		"label": "Front-facing baby chick"
+		"label": "Front-facing baby chick",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐦",
-		"label": "Bird"
+		"label": "Bird",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐦‍⬛",
-		"label": "Black bird"
+		"label": "Black bird",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐦‍🔥",
-		"label": "Phoenix"
+		"label": "Phoenix",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐧",
-		"label": "Penguin"
+		"label": "Penguin",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐨",
-		"label": "Koala"
+		"label": "Koala",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐩",
-		"label": "Poodle"
+		"label": "Poodle",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐪",
-		"label": "Camel"
+		"label": "Camel",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐫",
-		"label": "Two-hump camel"
+		"label": "Two-hump camel",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐬",
-		"label": "Dolphin"
+		"label": "Dolphin",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐭",
-		"label": "Mouse face"
+		"label": "Mouse face",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐮",
-		"label": "Cow face"
+		"label": "Cow face",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐯",
-		"label": "Tiger face"
+		"label": "Tiger face",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐰",
-		"label": "Rabbit face"
+		"label": "Rabbit face",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐱",
-		"label": "Cat face"
+		"label": "Cat face",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐲",
-		"label": "Dragon face"
+		"label": "Dragon face",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐳",
-		"label": "Spouting whale"
+		"label": "Spouting whale",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐴",
-		"label": "Horse face"
+		"label": "Horse face",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐵",
-		"label": "Monkey face"
+		"label": "Monkey face",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐶",
-		"label": "Dog face"
+		"label": "Dog face",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐷",
-		"label": "Pig face"
+		"label": "Pig face",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐸",
-		"label": "Frog"
+		"label": "Frog",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐹",
-		"label": "Hamster"
+		"label": "Hamster",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐺",
-		"label": "Wolf"
+		"label": "Wolf",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐻",
-		"label": "Bear"
+		"label": "Bear",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐻‍❄️",
-		"label": "Polar bear"
+		"label": "Polar bear",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐼",
-		"label": "Panda"
+		"label": "Panda",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐽",
-		"label": "Pig nose"
+		"label": "Pig nose",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐾",
-		"label": "Paw prints"
+		"label": "Paw prints",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🐿️",
-		"label": "Chipmunk"
+		"label": "Chipmunk",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "👀",
-		"label": "Eyes"
+		"label": "Eyes",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👁️",
-		"label": "Eye"
+		"label": "Eye",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👁️‍🗨️",
-		"label": "Eye in speech bubble"
+		"label": "Eye in speech bubble",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "👂",
-		"label": "Ear"
+		"label": "Ear",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👂🏻",
-		"label": "Ear: light skin tone"
+		"label": "Ear: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👂🏼",
-		"label": "Ear: medium-light skin tone"
+		"label": "Ear: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👂🏽",
-		"label": "Ear: medium skin tone"
+		"label": "Ear: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👂🏾",
-		"label": "Ear: medium-dark skin tone"
+		"label": "Ear: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👂🏿",
-		"label": "Ear: dark skin tone"
+		"label": "Ear: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👃",
-		"label": "Nose"
+		"label": "Nose",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👃🏻",
-		"label": "Nose: light skin tone"
+		"label": "Nose: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👃🏼",
-		"label": "Nose: medium-light skin tone"
+		"label": "Nose: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👃🏽",
-		"label": "Nose: medium skin tone"
+		"label": "Nose: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👃🏾",
-		"label": "Nose: medium-dark skin tone"
+		"label": "Nose: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👃🏿",
-		"label": "Nose: dark skin tone"
+		"label": "Nose: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👄",
-		"label": "Mouth"
+		"label": "Mouth",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👅",
-		"label": "Tongue"
+		"label": "Tongue",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👆",
-		"label": "Backhand index pointing up"
+		"label": "Backhand index pointing up",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👆🏻",
-		"label": "Backhand index pointing up: light skin tone"
+		"label": "Backhand index pointing up: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👆🏼",
-		"label": "Backhand index pointing up: medium-light skin tone"
+		"label": "Backhand index pointing up: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👆🏽",
-		"label": "Backhand index pointing up: medium skin tone"
+		"label": "Backhand index pointing up: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👆🏾",
-		"label": "Backhand index pointing up: medium-dark skin tone"
+		"label": "Backhand index pointing up: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👆🏿",
-		"label": "Backhand index pointing up: dark skin tone"
+		"label": "Backhand index pointing up: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👇",
-		"label": "Backhand index pointing down"
+		"label": "Backhand index pointing down",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👇🏻",
-		"label": "Backhand index pointing down: light skin tone"
+		"label": "Backhand index pointing down: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👇🏼",
-		"label": "Backhand index pointing down: medium-light skin tone"
+		"label": "Backhand index pointing down: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👇🏽",
-		"label": "Backhand index pointing down: medium skin tone"
+		"label": "Backhand index pointing down: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👇🏾",
-		"label": "Backhand index pointing down: medium-dark skin tone"
+		"label": "Backhand index pointing down: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👇🏿",
-		"label": "Backhand index pointing down: dark skin tone"
+		"label": "Backhand index pointing down: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👈",
-		"label": "Backhand index pointing left"
+		"label": "Backhand index pointing left",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👈🏻",
-		"label": "Backhand index pointing left: light skin tone"
+		"label": "Backhand index pointing left: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👈🏼",
-		"label": "Backhand index pointing left: medium-light skin tone"
+		"label": "Backhand index pointing left: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👈🏽",
-		"label": "Backhand index pointing left: medium skin tone"
+		"label": "Backhand index pointing left: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👈🏾",
-		"label": "Backhand index pointing left: medium-dark skin tone"
+		"label": "Backhand index pointing left: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👈🏿",
-		"label": "Backhand index pointing left: dark skin tone"
+		"label": "Backhand index pointing left: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👉",
-		"label": "Backhand index pointing right"
+		"label": "Backhand index pointing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👉🏻",
-		"label": "Backhand index pointing right: light skin tone"
+		"label": "Backhand index pointing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👉🏼",
-		"label": "Backhand index pointing right: medium-light skin tone"
+		"label": "Backhand index pointing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👉🏽",
-		"label": "Backhand index pointing right: medium skin tone"
+		"label": "Backhand index pointing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👉🏾",
-		"label": "Backhand index pointing right: medium-dark skin tone"
+		"label": "Backhand index pointing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👉🏿",
-		"label": "Backhand index pointing right: dark skin tone"
+		"label": "Backhand index pointing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👊",
-		"label": "Oncoming fist"
+		"label": "Oncoming fist",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👊🏻",
-		"label": "Oncoming fist: light skin tone"
+		"label": "Oncoming fist: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👊🏼",
-		"label": "Oncoming fist: medium-light skin tone"
+		"label": "Oncoming fist: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👊🏽",
-		"label": "Oncoming fist: medium skin tone"
+		"label": "Oncoming fist: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👊🏾",
-		"label": "Oncoming fist: medium-dark skin tone"
+		"label": "Oncoming fist: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👊🏿",
-		"label": "Oncoming fist: dark skin tone"
+		"label": "Oncoming fist: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👋",
-		"label": "Waving hand"
+		"label": "Waving hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👋🏻",
-		"label": "Waving hand: light skin tone"
+		"label": "Waving hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👋🏼",
-		"label": "Waving hand: medium-light skin tone"
+		"label": "Waving hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👋🏽",
-		"label": "Waving hand: medium skin tone"
+		"label": "Waving hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👋🏾",
-		"label": "Waving hand: medium-dark skin tone"
+		"label": "Waving hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👋🏿",
-		"label": "Waving hand: dark skin tone"
+		"label": "Waving hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👌",
-		"label": "OK hand"
+		"label": "OK hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👌🏻",
-		"label": "OK hand: light skin tone"
+		"label": "OK hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👌🏼",
-		"label": "OK hand: medium-light skin tone"
+		"label": "OK hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👌🏽",
-		"label": "OK hand: medium skin tone"
+		"label": "OK hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👌🏾",
-		"label": "OK hand: medium-dark skin tone"
+		"label": "OK hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👌🏿",
-		"label": "OK hand: dark skin tone"
+		"label": "OK hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👍",
-		"label": "Thumbs up"
+		"label": "Thumbs up",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👍🏻",
-		"label": "Thumbs up: light skin tone"
+		"label": "Thumbs up: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👍🏼",
-		"label": "Thumbs up: medium-light skin tone"
+		"label": "Thumbs up: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👍🏽",
-		"label": "Thumbs up: medium skin tone"
+		"label": "Thumbs up: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👍🏾",
-		"label": "Thumbs up: medium-dark skin tone"
+		"label": "Thumbs up: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👍🏿",
-		"label": "Thumbs up: dark skin tone"
+		"label": "Thumbs up: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👎",
-		"label": "Thumbs down"
+		"label": "Thumbs down",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👎🏻",
-		"label": "Thumbs down: light skin tone"
+		"label": "Thumbs down: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👎🏼",
-		"label": "Thumbs down: medium-light skin tone"
+		"label": "Thumbs down: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👎🏽",
-		"label": "Thumbs down: medium skin tone"
+		"label": "Thumbs down: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👎🏾",
-		"label": "Thumbs down: medium-dark skin tone"
+		"label": "Thumbs down: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👎🏿",
-		"label": "Thumbs down: dark skin tone"
+		"label": "Thumbs down: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👏",
-		"label": "Clapping hands"
+		"label": "Clapping hands",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👏🏻",
-		"label": "Clapping hands: light skin tone"
+		"label": "Clapping hands: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👏🏼",
-		"label": "Clapping hands: medium-light skin tone"
+		"label": "Clapping hands: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👏🏽",
-		"label": "Clapping hands: medium skin tone"
+		"label": "Clapping hands: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👏🏾",
-		"label": "Clapping hands: medium-dark skin tone"
+		"label": "Clapping hands: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👏🏿",
-		"label": "Clapping hands: dark skin tone"
+		"label": "Clapping hands: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👐",
-		"label": "Open hands"
+		"label": "Open hands",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👐🏻",
-		"label": "Open hands: light skin tone"
+		"label": "Open hands: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👐🏼",
-		"label": "Open hands: medium-light skin tone"
+		"label": "Open hands: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👐🏽",
-		"label": "Open hands: medium skin tone"
+		"label": "Open hands: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👐🏾",
-		"label": "Open hands: medium-dark skin tone"
+		"label": "Open hands: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👐🏿",
-		"label": "Open hands: dark skin tone"
+		"label": "Open hands: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👑",
-		"label": "Crown"
+		"label": "Crown",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👒",
-		"label": "Woman’s hat"
+		"label": "Woman’s hat",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👓",
-		"label": "Glasses"
+		"label": "Glasses",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👔",
-		"label": "Necktie"
+		"label": "Necktie",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👕",
-		"label": "T-shirt"
+		"label": "T-shirt",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👖",
-		"label": "Jeans"
+		"label": "Jeans",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👗",
-		"label": "Dress"
+		"label": "Dress",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👘",
-		"label": "Kimono"
+		"label": "Kimono",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👙",
-		"label": "Bikini"
+		"label": "Bikini",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👚",
-		"label": "Woman’s clothes"
+		"label": "Woman’s clothes",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👛",
-		"label": "Purse"
+		"label": "Purse",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👜",
-		"label": "Handbag"
+		"label": "Handbag",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👝",
-		"label": "Clutch bag"
+		"label": "Clutch bag",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👞",
-		"label": "Man’s shoe"
+		"label": "Man’s shoe",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👟",
-		"label": "Running shoe"
+		"label": "Running shoe",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👠",
-		"label": "High-heeled shoe"
+		"label": "High-heeled shoe",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👡",
-		"label": "Woman’s sandal"
+		"label": "Woman’s sandal",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👢",
-		"label": "Woman’s boot"
+		"label": "Woman’s boot",
+		"group": "Objects"
 	},
 	{
 		"emoji": "👣",
-		"label": "Footprints"
+		"label": "Footprints",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👤",
-		"label": "Bust in silhouette"
+		"label": "Bust in silhouette",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👥",
-		"label": "Busts in silhouette"
+		"label": "Busts in silhouette",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👦",
-		"label": "Boy"
+		"label": "Boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👦🏻",
-		"label": "Boy: light skin tone"
+		"label": "Boy: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👦🏼",
-		"label": "Boy: medium-light skin tone"
+		"label": "Boy: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👦🏽",
-		"label": "Boy: medium skin tone"
+		"label": "Boy: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👦🏾",
-		"label": "Boy: medium-dark skin tone"
+		"label": "Boy: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👦🏿",
-		"label": "Boy: dark skin tone"
+		"label": "Boy: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👧",
-		"label": "Girl"
+		"label": "Girl",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👧🏻",
-		"label": "Girl: light skin tone"
+		"label": "Girl: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👧🏼",
-		"label": "Girl: medium-light skin tone"
+		"label": "Girl: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👧🏽",
-		"label": "Girl: medium skin tone"
+		"label": "Girl: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👧🏾",
-		"label": "Girl: medium-dark skin tone"
+		"label": "Girl: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👧🏿",
-		"label": "Girl: dark skin tone"
+		"label": "Girl: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨",
-		"label": "Man"
+		"label": "Man",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍⚕️",
-		"label": "Man health worker"
+		"label": "Man health worker",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍⚖️",
-		"label": "Man judge"
+		"label": "Man judge",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍✈️",
-		"label": "Man pilot"
+		"label": "Man pilot",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍❤️‍👨",
-		"label": "Couple with heart: man, man"
+		"label": "Couple with heart: man, man",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍❤️‍💋‍👨",
-		"label": "Kiss: man, man"
+		"label": "Kiss: man, man",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🌾",
-		"label": "Man farmer"
+		"label": "Man farmer",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🍳",
-		"label": "Man cook"
+		"label": "Man cook",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🍼",
-		"label": "Man feeding baby"
+		"label": "Man feeding baby",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🎓",
-		"label": "Man student"
+		"label": "Man student",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🎤",
-		"label": "Man singer"
+		"label": "Man singer",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🎨",
-		"label": "Man artist"
+		"label": "Man artist",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🏫",
-		"label": "Man teacher"
+		"label": "Man teacher",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🏭",
-		"label": "Man factory worker"
+		"label": "Man factory worker",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👦",
-		"label": "Family: man, boy"
+		"label": "Family: man, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👦‍👦",
-		"label": "Family: man, boy, boy"
+		"label": "Family: man, boy, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👧",
-		"label": "Family: man, girl"
+		"label": "Family: man, girl",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👧‍👦",
-		"label": "Family: man, girl, boy"
+		"label": "Family: man, girl, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👧‍👧",
-		"label": "Family: man, girl, girl"
+		"label": "Family: man, girl, girl",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👨‍👦",
-		"label": "Family: man, man, boy"
+		"label": "Family: man, man, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👨‍👦‍👦",
-		"label": "Family: man, man, boy, boy"
+		"label": "Family: man, man, boy, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👨‍👧",
-		"label": "Family: man, man, girl"
+		"label": "Family: man, man, girl",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👨‍👧‍👦",
-		"label": "Family: man, man, girl, boy"
+		"label": "Family: man, man, girl, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👨‍👧‍👧",
-		"label": "Family: man, man, girl, girl"
+		"label": "Family: man, man, girl, girl",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👩‍👦",
-		"label": "Family: man, woman, boy"
+		"label": "Family: man, woman, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👩‍👦‍👦",
-		"label": "Family: man, woman, boy, boy"
+		"label": "Family: man, woman, boy, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👩‍👧",
-		"label": "Family: man, woman, girl"
+		"label": "Family: man, woman, girl",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👩‍👧‍👦",
-		"label": "Family: man, woman, girl, boy"
+		"label": "Family: man, woman, girl, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍👩‍👧‍👧",
-		"label": "Family: man, woman, girl, girl"
+		"label": "Family: man, woman, girl, girl",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍💻",
-		"label": "Man technologist"
+		"label": "Man technologist",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍💼",
-		"label": "Man office worker"
+		"label": "Man office worker",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🔧",
-		"label": "Man mechanic"
+		"label": "Man mechanic",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🔬",
-		"label": "Man scientist"
+		"label": "Man scientist",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🚀",
-		"label": "Man astronaut"
+		"label": "Man astronaut",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🚒",
-		"label": "Man firefighter"
+		"label": "Man firefighter",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🦯",
-		"label": "Man with white cane"
+		"label": "Man with white cane",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🦯‍➡️",
-		"label": "Man with white cane facing right"
+		"label": "Man with white cane facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🦰",
-		"label": "Man: red hair"
+		"label": "Man: red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🦱",
-		"label": "Man: curly hair"
+		"label": "Man: curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🦲",
-		"label": "Man: bald"
+		"label": "Man: bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🦳",
-		"label": "Man: white hair"
+		"label": "Man: white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🦼",
-		"label": "Man in motorized wheelchair"
+		"label": "Man in motorized wheelchair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🦼‍➡️",
-		"label": "Man in motorized wheelchair facing right"
+		"label": "Man in motorized wheelchair facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🦽",
-		"label": "Man in manual wheelchair"
+		"label": "Man in manual wheelchair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨‍🦽‍➡️",
-		"label": "Man in manual wheelchair facing right"
+		"label": "Man in manual wheelchair facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻",
-		"label": "Man: light skin tone"
+		"label": "Man: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍⚕️",
-		"label": "Man health worker: light skin tone"
+		"label": "Man health worker: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍⚖️",
-		"label": "Man judge: light skin tone"
+		"label": "Man judge: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍✈️",
-		"label": "Man pilot: light skin tone"
+		"label": "Man pilot: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍❤️‍👨🏻",
-		"label": "Couple with heart: man, man, light skin tone"
+		"label": "Couple with heart: man, man, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍❤️‍👨🏼",
-		"label": "Couple with heart: man, man, light skin tone, medium-light skin tone"
+		"label": "Couple with heart: man, man, light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍❤️‍👨🏽",
-		"label": "Couple with heart: man, man, light skin tone, medium skin tone"
+		"label": "Couple with heart: man, man, light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍❤️‍👨🏾",
-		"label": "Couple with heart: man, man, light skin tone, medium-dark skin tone"
+		"label": "Couple with heart: man, man, light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍❤️‍👨🏿",
-		"label": "Couple with heart: man, man, light skin tone, dark skin tone"
+		"label": "Couple with heart: man, man, light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍❤️‍💋‍👨🏻",
-		"label": "Kiss: man, man, light skin tone"
+		"label": "Kiss: man, man, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍❤️‍💋‍👨🏼",
-		"label": "Kiss: man, man, light skin tone, medium-light skin tone"
+		"label": "Kiss: man, man, light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍❤️‍💋‍👨🏽",
-		"label": "Kiss: man, man, light skin tone, medium skin tone"
+		"label": "Kiss: man, man, light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍❤️‍💋‍👨🏾",
-		"label": "Kiss: man, man, light skin tone, medium-dark skin tone"
+		"label": "Kiss: man, man, light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍❤️‍💋‍👨🏿",
-		"label": "Kiss: man, man, light skin tone, dark skin tone"
+		"label": "Kiss: man, man, light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🌾",
-		"label": "Man farmer: light skin tone"
+		"label": "Man farmer: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🍳",
-		"label": "Man cook: light skin tone"
+		"label": "Man cook: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🍼",
-		"label": "Man feeding baby: light skin tone"
+		"label": "Man feeding baby: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🎓",
-		"label": "Man student: light skin tone"
+		"label": "Man student: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🎤",
-		"label": "Man singer: light skin tone"
+		"label": "Man singer: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🎨",
-		"label": "Man artist: light skin tone"
+		"label": "Man artist: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🏫",
-		"label": "Man teacher: light skin tone"
+		"label": "Man teacher: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🏭",
-		"label": "Man factory worker: light skin tone"
+		"label": "Man factory worker: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🐰‍👨🏼",
-		"label": "Men with bunny ears: light skin tone, medium-light skin tone"
+		"label": "Men with bunny ears: light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🐰‍👨🏽",
-		"label": "Men with bunny ears: light skin tone, medium skin tone"
+		"label": "Men with bunny ears: light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🐰‍👨🏾",
-		"label": "Men with bunny ears: light skin tone, medium-dark skin tone"
+		"label": "Men with bunny ears: light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🐰‍👨🏿",
-		"label": "Men with bunny ears: light skin tone, dark skin tone"
+		"label": "Men with bunny ears: light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍💻",
-		"label": "Man technologist: light skin tone"
+		"label": "Man technologist: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍💼",
-		"label": "Man office worker: light skin tone"
+		"label": "Man office worker: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🔧",
-		"label": "Man mechanic: light skin tone"
+		"label": "Man mechanic: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🔬",
-		"label": "Man scientist: light skin tone"
+		"label": "Man scientist: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🚀",
-		"label": "Man astronaut: light skin tone"
+		"label": "Man astronaut: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🚒",
-		"label": "Man firefighter: light skin tone"
+		"label": "Man firefighter: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🤝‍👨🏼",
-		"label": "Men holding hands: light skin tone, medium-light skin tone"
+		"label": "Men holding hands: light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🤝‍👨🏽",
-		"label": "Men holding hands: light skin tone, medium skin tone"
+		"label": "Men holding hands: light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🤝‍👨🏾",
-		"label": "Men holding hands: light skin tone, medium-dark skin tone"
+		"label": "Men holding hands: light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🤝‍👨🏿",
-		"label": "Men holding hands: light skin tone, dark skin tone"
+		"label": "Men holding hands: light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🦯",
-		"label": "Man with white cane: light skin tone"
+		"label": "Man with white cane: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🦯‍➡️",
-		"label": "Man with white cane facing right: light skin tone"
+		"label": "Man with white cane facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🦰",
-		"label": "Man: light skin tone, red hair"
+		"label": "Man: light skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🦱",
-		"label": "Man: light skin tone, curly hair"
+		"label": "Man: light skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🦲",
-		"label": "Man: light skin tone, bald"
+		"label": "Man: light skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🦳",
-		"label": "Man: light skin tone, white hair"
+		"label": "Man: light skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🦼",
-		"label": "Man in motorized wheelchair: light skin tone"
+		"label": "Man in motorized wheelchair: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🦼‍➡️",
-		"label": "Man in motorized wheelchair facing right: light skin tone"
+		"label": "Man in motorized wheelchair facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🦽",
-		"label": "Man in manual wheelchair: light skin tone"
+		"label": "Man in manual wheelchair: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🦽‍➡️",
-		"label": "Man in manual wheelchair facing right: light skin tone"
+		"label": "Man in manual wheelchair facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🫯‍👨🏼",
-		"label": "Men wrestling: light skin tone, medium-light skin tone"
+		"label": "Men wrestling: light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🫯‍👨🏽",
-		"label": "Men wrestling: light skin tone, medium skin tone"
+		"label": "Men wrestling: light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🫯‍👨🏾",
-		"label": "Men wrestling: light skin tone, medium-dark skin tone"
+		"label": "Men wrestling: light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏻‍🫯‍👨🏿",
-		"label": "Men wrestling: light skin tone, dark skin tone"
+		"label": "Men wrestling: light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼",
-		"label": "Man: medium-light skin tone"
+		"label": "Man: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍⚕️",
-		"label": "Man health worker: medium-light skin tone"
+		"label": "Man health worker: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍⚖️",
-		"label": "Man judge: medium-light skin tone"
+		"label": "Man judge: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍✈️",
-		"label": "Man pilot: medium-light skin tone"
+		"label": "Man pilot: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍❤️‍👨🏻",
-		"label": "Couple with heart: man, man, medium-light skin tone, light skin tone"
+		"label": "Couple with heart: man, man, medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍❤️‍👨🏼",
-		"label": "Couple with heart: man, man, medium-light skin tone"
+		"label": "Couple with heart: man, man, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍❤️‍👨🏽",
-		"label": "Couple with heart: man, man, medium-light skin tone, medium skin tone"
+		"label": "Couple with heart: man, man, medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍❤️‍👨🏾",
-		"label": "Couple with heart: man, man, medium-light skin tone, medium-dark skin tone"
+		"label": "Couple with heart: man, man, medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍❤️‍👨🏿",
-		"label": "Couple with heart: man, man, medium-light skin tone, dark skin tone"
+		"label": "Couple with heart: man, man, medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍❤️‍💋‍👨🏻",
-		"label": "Kiss: man, man, medium-light skin tone, light skin tone"
+		"label": "Kiss: man, man, medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍❤️‍💋‍👨🏼",
-		"label": "Kiss: man, man, medium-light skin tone"
+		"label": "Kiss: man, man, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍❤️‍💋‍👨🏽",
-		"label": "Kiss: man, man, medium-light skin tone, medium skin tone"
+		"label": "Kiss: man, man, medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍❤️‍💋‍👨🏾",
-		"label": "Kiss: man, man, medium-light skin tone, medium-dark skin tone"
+		"label": "Kiss: man, man, medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍❤️‍💋‍👨🏿",
-		"label": "Kiss: man, man, medium-light skin tone, dark skin tone"
+		"label": "Kiss: man, man, medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🌾",
-		"label": "Man farmer: medium-light skin tone"
+		"label": "Man farmer: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🍳",
-		"label": "Man cook: medium-light skin tone"
+		"label": "Man cook: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🍼",
-		"label": "Man feeding baby: medium-light skin tone"
+		"label": "Man feeding baby: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🎓",
-		"label": "Man student: medium-light skin tone"
+		"label": "Man student: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🎤",
-		"label": "Man singer: medium-light skin tone"
+		"label": "Man singer: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🎨",
-		"label": "Man artist: medium-light skin tone"
+		"label": "Man artist: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🏫",
-		"label": "Man teacher: medium-light skin tone"
+		"label": "Man teacher: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🏭",
-		"label": "Man factory worker: medium-light skin tone"
+		"label": "Man factory worker: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🐰‍👨🏻",
-		"label": "Men with bunny ears: medium-light skin tone, light skin tone"
+		"label": "Men with bunny ears: medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🐰‍👨🏽",
-		"label": "Men with bunny ears: medium-light skin tone, medium skin tone"
+		"label": "Men with bunny ears: medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🐰‍👨🏾",
-		"label": "Men with bunny ears: medium-light skin tone, medium-dark skin tone"
+		"label": "Men with bunny ears: medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🐰‍👨🏿",
-		"label": "Men with bunny ears: medium-light skin tone, dark skin tone"
+		"label": "Men with bunny ears: medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍💻",
-		"label": "Man technologist: medium-light skin tone"
+		"label": "Man technologist: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍💼",
-		"label": "Man office worker: medium-light skin tone"
+		"label": "Man office worker: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🔧",
-		"label": "Man mechanic: medium-light skin tone"
+		"label": "Man mechanic: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🔬",
-		"label": "Man scientist: medium-light skin tone"
+		"label": "Man scientist: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🚀",
-		"label": "Man astronaut: medium-light skin tone"
+		"label": "Man astronaut: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🚒",
-		"label": "Man firefighter: medium-light skin tone"
+		"label": "Man firefighter: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🤝‍👨🏻",
-		"label": "Men holding hands: medium-light skin tone, light skin tone"
+		"label": "Men holding hands: medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🤝‍👨🏽",
-		"label": "Men holding hands: medium-light skin tone, medium skin tone"
+		"label": "Men holding hands: medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🤝‍👨🏾",
-		"label": "Men holding hands: medium-light skin tone, medium-dark skin tone"
+		"label": "Men holding hands: medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🤝‍👨🏿",
-		"label": "Men holding hands: medium-light skin tone, dark skin tone"
+		"label": "Men holding hands: medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🦯",
-		"label": "Man with white cane: medium-light skin tone"
+		"label": "Man with white cane: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🦯‍➡️",
-		"label": "Man with white cane facing right: medium-light skin tone"
+		"label": "Man with white cane facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🦰",
-		"label": "Man: medium-light skin tone, red hair"
+		"label": "Man: medium-light skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🦱",
-		"label": "Man: medium-light skin tone, curly hair"
+		"label": "Man: medium-light skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🦲",
-		"label": "Man: medium-light skin tone, bald"
+		"label": "Man: medium-light skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🦳",
-		"label": "Man: medium-light skin tone, white hair"
+		"label": "Man: medium-light skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🦼",
-		"label": "Man in motorized wheelchair: medium-light skin tone"
+		"label": "Man in motorized wheelchair: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🦼‍➡️",
-		"label": "Man in motorized wheelchair facing right: medium-light skin tone"
+		"label": "Man in motorized wheelchair facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🦽",
-		"label": "Man in manual wheelchair: medium-light skin tone"
+		"label": "Man in manual wheelchair: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🦽‍➡️",
-		"label": "Man in manual wheelchair facing right: medium-light skin tone"
+		"label": "Man in manual wheelchair facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🫯‍👨🏻",
-		"label": "Men wrestling: medium-light skin tone, light skin tone"
+		"label": "Men wrestling: medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🫯‍👨🏽",
-		"label": "Men wrestling: medium-light skin tone, medium skin tone"
+		"label": "Men wrestling: medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🫯‍👨🏾",
-		"label": "Men wrestling: medium-light skin tone, medium-dark skin tone"
+		"label": "Men wrestling: medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏼‍🫯‍👨🏿",
-		"label": "Men wrestling: medium-light skin tone, dark skin tone"
+		"label": "Men wrestling: medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽",
-		"label": "Man: medium skin tone"
+		"label": "Man: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍⚕️",
-		"label": "Man health worker: medium skin tone"
+		"label": "Man health worker: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍⚖️",
-		"label": "Man judge: medium skin tone"
+		"label": "Man judge: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍✈️",
-		"label": "Man pilot: medium skin tone"
+		"label": "Man pilot: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍❤️‍👨🏻",
-		"label": "Couple with heart: man, man, medium skin tone, light skin tone"
+		"label": "Couple with heart: man, man, medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍❤️‍👨🏼",
-		"label": "Couple with heart: man, man, medium skin tone, medium-light skin tone"
+		"label": "Couple with heart: man, man, medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍❤️‍👨🏽",
-		"label": "Couple with heart: man, man, medium skin tone"
+		"label": "Couple with heart: man, man, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍❤️‍👨🏾",
-		"label": "Couple with heart: man, man, medium skin tone, medium-dark skin tone"
+		"label": "Couple with heart: man, man, medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍❤️‍👨🏿",
-		"label": "Couple with heart: man, man, medium skin tone, dark skin tone"
+		"label": "Couple with heart: man, man, medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍❤️‍💋‍👨🏻",
-		"label": "Kiss: man, man, medium skin tone, light skin tone"
+		"label": "Kiss: man, man, medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍❤️‍💋‍👨🏼",
-		"label": "Kiss: man, man, medium skin tone, medium-light skin tone"
+		"label": "Kiss: man, man, medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍❤️‍💋‍👨🏽",
-		"label": "Kiss: man, man, medium skin tone"
+		"label": "Kiss: man, man, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍❤️‍💋‍👨🏾",
-		"label": "Kiss: man, man, medium skin tone, medium-dark skin tone"
+		"label": "Kiss: man, man, medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍❤️‍💋‍👨🏿",
-		"label": "Kiss: man, man, medium skin tone, dark skin tone"
+		"label": "Kiss: man, man, medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🌾",
-		"label": "Man farmer: medium skin tone"
+		"label": "Man farmer: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🍳",
-		"label": "Man cook: medium skin tone"
+		"label": "Man cook: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🍼",
-		"label": "Man feeding baby: medium skin tone"
+		"label": "Man feeding baby: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🎓",
-		"label": "Man student: medium skin tone"
+		"label": "Man student: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🎤",
-		"label": "Man singer: medium skin tone"
+		"label": "Man singer: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🎨",
-		"label": "Man artist: medium skin tone"
+		"label": "Man artist: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🏫",
-		"label": "Man teacher: medium skin tone"
+		"label": "Man teacher: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🏭",
-		"label": "Man factory worker: medium skin tone"
+		"label": "Man factory worker: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🐰‍👨🏻",
-		"label": "Men with bunny ears: medium skin tone, light skin tone"
+		"label": "Men with bunny ears: medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🐰‍👨🏼",
-		"label": "Men with bunny ears: medium skin tone, medium-light skin tone"
+		"label": "Men with bunny ears: medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🐰‍👨🏾",
-		"label": "Men with bunny ears: medium skin tone, medium-dark skin tone"
+		"label": "Men with bunny ears: medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🐰‍👨🏿",
-		"label": "Men with bunny ears: medium skin tone, dark skin tone"
+		"label": "Men with bunny ears: medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍💻",
-		"label": "Man technologist: medium skin tone"
+		"label": "Man technologist: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍💼",
-		"label": "Man office worker: medium skin tone"
+		"label": "Man office worker: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🔧",
-		"label": "Man mechanic: medium skin tone"
+		"label": "Man mechanic: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🔬",
-		"label": "Man scientist: medium skin tone"
+		"label": "Man scientist: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🚀",
-		"label": "Man astronaut: medium skin tone"
+		"label": "Man astronaut: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🚒",
-		"label": "Man firefighter: medium skin tone"
+		"label": "Man firefighter: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🤝‍👨🏻",
-		"label": "Men holding hands: medium skin tone, light skin tone"
+		"label": "Men holding hands: medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🤝‍👨🏼",
-		"label": "Men holding hands: medium skin tone, medium-light skin tone"
+		"label": "Men holding hands: medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🤝‍👨🏾",
-		"label": "Men holding hands: medium skin tone, medium-dark skin tone"
+		"label": "Men holding hands: medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🤝‍👨🏿",
-		"label": "Men holding hands: medium skin tone, dark skin tone"
+		"label": "Men holding hands: medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🦯",
-		"label": "Man with white cane: medium skin tone"
+		"label": "Man with white cane: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🦯‍➡️",
-		"label": "Man with white cane facing right: medium skin tone"
+		"label": "Man with white cane facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🦰",
-		"label": "Man: medium skin tone, red hair"
+		"label": "Man: medium skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🦱",
-		"label": "Man: medium skin tone, curly hair"
+		"label": "Man: medium skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🦲",
-		"label": "Man: medium skin tone, bald"
+		"label": "Man: medium skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🦳",
-		"label": "Man: medium skin tone, white hair"
+		"label": "Man: medium skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🦼",
-		"label": "Man in motorized wheelchair: medium skin tone"
+		"label": "Man in motorized wheelchair: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🦼‍➡️",
-		"label": "Man in motorized wheelchair facing right: medium skin tone"
+		"label": "Man in motorized wheelchair facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🦽",
-		"label": "Man in manual wheelchair: medium skin tone"
+		"label": "Man in manual wheelchair: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🦽‍➡️",
-		"label": "Man in manual wheelchair facing right: medium skin tone"
+		"label": "Man in manual wheelchair facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🫯‍👨🏻",
-		"label": "Men wrestling: medium skin tone, light skin tone"
+		"label": "Men wrestling: medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🫯‍👨🏼",
-		"label": "Men wrestling: medium skin tone, medium-light skin tone"
+		"label": "Men wrestling: medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🫯‍👨🏾",
-		"label": "Men wrestling: medium skin tone, medium-dark skin tone"
+		"label": "Men wrestling: medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏽‍🫯‍👨🏿",
-		"label": "Men wrestling: medium skin tone, dark skin tone"
+		"label": "Men wrestling: medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾",
-		"label": "Man: medium-dark skin tone"
+		"label": "Man: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍⚕️",
-		"label": "Man health worker: medium-dark skin tone"
+		"label": "Man health worker: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍⚖️",
-		"label": "Man judge: medium-dark skin tone"
+		"label": "Man judge: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍✈️",
-		"label": "Man pilot: medium-dark skin tone"
+		"label": "Man pilot: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍❤️‍👨🏻",
-		"label": "Couple with heart: man, man, medium-dark skin tone, light skin tone"
+		"label": "Couple with heart: man, man, medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍❤️‍👨🏼",
-		"label": "Couple with heart: man, man, medium-dark skin tone, medium-light skin tone"
+		"label": "Couple with heart: man, man, medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍❤️‍👨🏽",
-		"label": "Couple with heart: man, man, medium-dark skin tone, medium skin tone"
+		"label": "Couple with heart: man, man, medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍❤️‍👨🏾",
-		"label": "Couple with heart: man, man, medium-dark skin tone"
+		"label": "Couple with heart: man, man, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍❤️‍👨🏿",
-		"label": "Couple with heart: man, man, medium-dark skin tone, dark skin tone"
+		"label": "Couple with heart: man, man, medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍❤️‍💋‍👨🏻",
-		"label": "Kiss: man, man, medium-dark skin tone, light skin tone"
+		"label": "Kiss: man, man, medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍❤️‍💋‍👨🏼",
-		"label": "Kiss: man, man, medium-dark skin tone, medium-light skin tone"
+		"label": "Kiss: man, man, medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍❤️‍💋‍👨🏽",
-		"label": "Kiss: man, man, medium-dark skin tone, medium skin tone"
+		"label": "Kiss: man, man, medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍❤️‍💋‍👨🏾",
-		"label": "Kiss: man, man, medium-dark skin tone"
+		"label": "Kiss: man, man, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍❤️‍💋‍👨🏿",
-		"label": "Kiss: man, man, medium-dark skin tone, dark skin tone"
+		"label": "Kiss: man, man, medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🌾",
-		"label": "Man farmer: medium-dark skin tone"
+		"label": "Man farmer: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🍳",
-		"label": "Man cook: medium-dark skin tone"
+		"label": "Man cook: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🍼",
-		"label": "Man feeding baby: medium-dark skin tone"
+		"label": "Man feeding baby: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🎓",
-		"label": "Man student: medium-dark skin tone"
+		"label": "Man student: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🎤",
-		"label": "Man singer: medium-dark skin tone"
+		"label": "Man singer: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🎨",
-		"label": "Man artist: medium-dark skin tone"
+		"label": "Man artist: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🏫",
-		"label": "Man teacher: medium-dark skin tone"
+		"label": "Man teacher: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🏭",
-		"label": "Man factory worker: medium-dark skin tone"
+		"label": "Man factory worker: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🐰‍👨🏻",
-		"label": "Men with bunny ears: medium-dark skin tone, light skin tone"
+		"label": "Men with bunny ears: medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🐰‍👨🏼",
-		"label": "Men with bunny ears: medium-dark skin tone, medium-light skin tone"
+		"label": "Men with bunny ears: medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🐰‍👨🏽",
-		"label": "Men with bunny ears: medium-dark skin tone, medium skin tone"
+		"label": "Men with bunny ears: medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🐰‍👨🏿",
-		"label": "Men with bunny ears: medium-dark skin tone, dark skin tone"
+		"label": "Men with bunny ears: medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍💻",
-		"label": "Man technologist: medium-dark skin tone"
+		"label": "Man technologist: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍💼",
-		"label": "Man office worker: medium-dark skin tone"
+		"label": "Man office worker: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🔧",
-		"label": "Man mechanic: medium-dark skin tone"
+		"label": "Man mechanic: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🔬",
-		"label": "Man scientist: medium-dark skin tone"
+		"label": "Man scientist: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🚀",
-		"label": "Man astronaut: medium-dark skin tone"
+		"label": "Man astronaut: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🚒",
-		"label": "Man firefighter: medium-dark skin tone"
+		"label": "Man firefighter: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🤝‍👨🏻",
-		"label": "Men holding hands: medium-dark skin tone, light skin tone"
+		"label": "Men holding hands: medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🤝‍👨🏼",
-		"label": "Men holding hands: medium-dark skin tone, medium-light skin tone"
+		"label": "Men holding hands: medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🤝‍👨🏽",
-		"label": "Men holding hands: medium-dark skin tone, medium skin tone"
+		"label": "Men holding hands: medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🤝‍👨🏿",
-		"label": "Men holding hands: medium-dark skin tone, dark skin tone"
+		"label": "Men holding hands: medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🦯",
-		"label": "Man with white cane: medium-dark skin tone"
+		"label": "Man with white cane: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🦯‍➡️",
-		"label": "Man with white cane facing right: medium-dark skin tone"
+		"label": "Man with white cane facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🦰",
-		"label": "Man: medium-dark skin tone, red hair"
+		"label": "Man: medium-dark skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🦱",
-		"label": "Man: medium-dark skin tone, curly hair"
+		"label": "Man: medium-dark skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🦲",
-		"label": "Man: medium-dark skin tone, bald"
+		"label": "Man: medium-dark skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🦳",
-		"label": "Man: medium-dark skin tone, white hair"
+		"label": "Man: medium-dark skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🦼",
-		"label": "Man in motorized wheelchair: medium-dark skin tone"
+		"label": "Man in motorized wheelchair: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🦼‍➡️",
-		"label": "Man in motorized wheelchair facing right: medium-dark skin tone"
+		"label": "Man in motorized wheelchair facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🦽",
-		"label": "Man in manual wheelchair: medium-dark skin tone"
+		"label": "Man in manual wheelchair: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🦽‍➡️",
-		"label": "Man in manual wheelchair facing right: medium-dark skin tone"
+		"label": "Man in manual wheelchair facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🫯‍👨🏻",
-		"label": "Men wrestling: medium-dark skin tone, light skin tone"
+		"label": "Men wrestling: medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🫯‍👨🏼",
-		"label": "Men wrestling: medium-dark skin tone, medium-light skin tone"
+		"label": "Men wrestling: medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🫯‍👨🏽",
-		"label": "Men wrestling: medium-dark skin tone, medium skin tone"
+		"label": "Men wrestling: medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏾‍🫯‍👨🏿",
-		"label": "Men wrestling: medium-dark skin tone, dark skin tone"
+		"label": "Men wrestling: medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿",
-		"label": "Man: dark skin tone"
+		"label": "Man: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍⚕️",
-		"label": "Man health worker: dark skin tone"
+		"label": "Man health worker: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍⚖️",
-		"label": "Man judge: dark skin tone"
+		"label": "Man judge: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍✈️",
-		"label": "Man pilot: dark skin tone"
+		"label": "Man pilot: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍❤️‍👨🏻",
-		"label": "Couple with heart: man, man, dark skin tone, light skin tone"
+		"label": "Couple with heart: man, man, dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍❤️‍👨🏼",
-		"label": "Couple with heart: man, man, dark skin tone, medium-light skin tone"
+		"label": "Couple with heart: man, man, dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍❤️‍👨🏽",
-		"label": "Couple with heart: man, man, dark skin tone, medium skin tone"
+		"label": "Couple with heart: man, man, dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍❤️‍👨🏾",
-		"label": "Couple with heart: man, man, dark skin tone, medium-dark skin tone"
+		"label": "Couple with heart: man, man, dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍❤️‍👨🏿",
-		"label": "Couple with heart: man, man, dark skin tone"
+		"label": "Couple with heart: man, man, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍❤️‍💋‍👨🏻",
-		"label": "Kiss: man, man, dark skin tone, light skin tone"
+		"label": "Kiss: man, man, dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍❤️‍💋‍👨🏼",
-		"label": "Kiss: man, man, dark skin tone, medium-light skin tone"
+		"label": "Kiss: man, man, dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍❤️‍💋‍👨🏽",
-		"label": "Kiss: man, man, dark skin tone, medium skin tone"
+		"label": "Kiss: man, man, dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍❤️‍💋‍👨🏾",
-		"label": "Kiss: man, man, dark skin tone, medium-dark skin tone"
+		"label": "Kiss: man, man, dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍❤️‍💋‍👨🏿",
-		"label": "Kiss: man, man, dark skin tone"
+		"label": "Kiss: man, man, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🌾",
-		"label": "Man farmer: dark skin tone"
+		"label": "Man farmer: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🍳",
-		"label": "Man cook: dark skin tone"
+		"label": "Man cook: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🍼",
-		"label": "Man feeding baby: dark skin tone"
+		"label": "Man feeding baby: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🎓",
-		"label": "Man student: dark skin tone"
+		"label": "Man student: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🎤",
-		"label": "Man singer: dark skin tone"
+		"label": "Man singer: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🎨",
-		"label": "Man artist: dark skin tone"
+		"label": "Man artist: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🏫",
-		"label": "Man teacher: dark skin tone"
+		"label": "Man teacher: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🏭",
-		"label": "Man factory worker: dark skin tone"
+		"label": "Man factory worker: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🐰‍👨🏻",
-		"label": "Men with bunny ears: dark skin tone, light skin tone"
+		"label": "Men with bunny ears: dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🐰‍👨🏼",
-		"label": "Men with bunny ears: dark skin tone, medium-light skin tone"
+		"label": "Men with bunny ears: dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🐰‍👨🏽",
-		"label": "Men with bunny ears: dark skin tone, medium skin tone"
+		"label": "Men with bunny ears: dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🐰‍👨🏾",
-		"label": "Men with bunny ears: dark skin tone, medium-dark skin tone"
+		"label": "Men with bunny ears: dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍💻",
-		"label": "Man technologist: dark skin tone"
+		"label": "Man technologist: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍💼",
-		"label": "Man office worker: dark skin tone"
+		"label": "Man office worker: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🔧",
-		"label": "Man mechanic: dark skin tone"
+		"label": "Man mechanic: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🔬",
-		"label": "Man scientist: dark skin tone"
+		"label": "Man scientist: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🚀",
-		"label": "Man astronaut: dark skin tone"
+		"label": "Man astronaut: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🚒",
-		"label": "Man firefighter: dark skin tone"
+		"label": "Man firefighter: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🤝‍👨🏻",
-		"label": "Men holding hands: dark skin tone, light skin tone"
+		"label": "Men holding hands: dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🤝‍👨🏼",
-		"label": "Men holding hands: dark skin tone, medium-light skin tone"
+		"label": "Men holding hands: dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🤝‍👨🏽",
-		"label": "Men holding hands: dark skin tone, medium skin tone"
+		"label": "Men holding hands: dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🤝‍👨🏾",
-		"label": "Men holding hands: dark skin tone, medium-dark skin tone"
+		"label": "Men holding hands: dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🦯",
-		"label": "Man with white cane: dark skin tone"
+		"label": "Man with white cane: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🦯‍➡️",
-		"label": "Man with white cane facing right: dark skin tone"
+		"label": "Man with white cane facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🦰",
-		"label": "Man: dark skin tone, red hair"
+		"label": "Man: dark skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🦱",
-		"label": "Man: dark skin tone, curly hair"
+		"label": "Man: dark skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🦲",
-		"label": "Man: dark skin tone, bald"
+		"label": "Man: dark skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🦳",
-		"label": "Man: dark skin tone, white hair"
+		"label": "Man: dark skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🦼",
-		"label": "Man in motorized wheelchair: dark skin tone"
+		"label": "Man in motorized wheelchair: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🦼‍➡️",
-		"label": "Man in motorized wheelchair facing right: dark skin tone"
+		"label": "Man in motorized wheelchair facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🦽",
-		"label": "Man in manual wheelchair: dark skin tone"
+		"label": "Man in manual wheelchair: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🦽‍➡️",
-		"label": "Man in manual wheelchair facing right: dark skin tone"
+		"label": "Man in manual wheelchair facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🫯‍👨🏻",
-		"label": "Men wrestling: dark skin tone, light skin tone"
+		"label": "Men wrestling: dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🫯‍👨🏼",
-		"label": "Men wrestling: dark skin tone, medium-light skin tone"
+		"label": "Men wrestling: dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🫯‍👨🏽",
-		"label": "Men wrestling: dark skin tone, medium skin tone"
+		"label": "Men wrestling: dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👨🏿‍🫯‍👨🏾",
-		"label": "Men wrestling: dark skin tone, medium-dark skin tone"
+		"label": "Men wrestling: dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩",
-		"label": "Woman"
+		"label": "Woman",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍⚕️",
-		"label": "Woman health worker"
+		"label": "Woman health worker",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍⚖️",
-		"label": "Woman judge"
+		"label": "Woman judge",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍✈️",
-		"label": "Woman pilot"
+		"label": "Woman pilot",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍❤️‍👨",
-		"label": "Couple with heart: woman, man"
+		"label": "Couple with heart: woman, man",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍❤️‍👩",
-		"label": "Couple with heart: woman, woman"
+		"label": "Couple with heart: woman, woman",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍❤️‍💋‍👨",
-		"label": "Kiss: woman, man"
+		"label": "Kiss: woman, man",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍❤️‍💋‍👩",
-		"label": "Kiss: woman, woman"
+		"label": "Kiss: woman, woman",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🌾",
-		"label": "Woman farmer"
+		"label": "Woman farmer",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🍳",
-		"label": "Woman cook"
+		"label": "Woman cook",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🍼",
-		"label": "Woman feeding baby"
+		"label": "Woman feeding baby",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🎓",
-		"label": "Woman student"
+		"label": "Woman student",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🎤",
-		"label": "Woman singer"
+		"label": "Woman singer",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🎨",
-		"label": "Woman artist"
+		"label": "Woman artist",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🏫",
-		"label": "Woman teacher"
+		"label": "Woman teacher",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🏭",
-		"label": "Woman factory worker"
+		"label": "Woman factory worker",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍👦",
-		"label": "Family: woman, boy"
+		"label": "Family: woman, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍👦‍👦",
-		"label": "Family: woman, boy, boy"
+		"label": "Family: woman, boy, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍👧",
-		"label": "Family: woman, girl"
+		"label": "Family: woman, girl",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍👧‍👦",
-		"label": "Family: woman, girl, boy"
+		"label": "Family: woman, girl, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍👧‍👧",
-		"label": "Family: woman, girl, girl"
+		"label": "Family: woman, girl, girl",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍👩‍👦",
-		"label": "Family: woman, woman, boy"
+		"label": "Family: woman, woman, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍👩‍👦‍👦",
-		"label": "Family: woman, woman, boy, boy"
+		"label": "Family: woman, woman, boy, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍👩‍👧",
-		"label": "Family: woman, woman, girl"
+		"label": "Family: woman, woman, girl",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍👩‍👧‍👦",
-		"label": "Family: woman, woman, girl, boy"
+		"label": "Family: woman, woman, girl, boy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍👩‍👧‍👧",
-		"label": "Family: woman, woman, girl, girl"
+		"label": "Family: woman, woman, girl, girl",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍💻",
-		"label": "Woman technologist"
+		"label": "Woman technologist",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍💼",
-		"label": "Woman office worker"
+		"label": "Woman office worker",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🔧",
-		"label": "Woman mechanic"
+		"label": "Woman mechanic",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🔬",
-		"label": "Woman scientist"
+		"label": "Woman scientist",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🚀",
-		"label": "Woman astronaut"
+		"label": "Woman astronaut",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🚒",
-		"label": "Woman firefighter"
+		"label": "Woman firefighter",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🦯",
-		"label": "Woman with white cane"
+		"label": "Woman with white cane",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🦯‍➡️",
-		"label": "Woman with white cane facing right"
+		"label": "Woman with white cane facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🦰",
-		"label": "Woman: red hair"
+		"label": "Woman: red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🦱",
-		"label": "Woman: curly hair"
+		"label": "Woman: curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🦲",
-		"label": "Woman: bald"
+		"label": "Woman: bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🦳",
-		"label": "Woman: white hair"
+		"label": "Woman: white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🦼",
-		"label": "Woman in motorized wheelchair"
+		"label": "Woman in motorized wheelchair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🦼‍➡️",
-		"label": "Woman in motorized wheelchair facing right"
+		"label": "Woman in motorized wheelchair facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🦽",
-		"label": "Woman in manual wheelchair"
+		"label": "Woman in manual wheelchair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩‍🦽‍➡️",
-		"label": "Woman in manual wheelchair facing right"
+		"label": "Woman in manual wheelchair facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻",
-		"label": "Woman: light skin tone"
+		"label": "Woman: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍⚕️",
-		"label": "Woman health worker: light skin tone"
+		"label": "Woman health worker: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍⚖️",
-		"label": "Woman judge: light skin tone"
+		"label": "Woman judge: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍✈️",
-		"label": "Woman pilot: light skin tone"
+		"label": "Woman pilot: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍👨🏻",
-		"label": "Couple with heart: woman, man, light skin tone"
+		"label": "Couple with heart: woman, man, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍👨🏼",
-		"label": "Couple with heart: woman, man, light skin tone, medium-light skin tone"
+		"label": "Couple with heart: woman, man, light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍👨🏽",
-		"label": "Couple with heart: woman, man, light skin tone, medium skin tone"
+		"label": "Couple with heart: woman, man, light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍👨🏾",
-		"label": "Couple with heart: woman, man, light skin tone, medium-dark skin tone"
+		"label": "Couple with heart: woman, man, light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍👨🏿",
-		"label": "Couple with heart: woman, man, light skin tone, dark skin tone"
+		"label": "Couple with heart: woman, man, light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍👩🏻",
-		"label": "Couple with heart: woman, woman, light skin tone"
+		"label": "Couple with heart: woman, woman, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍👩🏼",
-		"label": "Couple with heart: woman, woman, light skin tone, medium-light skin tone"
+		"label": "Couple with heart: woman, woman, light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍👩🏽",
-		"label": "Couple with heart: woman, woman, light skin tone, medium skin tone"
+		"label": "Couple with heart: woman, woman, light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍👩🏾",
-		"label": "Couple with heart: woman, woman, light skin tone, medium-dark skin tone"
+		"label": "Couple with heart: woman, woman, light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍👩🏿",
-		"label": "Couple with heart: woman, woman, light skin tone, dark skin tone"
+		"label": "Couple with heart: woman, woman, light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍💋‍👨🏻",
-		"label": "Kiss: woman, man, light skin tone"
+		"label": "Kiss: woman, man, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍💋‍👨🏼",
-		"label": "Kiss: woman, man, light skin tone, medium-light skin tone"
+		"label": "Kiss: woman, man, light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍💋‍👨🏽",
-		"label": "Kiss: woman, man, light skin tone, medium skin tone"
+		"label": "Kiss: woman, man, light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍💋‍👨🏾",
-		"label": "Kiss: woman, man, light skin tone, medium-dark skin tone"
+		"label": "Kiss: woman, man, light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍💋‍👨🏿",
-		"label": "Kiss: woman, man, light skin tone, dark skin tone"
+		"label": "Kiss: woman, man, light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍💋‍👩🏻",
-		"label": "Kiss: woman, woman, light skin tone"
+		"label": "Kiss: woman, woman, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍💋‍👩🏼",
-		"label": "Kiss: woman, woman, light skin tone, medium-light skin tone"
+		"label": "Kiss: woman, woman, light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍💋‍👩🏽",
-		"label": "Kiss: woman, woman, light skin tone, medium skin tone"
+		"label": "Kiss: woman, woman, light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍💋‍👩🏾",
-		"label": "Kiss: woman, woman, light skin tone, medium-dark skin tone"
+		"label": "Kiss: woman, woman, light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍❤️‍💋‍👩🏿",
-		"label": "Kiss: woman, woman, light skin tone, dark skin tone"
+		"label": "Kiss: woman, woman, light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🌾",
-		"label": "Woman farmer: light skin tone"
+		"label": "Woman farmer: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🍳",
-		"label": "Woman cook: light skin tone"
+		"label": "Woman cook: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🍼",
-		"label": "Woman feeding baby: light skin tone"
+		"label": "Woman feeding baby: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🎓",
-		"label": "Woman student: light skin tone"
+		"label": "Woman student: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🎤",
-		"label": "Woman singer: light skin tone"
+		"label": "Woman singer: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🎨",
-		"label": "Woman artist: light skin tone"
+		"label": "Woman artist: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🏫",
-		"label": "Woman teacher: light skin tone"
+		"label": "Woman teacher: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🏭",
-		"label": "Woman factory worker: light skin tone"
+		"label": "Woman factory worker: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🐰‍👩🏼",
-		"label": "Women with bunny ears: light skin tone, medium-light skin tone"
+		"label": "Women with bunny ears: light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🐰‍👩🏽",
-		"label": "Women with bunny ears: light skin tone, medium skin tone"
+		"label": "Women with bunny ears: light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🐰‍👩🏾",
-		"label": "Women with bunny ears: light skin tone, medium-dark skin tone"
+		"label": "Women with bunny ears: light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🐰‍👩🏿",
-		"label": "Women with bunny ears: light skin tone, dark skin tone"
+		"label": "Women with bunny ears: light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍💻",
-		"label": "Woman technologist: light skin tone"
+		"label": "Woman technologist: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍💼",
-		"label": "Woman office worker: light skin tone"
+		"label": "Woman office worker: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🔧",
-		"label": "Woman mechanic: light skin tone"
+		"label": "Woman mechanic: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🔬",
-		"label": "Woman scientist: light skin tone"
+		"label": "Woman scientist: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🚀",
-		"label": "Woman astronaut: light skin tone"
+		"label": "Woman astronaut: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🚒",
-		"label": "Woman firefighter: light skin tone"
+		"label": "Woman firefighter: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🤝‍👨🏼",
-		"label": "Woman and man holding hands: light skin tone, medium-light skin tone"
+		"label": "Woman and man holding hands: light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🤝‍👨🏽",
-		"label": "Woman and man holding hands: light skin tone, medium skin tone"
+		"label": "Woman and man holding hands: light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🤝‍👨🏾",
-		"label": "Woman and man holding hands: light skin tone, medium-dark skin tone"
+		"label": "Woman and man holding hands: light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🤝‍👨🏿",
-		"label": "Woman and man holding hands: light skin tone, dark skin tone"
+		"label": "Woman and man holding hands: light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🤝‍👩🏼",
-		"label": "Women holding hands: light skin tone, medium-light skin tone"
+		"label": "Women holding hands: light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🤝‍👩🏽",
-		"label": "Women holding hands: light skin tone, medium skin tone"
+		"label": "Women holding hands: light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🤝‍👩🏾",
-		"label": "Women holding hands: light skin tone, medium-dark skin tone"
+		"label": "Women holding hands: light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🤝‍👩🏿",
-		"label": "Women holding hands: light skin tone, dark skin tone"
+		"label": "Women holding hands: light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🦯",
-		"label": "Woman with white cane: light skin tone"
+		"label": "Woman with white cane: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🦯‍➡️",
-		"label": "Woman with white cane facing right: light skin tone"
+		"label": "Woman with white cane facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🦰",
-		"label": "Woman: light skin tone, red hair"
+		"label": "Woman: light skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🦱",
-		"label": "Woman: light skin tone, curly hair"
+		"label": "Woman: light skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🦲",
-		"label": "Woman: light skin tone, bald"
+		"label": "Woman: light skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🦳",
-		"label": "Woman: light skin tone, white hair"
+		"label": "Woman: light skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🦼",
-		"label": "Woman in motorized wheelchair: light skin tone"
+		"label": "Woman in motorized wheelchair: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🦼‍➡️",
-		"label": "Woman in motorized wheelchair facing right: light skin tone"
+		"label": "Woman in motorized wheelchair facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🦽",
-		"label": "Woman in manual wheelchair: light skin tone"
+		"label": "Woman in manual wheelchair: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🦽‍➡️",
-		"label": "Woman in manual wheelchair facing right: light skin tone"
+		"label": "Woman in manual wheelchair facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🫯‍👩🏼",
-		"label": "Women wrestling: light skin tone, medium-light skin tone"
+		"label": "Women wrestling: light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🫯‍👩🏽",
-		"label": "Women wrestling: light skin tone, medium skin tone"
+		"label": "Women wrestling: light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🫯‍👩🏾",
-		"label": "Women wrestling: light skin tone, medium-dark skin tone"
+		"label": "Women wrestling: light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏻‍🫯‍👩🏿",
-		"label": "Women wrestling: light skin tone, dark skin tone"
+		"label": "Women wrestling: light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼",
-		"label": "Woman: medium-light skin tone"
+		"label": "Woman: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍⚕️",
-		"label": "Woman health worker: medium-light skin tone"
+		"label": "Woman health worker: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍⚖️",
-		"label": "Woman judge: medium-light skin tone"
+		"label": "Woman judge: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍✈️",
-		"label": "Woman pilot: medium-light skin tone"
+		"label": "Woman pilot: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍👨🏻",
-		"label": "Couple with heart: woman, man, medium-light skin tone, light skin tone"
+		"label": "Couple with heart: woman, man, medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍👨🏼",
-		"label": "Couple with heart: woman, man, medium-light skin tone"
+		"label": "Couple with heart: woman, man, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍👨🏽",
-		"label": "Couple with heart: woman, man, medium-light skin tone, medium skin tone"
+		"label": "Couple with heart: woman, man, medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍👨🏾",
-		"label": "Couple with heart: woman, man, medium-light skin tone, medium-dark skin tone"
+		"label": "Couple with heart: woman, man, medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍👨🏿",
-		"label": "Couple with heart: woman, man, medium-light skin tone, dark skin tone"
+		"label": "Couple with heart: woman, man, medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍👩🏻",
-		"label": "Couple with heart: woman, woman, medium-light skin tone, light skin tone"
+		"label": "Couple with heart: woman, woman, medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍👩🏼",
-		"label": "Couple with heart: woman, woman, medium-light skin tone"
+		"label": "Couple with heart: woman, woman, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍👩🏽",
-		"label": "Couple with heart: woman, woman, medium-light skin tone, medium skin tone"
+		"label": "Couple with heart: woman, woman, medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍👩🏾",
-		"label": "Couple with heart: woman, woman, medium-light skin tone, medium-dark skin tone"
+		"label": "Couple with heart: woman, woman, medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍👩🏿",
-		"label": "Couple with heart: woman, woman, medium-light skin tone, dark skin tone"
+		"label": "Couple with heart: woman, woman, medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍💋‍👨🏻",
-		"label": "Kiss: woman, man, medium-light skin tone, light skin tone"
+		"label": "Kiss: woman, man, medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍💋‍👨🏼",
-		"label": "Kiss: woman, man, medium-light skin tone"
+		"label": "Kiss: woman, man, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍💋‍👨🏽",
-		"label": "Kiss: woman, man, medium-light skin tone, medium skin tone"
+		"label": "Kiss: woman, man, medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍💋‍👨🏾",
-		"label": "Kiss: woman, man, medium-light skin tone, medium-dark skin tone"
+		"label": "Kiss: woman, man, medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍💋‍👨🏿",
-		"label": "Kiss: woman, man, medium-light skin tone, dark skin tone"
+		"label": "Kiss: woman, man, medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍💋‍👩🏻",
-		"label": "Kiss: woman, woman, medium-light skin tone, light skin tone"
+		"label": "Kiss: woman, woman, medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍💋‍👩🏼",
-		"label": "Kiss: woman, woman, medium-light skin tone"
+		"label": "Kiss: woman, woman, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍💋‍👩🏽",
-		"label": "Kiss: woman, woman, medium-light skin tone, medium skin tone"
+		"label": "Kiss: woman, woman, medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍💋‍👩🏾",
-		"label": "Kiss: woman, woman, medium-light skin tone, medium-dark skin tone"
+		"label": "Kiss: woman, woman, medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍❤️‍💋‍👩🏿",
-		"label": "Kiss: woman, woman, medium-light skin tone, dark skin tone"
+		"label": "Kiss: woman, woman, medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🌾",
-		"label": "Woman farmer: medium-light skin tone"
+		"label": "Woman farmer: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🍳",
-		"label": "Woman cook: medium-light skin tone"
+		"label": "Woman cook: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🍼",
-		"label": "Woman feeding baby: medium-light skin tone"
+		"label": "Woman feeding baby: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🎓",
-		"label": "Woman student: medium-light skin tone"
+		"label": "Woman student: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🎤",
-		"label": "Woman singer: medium-light skin tone"
+		"label": "Woman singer: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🎨",
-		"label": "Woman artist: medium-light skin tone"
+		"label": "Woman artist: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🏫",
-		"label": "Woman teacher: medium-light skin tone"
+		"label": "Woman teacher: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🏭",
-		"label": "Woman factory worker: medium-light skin tone"
+		"label": "Woman factory worker: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🐰‍👩🏻",
-		"label": "Women with bunny ears: medium-light skin tone, light skin tone"
+		"label": "Women with bunny ears: medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🐰‍👩🏽",
-		"label": "Women with bunny ears: medium-light skin tone, medium skin tone"
+		"label": "Women with bunny ears: medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🐰‍👩🏾",
-		"label": "Women with bunny ears: medium-light skin tone, medium-dark skin tone"
+		"label": "Women with bunny ears: medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🐰‍👩🏿",
-		"label": "Women with bunny ears: medium-light skin tone, dark skin tone"
+		"label": "Women with bunny ears: medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍💻",
-		"label": "Woman technologist: medium-light skin tone"
+		"label": "Woman technologist: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍💼",
-		"label": "Woman office worker: medium-light skin tone"
+		"label": "Woman office worker: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🔧",
-		"label": "Woman mechanic: medium-light skin tone"
+		"label": "Woman mechanic: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🔬",
-		"label": "Woman scientist: medium-light skin tone"
+		"label": "Woman scientist: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🚀",
-		"label": "Woman astronaut: medium-light skin tone"
+		"label": "Woman astronaut: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🚒",
-		"label": "Woman firefighter: medium-light skin tone"
+		"label": "Woman firefighter: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🤝‍👨🏻",
-		"label": "Woman and man holding hands: medium-light skin tone, light skin tone"
+		"label": "Woman and man holding hands: medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🤝‍👨🏽",
-		"label": "Woman and man holding hands: medium-light skin tone, medium skin tone"
+		"label": "Woman and man holding hands: medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🤝‍👨🏾",
-		"label": "Woman and man holding hands: medium-light skin tone, medium-dark skin tone"
+		"label": "Woman and man holding hands: medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🤝‍👨🏿",
-		"label": "Woman and man holding hands: medium-light skin tone, dark skin tone"
+		"label": "Woman and man holding hands: medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🤝‍👩🏻",
-		"label": "Women holding hands: medium-light skin tone, light skin tone"
+		"label": "Women holding hands: medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🤝‍👩🏽",
-		"label": "Women holding hands: medium-light skin tone, medium skin tone"
+		"label": "Women holding hands: medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🤝‍👩🏾",
-		"label": "Women holding hands: medium-light skin tone, medium-dark skin tone"
+		"label": "Women holding hands: medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🤝‍👩🏿",
-		"label": "Women holding hands: medium-light skin tone, dark skin tone"
+		"label": "Women holding hands: medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🦯",
-		"label": "Woman with white cane: medium-light skin tone"
+		"label": "Woman with white cane: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🦯‍➡️",
-		"label": "Woman with white cane facing right: medium-light skin tone"
+		"label": "Woman with white cane facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🦰",
-		"label": "Woman: medium-light skin tone, red hair"
+		"label": "Woman: medium-light skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🦱",
-		"label": "Woman: medium-light skin tone, curly hair"
+		"label": "Woman: medium-light skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🦲",
-		"label": "Woman: medium-light skin tone, bald"
+		"label": "Woman: medium-light skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🦳",
-		"label": "Woman: medium-light skin tone, white hair"
+		"label": "Woman: medium-light skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🦼",
-		"label": "Woman in motorized wheelchair: medium-light skin tone"
+		"label": "Woman in motorized wheelchair: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🦼‍➡️",
-		"label": "Woman in motorized wheelchair facing right: medium-light skin tone"
+		"label": "Woman in motorized wheelchair facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🦽",
-		"label": "Woman in manual wheelchair: medium-light skin tone"
+		"label": "Woman in manual wheelchair: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🦽‍➡️",
-		"label": "Woman in manual wheelchair facing right: medium-light skin tone"
+		"label": "Woman in manual wheelchair facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🫯‍👩🏻",
-		"label": "Women wrestling: medium-light skin tone, light skin tone"
+		"label": "Women wrestling: medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🫯‍👩🏽",
-		"label": "Women wrestling: medium-light skin tone, medium skin tone"
+		"label": "Women wrestling: medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🫯‍👩🏾",
-		"label": "Women wrestling: medium-light skin tone, medium-dark skin tone"
+		"label": "Women wrestling: medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏼‍🫯‍👩🏿",
-		"label": "Women wrestling: medium-light skin tone, dark skin tone"
+		"label": "Women wrestling: medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽",
-		"label": "Woman: medium skin tone"
+		"label": "Woman: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍⚕️",
-		"label": "Woman health worker: medium skin tone"
+		"label": "Woman health worker: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍⚖️",
-		"label": "Woman judge: medium skin tone"
+		"label": "Woman judge: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍✈️",
-		"label": "Woman pilot: medium skin tone"
+		"label": "Woman pilot: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍👨🏻",
-		"label": "Couple with heart: woman, man, medium skin tone, light skin tone"
+		"label": "Couple with heart: woman, man, medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍👨🏼",
-		"label": "Couple with heart: woman, man, medium skin tone, medium-light skin tone"
+		"label": "Couple with heart: woman, man, medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍👨🏽",
-		"label": "Couple with heart: woman, man, medium skin tone"
+		"label": "Couple with heart: woman, man, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍👨🏾",
-		"label": "Couple with heart: woman, man, medium skin tone, medium-dark skin tone"
+		"label": "Couple with heart: woman, man, medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍👨🏿",
-		"label": "Couple with heart: woman, man, medium skin tone, dark skin tone"
+		"label": "Couple with heart: woman, man, medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍👩🏻",
-		"label": "Couple with heart: woman, woman, medium skin tone, light skin tone"
+		"label": "Couple with heart: woman, woman, medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍👩🏼",
-		"label": "Couple with heart: woman, woman, medium skin tone, medium-light skin tone"
+		"label": "Couple with heart: woman, woman, medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍👩🏽",
-		"label": "Couple with heart: woman, woman, medium skin tone"
+		"label": "Couple with heart: woman, woman, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍👩🏾",
-		"label": "Couple with heart: woman, woman, medium skin tone, medium-dark skin tone"
+		"label": "Couple with heart: woman, woman, medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍👩🏿",
-		"label": "Couple with heart: woman, woman, medium skin tone, dark skin tone"
+		"label": "Couple with heart: woman, woman, medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍💋‍👨🏻",
-		"label": "Kiss: woman, man, medium skin tone, light skin tone"
+		"label": "Kiss: woman, man, medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍💋‍👨🏼",
-		"label": "Kiss: woman, man, medium skin tone, medium-light skin tone"
+		"label": "Kiss: woman, man, medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍💋‍👨🏽",
-		"label": "Kiss: woman, man, medium skin tone"
+		"label": "Kiss: woman, man, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍💋‍👨🏾",
-		"label": "Kiss: woman, man, medium skin tone, medium-dark skin tone"
+		"label": "Kiss: woman, man, medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍💋‍👨🏿",
-		"label": "Kiss: woman, man, medium skin tone, dark skin tone"
+		"label": "Kiss: woman, man, medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍💋‍👩🏻",
-		"label": "Kiss: woman, woman, medium skin tone, light skin tone"
+		"label": "Kiss: woman, woman, medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍💋‍👩🏼",
-		"label": "Kiss: woman, woman, medium skin tone, medium-light skin tone"
+		"label": "Kiss: woman, woman, medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍💋‍👩🏽",
-		"label": "Kiss: woman, woman, medium skin tone"
+		"label": "Kiss: woman, woman, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍💋‍👩🏾",
-		"label": "Kiss: woman, woman, medium skin tone, medium-dark skin tone"
+		"label": "Kiss: woman, woman, medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍❤️‍💋‍👩🏿",
-		"label": "Kiss: woman, woman, medium skin tone, dark skin tone"
+		"label": "Kiss: woman, woman, medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🌾",
-		"label": "Woman farmer: medium skin tone"
+		"label": "Woman farmer: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🍳",
-		"label": "Woman cook: medium skin tone"
+		"label": "Woman cook: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🍼",
-		"label": "Woman feeding baby: medium skin tone"
+		"label": "Woman feeding baby: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🎓",
-		"label": "Woman student: medium skin tone"
+		"label": "Woman student: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🎤",
-		"label": "Woman singer: medium skin tone"
+		"label": "Woman singer: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🎨",
-		"label": "Woman artist: medium skin tone"
+		"label": "Woman artist: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🏫",
-		"label": "Woman teacher: medium skin tone"
+		"label": "Woman teacher: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🏭",
-		"label": "Woman factory worker: medium skin tone"
+		"label": "Woman factory worker: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🐰‍👩🏻",
-		"label": "Women with bunny ears: medium skin tone, light skin tone"
+		"label": "Women with bunny ears: medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🐰‍👩🏼",
-		"label": "Women with bunny ears: medium skin tone, medium-light skin tone"
+		"label": "Women with bunny ears: medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🐰‍👩🏾",
-		"label": "Women with bunny ears: medium skin tone, medium-dark skin tone"
+		"label": "Women with bunny ears: medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🐰‍👩🏿",
-		"label": "Women with bunny ears: medium skin tone, dark skin tone"
+		"label": "Women with bunny ears: medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍💻",
-		"label": "Woman technologist: medium skin tone"
+		"label": "Woman technologist: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍💼",
-		"label": "Woman office worker: medium skin tone"
+		"label": "Woman office worker: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🔧",
-		"label": "Woman mechanic: medium skin tone"
+		"label": "Woman mechanic: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🔬",
-		"label": "Woman scientist: medium skin tone"
+		"label": "Woman scientist: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🚀",
-		"label": "Woman astronaut: medium skin tone"
+		"label": "Woman astronaut: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🚒",
-		"label": "Woman firefighter: medium skin tone"
+		"label": "Woman firefighter: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🤝‍👨🏻",
-		"label": "Woman and man holding hands: medium skin tone, light skin tone"
+		"label": "Woman and man holding hands: medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🤝‍👨🏼",
-		"label": "Woman and man holding hands: medium skin tone, medium-light skin tone"
+		"label": "Woman and man holding hands: medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🤝‍👨🏾",
-		"label": "Woman and man holding hands: medium skin tone, medium-dark skin tone"
+		"label": "Woman and man holding hands: medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🤝‍👨🏿",
-		"label": "Woman and man holding hands: medium skin tone, dark skin tone"
+		"label": "Woman and man holding hands: medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🤝‍👩🏻",
-		"label": "Women holding hands: medium skin tone, light skin tone"
+		"label": "Women holding hands: medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🤝‍👩🏼",
-		"label": "Women holding hands: medium skin tone, medium-light skin tone"
+		"label": "Women holding hands: medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🤝‍👩🏾",
-		"label": "Women holding hands: medium skin tone, medium-dark skin tone"
+		"label": "Women holding hands: medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🤝‍👩🏿",
-		"label": "Women holding hands: medium skin tone, dark skin tone"
+		"label": "Women holding hands: medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🦯",
-		"label": "Woman with white cane: medium skin tone"
+		"label": "Woman with white cane: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🦯‍➡️",
-		"label": "Woman with white cane facing right: medium skin tone"
+		"label": "Woman with white cane facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🦰",
-		"label": "Woman: medium skin tone, red hair"
+		"label": "Woman: medium skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🦱",
-		"label": "Woman: medium skin tone, curly hair"
+		"label": "Woman: medium skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🦲",
-		"label": "Woman: medium skin tone, bald"
+		"label": "Woman: medium skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🦳",
-		"label": "Woman: medium skin tone, white hair"
+		"label": "Woman: medium skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🦼",
-		"label": "Woman in motorized wheelchair: medium skin tone"
+		"label": "Woman in motorized wheelchair: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🦼‍➡️",
-		"label": "Woman in motorized wheelchair facing right: medium skin tone"
+		"label": "Woman in motorized wheelchair facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🦽",
-		"label": "Woman in manual wheelchair: medium skin tone"
+		"label": "Woman in manual wheelchair: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🦽‍➡️",
-		"label": "Woman in manual wheelchair facing right: medium skin tone"
+		"label": "Woman in manual wheelchair facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🫯‍👩🏻",
-		"label": "Women wrestling: medium skin tone, light skin tone"
+		"label": "Women wrestling: medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🫯‍👩🏼",
-		"label": "Women wrestling: medium skin tone, medium-light skin tone"
+		"label": "Women wrestling: medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🫯‍👩🏾",
-		"label": "Women wrestling: medium skin tone, medium-dark skin tone"
+		"label": "Women wrestling: medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏽‍🫯‍👩🏿",
-		"label": "Women wrestling: medium skin tone, dark skin tone"
+		"label": "Women wrestling: medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾",
-		"label": "Woman: medium-dark skin tone"
+		"label": "Woman: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍⚕️",
-		"label": "Woman health worker: medium-dark skin tone"
+		"label": "Woman health worker: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍⚖️",
-		"label": "Woman judge: medium-dark skin tone"
+		"label": "Woman judge: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍✈️",
-		"label": "Woman pilot: medium-dark skin tone"
+		"label": "Woman pilot: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍👨🏻",
-		"label": "Couple with heart: woman, man, medium-dark skin tone, light skin tone"
+		"label": "Couple with heart: woman, man, medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍👨🏼",
-		"label": "Couple with heart: woman, man, medium-dark skin tone, medium-light skin tone"
+		"label": "Couple with heart: woman, man, medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍👨🏽",
-		"label": "Couple with heart: woman, man, medium-dark skin tone, medium skin tone"
+		"label": "Couple with heart: woman, man, medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍👨🏾",
-		"label": "Couple with heart: woman, man, medium-dark skin tone"
+		"label": "Couple with heart: woman, man, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍👨🏿",
-		"label": "Couple with heart: woman, man, medium-dark skin tone, dark skin tone"
+		"label": "Couple with heart: woman, man, medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍👩🏻",
-		"label": "Couple with heart: woman, woman, medium-dark skin tone, light skin tone"
+		"label": "Couple with heart: woman, woman, medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍👩🏼",
-		"label": "Couple with heart: woman, woman, medium-dark skin tone, medium-light skin tone"
+		"label": "Couple with heart: woman, woman, medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍👩🏽",
-		"label": "Couple with heart: woman, woman, medium-dark skin tone, medium skin tone"
+		"label": "Couple with heart: woman, woman, medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍👩🏾",
-		"label": "Couple with heart: woman, woman, medium-dark skin tone"
+		"label": "Couple with heart: woman, woman, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍👩🏿",
-		"label": "Couple with heart: woman, woman, medium-dark skin tone, dark skin tone"
+		"label": "Couple with heart: woman, woman, medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍💋‍👨🏻",
-		"label": "Kiss: woman, man, medium-dark skin tone, light skin tone"
+		"label": "Kiss: woman, man, medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍💋‍👨🏼",
-		"label": "Kiss: woman, man, medium-dark skin tone, medium-light skin tone"
+		"label": "Kiss: woman, man, medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍💋‍👨🏽",
-		"label": "Kiss: woman, man, medium-dark skin tone, medium skin tone"
+		"label": "Kiss: woman, man, medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍💋‍👨🏾",
-		"label": "Kiss: woman, man, medium-dark skin tone"
+		"label": "Kiss: woman, man, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍💋‍👨🏿",
-		"label": "Kiss: woman, man, medium-dark skin tone, dark skin tone"
+		"label": "Kiss: woman, man, medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍💋‍👩🏻",
-		"label": "Kiss: woman, woman, medium-dark skin tone, light skin tone"
+		"label": "Kiss: woman, woman, medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍💋‍👩🏼",
-		"label": "Kiss: woman, woman, medium-dark skin tone, medium-light skin tone"
+		"label": "Kiss: woman, woman, medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍💋‍👩🏽",
-		"label": "Kiss: woman, woman, medium-dark skin tone, medium skin tone"
+		"label": "Kiss: woman, woman, medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍💋‍👩🏾",
-		"label": "Kiss: woman, woman, medium-dark skin tone"
+		"label": "Kiss: woman, woman, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍❤️‍💋‍👩🏿",
-		"label": "Kiss: woman, woman, medium-dark skin tone, dark skin tone"
+		"label": "Kiss: woman, woman, medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🌾",
-		"label": "Woman farmer: medium-dark skin tone"
+		"label": "Woman farmer: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🍳",
-		"label": "Woman cook: medium-dark skin tone"
+		"label": "Woman cook: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🍼",
-		"label": "Woman feeding baby: medium-dark skin tone"
+		"label": "Woman feeding baby: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🎓",
-		"label": "Woman student: medium-dark skin tone"
+		"label": "Woman student: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🎤",
-		"label": "Woman singer: medium-dark skin tone"
+		"label": "Woman singer: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🎨",
-		"label": "Woman artist: medium-dark skin tone"
+		"label": "Woman artist: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🏫",
-		"label": "Woman teacher: medium-dark skin tone"
+		"label": "Woman teacher: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🏭",
-		"label": "Woman factory worker: medium-dark skin tone"
+		"label": "Woman factory worker: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🐰‍👩🏻",
-		"label": "Women with bunny ears: medium-dark skin tone, light skin tone"
+		"label": "Women with bunny ears: medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🐰‍👩🏼",
-		"label": "Women with bunny ears: medium-dark skin tone, medium-light skin tone"
+		"label": "Women with bunny ears: medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🐰‍👩🏽",
-		"label": "Women with bunny ears: medium-dark skin tone, medium skin tone"
+		"label": "Women with bunny ears: medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🐰‍👩🏿",
-		"label": "Women with bunny ears: medium-dark skin tone, dark skin tone"
+		"label": "Women with bunny ears: medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍💻",
-		"label": "Woman technologist: medium-dark skin tone"
+		"label": "Woman technologist: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍💼",
-		"label": "Woman office worker: medium-dark skin tone"
+		"label": "Woman office worker: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🔧",
-		"label": "Woman mechanic: medium-dark skin tone"
+		"label": "Woman mechanic: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🔬",
-		"label": "Woman scientist: medium-dark skin tone"
+		"label": "Woman scientist: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🚀",
-		"label": "Woman astronaut: medium-dark skin tone"
+		"label": "Woman astronaut: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🚒",
-		"label": "Woman firefighter: medium-dark skin tone"
+		"label": "Woman firefighter: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🤝‍👨🏻",
-		"label": "Woman and man holding hands: medium-dark skin tone, light skin tone"
+		"label": "Woman and man holding hands: medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🤝‍👨🏼",
-		"label": "Woman and man holding hands: medium-dark skin tone, medium-light skin tone"
+		"label": "Woman and man holding hands: medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🤝‍👨🏽",
-		"label": "Woman and man holding hands: medium-dark skin tone, medium skin tone"
+		"label": "Woman and man holding hands: medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🤝‍👨🏿",
-		"label": "Woman and man holding hands: medium-dark skin tone, dark skin tone"
+		"label": "Woman and man holding hands: medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🤝‍👩🏻",
-		"label": "Women holding hands: medium-dark skin tone, light skin tone"
+		"label": "Women holding hands: medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🤝‍👩🏼",
-		"label": "Women holding hands: medium-dark skin tone, medium-light skin tone"
+		"label": "Women holding hands: medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🤝‍👩🏽",
-		"label": "Women holding hands: medium-dark skin tone, medium skin tone"
+		"label": "Women holding hands: medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🤝‍👩🏿",
-		"label": "Women holding hands: medium-dark skin tone, dark skin tone"
+		"label": "Women holding hands: medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🦯",
-		"label": "Woman with white cane: medium-dark skin tone"
+		"label": "Woman with white cane: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🦯‍➡️",
-		"label": "Woman with white cane facing right: medium-dark skin tone"
+		"label": "Woman with white cane facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🦰",
-		"label": "Woman: medium-dark skin tone, red hair"
+		"label": "Woman: medium-dark skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🦱",
-		"label": "Woman: medium-dark skin tone, curly hair"
+		"label": "Woman: medium-dark skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🦲",
-		"label": "Woman: medium-dark skin tone, bald"
+		"label": "Woman: medium-dark skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🦳",
-		"label": "Woman: medium-dark skin tone, white hair"
+		"label": "Woman: medium-dark skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🦼",
-		"label": "Woman in motorized wheelchair: medium-dark skin tone"
+		"label": "Woman in motorized wheelchair: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🦼‍➡️",
-		"label": "Woman in motorized wheelchair facing right: medium-dark skin tone"
+		"label": "Woman in motorized wheelchair facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🦽",
-		"label": "Woman in manual wheelchair: medium-dark skin tone"
+		"label": "Woman in manual wheelchair: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🦽‍➡️",
-		"label": "Woman in manual wheelchair facing right: medium-dark skin tone"
+		"label": "Woman in manual wheelchair facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🫯‍👩🏻",
-		"label": "Women wrestling: medium-dark skin tone, light skin tone"
+		"label": "Women wrestling: medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🫯‍👩🏼",
-		"label": "Women wrestling: medium-dark skin tone, medium-light skin tone"
+		"label": "Women wrestling: medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🫯‍👩🏽",
-		"label": "Women wrestling: medium-dark skin tone, medium skin tone"
+		"label": "Women wrestling: medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏾‍🫯‍👩🏿",
-		"label": "Women wrestling: medium-dark skin tone, dark skin tone"
+		"label": "Women wrestling: medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿",
-		"label": "Woman: dark skin tone"
+		"label": "Woman: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍⚕️",
-		"label": "Woman health worker: dark skin tone"
+		"label": "Woman health worker: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍⚖️",
-		"label": "Woman judge: dark skin tone"
+		"label": "Woman judge: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍✈️",
-		"label": "Woman pilot: dark skin tone"
+		"label": "Woman pilot: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍👨🏻",
-		"label": "Couple with heart: woman, man, dark skin tone, light skin tone"
+		"label": "Couple with heart: woman, man, dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍👨🏼",
-		"label": "Couple with heart: woman, man, dark skin tone, medium-light skin tone"
+		"label": "Couple with heart: woman, man, dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍👨🏽",
-		"label": "Couple with heart: woman, man, dark skin tone, medium skin tone"
+		"label": "Couple with heart: woman, man, dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍👨🏾",
-		"label": "Couple with heart: woman, man, dark skin tone, medium-dark skin tone"
+		"label": "Couple with heart: woman, man, dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍👨🏿",
-		"label": "Couple with heart: woman, man, dark skin tone"
+		"label": "Couple with heart: woman, man, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍👩🏻",
-		"label": "Couple with heart: woman, woman, dark skin tone, light skin tone"
+		"label": "Couple with heart: woman, woman, dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍👩🏼",
-		"label": "Couple with heart: woman, woman, dark skin tone, medium-light skin tone"
+		"label": "Couple with heart: woman, woman, dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍👩🏽",
-		"label": "Couple with heart: woman, woman, dark skin tone, medium skin tone"
+		"label": "Couple with heart: woman, woman, dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍👩🏾",
-		"label": "Couple with heart: woman, woman, dark skin tone, medium-dark skin tone"
+		"label": "Couple with heart: woman, woman, dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍👩🏿",
-		"label": "Couple with heart: woman, woman, dark skin tone"
+		"label": "Couple with heart: woman, woman, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍💋‍👨🏻",
-		"label": "Kiss: woman, man, dark skin tone, light skin tone"
+		"label": "Kiss: woman, man, dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍💋‍👨🏼",
-		"label": "Kiss: woman, man, dark skin tone, medium-light skin tone"
+		"label": "Kiss: woman, man, dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍💋‍👨🏽",
-		"label": "Kiss: woman, man, dark skin tone, medium skin tone"
+		"label": "Kiss: woman, man, dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍💋‍👨🏾",
-		"label": "Kiss: woman, man, dark skin tone, medium-dark skin tone"
+		"label": "Kiss: woman, man, dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍💋‍👨🏿",
-		"label": "Kiss: woman, man, dark skin tone"
+		"label": "Kiss: woman, man, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍💋‍👩🏻",
-		"label": "Kiss: woman, woman, dark skin tone, light skin tone"
+		"label": "Kiss: woman, woman, dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍💋‍👩🏼",
-		"label": "Kiss: woman, woman, dark skin tone, medium-light skin tone"
+		"label": "Kiss: woman, woman, dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍💋‍👩🏽",
-		"label": "Kiss: woman, woman, dark skin tone, medium skin tone"
+		"label": "Kiss: woman, woman, dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍💋‍👩🏾",
-		"label": "Kiss: woman, woman, dark skin tone, medium-dark skin tone"
+		"label": "Kiss: woman, woman, dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍❤️‍💋‍👩🏿",
-		"label": "Kiss: woman, woman, dark skin tone"
+		"label": "Kiss: woman, woman, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🌾",
-		"label": "Woman farmer: dark skin tone"
+		"label": "Woman farmer: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🍳",
-		"label": "Woman cook: dark skin tone"
+		"label": "Woman cook: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🍼",
-		"label": "Woman feeding baby: dark skin tone"
+		"label": "Woman feeding baby: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🎓",
-		"label": "Woman student: dark skin tone"
+		"label": "Woman student: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🎤",
-		"label": "Woman singer: dark skin tone"
+		"label": "Woman singer: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🎨",
-		"label": "Woman artist: dark skin tone"
+		"label": "Woman artist: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🏫",
-		"label": "Woman teacher: dark skin tone"
+		"label": "Woman teacher: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🏭",
-		"label": "Woman factory worker: dark skin tone"
+		"label": "Woman factory worker: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🐰‍👩🏻",
-		"label": "Women with bunny ears: dark skin tone, light skin tone"
+		"label": "Women with bunny ears: dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🐰‍👩🏼",
-		"label": "Women with bunny ears: dark skin tone, medium-light skin tone"
+		"label": "Women with bunny ears: dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🐰‍👩🏽",
-		"label": "Women with bunny ears: dark skin tone, medium skin tone"
+		"label": "Women with bunny ears: dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🐰‍👩🏾",
-		"label": "Women with bunny ears: dark skin tone, medium-dark skin tone"
+		"label": "Women with bunny ears: dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍💻",
-		"label": "Woman technologist: dark skin tone"
+		"label": "Woman technologist: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍💼",
-		"label": "Woman office worker: dark skin tone"
+		"label": "Woman office worker: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🔧",
-		"label": "Woman mechanic: dark skin tone"
+		"label": "Woman mechanic: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🔬",
-		"label": "Woman scientist: dark skin tone"
+		"label": "Woman scientist: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🚀",
-		"label": "Woman astronaut: dark skin tone"
+		"label": "Woman astronaut: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🚒",
-		"label": "Woman firefighter: dark skin tone"
+		"label": "Woman firefighter: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🤝‍👨🏻",
-		"label": "Woman and man holding hands: dark skin tone, light skin tone"
+		"label": "Woman and man holding hands: dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🤝‍👨🏼",
-		"label": "Woman and man holding hands: dark skin tone, medium-light skin tone"
+		"label": "Woman and man holding hands: dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🤝‍👨🏽",
-		"label": "Woman and man holding hands: dark skin tone, medium skin tone"
+		"label": "Woman and man holding hands: dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🤝‍👨🏾",
-		"label": "Woman and man holding hands: dark skin tone, medium-dark skin tone"
+		"label": "Woman and man holding hands: dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🤝‍👩🏻",
-		"label": "Women holding hands: dark skin tone, light skin tone"
+		"label": "Women holding hands: dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🤝‍👩🏼",
-		"label": "Women holding hands: dark skin tone, medium-light skin tone"
+		"label": "Women holding hands: dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🤝‍👩🏽",
-		"label": "Women holding hands: dark skin tone, medium skin tone"
+		"label": "Women holding hands: dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🤝‍👩🏾",
-		"label": "Women holding hands: dark skin tone, medium-dark skin tone"
+		"label": "Women holding hands: dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🦯",
-		"label": "Woman with white cane: dark skin tone"
+		"label": "Woman with white cane: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🦯‍➡️",
-		"label": "Woman with white cane facing right: dark skin tone"
+		"label": "Woman with white cane facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🦰",
-		"label": "Woman: dark skin tone, red hair"
+		"label": "Woman: dark skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🦱",
-		"label": "Woman: dark skin tone, curly hair"
+		"label": "Woman: dark skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🦲",
-		"label": "Woman: dark skin tone, bald"
+		"label": "Woman: dark skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🦳",
-		"label": "Woman: dark skin tone, white hair"
+		"label": "Woman: dark skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🦼",
-		"label": "Woman in motorized wheelchair: dark skin tone"
+		"label": "Woman in motorized wheelchair: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🦼‍➡️",
-		"label": "Woman in motorized wheelchair facing right: dark skin tone"
+		"label": "Woman in motorized wheelchair facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🦽",
-		"label": "Woman in manual wheelchair: dark skin tone"
+		"label": "Woman in manual wheelchair: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🦽‍➡️",
-		"label": "Woman in manual wheelchair facing right: dark skin tone"
+		"label": "Woman in manual wheelchair facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🫯‍👩🏻",
-		"label": "Women wrestling: dark skin tone, light skin tone"
+		"label": "Women wrestling: dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🫯‍👩🏼",
-		"label": "Women wrestling: dark skin tone, medium-light skin tone"
+		"label": "Women wrestling: dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🫯‍👩🏽",
-		"label": "Women wrestling: dark skin tone, medium skin tone"
+		"label": "Women wrestling: dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👩🏿‍🫯‍👩🏾",
-		"label": "Women wrestling: dark skin tone, medium-dark skin tone"
+		"label": "Women wrestling: dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👪",
-		"label": "Family"
+		"label": "Family",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👫",
-		"label": "Woman and man holding hands"
+		"label": "Woman and man holding hands",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👫🏻",
-		"label": "Woman and man holding hands: light skin tone"
+		"label": "Woman and man holding hands: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👫🏼",
-		"label": "Woman and man holding hands: medium-light skin tone"
+		"label": "Woman and man holding hands: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👫🏽",
-		"label": "Woman and man holding hands: medium skin tone"
+		"label": "Woman and man holding hands: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👫🏾",
-		"label": "Woman and man holding hands: medium-dark skin tone"
+		"label": "Woman and man holding hands: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👫🏿",
-		"label": "Woman and man holding hands: dark skin tone"
+		"label": "Woman and man holding hands: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👬",
-		"label": "Men holding hands"
+		"label": "Men holding hands",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👬🏻",
-		"label": "Men holding hands: light skin tone"
+		"label": "Men holding hands: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👬🏼",
-		"label": "Men holding hands: medium-light skin tone"
+		"label": "Men holding hands: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👬🏽",
-		"label": "Men holding hands: medium skin tone"
+		"label": "Men holding hands: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👬🏾",
-		"label": "Men holding hands: medium-dark skin tone"
+		"label": "Men holding hands: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👬🏿",
-		"label": "Men holding hands: dark skin tone"
+		"label": "Men holding hands: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👭",
-		"label": "Women holding hands"
+		"label": "Women holding hands",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👭🏻",
-		"label": "Women holding hands: light skin tone"
+		"label": "Women holding hands: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👭🏼",
-		"label": "Women holding hands: medium-light skin tone"
+		"label": "Women holding hands: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👭🏽",
-		"label": "Women holding hands: medium skin tone"
+		"label": "Women holding hands: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👭🏾",
-		"label": "Women holding hands: medium-dark skin tone"
+		"label": "Women holding hands: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👭🏿",
-		"label": "Women holding hands: dark skin tone"
+		"label": "Women holding hands: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮",
-		"label": "Police officer"
+		"label": "Police officer",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮‍♀️",
-		"label": "Woman police officer"
+		"label": "Woman police officer",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮‍♂️",
-		"label": "Man police officer"
+		"label": "Man police officer",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏻",
-		"label": "Police officer: light skin tone"
+		"label": "Police officer: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏻‍♀️",
-		"label": "Woman police officer: light skin tone"
+		"label": "Woman police officer: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏻‍♂️",
-		"label": "Man police officer: light skin tone"
+		"label": "Man police officer: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏼",
-		"label": "Police officer: medium-light skin tone"
+		"label": "Police officer: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏼‍♀️",
-		"label": "Woman police officer: medium-light skin tone"
+		"label": "Woman police officer: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏼‍♂️",
-		"label": "Man police officer: medium-light skin tone"
+		"label": "Man police officer: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏽",
-		"label": "Police officer: medium skin tone"
+		"label": "Police officer: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏽‍♀️",
-		"label": "Woman police officer: medium skin tone"
+		"label": "Woman police officer: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏽‍♂️",
-		"label": "Man police officer: medium skin tone"
+		"label": "Man police officer: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏾",
-		"label": "Police officer: medium-dark skin tone"
+		"label": "Police officer: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏾‍♀️",
-		"label": "Woman police officer: medium-dark skin tone"
+		"label": "Woman police officer: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏾‍♂️",
-		"label": "Man police officer: medium-dark skin tone"
+		"label": "Man police officer: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏿",
-		"label": "Police officer: dark skin tone"
+		"label": "Police officer: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏿‍♀️",
-		"label": "Woman police officer: dark skin tone"
+		"label": "Woman police officer: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👮🏿‍♂️",
-		"label": "Man police officer: dark skin tone"
+		"label": "Man police officer: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯",
-		"label": "People with bunny ears"
+		"label": "People with bunny ears",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯‍♀️",
-		"label": "Women with bunny ears"
+		"label": "Women with bunny ears",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯‍♂️",
-		"label": "Men with bunny ears"
+		"label": "Men with bunny ears",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏻",
-		"label": "People with bunny ears: light skin tone"
+		"label": "People with bunny ears: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏻‍♀️",
-		"label": "Women with bunny ears: light skin tone"
+		"label": "Women with bunny ears: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏻‍♂️",
-		"label": "Men with bunny ears: light skin tone"
+		"label": "Men with bunny ears: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏼",
-		"label": "People with bunny ears: medium-light skin tone"
+		"label": "People with bunny ears: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏼‍♀️",
-		"label": "Women with bunny ears: medium-light skin tone"
+		"label": "Women with bunny ears: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏼‍♂️",
-		"label": "Men with bunny ears: medium-light skin tone"
+		"label": "Men with bunny ears: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏽",
-		"label": "People with bunny ears: medium skin tone"
+		"label": "People with bunny ears: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏽‍♀️",
-		"label": "Women with bunny ears: medium skin tone"
+		"label": "Women with bunny ears: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏽‍♂️",
-		"label": "Men with bunny ears: medium skin tone"
+		"label": "Men with bunny ears: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏾",
-		"label": "People with bunny ears: medium-dark skin tone"
+		"label": "People with bunny ears: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏾‍♀️",
-		"label": "Women with bunny ears: medium-dark skin tone"
+		"label": "Women with bunny ears: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏾‍♂️",
-		"label": "Men with bunny ears: medium-dark skin tone"
+		"label": "Men with bunny ears: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏿",
-		"label": "People with bunny ears: dark skin tone"
+		"label": "People with bunny ears: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏿‍♀️",
-		"label": "Women with bunny ears: dark skin tone"
+		"label": "Women with bunny ears: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👯🏿‍♂️",
-		"label": "Men with bunny ears: dark skin tone"
+		"label": "Men with bunny ears: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰",
-		"label": "Person with veil"
+		"label": "Person with veil",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰‍♀️",
-		"label": "Woman with veil"
+		"label": "Woman with veil",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰‍♂️",
-		"label": "Man with veil"
+		"label": "Man with veil",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏻",
-		"label": "Person with veil: light skin tone"
+		"label": "Person with veil: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏻‍♀️",
-		"label": "Woman with veil: light skin tone"
+		"label": "Woman with veil: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏻‍♂️",
-		"label": "Man with veil: light skin tone"
+		"label": "Man with veil: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏼",
-		"label": "Person with veil: medium-light skin tone"
+		"label": "Person with veil: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏼‍♀️",
-		"label": "Woman with veil: medium-light skin tone"
+		"label": "Woman with veil: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏼‍♂️",
-		"label": "Man with veil: medium-light skin tone"
+		"label": "Man with veil: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏽",
-		"label": "Person with veil: medium skin tone"
+		"label": "Person with veil: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏽‍♀️",
-		"label": "Woman with veil: medium skin tone"
+		"label": "Woman with veil: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏽‍♂️",
-		"label": "Man with veil: medium skin tone"
+		"label": "Man with veil: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏾",
-		"label": "Person with veil: medium-dark skin tone"
+		"label": "Person with veil: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏾‍♀️",
-		"label": "Woman with veil: medium-dark skin tone"
+		"label": "Woman with veil: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏾‍♂️",
-		"label": "Man with veil: medium-dark skin tone"
+		"label": "Man with veil: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏿",
-		"label": "Person with veil: dark skin tone"
+		"label": "Person with veil: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏿‍♀️",
-		"label": "Woman with veil: dark skin tone"
+		"label": "Woman with veil: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👰🏿‍♂️",
-		"label": "Man with veil: dark skin tone"
+		"label": "Man with veil: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱",
-		"label": "Person: blond hair"
+		"label": "Person: blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱‍♀️",
-		"label": "Woman: blond hair"
+		"label": "Woman: blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱‍♂️",
-		"label": "Man: blond hair"
+		"label": "Man: blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏻",
-		"label": "Person: light skin tone, blond hair"
+		"label": "Person: light skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏻‍♀️",
-		"label": "Woman: light skin tone, blond hair"
+		"label": "Woman: light skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏻‍♂️",
-		"label": "Man: light skin tone, blond hair"
+		"label": "Man: light skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏼",
-		"label": "Person: medium-light skin tone, blond hair"
+		"label": "Person: medium-light skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏼‍♀️",
-		"label": "Woman: medium-light skin tone, blond hair"
+		"label": "Woman: medium-light skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏼‍♂️",
-		"label": "Man: medium-light skin tone, blond hair"
+		"label": "Man: medium-light skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏽",
-		"label": "Person: medium skin tone, blond hair"
+		"label": "Person: medium skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏽‍♀️",
-		"label": "Woman: medium skin tone, blond hair"
+		"label": "Woman: medium skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏽‍♂️",
-		"label": "Man: medium skin tone, blond hair"
+		"label": "Man: medium skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏾",
-		"label": "Person: medium-dark skin tone, blond hair"
+		"label": "Person: medium-dark skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏾‍♀️",
-		"label": "Woman: medium-dark skin tone, blond hair"
+		"label": "Woman: medium-dark skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏾‍♂️",
-		"label": "Man: medium-dark skin tone, blond hair"
+		"label": "Man: medium-dark skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏿",
-		"label": "Person: dark skin tone, blond hair"
+		"label": "Person: dark skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏿‍♀️",
-		"label": "Woman: dark skin tone, blond hair"
+		"label": "Woman: dark skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👱🏿‍♂️",
-		"label": "Man: dark skin tone, blond hair"
+		"label": "Man: dark skin tone, blond hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👲",
-		"label": "Person with skullcap"
+		"label": "Person with skullcap",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👲🏻",
-		"label": "Person with skullcap: light skin tone"
+		"label": "Person with skullcap: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👲🏼",
-		"label": "Person with skullcap: medium-light skin tone"
+		"label": "Person with skullcap: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👲🏽",
-		"label": "Person with skullcap: medium skin tone"
+		"label": "Person with skullcap: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👲🏾",
-		"label": "Person with skullcap: medium-dark skin tone"
+		"label": "Person with skullcap: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👲🏿",
-		"label": "Person with skullcap: dark skin tone"
+		"label": "Person with skullcap: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳",
-		"label": "Person wearing turban"
+		"label": "Person wearing turban",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳‍♀️",
-		"label": "Woman wearing turban"
+		"label": "Woman wearing turban",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳‍♂️",
-		"label": "Man wearing turban"
+		"label": "Man wearing turban",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏻",
-		"label": "Person wearing turban: light skin tone"
+		"label": "Person wearing turban: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏻‍♀️",
-		"label": "Woman wearing turban: light skin tone"
+		"label": "Woman wearing turban: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏻‍♂️",
-		"label": "Man wearing turban: light skin tone"
+		"label": "Man wearing turban: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏼",
-		"label": "Person wearing turban: medium-light skin tone"
+		"label": "Person wearing turban: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏼‍♀️",
-		"label": "Woman wearing turban: medium-light skin tone"
+		"label": "Woman wearing turban: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏼‍♂️",
-		"label": "Man wearing turban: medium-light skin tone"
+		"label": "Man wearing turban: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏽",
-		"label": "Person wearing turban: medium skin tone"
+		"label": "Person wearing turban: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏽‍♀️",
-		"label": "Woman wearing turban: medium skin tone"
+		"label": "Woman wearing turban: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏽‍♂️",
-		"label": "Man wearing turban: medium skin tone"
+		"label": "Man wearing turban: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏾",
-		"label": "Person wearing turban: medium-dark skin tone"
+		"label": "Person wearing turban: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏾‍♀️",
-		"label": "Woman wearing turban: medium-dark skin tone"
+		"label": "Woman wearing turban: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏾‍♂️",
-		"label": "Man wearing turban: medium-dark skin tone"
+		"label": "Man wearing turban: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏿",
-		"label": "Person wearing turban: dark skin tone"
+		"label": "Person wearing turban: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏿‍♀️",
-		"label": "Woman wearing turban: dark skin tone"
+		"label": "Woman wearing turban: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👳🏿‍♂️",
-		"label": "Man wearing turban: dark skin tone"
+		"label": "Man wearing turban: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👴",
-		"label": "Old man"
+		"label": "Old man",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👴🏻",
-		"label": "Old man: light skin tone"
+		"label": "Old man: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👴🏼",
-		"label": "Old man: medium-light skin tone"
+		"label": "Old man: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👴🏽",
-		"label": "Old man: medium skin tone"
+		"label": "Old man: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👴🏾",
-		"label": "Old man: medium-dark skin tone"
+		"label": "Old man: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👴🏿",
-		"label": "Old man: dark skin tone"
+		"label": "Old man: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👵",
-		"label": "Old woman"
+		"label": "Old woman",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👵🏻",
-		"label": "Old woman: light skin tone"
+		"label": "Old woman: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👵🏼",
-		"label": "Old woman: medium-light skin tone"
+		"label": "Old woman: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👵🏽",
-		"label": "Old woman: medium skin tone"
+		"label": "Old woman: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👵🏾",
-		"label": "Old woman: medium-dark skin tone"
+		"label": "Old woman: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👵🏿",
-		"label": "Old woman: dark skin tone"
+		"label": "Old woman: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👶",
-		"label": "Baby"
+		"label": "Baby",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👶🏻",
-		"label": "Baby: light skin tone"
+		"label": "Baby: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👶🏼",
-		"label": "Baby: medium-light skin tone"
+		"label": "Baby: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👶🏽",
-		"label": "Baby: medium skin tone"
+		"label": "Baby: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👶🏾",
-		"label": "Baby: medium-dark skin tone"
+		"label": "Baby: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👶🏿",
-		"label": "Baby: dark skin tone"
+		"label": "Baby: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷",
-		"label": "Construction worker"
+		"label": "Construction worker",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷‍♀️",
-		"label": "Woman construction worker"
+		"label": "Woman construction worker",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷‍♂️",
-		"label": "Man construction worker"
+		"label": "Man construction worker",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏻",
-		"label": "Construction worker: light skin tone"
+		"label": "Construction worker: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏻‍♀️",
-		"label": "Woman construction worker: light skin tone"
+		"label": "Woman construction worker: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏻‍♂️",
-		"label": "Man construction worker: light skin tone"
+		"label": "Man construction worker: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏼",
-		"label": "Construction worker: medium-light skin tone"
+		"label": "Construction worker: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏼‍♀️",
-		"label": "Woman construction worker: medium-light skin tone"
+		"label": "Woman construction worker: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏼‍♂️",
-		"label": "Man construction worker: medium-light skin tone"
+		"label": "Man construction worker: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏽",
-		"label": "Construction worker: medium skin tone"
+		"label": "Construction worker: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏽‍♀️",
-		"label": "Woman construction worker: medium skin tone"
+		"label": "Woman construction worker: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏽‍♂️",
-		"label": "Man construction worker: medium skin tone"
+		"label": "Man construction worker: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏾",
-		"label": "Construction worker: medium-dark skin tone"
+		"label": "Construction worker: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏾‍♀️",
-		"label": "Woman construction worker: medium-dark skin tone"
+		"label": "Woman construction worker: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏾‍♂️",
-		"label": "Man construction worker: medium-dark skin tone"
+		"label": "Man construction worker: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏿",
-		"label": "Construction worker: dark skin tone"
+		"label": "Construction worker: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏿‍♀️",
-		"label": "Woman construction worker: dark skin tone"
+		"label": "Woman construction worker: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👷🏿‍♂️",
-		"label": "Man construction worker: dark skin tone"
+		"label": "Man construction worker: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👸",
-		"label": "Princess"
+		"label": "Princess",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👸🏻",
-		"label": "Princess: light skin tone"
+		"label": "Princess: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👸🏼",
-		"label": "Princess: medium-light skin tone"
+		"label": "Princess: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👸🏽",
-		"label": "Princess: medium skin tone"
+		"label": "Princess: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👸🏾",
-		"label": "Princess: medium-dark skin tone"
+		"label": "Princess: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👸🏿",
-		"label": "Princess: dark skin tone"
+		"label": "Princess: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👹",
-		"label": "Ogre"
+		"label": "Ogre",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "👺",
-		"label": "Goblin"
+		"label": "Goblin",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "👻",
-		"label": "Ghost"
+		"label": "Ghost",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "👼",
-		"label": "Baby angel"
+		"label": "Baby angel",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👼🏻",
-		"label": "Baby angel: light skin tone"
+		"label": "Baby angel: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👼🏼",
-		"label": "Baby angel: medium-light skin tone"
+		"label": "Baby angel: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👼🏽",
-		"label": "Baby angel: medium skin tone"
+		"label": "Baby angel: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👼🏾",
-		"label": "Baby angel: medium-dark skin tone"
+		"label": "Baby angel: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👼🏿",
-		"label": "Baby angel: dark skin tone"
+		"label": "Baby angel: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "👽",
-		"label": "Alien"
+		"label": "Alien",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "👾",
-		"label": "Alien monster"
+		"label": "Alien monster",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "👿",
-		"label": "Angry face with horns"
+		"label": "Angry face with horns",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💀",
-		"label": "Skull"
+		"label": "Skull",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💁",
-		"label": "Person tipping hand"
+		"label": "Person tipping hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁‍♀️",
-		"label": "Woman tipping hand"
+		"label": "Woman tipping hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁‍♂️",
-		"label": "Man tipping hand"
+		"label": "Man tipping hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏻",
-		"label": "Person tipping hand: light skin tone"
+		"label": "Person tipping hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏻‍♀️",
-		"label": "Woman tipping hand: light skin tone"
+		"label": "Woman tipping hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏻‍♂️",
-		"label": "Man tipping hand: light skin tone"
+		"label": "Man tipping hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏼",
-		"label": "Person tipping hand: medium-light skin tone"
+		"label": "Person tipping hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏼‍♀️",
-		"label": "Woman tipping hand: medium-light skin tone"
+		"label": "Woman tipping hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏼‍♂️",
-		"label": "Man tipping hand: medium-light skin tone"
+		"label": "Man tipping hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏽",
-		"label": "Person tipping hand: medium skin tone"
+		"label": "Person tipping hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏽‍♀️",
-		"label": "Woman tipping hand: medium skin tone"
+		"label": "Woman tipping hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏽‍♂️",
-		"label": "Man tipping hand: medium skin tone"
+		"label": "Man tipping hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏾",
-		"label": "Person tipping hand: medium-dark skin tone"
+		"label": "Person tipping hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏾‍♀️",
-		"label": "Woman tipping hand: medium-dark skin tone"
+		"label": "Woman tipping hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏾‍♂️",
-		"label": "Man tipping hand: medium-dark skin tone"
+		"label": "Man tipping hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏿",
-		"label": "Person tipping hand: dark skin tone"
+		"label": "Person tipping hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏿‍♀️",
-		"label": "Woman tipping hand: dark skin tone"
+		"label": "Woman tipping hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💁🏿‍♂️",
-		"label": "Man tipping hand: dark skin tone"
+		"label": "Man tipping hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂",
-		"label": "Guard"
+		"label": "Guard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂‍♀️",
-		"label": "Woman guard"
+		"label": "Woman guard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂‍♂️",
-		"label": "Man guard"
+		"label": "Man guard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏻",
-		"label": "Guard: light skin tone"
+		"label": "Guard: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏻‍♀️",
-		"label": "Woman guard: light skin tone"
+		"label": "Woman guard: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏻‍♂️",
-		"label": "Man guard: light skin tone"
+		"label": "Man guard: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏼",
-		"label": "Guard: medium-light skin tone"
+		"label": "Guard: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏼‍♀️",
-		"label": "Woman guard: medium-light skin tone"
+		"label": "Woman guard: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏼‍♂️",
-		"label": "Man guard: medium-light skin tone"
+		"label": "Man guard: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏽",
-		"label": "Guard: medium skin tone"
+		"label": "Guard: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏽‍♀️",
-		"label": "Woman guard: medium skin tone"
+		"label": "Woman guard: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏽‍♂️",
-		"label": "Man guard: medium skin tone"
+		"label": "Man guard: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏾",
-		"label": "Guard: medium-dark skin tone"
+		"label": "Guard: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏾‍♀️",
-		"label": "Woman guard: medium-dark skin tone"
+		"label": "Woman guard: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏾‍♂️",
-		"label": "Man guard: medium-dark skin tone"
+		"label": "Man guard: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏿",
-		"label": "Guard: dark skin tone"
+		"label": "Guard: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏿‍♀️",
-		"label": "Woman guard: dark skin tone"
+		"label": "Woman guard: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💂🏿‍♂️",
-		"label": "Man guard: dark skin tone"
+		"label": "Man guard: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💃",
-		"label": "Woman dancing"
+		"label": "Woman dancing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💃🏻",
-		"label": "Woman dancing: light skin tone"
+		"label": "Woman dancing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💃🏼",
-		"label": "Woman dancing: medium-light skin tone"
+		"label": "Woman dancing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💃🏽",
-		"label": "Woman dancing: medium skin tone"
+		"label": "Woman dancing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💃🏾",
-		"label": "Woman dancing: medium-dark skin tone"
+		"label": "Woman dancing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💃🏿",
-		"label": "Woman dancing: dark skin tone"
+		"label": "Woman dancing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💄",
-		"label": "Lipstick"
+		"label": "Lipstick",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💅",
-		"label": "Nail polish"
+		"label": "Nail polish",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💅🏻",
-		"label": "Nail polish: light skin tone"
+		"label": "Nail polish: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💅🏼",
-		"label": "Nail polish: medium-light skin tone"
+		"label": "Nail polish: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💅🏽",
-		"label": "Nail polish: medium skin tone"
+		"label": "Nail polish: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💅🏾",
-		"label": "Nail polish: medium-dark skin tone"
+		"label": "Nail polish: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💅🏿",
-		"label": "Nail polish: dark skin tone"
+		"label": "Nail polish: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆",
-		"label": "Person getting massage"
+		"label": "Person getting massage",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆‍♀️",
-		"label": "Woman getting massage"
+		"label": "Woman getting massage",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆‍♂️",
-		"label": "Man getting massage"
+		"label": "Man getting massage",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏻",
-		"label": "Person getting massage: light skin tone"
+		"label": "Person getting massage: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏻‍♀️",
-		"label": "Woman getting massage: light skin tone"
+		"label": "Woman getting massage: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏻‍♂️",
-		"label": "Man getting massage: light skin tone"
+		"label": "Man getting massage: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏼",
-		"label": "Person getting massage: medium-light skin tone"
+		"label": "Person getting massage: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏼‍♀️",
-		"label": "Woman getting massage: medium-light skin tone"
+		"label": "Woman getting massage: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏼‍♂️",
-		"label": "Man getting massage: medium-light skin tone"
+		"label": "Man getting massage: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏽",
-		"label": "Person getting massage: medium skin tone"
+		"label": "Person getting massage: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏽‍♀️",
-		"label": "Woman getting massage: medium skin tone"
+		"label": "Woman getting massage: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏽‍♂️",
-		"label": "Man getting massage: medium skin tone"
+		"label": "Man getting massage: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏾",
-		"label": "Person getting massage: medium-dark skin tone"
+		"label": "Person getting massage: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏾‍♀️",
-		"label": "Woman getting massage: medium-dark skin tone"
+		"label": "Woman getting massage: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏾‍♂️",
-		"label": "Man getting massage: medium-dark skin tone"
+		"label": "Man getting massage: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏿",
-		"label": "Person getting massage: dark skin tone"
+		"label": "Person getting massage: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏿‍♀️",
-		"label": "Woman getting massage: dark skin tone"
+		"label": "Woman getting massage: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💆🏿‍♂️",
-		"label": "Man getting massage: dark skin tone"
+		"label": "Man getting massage: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇",
-		"label": "Person getting haircut"
+		"label": "Person getting haircut",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇‍♀️",
-		"label": "Woman getting haircut"
+		"label": "Woman getting haircut",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇‍♂️",
-		"label": "Man getting haircut"
+		"label": "Man getting haircut",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏻",
-		"label": "Person getting haircut: light skin tone"
+		"label": "Person getting haircut: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏻‍♀️",
-		"label": "Woman getting haircut: light skin tone"
+		"label": "Woman getting haircut: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏻‍♂️",
-		"label": "Man getting haircut: light skin tone"
+		"label": "Man getting haircut: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏼",
-		"label": "Person getting haircut: medium-light skin tone"
+		"label": "Person getting haircut: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏼‍♀️",
-		"label": "Woman getting haircut: medium-light skin tone"
+		"label": "Woman getting haircut: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏼‍♂️",
-		"label": "Man getting haircut: medium-light skin tone"
+		"label": "Man getting haircut: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏽",
-		"label": "Person getting haircut: medium skin tone"
+		"label": "Person getting haircut: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏽‍♀️",
-		"label": "Woman getting haircut: medium skin tone"
+		"label": "Woman getting haircut: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏽‍♂️",
-		"label": "Man getting haircut: medium skin tone"
+		"label": "Man getting haircut: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏾",
-		"label": "Person getting haircut: medium-dark skin tone"
+		"label": "Person getting haircut: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏾‍♀️",
-		"label": "Woman getting haircut: medium-dark skin tone"
+		"label": "Woman getting haircut: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏾‍♂️",
-		"label": "Man getting haircut: medium-dark skin tone"
+		"label": "Man getting haircut: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏿",
-		"label": "Person getting haircut: dark skin tone"
+		"label": "Person getting haircut: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏿‍♀️",
-		"label": "Woman getting haircut: dark skin tone"
+		"label": "Woman getting haircut: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💇🏿‍♂️",
-		"label": "Man getting haircut: dark skin tone"
+		"label": "Man getting haircut: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💈",
-		"label": "Barber pole"
+		"label": "Barber pole",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "💉",
-		"label": "Syringe"
+		"label": "Syringe",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💊",
-		"label": "Pill"
+		"label": "Pill",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💋",
-		"label": "Kiss mark"
+		"label": "Kiss mark",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💌",
-		"label": "Love letter"
+		"label": "Love letter",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💍",
-		"label": "Ring"
+		"label": "Ring",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💎",
-		"label": "Gem stone"
+		"label": "Gem stone",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💏",
-		"label": "Kiss"
+		"label": "Kiss",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💏🏻",
-		"label": "Kiss: light skin tone"
+		"label": "Kiss: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💏🏼",
-		"label": "Kiss: medium-light skin tone"
+		"label": "Kiss: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💏🏽",
-		"label": "Kiss: medium skin tone"
+		"label": "Kiss: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💏🏾",
-		"label": "Kiss: medium-dark skin tone"
+		"label": "Kiss: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💏🏿",
-		"label": "Kiss: dark skin tone"
+		"label": "Kiss: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💐",
-		"label": "Bouquet"
+		"label": "Bouquet",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "💑",
-		"label": "Couple with heart"
+		"label": "Couple with heart",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💑🏻",
-		"label": "Couple with heart: light skin tone"
+		"label": "Couple with heart: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💑🏼",
-		"label": "Couple with heart: medium-light skin tone"
+		"label": "Couple with heart: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💑🏽",
-		"label": "Couple with heart: medium skin tone"
+		"label": "Couple with heart: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💑🏾",
-		"label": "Couple with heart: medium-dark skin tone"
+		"label": "Couple with heart: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💑🏿",
-		"label": "Couple with heart: dark skin tone"
+		"label": "Couple with heart: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💒",
-		"label": "Wedding"
+		"label": "Wedding",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "💓",
-		"label": "Beating heart"
+		"label": "Beating heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💔",
-		"label": "Broken heart"
+		"label": "Broken heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💕",
-		"label": "Two hearts"
+		"label": "Two hearts",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💖",
-		"label": "Sparkling heart"
+		"label": "Sparkling heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💗",
-		"label": "Growing heart"
+		"label": "Growing heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💘",
-		"label": "Heart with arrow"
+		"label": "Heart with arrow",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💙",
-		"label": "Blue heart"
+		"label": "Blue heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💚",
-		"label": "Green heart"
+		"label": "Green heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💛",
-		"label": "Yellow heart"
+		"label": "Yellow heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💜",
-		"label": "Purple heart"
+		"label": "Purple heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💝",
-		"label": "Heart with ribbon"
+		"label": "Heart with ribbon",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💞",
-		"label": "Revolving hearts"
+		"label": "Revolving hearts",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💟",
-		"label": "Heart decoration"
+		"label": "Heart decoration",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💠",
-		"label": "Diamond with a dot"
+		"label": "Diamond with a dot",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "💡",
-		"label": "Light bulb"
+		"label": "Light bulb",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💢",
-		"label": "Anger symbol"
+		"label": "Anger symbol",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💣",
-		"label": "Bomb"
+		"label": "Bomb",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💤",
-		"label": "ZZZ"
+		"label": "ZZZ",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💥",
-		"label": "Collision"
+		"label": "Collision",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💦",
-		"label": "Sweat droplets"
+		"label": "Sweat droplets",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💧",
-		"label": "Droplet"
+		"label": "Droplet",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "💨",
-		"label": "Dashing away"
+		"label": "Dashing away",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💩",
-		"label": "Pile of poo"
+		"label": "Pile of poo",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💪",
-		"label": "Flexed biceps"
+		"label": "Flexed biceps",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💪🏻",
-		"label": "Flexed biceps: light skin tone"
+		"label": "Flexed biceps: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💪🏼",
-		"label": "Flexed biceps: medium-light skin tone"
+		"label": "Flexed biceps: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💪🏽",
-		"label": "Flexed biceps: medium skin tone"
+		"label": "Flexed biceps: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💪🏾",
-		"label": "Flexed biceps: medium-dark skin tone"
+		"label": "Flexed biceps: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💪🏿",
-		"label": "Flexed biceps: dark skin tone"
+		"label": "Flexed biceps: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "💫",
-		"label": "Dizzy"
+		"label": "Dizzy",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💬",
-		"label": "Speech balloon"
+		"label": "Speech balloon",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💭",
-		"label": "Thought balloon"
+		"label": "Thought balloon",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💮",
-		"label": "White flower"
+		"label": "White flower",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "💯",
-		"label": "Hundred points"
+		"label": "Hundred points",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "💰",
-		"label": "Money bag"
+		"label": "Money bag",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💱",
-		"label": "Currency exchange"
+		"label": "Currency exchange",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "💲",
-		"label": "Heavy dollar sign"
+		"label": "Heavy dollar sign",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "💳",
-		"label": "Credit card"
+		"label": "Credit card",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💴",
-		"label": "Yen banknote"
+		"label": "Yen banknote",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💵",
-		"label": "Dollar banknote"
+		"label": "Dollar banknote",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💶",
-		"label": "Euro banknote"
+		"label": "Euro banknote",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💷",
-		"label": "Pound banknote"
+		"label": "Pound banknote",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💸",
-		"label": "Money with wings"
+		"label": "Money with wings",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💹",
-		"label": "Chart increasing with yen"
+		"label": "Chart increasing with yen",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💺",
-		"label": "Seat"
+		"label": "Seat",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "💻",
-		"label": "Laptop"
+		"label": "Laptop",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💼",
-		"label": "Briefcase"
+		"label": "Briefcase",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💽",
-		"label": "Computer disk"
+		"label": "Computer disk",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💾",
-		"label": "Floppy disk"
+		"label": "Floppy disk",
+		"group": "Objects"
 	},
 	{
 		"emoji": "💿",
-		"label": "Optical disk"
+		"label": "Optical disk",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📀",
-		"label": "Dvd"
+		"label": "Dvd",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📁",
-		"label": "File folder"
+		"label": "File folder",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📂",
-		"label": "Open file folder"
+		"label": "Open file folder",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📃",
-		"label": "Page with curl"
+		"label": "Page with curl",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📄",
-		"label": "Page facing up"
+		"label": "Page facing up",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📅",
-		"label": "Calendar"
+		"label": "Calendar",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📆",
-		"label": "Tear-off calendar"
+		"label": "Tear-off calendar",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📇",
-		"label": "Card index"
+		"label": "Card index",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📈",
-		"label": "Chart increasing"
+		"label": "Chart increasing",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📉",
-		"label": "Chart decreasing"
+		"label": "Chart decreasing",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📊",
-		"label": "Bar chart"
+		"label": "Bar chart",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📋",
-		"label": "Clipboard"
+		"label": "Clipboard",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📌",
-		"label": "Pushpin"
+		"label": "Pushpin",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📍",
-		"label": "Round pushpin"
+		"label": "Round pushpin",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📎",
-		"label": "Paperclip"
+		"label": "Paperclip",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📏",
-		"label": "Straight ruler"
+		"label": "Straight ruler",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📐",
-		"label": "Triangular ruler"
+		"label": "Triangular ruler",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📑",
-		"label": "Bookmark tabs"
+		"label": "Bookmark tabs",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📒",
-		"label": "Ledger"
+		"label": "Ledger",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📓",
-		"label": "Notebook"
+		"label": "Notebook",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📔",
-		"label": "Notebook with decorative cover"
+		"label": "Notebook with decorative cover",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📕",
-		"label": "Closed book"
+		"label": "Closed book",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📖",
-		"label": "Open book"
+		"label": "Open book",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📗",
-		"label": "Green book"
+		"label": "Green book",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📘",
-		"label": "Blue book"
+		"label": "Blue book",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📙",
-		"label": "Orange book"
+		"label": "Orange book",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📚",
-		"label": "Books"
+		"label": "Books",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📛",
-		"label": "Name badge"
+		"label": "Name badge",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "📜",
-		"label": "Scroll"
+		"label": "Scroll",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📝",
-		"label": "Memo"
+		"label": "Memo",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📞",
-		"label": "Telephone receiver"
+		"label": "Telephone receiver",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📟",
-		"label": "Pager"
+		"label": "Pager",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📠",
-		"label": "Fax machine"
+		"label": "Fax machine",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📡",
-		"label": "Satellite antenna"
+		"label": "Satellite antenna",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📢",
-		"label": "Loudspeaker"
+		"label": "Loudspeaker",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📣",
-		"label": "Megaphone"
+		"label": "Megaphone",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📤",
-		"label": "Outbox tray"
+		"label": "Outbox tray",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📥",
-		"label": "Inbox tray"
+		"label": "Inbox tray",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📦",
-		"label": "Package"
+		"label": "Package",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📧",
-		"label": "E-mail"
+		"label": "E-mail",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📨",
-		"label": "Incoming envelope"
+		"label": "Incoming envelope",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📩",
-		"label": "Envelope with arrow"
+		"label": "Envelope with arrow",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📪",
-		"label": "Closed mailbox with lowered flag"
+		"label": "Closed mailbox with lowered flag",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📫",
-		"label": "Closed mailbox with raised flag"
+		"label": "Closed mailbox with raised flag",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📬",
-		"label": "Open mailbox with raised flag"
+		"label": "Open mailbox with raised flag",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📭",
-		"label": "Open mailbox with lowered flag"
+		"label": "Open mailbox with lowered flag",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📮",
-		"label": "Postbox"
+		"label": "Postbox",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📯",
-		"label": "Postal horn"
+		"label": "Postal horn",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📰",
-		"label": "Newspaper"
+		"label": "Newspaper",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📱",
-		"label": "Mobile phone"
+		"label": "Mobile phone",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📲",
-		"label": "Mobile phone with arrow"
+		"label": "Mobile phone with arrow",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📳",
-		"label": "Vibration mode"
+		"label": "Vibration mode",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "📴",
-		"label": "Mobile phone off"
+		"label": "Mobile phone off",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "📵",
-		"label": "No mobile phones"
+		"label": "No mobile phones",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "📶",
-		"label": "Antenna bars"
+		"label": "Antenna bars",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "📷",
-		"label": "Camera"
+		"label": "Camera",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📸",
-		"label": "Camera with flash"
+		"label": "Camera with flash",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📹",
-		"label": "Video camera"
+		"label": "Video camera",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📺",
-		"label": "Television"
+		"label": "Television",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📻",
-		"label": "Radio"
+		"label": "Radio",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📼",
-		"label": "Videocassette"
+		"label": "Videocassette",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📽️",
-		"label": "Film projector"
+		"label": "Film projector",
+		"group": "Objects"
 	},
 	{
 		"emoji": "📿",
-		"label": "Prayer beads"
+		"label": "Prayer beads",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔀",
-		"label": "Shuffle tracks button"
+		"label": "Shuffle tracks button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔁",
-		"label": "Repeat button"
+		"label": "Repeat button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔂",
-		"label": "Repeat single button"
+		"label": "Repeat single button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔃",
-		"label": "Clockwise vertical arrows"
+		"label": "Clockwise vertical arrows",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔄",
-		"label": "Counterclockwise arrows button"
+		"label": "Counterclockwise arrows button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔅",
-		"label": "Dim button"
+		"label": "Dim button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔆",
-		"label": "Bright button"
+		"label": "Bright button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔇",
-		"label": "Muted speaker"
+		"label": "Muted speaker",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔈",
-		"label": "Speaker low volume"
+		"label": "Speaker low volume",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔉",
-		"label": "Speaker medium volume"
+		"label": "Speaker medium volume",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔊",
-		"label": "Speaker high volume"
+		"label": "Speaker high volume",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔋",
-		"label": "Battery"
+		"label": "Battery",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔌",
-		"label": "Electric plug"
+		"label": "Electric plug",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔍",
-		"label": "Magnifying glass tilted left"
+		"label": "Magnifying glass tilted left",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔎",
-		"label": "Magnifying glass tilted right"
+		"label": "Magnifying glass tilted right",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔏",
-		"label": "Locked with pen"
+		"label": "Locked with pen",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔐",
-		"label": "Locked with key"
+		"label": "Locked with key",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔑",
-		"label": "Key"
+		"label": "Key",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔒",
-		"label": "Locked"
+		"label": "Locked",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔓",
-		"label": "Unlocked"
+		"label": "Unlocked",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔔",
-		"label": "Bell"
+		"label": "Bell",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔕",
-		"label": "Bell with slash"
+		"label": "Bell with slash",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔖",
-		"label": "Bookmark"
+		"label": "Bookmark",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔗",
-		"label": "Link"
+		"label": "Link",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔘",
-		"label": "Radio button"
+		"label": "Radio button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔙",
-		"label": "BACK arrow"
+		"label": "BACK arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔚",
-		"label": "END arrow"
+		"label": "END arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔛",
-		"label": "ON! arrow"
+		"label": "ON! arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔜",
-		"label": "SOON arrow"
+		"label": "SOON arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔝",
-		"label": "TOP arrow"
+		"label": "TOP arrow",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔞",
-		"label": "No one under eighteen"
+		"label": "No one under eighteen",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔟",
-		"label": "Keycap: 10"
+		"label": "Keycap: 10",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔠",
-		"label": "Input latin uppercase"
+		"label": "Input latin uppercase",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔡",
-		"label": "Input latin lowercase"
+		"label": "Input latin lowercase",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔢",
-		"label": "Input numbers"
+		"label": "Input numbers",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔣",
-		"label": "Input symbols"
+		"label": "Input symbols",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔤",
-		"label": "Input latin letters"
+		"label": "Input latin letters",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔥",
-		"label": "Fire"
+		"label": "Fire",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🔦",
-		"label": "Flashlight"
+		"label": "Flashlight",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔧",
-		"label": "Wrench"
+		"label": "Wrench",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔨",
-		"label": "Hammer"
+		"label": "Hammer",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔩",
-		"label": "Nut and bolt"
+		"label": "Nut and bolt",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔪",
-		"label": "Kitchen knife"
+		"label": "Kitchen knife",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🔫",
-		"label": "Water pistol"
+		"label": "Water pistol",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🔬",
-		"label": "Microscope"
+		"label": "Microscope",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔭",
-		"label": "Telescope"
+		"label": "Telescope",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🔮",
-		"label": "Crystal ball"
+		"label": "Crystal ball",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🔯",
-		"label": "Dotted six-pointed star"
+		"label": "Dotted six-pointed star",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔰",
-		"label": "Japanese symbol for beginner"
+		"label": "Japanese symbol for beginner",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔱",
-		"label": "Trident emblem"
+		"label": "Trident emblem",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔲",
-		"label": "Black square button"
+		"label": "Black square button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔳",
-		"label": "White square button"
+		"label": "White square button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔴",
-		"label": "Red circle"
+		"label": "Red circle",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔵",
-		"label": "Blue circle"
+		"label": "Blue circle",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔶",
-		"label": "Large orange diamond"
+		"label": "Large orange diamond",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔷",
-		"label": "Large blue diamond"
+		"label": "Large blue diamond",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔸",
-		"label": "Small orange diamond"
+		"label": "Small orange diamond",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔹",
-		"label": "Small blue diamond"
+		"label": "Small blue diamond",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔺",
-		"label": "Red triangle pointed up"
+		"label": "Red triangle pointed up",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔻",
-		"label": "Red triangle pointed down"
+		"label": "Red triangle pointed down",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔼",
-		"label": "Upwards button"
+		"label": "Upwards button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🔽",
-		"label": "Downwards button"
+		"label": "Downwards button",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🕉️",
-		"label": "Om"
+		"label": "Om",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🕊️",
-		"label": "Dove"
+		"label": "Dove",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🕋",
-		"label": "Kaaba"
+		"label": "Kaaba",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕌",
-		"label": "Mosque"
+		"label": "Mosque",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕍",
-		"label": "Synagogue"
+		"label": "Synagogue",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕎",
-		"label": "Menorah"
+		"label": "Menorah",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🕐",
-		"label": "One o’clock"
+		"label": "One o’clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕑",
-		"label": "Two o’clock"
+		"label": "Two o’clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕒",
-		"label": "Three o’clock"
+		"label": "Three o’clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕓",
-		"label": "Four o’clock"
+		"label": "Four o’clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕔",
-		"label": "Five o’clock"
+		"label": "Five o’clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕕",
-		"label": "Six o’clock"
+		"label": "Six o’clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕖",
-		"label": "Seven o’clock"
+		"label": "Seven o’clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕗",
-		"label": "Eight o’clock"
+		"label": "Eight o’clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕘",
-		"label": "Nine o’clock"
+		"label": "Nine o’clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕙",
-		"label": "Ten o’clock"
+		"label": "Ten o’clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕚",
-		"label": "Eleven o’clock"
+		"label": "Eleven o’clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕛",
-		"label": "Twelve o’clock"
+		"label": "Twelve o’clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕜",
-		"label": "One-thirty"
+		"label": "One-thirty",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕝",
-		"label": "Two-thirty"
+		"label": "Two-thirty",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕞",
-		"label": "Three-thirty"
+		"label": "Three-thirty",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕟",
-		"label": "Four-thirty"
+		"label": "Four-thirty",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕠",
-		"label": "Five-thirty"
+		"label": "Five-thirty",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕡",
-		"label": "Six-thirty"
+		"label": "Six-thirty",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕢",
-		"label": "Seven-thirty"
+		"label": "Seven-thirty",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕣",
-		"label": "Eight-thirty"
+		"label": "Eight-thirty",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕤",
-		"label": "Nine-thirty"
+		"label": "Nine-thirty",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕥",
-		"label": "Ten-thirty"
+		"label": "Ten-thirty",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕦",
-		"label": "Eleven-thirty"
+		"label": "Eleven-thirty",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕧",
-		"label": "Twelve-thirty"
+		"label": "Twelve-thirty",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕯️",
-		"label": "Candle"
+		"label": "Candle",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🕰️",
-		"label": "Mantelpiece clock"
+		"label": "Mantelpiece clock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🕳️",
-		"label": "Hole"
+		"label": "Hole",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🕴️",
-		"label": "Person in suit levitating"
+		"label": "Person in suit levitating",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕴🏻",
-		"label": "Person in suit levitating: light skin tone"
+		"label": "Person in suit levitating: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕴🏼",
-		"label": "Person in suit levitating: medium-light skin tone"
+		"label": "Person in suit levitating: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕴🏽",
-		"label": "Person in suit levitating: medium skin tone"
+		"label": "Person in suit levitating: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕴🏾",
-		"label": "Person in suit levitating: medium-dark skin tone"
+		"label": "Person in suit levitating: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕴🏿",
-		"label": "Person in suit levitating: dark skin tone"
+		"label": "Person in suit levitating: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵️",
-		"label": "Detective"
+		"label": "Detective",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵️‍♀️",
-		"label": "Woman detective"
+		"label": "Woman detective",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵️‍♂️",
-		"label": "Man detective"
+		"label": "Man detective",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏻",
-		"label": "Detective: light skin tone"
+		"label": "Detective: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏻‍♀️",
-		"label": "Woman detective: light skin tone"
+		"label": "Woman detective: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏻‍♂️",
-		"label": "Man detective: light skin tone"
+		"label": "Man detective: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏼",
-		"label": "Detective: medium-light skin tone"
+		"label": "Detective: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏼‍♀️",
-		"label": "Woman detective: medium-light skin tone"
+		"label": "Woman detective: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏼‍♂️",
-		"label": "Man detective: medium-light skin tone"
+		"label": "Man detective: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏽",
-		"label": "Detective: medium skin tone"
+		"label": "Detective: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏽‍♀️",
-		"label": "Woman detective: medium skin tone"
+		"label": "Woman detective: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏽‍♂️",
-		"label": "Man detective: medium skin tone"
+		"label": "Man detective: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏾",
-		"label": "Detective: medium-dark skin tone"
+		"label": "Detective: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏾‍♀️",
-		"label": "Woman detective: medium-dark skin tone"
+		"label": "Woman detective: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏾‍♂️",
-		"label": "Man detective: medium-dark skin tone"
+		"label": "Man detective: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏿",
-		"label": "Detective: dark skin tone"
+		"label": "Detective: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏿‍♀️",
-		"label": "Woman detective: dark skin tone"
+		"label": "Woman detective: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕵🏿‍♂️",
-		"label": "Man detective: dark skin tone"
+		"label": "Man detective: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕶️",
-		"label": "Sunglasses"
+		"label": "Sunglasses",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🕷️",
-		"label": "Spider"
+		"label": "Spider",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🕸️",
-		"label": "Spider web"
+		"label": "Spider web",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🕹️",
-		"label": "Joystick"
+		"label": "Joystick",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🕺",
-		"label": "Man dancing"
+		"label": "Man dancing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕺🏻",
-		"label": "Man dancing: light skin tone"
+		"label": "Man dancing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕺🏼",
-		"label": "Man dancing: medium-light skin tone"
+		"label": "Man dancing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕺🏽",
-		"label": "Man dancing: medium skin tone"
+		"label": "Man dancing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕺🏾",
-		"label": "Man dancing: medium-dark skin tone"
+		"label": "Man dancing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🕺🏿",
-		"label": "Man dancing: dark skin tone"
+		"label": "Man dancing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖇️",
-		"label": "Linked paperclips"
+		"label": "Linked paperclips",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🖊️",
-		"label": "Pen"
+		"label": "Pen",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🖋️",
-		"label": "Fountain pen"
+		"label": "Fountain pen",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🖌️",
-		"label": "Paintbrush"
+		"label": "Paintbrush",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🖍️",
-		"label": "Crayon"
+		"label": "Crayon",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🖐️",
-		"label": "Hand with fingers splayed"
+		"label": "Hand with fingers splayed",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖐🏻",
-		"label": "Hand with fingers splayed: light skin tone"
+		"label": "Hand with fingers splayed: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖐🏼",
-		"label": "Hand with fingers splayed: medium-light skin tone"
+		"label": "Hand with fingers splayed: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖐🏽",
-		"label": "Hand with fingers splayed: medium skin tone"
+		"label": "Hand with fingers splayed: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖐🏾",
-		"label": "Hand with fingers splayed: medium-dark skin tone"
+		"label": "Hand with fingers splayed: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖐🏿",
-		"label": "Hand with fingers splayed: dark skin tone"
+		"label": "Hand with fingers splayed: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖕",
-		"label": "Middle finger"
+		"label": "Middle finger",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖕🏻",
-		"label": "Middle finger: light skin tone"
+		"label": "Middle finger: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖕🏼",
-		"label": "Middle finger: medium-light skin tone"
+		"label": "Middle finger: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖕🏽",
-		"label": "Middle finger: medium skin tone"
+		"label": "Middle finger: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖕🏾",
-		"label": "Middle finger: medium-dark skin tone"
+		"label": "Middle finger: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖕🏿",
-		"label": "Middle finger: dark skin tone"
+		"label": "Middle finger: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖖",
-		"label": "Vulcan salute"
+		"label": "Vulcan salute",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖖🏻",
-		"label": "Vulcan salute: light skin tone"
+		"label": "Vulcan salute: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖖🏼",
-		"label": "Vulcan salute: medium-light skin tone"
+		"label": "Vulcan salute: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖖🏽",
-		"label": "Vulcan salute: medium skin tone"
+		"label": "Vulcan salute: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖖🏾",
-		"label": "Vulcan salute: medium-dark skin tone"
+		"label": "Vulcan salute: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖖🏿",
-		"label": "Vulcan salute: dark skin tone"
+		"label": "Vulcan salute: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🖤",
-		"label": "Black heart"
+		"label": "Black heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🖥️",
-		"label": "Desktop computer"
+		"label": "Desktop computer",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🖨️",
-		"label": "Printer"
+		"label": "Printer",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🖱️",
-		"label": "Computer mouse"
+		"label": "Computer mouse",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🖲️",
-		"label": "Trackball"
+		"label": "Trackball",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🖼️",
-		"label": "Framed picture"
+		"label": "Framed picture",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🗂️",
-		"label": "Card index dividers"
+		"label": "Card index dividers",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🗃️",
-		"label": "Card file box"
+		"label": "Card file box",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🗄️",
-		"label": "File cabinet"
+		"label": "File cabinet",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🗑️",
-		"label": "Wastebasket"
+		"label": "Wastebasket",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🗒️",
-		"label": "Spiral notepad"
+		"label": "Spiral notepad",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🗓️",
-		"label": "Spiral calendar"
+		"label": "Spiral calendar",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🗜️",
-		"label": "Clamp"
+		"label": "Clamp",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🗝️",
-		"label": "Old key"
+		"label": "Old key",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🗞️",
-		"label": "Rolled-up newspaper"
+		"label": "Rolled-up newspaper",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🗡️",
-		"label": "Dagger"
+		"label": "Dagger",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🗣️",
-		"label": "Speaking head"
+		"label": "Speaking head",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🗨️",
-		"label": "Left speech bubble"
+		"label": "Left speech bubble",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🗯️",
-		"label": "Right anger bubble"
+		"label": "Right anger bubble",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🗳️",
-		"label": "Ballot box with ballot"
+		"label": "Ballot box with ballot",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🗺️",
-		"label": "World map"
+		"label": "World map",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🗻",
-		"label": "Mount fuji"
+		"label": "Mount fuji",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🗼",
-		"label": "Tokyo tower"
+		"label": "Tokyo tower",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🗽",
-		"label": "Statue of Liberty"
+		"label": "Statue of Liberty",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🗾",
-		"label": "Map of Japan"
+		"label": "Map of Japan",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🗿",
-		"label": "Moai"
+		"label": "Moai",
+		"group": "Objects"
 	},
 	{
 		"emoji": "😀",
-		"label": "Grinning face"
+		"label": "Grinning face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😁",
-		"label": "Beaming face with smiling eyes"
+		"label": "Beaming face with smiling eyes",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😂",
-		"label": "Face with tears of joy"
+		"label": "Face with tears of joy",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😃",
-		"label": "Grinning face with big eyes"
+		"label": "Grinning face with big eyes",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😄",
-		"label": "Grinning face with smiling eyes"
+		"label": "Grinning face with smiling eyes",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😅",
-		"label": "Grinning face with sweat"
+		"label": "Grinning face with sweat",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😆",
-		"label": "Grinning squinting face"
+		"label": "Grinning squinting face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😇",
-		"label": "Smiling face with halo"
+		"label": "Smiling face with halo",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😈",
-		"label": "Smiling face with horns"
+		"label": "Smiling face with horns",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😉",
-		"label": "Winking face"
+		"label": "Winking face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😊",
-		"label": "Smiling face with smiling eyes"
+		"label": "Smiling face with smiling eyes",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😋",
-		"label": "Face savoring food"
+		"label": "Face savoring food",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😌",
-		"label": "Relieved face"
+		"label": "Relieved face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😍",
-		"label": "Smiling face with heart-eyes"
+		"label": "Smiling face with heart-eyes",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😎",
-		"label": "Smiling face with sunglasses"
+		"label": "Smiling face with sunglasses",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😏",
-		"label": "Smirking face"
+		"label": "Smirking face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😐",
-		"label": "Neutral face"
+		"label": "Neutral face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😑",
-		"label": "Expressionless face"
+		"label": "Expressionless face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😒",
-		"label": "Unamused face"
+		"label": "Unamused face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😓",
-		"label": "Downcast face with sweat"
+		"label": "Downcast face with sweat",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😔",
-		"label": "Pensive face"
+		"label": "Pensive face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😕",
-		"label": "Confused face"
+		"label": "Confused face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😖",
-		"label": "Confounded face"
+		"label": "Confounded face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😗",
-		"label": "Kissing face"
+		"label": "Kissing face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😘",
-		"label": "Face blowing a kiss"
+		"label": "Face blowing a kiss",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😙",
-		"label": "Kissing face with smiling eyes"
+		"label": "Kissing face with smiling eyes",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😚",
-		"label": "Kissing face with closed eyes"
+		"label": "Kissing face with closed eyes",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😛",
-		"label": "Face with tongue"
+		"label": "Face with tongue",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😜",
-		"label": "Winking face with tongue"
+		"label": "Winking face with tongue",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😝",
-		"label": "Squinting face with tongue"
+		"label": "Squinting face with tongue",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😞",
-		"label": "Disappointed face"
+		"label": "Disappointed face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😟",
-		"label": "Worried face"
+		"label": "Worried face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😠",
-		"label": "Angry face"
+		"label": "Angry face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😡",
-		"label": "Enraged face"
+		"label": "Enraged face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😢",
-		"label": "Crying face"
+		"label": "Crying face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😣",
-		"label": "Persevering face"
+		"label": "Persevering face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😤",
-		"label": "Face with steam from nose"
+		"label": "Face with steam from nose",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😥",
-		"label": "Sad but relieved face"
+		"label": "Sad but relieved face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😦",
-		"label": "Frowning face with open mouth"
+		"label": "Frowning face with open mouth",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😧",
-		"label": "Anguished face"
+		"label": "Anguished face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😨",
-		"label": "Fearful face"
+		"label": "Fearful face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😩",
-		"label": "Weary face"
+		"label": "Weary face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😪",
-		"label": "Sleepy face"
+		"label": "Sleepy face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😫",
-		"label": "Tired face"
+		"label": "Tired face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😬",
-		"label": "Grimacing face"
+		"label": "Grimacing face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😭",
-		"label": "Loudly crying face"
+		"label": "Loudly crying face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😮",
-		"label": "Face with open mouth"
+		"label": "Face with open mouth",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😮‍💨",
-		"label": "Face exhaling"
+		"label": "Face exhaling",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😯",
-		"label": "Hushed face"
+		"label": "Hushed face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😰",
-		"label": "Anxious face with sweat"
+		"label": "Anxious face with sweat",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😱",
-		"label": "Face screaming in fear"
+		"label": "Face screaming in fear",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😲",
-		"label": "Astonished face"
+		"label": "Astonished face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😳",
-		"label": "Flushed face"
+		"label": "Flushed face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😴",
-		"label": "Sleeping face"
+		"label": "Sleeping face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😵",
-		"label": "Face with crossed-out eyes"
+		"label": "Face with crossed-out eyes",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😵‍💫",
-		"label": "Face with spiral eyes"
+		"label": "Face with spiral eyes",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😶",
-		"label": "Face without mouth"
+		"label": "Face without mouth",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😶‍🌫️",
-		"label": "Face in clouds"
+		"label": "Face in clouds",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😷",
-		"label": "Face with medical mask"
+		"label": "Face with medical mask",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😸",
-		"label": "Grinning cat with smiling eyes"
+		"label": "Grinning cat with smiling eyes",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😹",
-		"label": "Cat with tears of joy"
+		"label": "Cat with tears of joy",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😺",
-		"label": "Grinning cat"
+		"label": "Grinning cat",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😻",
-		"label": "Smiling cat with heart-eyes"
+		"label": "Smiling cat with heart-eyes",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😼",
-		"label": "Cat with wry smile"
+		"label": "Cat with wry smile",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😽",
-		"label": "Kissing cat"
+		"label": "Kissing cat",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😾",
-		"label": "Pouting cat"
+		"label": "Pouting cat",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "😿",
-		"label": "Crying cat"
+		"label": "Crying cat",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🙀",
-		"label": "Weary cat"
+		"label": "Weary cat",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🙁",
-		"label": "Slightly frowning face"
+		"label": "Slightly frowning face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🙂",
-		"label": "Slightly smiling face"
+		"label": "Slightly smiling face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🙂‍↔️",
-		"label": "Head shaking horizontally"
+		"label": "Head shaking horizontally",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🙂‍↕️",
-		"label": "Head shaking vertically"
+		"label": "Head shaking vertically",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🙃",
-		"label": "Upside-down face"
+		"label": "Upside-down face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🙄",
-		"label": "Face with rolling eyes"
+		"label": "Face with rolling eyes",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🙅",
-		"label": "Person gesturing NO"
+		"label": "Person gesturing NO",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅‍♀️",
-		"label": "Woman gesturing NO"
+		"label": "Woman gesturing NO",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅‍♂️",
-		"label": "Man gesturing NO"
+		"label": "Man gesturing NO",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏻",
-		"label": "Person gesturing NO: light skin tone"
+		"label": "Person gesturing NO: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏻‍♀️",
-		"label": "Woman gesturing NO: light skin tone"
+		"label": "Woman gesturing NO: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏻‍♂️",
-		"label": "Man gesturing NO: light skin tone"
+		"label": "Man gesturing NO: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏼",
-		"label": "Person gesturing NO: medium-light skin tone"
+		"label": "Person gesturing NO: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏼‍♀️",
-		"label": "Woman gesturing NO: medium-light skin tone"
+		"label": "Woman gesturing NO: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏼‍♂️",
-		"label": "Man gesturing NO: medium-light skin tone"
+		"label": "Man gesturing NO: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏽",
-		"label": "Person gesturing NO: medium skin tone"
+		"label": "Person gesturing NO: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏽‍♀️",
-		"label": "Woman gesturing NO: medium skin tone"
+		"label": "Woman gesturing NO: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏽‍♂️",
-		"label": "Man gesturing NO: medium skin tone"
+		"label": "Man gesturing NO: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏾",
-		"label": "Person gesturing NO: medium-dark skin tone"
+		"label": "Person gesturing NO: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏾‍♀️",
-		"label": "Woman gesturing NO: medium-dark skin tone"
+		"label": "Woman gesturing NO: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏾‍♂️",
-		"label": "Man gesturing NO: medium-dark skin tone"
+		"label": "Man gesturing NO: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏿",
-		"label": "Person gesturing NO: dark skin tone"
+		"label": "Person gesturing NO: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏿‍♀️",
-		"label": "Woman gesturing NO: dark skin tone"
+		"label": "Woman gesturing NO: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙅🏿‍♂️",
-		"label": "Man gesturing NO: dark skin tone"
+		"label": "Man gesturing NO: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆",
-		"label": "Person gesturing OK"
+		"label": "Person gesturing OK",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆‍♀️",
-		"label": "Woman gesturing OK"
+		"label": "Woman gesturing OK",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆‍♂️",
-		"label": "Man gesturing OK"
+		"label": "Man gesturing OK",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏻",
-		"label": "Person gesturing OK: light skin tone"
+		"label": "Person gesturing OK: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏻‍♀️",
-		"label": "Woman gesturing OK: light skin tone"
+		"label": "Woman gesturing OK: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏻‍♂️",
-		"label": "Man gesturing OK: light skin tone"
+		"label": "Man gesturing OK: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏼",
-		"label": "Person gesturing OK: medium-light skin tone"
+		"label": "Person gesturing OK: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏼‍♀️",
-		"label": "Woman gesturing OK: medium-light skin tone"
+		"label": "Woman gesturing OK: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏼‍♂️",
-		"label": "Man gesturing OK: medium-light skin tone"
+		"label": "Man gesturing OK: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏽",
-		"label": "Person gesturing OK: medium skin tone"
+		"label": "Person gesturing OK: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏽‍♀️",
-		"label": "Woman gesturing OK: medium skin tone"
+		"label": "Woman gesturing OK: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏽‍♂️",
-		"label": "Man gesturing OK: medium skin tone"
+		"label": "Man gesturing OK: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏾",
-		"label": "Person gesturing OK: medium-dark skin tone"
+		"label": "Person gesturing OK: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏾‍♀️",
-		"label": "Woman gesturing OK: medium-dark skin tone"
+		"label": "Woman gesturing OK: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏾‍♂️",
-		"label": "Man gesturing OK: medium-dark skin tone"
+		"label": "Man gesturing OK: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏿",
-		"label": "Person gesturing OK: dark skin tone"
+		"label": "Person gesturing OK: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏿‍♀️",
-		"label": "Woman gesturing OK: dark skin tone"
+		"label": "Woman gesturing OK: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙆🏿‍♂️",
-		"label": "Man gesturing OK: dark skin tone"
+		"label": "Man gesturing OK: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇",
-		"label": "Person bowing"
+		"label": "Person bowing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇‍♀️",
-		"label": "Woman bowing"
+		"label": "Woman bowing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇‍♂️",
-		"label": "Man bowing"
+		"label": "Man bowing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏻",
-		"label": "Person bowing: light skin tone"
+		"label": "Person bowing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏻‍♀️",
-		"label": "Woman bowing: light skin tone"
+		"label": "Woman bowing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏻‍♂️",
-		"label": "Man bowing: light skin tone"
+		"label": "Man bowing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏼",
-		"label": "Person bowing: medium-light skin tone"
+		"label": "Person bowing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏼‍♀️",
-		"label": "Woman bowing: medium-light skin tone"
+		"label": "Woman bowing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏼‍♂️",
-		"label": "Man bowing: medium-light skin tone"
+		"label": "Man bowing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏽",
-		"label": "Person bowing: medium skin tone"
+		"label": "Person bowing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏽‍♀️",
-		"label": "Woman bowing: medium skin tone"
+		"label": "Woman bowing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏽‍♂️",
-		"label": "Man bowing: medium skin tone"
+		"label": "Man bowing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏾",
-		"label": "Person bowing: medium-dark skin tone"
+		"label": "Person bowing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏾‍♀️",
-		"label": "Woman bowing: medium-dark skin tone"
+		"label": "Woman bowing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏾‍♂️",
-		"label": "Man bowing: medium-dark skin tone"
+		"label": "Man bowing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏿",
-		"label": "Person bowing: dark skin tone"
+		"label": "Person bowing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏿‍♀️",
-		"label": "Woman bowing: dark skin tone"
+		"label": "Woman bowing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙇🏿‍♂️",
-		"label": "Man bowing: dark skin tone"
+		"label": "Man bowing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙈",
-		"label": "See-no-evil monkey"
+		"label": "See-no-evil monkey",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🙉",
-		"label": "Hear-no-evil monkey"
+		"label": "Hear-no-evil monkey",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🙊",
-		"label": "Speak-no-evil monkey"
+		"label": "Speak-no-evil monkey",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🙋",
-		"label": "Person raising hand"
+		"label": "Person raising hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋‍♀️",
-		"label": "Woman raising hand"
+		"label": "Woman raising hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋‍♂️",
-		"label": "Man raising hand"
+		"label": "Man raising hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏻",
-		"label": "Person raising hand: light skin tone"
+		"label": "Person raising hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏻‍♀️",
-		"label": "Woman raising hand: light skin tone"
+		"label": "Woman raising hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏻‍♂️",
-		"label": "Man raising hand: light skin tone"
+		"label": "Man raising hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏼",
-		"label": "Person raising hand: medium-light skin tone"
+		"label": "Person raising hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏼‍♀️",
-		"label": "Woman raising hand: medium-light skin tone"
+		"label": "Woman raising hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏼‍♂️",
-		"label": "Man raising hand: medium-light skin tone"
+		"label": "Man raising hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏽",
-		"label": "Person raising hand: medium skin tone"
+		"label": "Person raising hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏽‍♀️",
-		"label": "Woman raising hand: medium skin tone"
+		"label": "Woman raising hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏽‍♂️",
-		"label": "Man raising hand: medium skin tone"
+		"label": "Man raising hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏾",
-		"label": "Person raising hand: medium-dark skin tone"
+		"label": "Person raising hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏾‍♀️",
-		"label": "Woman raising hand: medium-dark skin tone"
+		"label": "Woman raising hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏾‍♂️",
-		"label": "Man raising hand: medium-dark skin tone"
+		"label": "Man raising hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏿",
-		"label": "Person raising hand: dark skin tone"
+		"label": "Person raising hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏿‍♀️",
-		"label": "Woman raising hand: dark skin tone"
+		"label": "Woman raising hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙋🏿‍♂️",
-		"label": "Man raising hand: dark skin tone"
+		"label": "Man raising hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙌",
-		"label": "Raising hands"
+		"label": "Raising hands",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙌🏻",
-		"label": "Raising hands: light skin tone"
+		"label": "Raising hands: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙌🏼",
-		"label": "Raising hands: medium-light skin tone"
+		"label": "Raising hands: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙌🏽",
-		"label": "Raising hands: medium skin tone"
+		"label": "Raising hands: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙌🏾",
-		"label": "Raising hands: medium-dark skin tone"
+		"label": "Raising hands: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙌🏿",
-		"label": "Raising hands: dark skin tone"
+		"label": "Raising hands: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍",
-		"label": "Person frowning"
+		"label": "Person frowning",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍‍♀️",
-		"label": "Woman frowning"
+		"label": "Woman frowning",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍‍♂️",
-		"label": "Man frowning"
+		"label": "Man frowning",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏻",
-		"label": "Person frowning: light skin tone"
+		"label": "Person frowning: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏻‍♀️",
-		"label": "Woman frowning: light skin tone"
+		"label": "Woman frowning: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏻‍♂️",
-		"label": "Man frowning: light skin tone"
+		"label": "Man frowning: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏼",
-		"label": "Person frowning: medium-light skin tone"
+		"label": "Person frowning: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏼‍♀️",
-		"label": "Woman frowning: medium-light skin tone"
+		"label": "Woman frowning: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏼‍♂️",
-		"label": "Man frowning: medium-light skin tone"
+		"label": "Man frowning: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏽",
-		"label": "Person frowning: medium skin tone"
+		"label": "Person frowning: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏽‍♀️",
-		"label": "Woman frowning: medium skin tone"
+		"label": "Woman frowning: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏽‍♂️",
-		"label": "Man frowning: medium skin tone"
+		"label": "Man frowning: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏾",
-		"label": "Person frowning: medium-dark skin tone"
+		"label": "Person frowning: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏾‍♀️",
-		"label": "Woman frowning: medium-dark skin tone"
+		"label": "Woman frowning: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏾‍♂️",
-		"label": "Man frowning: medium-dark skin tone"
+		"label": "Man frowning: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏿",
-		"label": "Person frowning: dark skin tone"
+		"label": "Person frowning: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏿‍♀️",
-		"label": "Woman frowning: dark skin tone"
+		"label": "Woman frowning: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙍🏿‍♂️",
-		"label": "Man frowning: dark skin tone"
+		"label": "Man frowning: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎",
-		"label": "Person pouting"
+		"label": "Person pouting",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎‍♀️",
-		"label": "Woman pouting"
+		"label": "Woman pouting",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎‍♂️",
-		"label": "Man pouting"
+		"label": "Man pouting",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏻",
-		"label": "Person pouting: light skin tone"
+		"label": "Person pouting: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏻‍♀️",
-		"label": "Woman pouting: light skin tone"
+		"label": "Woman pouting: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏻‍♂️",
-		"label": "Man pouting: light skin tone"
+		"label": "Man pouting: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏼",
-		"label": "Person pouting: medium-light skin tone"
+		"label": "Person pouting: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏼‍♀️",
-		"label": "Woman pouting: medium-light skin tone"
+		"label": "Woman pouting: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏼‍♂️",
-		"label": "Man pouting: medium-light skin tone"
+		"label": "Man pouting: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏽",
-		"label": "Person pouting: medium skin tone"
+		"label": "Person pouting: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏽‍♀️",
-		"label": "Woman pouting: medium skin tone"
+		"label": "Woman pouting: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏽‍♂️",
-		"label": "Man pouting: medium skin tone"
+		"label": "Man pouting: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏾",
-		"label": "Person pouting: medium-dark skin tone"
+		"label": "Person pouting: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏾‍♀️",
-		"label": "Woman pouting: medium-dark skin tone"
+		"label": "Woman pouting: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏾‍♂️",
-		"label": "Man pouting: medium-dark skin tone"
+		"label": "Man pouting: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏿",
-		"label": "Person pouting: dark skin tone"
+		"label": "Person pouting: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏿‍♀️",
-		"label": "Woman pouting: dark skin tone"
+		"label": "Woman pouting: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙎🏿‍♂️",
-		"label": "Man pouting: dark skin tone"
+		"label": "Man pouting: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙏",
-		"label": "Folded hands"
+		"label": "Folded hands",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙏🏻",
-		"label": "Folded hands: light skin tone"
+		"label": "Folded hands: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙏🏼",
-		"label": "Folded hands: medium-light skin tone"
+		"label": "Folded hands: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙏🏽",
-		"label": "Folded hands: medium skin tone"
+		"label": "Folded hands: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙏🏾",
-		"label": "Folded hands: medium-dark skin tone"
+		"label": "Folded hands: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🙏🏿",
-		"label": "Folded hands: dark skin tone"
+		"label": "Folded hands: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚀",
-		"label": "Rocket"
+		"label": "Rocket",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚁",
-		"label": "Helicopter"
+		"label": "Helicopter",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚂",
-		"label": "Locomotive"
+		"label": "Locomotive",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚃",
-		"label": "Railway car"
+		"label": "Railway car",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚄",
-		"label": "High-speed train"
+		"label": "High-speed train",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚅",
-		"label": "Bullet train"
+		"label": "Bullet train",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚆",
-		"label": "Train"
+		"label": "Train",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚇",
-		"label": "Metro"
+		"label": "Metro",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚈",
-		"label": "Light rail"
+		"label": "Light rail",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚉",
-		"label": "Station"
+		"label": "Station",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚊",
-		"label": "Tram"
+		"label": "Tram",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚋",
-		"label": "Tram car"
+		"label": "Tram car",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚌",
-		"label": "Bus"
+		"label": "Bus",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚍",
-		"label": "Oncoming bus"
+		"label": "Oncoming bus",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚎",
-		"label": "Trolleybus"
+		"label": "Trolleybus",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚏",
-		"label": "Bus stop"
+		"label": "Bus stop",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚐",
-		"label": "Minibus"
+		"label": "Minibus",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚑",
-		"label": "Ambulance"
+		"label": "Ambulance",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚒",
-		"label": "Fire engine"
+		"label": "Fire engine",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚓",
-		"label": "Police car"
+		"label": "Police car",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚔",
-		"label": "Oncoming police car"
+		"label": "Oncoming police car",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚕",
-		"label": "Taxi"
+		"label": "Taxi",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚖",
-		"label": "Oncoming taxi"
+		"label": "Oncoming taxi",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚗",
-		"label": "Automobile"
+		"label": "Automobile",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚘",
-		"label": "Oncoming automobile"
+		"label": "Oncoming automobile",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚙",
-		"label": "Sport utility vehicle"
+		"label": "Sport utility vehicle",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚚",
-		"label": "Delivery truck"
+		"label": "Delivery truck",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚛",
-		"label": "Articulated lorry"
+		"label": "Articulated lorry",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚜",
-		"label": "Tractor"
+		"label": "Tractor",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚝",
-		"label": "Monorail"
+		"label": "Monorail",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚞",
-		"label": "Mountain railway"
+		"label": "Mountain railway",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚟",
-		"label": "Suspension railway"
+		"label": "Suspension railway",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚠",
-		"label": "Mountain cableway"
+		"label": "Mountain cableway",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚡",
-		"label": "Aerial tramway"
+		"label": "Aerial tramway",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚢",
-		"label": "Ship"
+		"label": "Ship",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚣",
-		"label": "Person rowing boat"
+		"label": "Person rowing boat",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣‍♀️",
-		"label": "Woman rowing boat"
+		"label": "Woman rowing boat",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣‍♂️",
-		"label": "Man rowing boat"
+		"label": "Man rowing boat",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏻",
-		"label": "Person rowing boat: light skin tone"
+		"label": "Person rowing boat: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏻‍♀️",
-		"label": "Woman rowing boat: light skin tone"
+		"label": "Woman rowing boat: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏻‍♂️",
-		"label": "Man rowing boat: light skin tone"
+		"label": "Man rowing boat: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏼",
-		"label": "Person rowing boat: medium-light skin tone"
+		"label": "Person rowing boat: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏼‍♀️",
-		"label": "Woman rowing boat: medium-light skin tone"
+		"label": "Woman rowing boat: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏼‍♂️",
-		"label": "Man rowing boat: medium-light skin tone"
+		"label": "Man rowing boat: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏽",
-		"label": "Person rowing boat: medium skin tone"
+		"label": "Person rowing boat: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏽‍♀️",
-		"label": "Woman rowing boat: medium skin tone"
+		"label": "Woman rowing boat: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏽‍♂️",
-		"label": "Man rowing boat: medium skin tone"
+		"label": "Man rowing boat: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏾",
-		"label": "Person rowing boat: medium-dark skin tone"
+		"label": "Person rowing boat: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏾‍♀️",
-		"label": "Woman rowing boat: medium-dark skin tone"
+		"label": "Woman rowing boat: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏾‍♂️",
-		"label": "Man rowing boat: medium-dark skin tone"
+		"label": "Man rowing boat: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏿",
-		"label": "Person rowing boat: dark skin tone"
+		"label": "Person rowing boat: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏿‍♀️",
-		"label": "Woman rowing boat: dark skin tone"
+		"label": "Woman rowing boat: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚣🏿‍♂️",
-		"label": "Man rowing boat: dark skin tone"
+		"label": "Man rowing boat: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚤",
-		"label": "Speedboat"
+		"label": "Speedboat",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚥",
-		"label": "Horizontal traffic light"
+		"label": "Horizontal traffic light",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚦",
-		"label": "Vertical traffic light"
+		"label": "Vertical traffic light",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚧",
-		"label": "Construction"
+		"label": "Construction",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚨",
-		"label": "Police car light"
+		"label": "Police car light",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚩",
-		"label": "Triangular flag"
+		"label": "Triangular flag",
+		"group": "Flags"
 	},
 	{
 		"emoji": "🚪",
-		"label": "Door"
+		"label": "Door",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🚫",
-		"label": "Prohibited"
+		"label": "Prohibited",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🚬",
-		"label": "Cigarette"
+		"label": "Cigarette",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🚭",
-		"label": "No smoking"
+		"label": "No smoking",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🚮",
-		"label": "Litter in bin sign"
+		"label": "Litter in bin sign",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🚯",
-		"label": "No littering"
+		"label": "No littering",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🚰",
-		"label": "Potable water"
+		"label": "Potable water",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🚱",
-		"label": "Non-potable water"
+		"label": "Non-potable water",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🚲",
-		"label": "Bicycle"
+		"label": "Bicycle",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🚳",
-		"label": "No bicycles"
+		"label": "No bicycles",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🚴",
-		"label": "Person biking"
+		"label": "Person biking",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴‍♀️",
-		"label": "Woman biking"
+		"label": "Woman biking",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴‍♂️",
-		"label": "Man biking"
+		"label": "Man biking",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏻",
-		"label": "Person biking: light skin tone"
+		"label": "Person biking: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏻‍♀️",
-		"label": "Woman biking: light skin tone"
+		"label": "Woman biking: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏻‍♂️",
-		"label": "Man biking: light skin tone"
+		"label": "Man biking: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏼",
-		"label": "Person biking: medium-light skin tone"
+		"label": "Person biking: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏼‍♀️",
-		"label": "Woman biking: medium-light skin tone"
+		"label": "Woman biking: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏼‍♂️",
-		"label": "Man biking: medium-light skin tone"
+		"label": "Man biking: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏽",
-		"label": "Person biking: medium skin tone"
+		"label": "Person biking: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏽‍♀️",
-		"label": "Woman biking: medium skin tone"
+		"label": "Woman biking: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏽‍♂️",
-		"label": "Man biking: medium skin tone"
+		"label": "Man biking: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏾",
-		"label": "Person biking: medium-dark skin tone"
+		"label": "Person biking: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏾‍♀️",
-		"label": "Woman biking: medium-dark skin tone"
+		"label": "Woman biking: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏾‍♂️",
-		"label": "Man biking: medium-dark skin tone"
+		"label": "Man biking: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏿",
-		"label": "Person biking: dark skin tone"
+		"label": "Person biking: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏿‍♀️",
-		"label": "Woman biking: dark skin tone"
+		"label": "Woman biking: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚴🏿‍♂️",
-		"label": "Man biking: dark skin tone"
+		"label": "Man biking: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵",
-		"label": "Person mountain biking"
+		"label": "Person mountain biking",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵‍♀️",
-		"label": "Woman mountain biking"
+		"label": "Woman mountain biking",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵‍♂️",
-		"label": "Man mountain biking"
+		"label": "Man mountain biking",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏻",
-		"label": "Person mountain biking: light skin tone"
+		"label": "Person mountain biking: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏻‍♀️",
-		"label": "Woman mountain biking: light skin tone"
+		"label": "Woman mountain biking: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏻‍♂️",
-		"label": "Man mountain biking: light skin tone"
+		"label": "Man mountain biking: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏼",
-		"label": "Person mountain biking: medium-light skin tone"
+		"label": "Person mountain biking: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏼‍♀️",
-		"label": "Woman mountain biking: medium-light skin tone"
+		"label": "Woman mountain biking: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏼‍♂️",
-		"label": "Man mountain biking: medium-light skin tone"
+		"label": "Man mountain biking: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏽",
-		"label": "Person mountain biking: medium skin tone"
+		"label": "Person mountain biking: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏽‍♀️",
-		"label": "Woman mountain biking: medium skin tone"
+		"label": "Woman mountain biking: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏽‍♂️",
-		"label": "Man mountain biking: medium skin tone"
+		"label": "Man mountain biking: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏾",
-		"label": "Person mountain biking: medium-dark skin tone"
+		"label": "Person mountain biking: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏾‍♀️",
-		"label": "Woman mountain biking: medium-dark skin tone"
+		"label": "Woman mountain biking: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏾‍♂️",
-		"label": "Man mountain biking: medium-dark skin tone"
+		"label": "Man mountain biking: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏿",
-		"label": "Person mountain biking: dark skin tone"
+		"label": "Person mountain biking: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏿‍♀️",
-		"label": "Woman mountain biking: dark skin tone"
+		"label": "Woman mountain biking: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚵🏿‍♂️",
-		"label": "Man mountain biking: dark skin tone"
+		"label": "Man mountain biking: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶",
-		"label": "Person walking"
+		"label": "Person walking",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶‍♀️",
-		"label": "Woman walking"
+		"label": "Woman walking",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶‍♀️‍➡️",
-		"label": "Woman walking facing right"
+		"label": "Woman walking facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶‍♂️",
-		"label": "Man walking"
+		"label": "Man walking",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶‍♂️‍➡️",
-		"label": "Man walking facing right"
+		"label": "Man walking facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶‍➡️",
-		"label": "Person walking facing right"
+		"label": "Person walking facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏻",
-		"label": "Person walking: light skin tone"
+		"label": "Person walking: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏻‍♀️",
-		"label": "Woman walking: light skin tone"
+		"label": "Woman walking: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏻‍♀️‍➡️",
-		"label": "Woman walking facing right: light skin tone"
+		"label": "Woman walking facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏻‍♂️",
-		"label": "Man walking: light skin tone"
+		"label": "Man walking: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏻‍♂️‍➡️",
-		"label": "Man walking facing right: light skin tone"
+		"label": "Man walking facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏻‍➡️",
-		"label": "Person walking facing right: light skin tone"
+		"label": "Person walking facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏼",
-		"label": "Person walking: medium-light skin tone"
+		"label": "Person walking: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏼‍♀️",
-		"label": "Woman walking: medium-light skin tone"
+		"label": "Woman walking: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏼‍♀️‍➡️",
-		"label": "Woman walking facing right: medium-light skin tone"
+		"label": "Woman walking facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏼‍♂️",
-		"label": "Man walking: medium-light skin tone"
+		"label": "Man walking: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏼‍♂️‍➡️",
-		"label": "Man walking facing right: medium-light skin tone"
+		"label": "Man walking facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏼‍➡️",
-		"label": "Person walking facing right: medium-light skin tone"
+		"label": "Person walking facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏽",
-		"label": "Person walking: medium skin tone"
+		"label": "Person walking: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏽‍♀️",
-		"label": "Woman walking: medium skin tone"
+		"label": "Woman walking: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏽‍♀️‍➡️",
-		"label": "Woman walking facing right: medium skin tone"
+		"label": "Woman walking facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏽‍♂️",
-		"label": "Man walking: medium skin tone"
+		"label": "Man walking: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏽‍♂️‍➡️",
-		"label": "Man walking facing right: medium skin tone"
+		"label": "Man walking facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏽‍➡️",
-		"label": "Person walking facing right: medium skin tone"
+		"label": "Person walking facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏾",
-		"label": "Person walking: medium-dark skin tone"
+		"label": "Person walking: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏾‍♀️",
-		"label": "Woman walking: medium-dark skin tone"
+		"label": "Woman walking: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏾‍♀️‍➡️",
-		"label": "Woman walking facing right: medium-dark skin tone"
+		"label": "Woman walking facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏾‍♂️",
-		"label": "Man walking: medium-dark skin tone"
+		"label": "Man walking: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏾‍♂️‍➡️",
-		"label": "Man walking facing right: medium-dark skin tone"
+		"label": "Man walking facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏾‍➡️",
-		"label": "Person walking facing right: medium-dark skin tone"
+		"label": "Person walking facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏿",
-		"label": "Person walking: dark skin tone"
+		"label": "Person walking: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏿‍♀️",
-		"label": "Woman walking: dark skin tone"
+		"label": "Woman walking: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏿‍♀️‍➡️",
-		"label": "Woman walking facing right: dark skin tone"
+		"label": "Woman walking facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏿‍♂️",
-		"label": "Man walking: dark skin tone"
+		"label": "Man walking: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏿‍♂️‍➡️",
-		"label": "Man walking facing right: dark skin tone"
+		"label": "Man walking facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚶🏿‍➡️",
-		"label": "Person walking facing right: dark skin tone"
+		"label": "Person walking facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🚷",
-		"label": "No pedestrians"
+		"label": "No pedestrians",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🚸",
-		"label": "Children crossing"
+		"label": "Children crossing",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🚹",
-		"label": "Men’s room"
+		"label": "Men’s room",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🚺",
-		"label": "Women’s room"
+		"label": "Women’s room",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🚻",
-		"label": "Restroom"
+		"label": "Restroom",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🚼",
-		"label": "Baby symbol"
+		"label": "Baby symbol",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🚽",
-		"label": "Toilet"
+		"label": "Toilet",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🚾",
-		"label": "Water closet"
+		"label": "Water closet",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🚿",
-		"label": "Shower"
+		"label": "Shower",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🛀",
-		"label": "Person taking bath"
+		"label": "Person taking bath",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🛀🏻",
-		"label": "Person taking bath: light skin tone"
+		"label": "Person taking bath: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🛀🏼",
-		"label": "Person taking bath: medium-light skin tone"
+		"label": "Person taking bath: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🛀🏽",
-		"label": "Person taking bath: medium skin tone"
+		"label": "Person taking bath: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🛀🏾",
-		"label": "Person taking bath: medium-dark skin tone"
+		"label": "Person taking bath: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🛀🏿",
-		"label": "Person taking bath: dark skin tone"
+		"label": "Person taking bath: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🛁",
-		"label": "Bathtub"
+		"label": "Bathtub",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🛂",
-		"label": "Passport control"
+		"label": "Passport control",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🛃",
-		"label": "Customs"
+		"label": "Customs",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🛄",
-		"label": "Baggage claim"
+		"label": "Baggage claim",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🛅",
-		"label": "Left luggage"
+		"label": "Left luggage",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🛋️",
-		"label": "Couch and lamp"
+		"label": "Couch and lamp",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🛌",
-		"label": "Person in bed"
+		"label": "Person in bed",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🛌🏻",
-		"label": "Person in bed: light skin tone"
+		"label": "Person in bed: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🛌🏼",
-		"label": "Person in bed: medium-light skin tone"
+		"label": "Person in bed: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🛌🏽",
-		"label": "Person in bed: medium skin tone"
+		"label": "Person in bed: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🛌🏾",
-		"label": "Person in bed: medium-dark skin tone"
+		"label": "Person in bed: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🛌🏿",
-		"label": "Person in bed: dark skin tone"
+		"label": "Person in bed: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🛍️",
-		"label": "Shopping bags"
+		"label": "Shopping bags",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🛎️",
-		"label": "Bellhop bell"
+		"label": "Bellhop bell",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛏️",
-		"label": "Bed"
+		"label": "Bed",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🛐",
-		"label": "Place of worship"
+		"label": "Place of worship",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🛑",
-		"label": "Stop sign"
+		"label": "Stop sign",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛒",
-		"label": "Shopping cart"
+		"label": "Shopping cart",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🛕",
-		"label": "Hindu temple"
+		"label": "Hindu temple",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛖",
-		"label": "Hut"
+		"label": "Hut",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛗",
-		"label": "Elevator"
+		"label": "Elevator",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🛘",
-		"label": "Landslide"
+		"label": "Landslide",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛜",
-		"label": "Wireless"
+		"label": "Wireless",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🛝",
-		"label": "Playground slide"
+		"label": "Playground slide",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛞",
-		"label": "Wheel"
+		"label": "Wheel",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛟",
-		"label": "Ring buoy"
+		"label": "Ring buoy",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛠️",
-		"label": "Hammer and wrench"
+		"label": "Hammer and wrench",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🛡️",
-		"label": "Shield"
+		"label": "Shield",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🛢️",
-		"label": "Oil drum"
+		"label": "Oil drum",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛣️",
-		"label": "Motorway"
+		"label": "Motorway",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛤️",
-		"label": "Railway track"
+		"label": "Railway track",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛥️",
-		"label": "Motor boat"
+		"label": "Motor boat",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛩️",
-		"label": "Small airplane"
+		"label": "Small airplane",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛫",
-		"label": "Airplane departure"
+		"label": "Airplane departure",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛬",
-		"label": "Airplane arrival"
+		"label": "Airplane arrival",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛰️",
-		"label": "Satellite"
+		"label": "Satellite",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛳️",
-		"label": "Passenger ship"
+		"label": "Passenger ship",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛴",
-		"label": "Kick scooter"
+		"label": "Kick scooter",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛵",
-		"label": "Motor scooter"
+		"label": "Motor scooter",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛶",
-		"label": "Canoe"
+		"label": "Canoe",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛷",
-		"label": "Sled"
+		"label": "Sled",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🛸",
-		"label": "Flying saucer"
+		"label": "Flying saucer",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛹",
-		"label": "Skateboard"
+		"label": "Skateboard",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛺",
-		"label": "Auto rickshaw"
+		"label": "Auto rickshaw",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛻",
-		"label": "Pickup truck"
+		"label": "Pickup truck",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🛼",
-		"label": "Roller skate"
+		"label": "Roller skate",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🟠",
-		"label": "Orange circle"
+		"label": "Orange circle",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🟡",
-		"label": "Yellow circle"
+		"label": "Yellow circle",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🟢",
-		"label": "Green circle"
+		"label": "Green circle",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🟣",
-		"label": "Purple circle"
+		"label": "Purple circle",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🟤",
-		"label": "Brown circle"
+		"label": "Brown circle",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🟥",
-		"label": "Red square"
+		"label": "Red square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🟦",
-		"label": "Blue square"
+		"label": "Blue square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🟧",
-		"label": "Orange square"
+		"label": "Orange square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🟨",
-		"label": "Yellow square"
+		"label": "Yellow square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🟩",
-		"label": "Green square"
+		"label": "Green square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🟪",
-		"label": "Purple square"
+		"label": "Purple square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🟫",
-		"label": "Brown square"
+		"label": "Brown square",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🟰",
-		"label": "Heavy equals sign"
+		"label": "Heavy equals sign",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🤌",
-		"label": "Pinched fingers"
+		"label": "Pinched fingers",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤌🏻",
-		"label": "Pinched fingers: light skin tone"
+		"label": "Pinched fingers: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤌🏼",
-		"label": "Pinched fingers: medium-light skin tone"
+		"label": "Pinched fingers: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤌🏽",
-		"label": "Pinched fingers: medium skin tone"
+		"label": "Pinched fingers: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤌🏾",
-		"label": "Pinched fingers: medium-dark skin tone"
+		"label": "Pinched fingers: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤌🏿",
-		"label": "Pinched fingers: dark skin tone"
+		"label": "Pinched fingers: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤍",
-		"label": "White heart"
+		"label": "White heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤎",
-		"label": "Brown heart"
+		"label": "Brown heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤏",
-		"label": "Pinching hand"
+		"label": "Pinching hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤏🏻",
-		"label": "Pinching hand: light skin tone"
+		"label": "Pinching hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤏🏼",
-		"label": "Pinching hand: medium-light skin tone"
+		"label": "Pinching hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤏🏽",
-		"label": "Pinching hand: medium skin tone"
+		"label": "Pinching hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤏🏾",
-		"label": "Pinching hand: medium-dark skin tone"
+		"label": "Pinching hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤏🏿",
-		"label": "Pinching hand: dark skin tone"
+		"label": "Pinching hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤐",
-		"label": "Zipper-mouth face"
+		"label": "Zipper-mouth face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤑",
-		"label": "Money-mouth face"
+		"label": "Money-mouth face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤒",
-		"label": "Face with thermometer"
+		"label": "Face with thermometer",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤓",
-		"label": "Nerd face"
+		"label": "Nerd face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤔",
-		"label": "Thinking face"
+		"label": "Thinking face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤕",
-		"label": "Face with head-bandage"
+		"label": "Face with head-bandage",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤖",
-		"label": "Robot"
+		"label": "Robot",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤗",
-		"label": "Smiling face with open hands"
+		"label": "Smiling face with open hands",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤘",
-		"label": "Sign of the horns"
+		"label": "Sign of the horns",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤘🏻",
-		"label": "Sign of the horns: light skin tone"
+		"label": "Sign of the horns: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤘🏼",
-		"label": "Sign of the horns: medium-light skin tone"
+		"label": "Sign of the horns: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤘🏽",
-		"label": "Sign of the horns: medium skin tone"
+		"label": "Sign of the horns: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤘🏾",
-		"label": "Sign of the horns: medium-dark skin tone"
+		"label": "Sign of the horns: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤘🏿",
-		"label": "Sign of the horns: dark skin tone"
+		"label": "Sign of the horns: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤙",
-		"label": "Call me hand"
+		"label": "Call me hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤙🏻",
-		"label": "Call me hand: light skin tone"
+		"label": "Call me hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤙🏼",
-		"label": "Call me hand: medium-light skin tone"
+		"label": "Call me hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤙🏽",
-		"label": "Call me hand: medium skin tone"
+		"label": "Call me hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤙🏾",
-		"label": "Call me hand: medium-dark skin tone"
+		"label": "Call me hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤙🏿",
-		"label": "Call me hand: dark skin tone"
+		"label": "Call me hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤚",
-		"label": "Raised back of hand"
+		"label": "Raised back of hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤚🏻",
-		"label": "Raised back of hand: light skin tone"
+		"label": "Raised back of hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤚🏼",
-		"label": "Raised back of hand: medium-light skin tone"
+		"label": "Raised back of hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤚🏽",
-		"label": "Raised back of hand: medium skin tone"
+		"label": "Raised back of hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤚🏾",
-		"label": "Raised back of hand: medium-dark skin tone"
+		"label": "Raised back of hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤚🏿",
-		"label": "Raised back of hand: dark skin tone"
+		"label": "Raised back of hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤛",
-		"label": "Left-facing fist"
+		"label": "Left-facing fist",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤛🏻",
-		"label": "Left-facing fist: light skin tone"
+		"label": "Left-facing fist: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤛🏼",
-		"label": "Left-facing fist: medium-light skin tone"
+		"label": "Left-facing fist: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤛🏽",
-		"label": "Left-facing fist: medium skin tone"
+		"label": "Left-facing fist: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤛🏾",
-		"label": "Left-facing fist: medium-dark skin tone"
+		"label": "Left-facing fist: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤛🏿",
-		"label": "Left-facing fist: dark skin tone"
+		"label": "Left-facing fist: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤜",
-		"label": "Right-facing fist"
+		"label": "Right-facing fist",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤜🏻",
-		"label": "Right-facing fist: light skin tone"
+		"label": "Right-facing fist: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤜🏼",
-		"label": "Right-facing fist: medium-light skin tone"
+		"label": "Right-facing fist: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤜🏽",
-		"label": "Right-facing fist: medium skin tone"
+		"label": "Right-facing fist: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤜🏾",
-		"label": "Right-facing fist: medium-dark skin tone"
+		"label": "Right-facing fist: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤜🏿",
-		"label": "Right-facing fist: dark skin tone"
+		"label": "Right-facing fist: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤝",
-		"label": "Handshake"
+		"label": "Handshake",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤝🏻",
-		"label": "Handshake: light skin tone"
+		"label": "Handshake: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤝🏼",
-		"label": "Handshake: medium-light skin tone"
+		"label": "Handshake: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤝🏽",
-		"label": "Handshake: medium skin tone"
+		"label": "Handshake: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤝🏾",
-		"label": "Handshake: medium-dark skin tone"
+		"label": "Handshake: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤝🏿",
-		"label": "Handshake: dark skin tone"
+		"label": "Handshake: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤞",
-		"label": "Crossed fingers"
+		"label": "Crossed fingers",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤞🏻",
-		"label": "Crossed fingers: light skin tone"
+		"label": "Crossed fingers: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤞🏼",
-		"label": "Crossed fingers: medium-light skin tone"
+		"label": "Crossed fingers: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤞🏽",
-		"label": "Crossed fingers: medium skin tone"
+		"label": "Crossed fingers: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤞🏾",
-		"label": "Crossed fingers: medium-dark skin tone"
+		"label": "Crossed fingers: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤞🏿",
-		"label": "Crossed fingers: dark skin tone"
+		"label": "Crossed fingers: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤟",
-		"label": "Love-you gesture"
+		"label": "Love-you gesture",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤟🏻",
-		"label": "Love-you gesture: light skin tone"
+		"label": "Love-you gesture: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤟🏼",
-		"label": "Love-you gesture: medium-light skin tone"
+		"label": "Love-you gesture: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤟🏽",
-		"label": "Love-you gesture: medium skin tone"
+		"label": "Love-you gesture: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤟🏾",
-		"label": "Love-you gesture: medium-dark skin tone"
+		"label": "Love-you gesture: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤟🏿",
-		"label": "Love-you gesture: dark skin tone"
+		"label": "Love-you gesture: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤠",
-		"label": "Cowboy hat face"
+		"label": "Cowboy hat face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤡",
-		"label": "Clown face"
+		"label": "Clown face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤢",
-		"label": "Nauseated face"
+		"label": "Nauseated face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤣",
-		"label": "Rolling on the floor laughing"
+		"label": "Rolling on the floor laughing",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤤",
-		"label": "Drooling face"
+		"label": "Drooling face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤥",
-		"label": "Lying face"
+		"label": "Lying face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤦",
-		"label": "Person facepalming"
+		"label": "Person facepalming",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦‍♀️",
-		"label": "Woman facepalming"
+		"label": "Woman facepalming",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦‍♂️",
-		"label": "Man facepalming"
+		"label": "Man facepalming",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏻",
-		"label": "Person facepalming: light skin tone"
+		"label": "Person facepalming: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏻‍♀️",
-		"label": "Woman facepalming: light skin tone"
+		"label": "Woman facepalming: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏻‍♂️",
-		"label": "Man facepalming: light skin tone"
+		"label": "Man facepalming: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏼",
-		"label": "Person facepalming: medium-light skin tone"
+		"label": "Person facepalming: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏼‍♀️",
-		"label": "Woman facepalming: medium-light skin tone"
+		"label": "Woman facepalming: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏼‍♂️",
-		"label": "Man facepalming: medium-light skin tone"
+		"label": "Man facepalming: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏽",
-		"label": "Person facepalming: medium skin tone"
+		"label": "Person facepalming: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏽‍♀️",
-		"label": "Woman facepalming: medium skin tone"
+		"label": "Woman facepalming: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏽‍♂️",
-		"label": "Man facepalming: medium skin tone"
+		"label": "Man facepalming: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏾",
-		"label": "Person facepalming: medium-dark skin tone"
+		"label": "Person facepalming: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏾‍♀️",
-		"label": "Woman facepalming: medium-dark skin tone"
+		"label": "Woman facepalming: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏾‍♂️",
-		"label": "Man facepalming: medium-dark skin tone"
+		"label": "Man facepalming: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏿",
-		"label": "Person facepalming: dark skin tone"
+		"label": "Person facepalming: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏿‍♀️",
-		"label": "Woman facepalming: dark skin tone"
+		"label": "Woman facepalming: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤦🏿‍♂️",
-		"label": "Man facepalming: dark skin tone"
+		"label": "Man facepalming: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤧",
-		"label": "Sneezing face"
+		"label": "Sneezing face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤨",
-		"label": "Face with raised eyebrow"
+		"label": "Face with raised eyebrow",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤩",
-		"label": "Star-struck"
+		"label": "Star-struck",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤪",
-		"label": "Zany face"
+		"label": "Zany face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤫",
-		"label": "Shushing face"
+		"label": "Shushing face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤬",
-		"label": "Face with symbols on mouth"
+		"label": "Face with symbols on mouth",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤭",
-		"label": "Face with hand over mouth"
+		"label": "Face with hand over mouth",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤮",
-		"label": "Face vomiting"
+		"label": "Face vomiting",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤯",
-		"label": "Exploding head"
+		"label": "Exploding head",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🤰",
-		"label": "Pregnant woman"
+		"label": "Pregnant woman",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤰🏻",
-		"label": "Pregnant woman: light skin tone"
+		"label": "Pregnant woman: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤰🏼",
-		"label": "Pregnant woman: medium-light skin tone"
+		"label": "Pregnant woman: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤰🏽",
-		"label": "Pregnant woman: medium skin tone"
+		"label": "Pregnant woman: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤰🏾",
-		"label": "Pregnant woman: medium-dark skin tone"
+		"label": "Pregnant woman: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤰🏿",
-		"label": "Pregnant woman: dark skin tone"
+		"label": "Pregnant woman: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤱",
-		"label": "Breast-feeding"
+		"label": "Breast-feeding",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤱🏻",
-		"label": "Breast-feeding: light skin tone"
+		"label": "Breast-feeding: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤱🏼",
-		"label": "Breast-feeding: medium-light skin tone"
+		"label": "Breast-feeding: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤱🏽",
-		"label": "Breast-feeding: medium skin tone"
+		"label": "Breast-feeding: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤱🏾",
-		"label": "Breast-feeding: medium-dark skin tone"
+		"label": "Breast-feeding: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤱🏿",
-		"label": "Breast-feeding: dark skin tone"
+		"label": "Breast-feeding: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤲",
-		"label": "Palms up together"
+		"label": "Palms up together",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤲🏻",
-		"label": "Palms up together: light skin tone"
+		"label": "Palms up together: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤲🏼",
-		"label": "Palms up together: medium-light skin tone"
+		"label": "Palms up together: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤲🏽",
-		"label": "Palms up together: medium skin tone"
+		"label": "Palms up together: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤲🏾",
-		"label": "Palms up together: medium-dark skin tone"
+		"label": "Palms up together: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤲🏿",
-		"label": "Palms up together: dark skin tone"
+		"label": "Palms up together: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤳",
-		"label": "Selfie"
+		"label": "Selfie",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤳🏻",
-		"label": "Selfie: light skin tone"
+		"label": "Selfie: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤳🏼",
-		"label": "Selfie: medium-light skin tone"
+		"label": "Selfie: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤳🏽",
-		"label": "Selfie: medium skin tone"
+		"label": "Selfie: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤳🏾",
-		"label": "Selfie: medium-dark skin tone"
+		"label": "Selfie: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤳🏿",
-		"label": "Selfie: dark skin tone"
+		"label": "Selfie: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤴",
-		"label": "Prince"
+		"label": "Prince",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤴🏻",
-		"label": "Prince: light skin tone"
+		"label": "Prince: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤴🏼",
-		"label": "Prince: medium-light skin tone"
+		"label": "Prince: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤴🏽",
-		"label": "Prince: medium skin tone"
+		"label": "Prince: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤴🏾",
-		"label": "Prince: medium-dark skin tone"
+		"label": "Prince: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤴🏿",
-		"label": "Prince: dark skin tone"
+		"label": "Prince: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵",
-		"label": "Person in tuxedo"
+		"label": "Person in tuxedo",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵‍♀️",
-		"label": "Woman in tuxedo"
+		"label": "Woman in tuxedo",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵‍♂️",
-		"label": "Man in tuxedo"
+		"label": "Man in tuxedo",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏻",
-		"label": "Person in tuxedo: light skin tone"
+		"label": "Person in tuxedo: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏻‍♀️",
-		"label": "Woman in tuxedo: light skin tone"
+		"label": "Woman in tuxedo: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏻‍♂️",
-		"label": "Man in tuxedo: light skin tone"
+		"label": "Man in tuxedo: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏼",
-		"label": "Person in tuxedo: medium-light skin tone"
+		"label": "Person in tuxedo: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏼‍♀️",
-		"label": "Woman in tuxedo: medium-light skin tone"
+		"label": "Woman in tuxedo: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏼‍♂️",
-		"label": "Man in tuxedo: medium-light skin tone"
+		"label": "Man in tuxedo: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏽",
-		"label": "Person in tuxedo: medium skin tone"
+		"label": "Person in tuxedo: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏽‍♀️",
-		"label": "Woman in tuxedo: medium skin tone"
+		"label": "Woman in tuxedo: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏽‍♂️",
-		"label": "Man in tuxedo: medium skin tone"
+		"label": "Man in tuxedo: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏾",
-		"label": "Person in tuxedo: medium-dark skin tone"
+		"label": "Person in tuxedo: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏾‍♀️",
-		"label": "Woman in tuxedo: medium-dark skin tone"
+		"label": "Woman in tuxedo: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏾‍♂️",
-		"label": "Man in tuxedo: medium-dark skin tone"
+		"label": "Man in tuxedo: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏿",
-		"label": "Person in tuxedo: dark skin tone"
+		"label": "Person in tuxedo: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏿‍♀️",
-		"label": "Woman in tuxedo: dark skin tone"
+		"label": "Woman in tuxedo: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤵🏿‍♂️",
-		"label": "Man in tuxedo: dark skin tone"
+		"label": "Man in tuxedo: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤶",
-		"label": "Mrs. Claus"
+		"label": "Mrs. Claus",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤶🏻",
-		"label": "Mrs. Claus: light skin tone"
+		"label": "Mrs. Claus: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤶🏼",
-		"label": "Mrs. Claus: medium-light skin tone"
+		"label": "Mrs. Claus: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤶🏽",
-		"label": "Mrs. Claus: medium skin tone"
+		"label": "Mrs. Claus: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤶🏾",
-		"label": "Mrs. Claus: medium-dark skin tone"
+		"label": "Mrs. Claus: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤶🏿",
-		"label": "Mrs. Claus: dark skin tone"
+		"label": "Mrs. Claus: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷",
-		"label": "Person shrugging"
+		"label": "Person shrugging",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷‍♀️",
-		"label": "Woman shrugging"
+		"label": "Woman shrugging",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷‍♂️",
-		"label": "Man shrugging"
+		"label": "Man shrugging",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏻",
-		"label": "Person shrugging: light skin tone"
+		"label": "Person shrugging: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏻‍♀️",
-		"label": "Woman shrugging: light skin tone"
+		"label": "Woman shrugging: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏻‍♂️",
-		"label": "Man shrugging: light skin tone"
+		"label": "Man shrugging: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏼",
-		"label": "Person shrugging: medium-light skin tone"
+		"label": "Person shrugging: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏼‍♀️",
-		"label": "Woman shrugging: medium-light skin tone"
+		"label": "Woman shrugging: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏼‍♂️",
-		"label": "Man shrugging: medium-light skin tone"
+		"label": "Man shrugging: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏽",
-		"label": "Person shrugging: medium skin tone"
+		"label": "Person shrugging: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏽‍♀️",
-		"label": "Woman shrugging: medium skin tone"
+		"label": "Woman shrugging: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏽‍♂️",
-		"label": "Man shrugging: medium skin tone"
+		"label": "Man shrugging: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏾",
-		"label": "Person shrugging: medium-dark skin tone"
+		"label": "Person shrugging: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏾‍♀️",
-		"label": "Woman shrugging: medium-dark skin tone"
+		"label": "Woman shrugging: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏾‍♂️",
-		"label": "Man shrugging: medium-dark skin tone"
+		"label": "Man shrugging: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏿",
-		"label": "Person shrugging: dark skin tone"
+		"label": "Person shrugging: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏿‍♀️",
-		"label": "Woman shrugging: dark skin tone"
+		"label": "Woman shrugging: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤷🏿‍♂️",
-		"label": "Man shrugging: dark skin tone"
+		"label": "Man shrugging: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸",
-		"label": "Person cartwheeling"
+		"label": "Person cartwheeling",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸‍♀️",
-		"label": "Woman cartwheeling"
+		"label": "Woman cartwheeling",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸‍♂️",
-		"label": "Man cartwheeling"
+		"label": "Man cartwheeling",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏻",
-		"label": "Person cartwheeling: light skin tone"
+		"label": "Person cartwheeling: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏻‍♀️",
-		"label": "Woman cartwheeling: light skin tone"
+		"label": "Woman cartwheeling: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏻‍♂️",
-		"label": "Man cartwheeling: light skin tone"
+		"label": "Man cartwheeling: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏼",
-		"label": "Person cartwheeling: medium-light skin tone"
+		"label": "Person cartwheeling: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏼‍♀️",
-		"label": "Woman cartwheeling: medium-light skin tone"
+		"label": "Woman cartwheeling: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏼‍♂️",
-		"label": "Man cartwheeling: medium-light skin tone"
+		"label": "Man cartwheeling: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏽",
-		"label": "Person cartwheeling: medium skin tone"
+		"label": "Person cartwheeling: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏽‍♀️",
-		"label": "Woman cartwheeling: medium skin tone"
+		"label": "Woman cartwheeling: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏽‍♂️",
-		"label": "Man cartwheeling: medium skin tone"
+		"label": "Man cartwheeling: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏾",
-		"label": "Person cartwheeling: medium-dark skin tone"
+		"label": "Person cartwheeling: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏾‍♀️",
-		"label": "Woman cartwheeling: medium-dark skin tone"
+		"label": "Woman cartwheeling: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏾‍♂️",
-		"label": "Man cartwheeling: medium-dark skin tone"
+		"label": "Man cartwheeling: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏿",
-		"label": "Person cartwheeling: dark skin tone"
+		"label": "Person cartwheeling: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏿‍♀️",
-		"label": "Woman cartwheeling: dark skin tone"
+		"label": "Woman cartwheeling: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤸🏿‍♂️",
-		"label": "Man cartwheeling: dark skin tone"
+		"label": "Man cartwheeling: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹",
-		"label": "Person juggling"
+		"label": "Person juggling",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹‍♀️",
-		"label": "Woman juggling"
+		"label": "Woman juggling",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹‍♂️",
-		"label": "Man juggling"
+		"label": "Man juggling",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏻",
-		"label": "Person juggling: light skin tone"
+		"label": "Person juggling: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏻‍♀️",
-		"label": "Woman juggling: light skin tone"
+		"label": "Woman juggling: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏻‍♂️",
-		"label": "Man juggling: light skin tone"
+		"label": "Man juggling: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏼",
-		"label": "Person juggling: medium-light skin tone"
+		"label": "Person juggling: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏼‍♀️",
-		"label": "Woman juggling: medium-light skin tone"
+		"label": "Woman juggling: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏼‍♂️",
-		"label": "Man juggling: medium-light skin tone"
+		"label": "Man juggling: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏽",
-		"label": "Person juggling: medium skin tone"
+		"label": "Person juggling: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏽‍♀️",
-		"label": "Woman juggling: medium skin tone"
+		"label": "Woman juggling: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏽‍♂️",
-		"label": "Man juggling: medium skin tone"
+		"label": "Man juggling: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏾",
-		"label": "Person juggling: medium-dark skin tone"
+		"label": "Person juggling: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏾‍♀️",
-		"label": "Woman juggling: medium-dark skin tone"
+		"label": "Woman juggling: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏾‍♂️",
-		"label": "Man juggling: medium-dark skin tone"
+		"label": "Man juggling: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏿",
-		"label": "Person juggling: dark skin tone"
+		"label": "Person juggling: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏿‍♀️",
-		"label": "Woman juggling: dark skin tone"
+		"label": "Woman juggling: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤹🏿‍♂️",
-		"label": "Man juggling: dark skin tone"
+		"label": "Man juggling: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤺",
-		"label": "Person fencing"
+		"label": "Person fencing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼",
-		"label": "People wrestling"
+		"label": "People wrestling",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼‍♀️",
-		"label": "Women wrestling"
+		"label": "Women wrestling",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼‍♂️",
-		"label": "Men wrestling"
+		"label": "Men wrestling",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏻",
-		"label": "People wrestling: light skin tone"
+		"label": "People wrestling: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏻‍♀️",
-		"label": "Women wrestling: light skin tone"
+		"label": "Women wrestling: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏻‍♂️",
-		"label": "Men wrestling: light skin tone"
+		"label": "Men wrestling: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏼",
-		"label": "People wrestling: medium-light skin tone"
+		"label": "People wrestling: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏼‍♀️",
-		"label": "Women wrestling: medium-light skin tone"
+		"label": "Women wrestling: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏼‍♂️",
-		"label": "Men wrestling: medium-light skin tone"
+		"label": "Men wrestling: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏽",
-		"label": "People wrestling: medium skin tone"
+		"label": "People wrestling: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏽‍♀️",
-		"label": "Women wrestling: medium skin tone"
+		"label": "Women wrestling: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏽‍♂️",
-		"label": "Men wrestling: medium skin tone"
+		"label": "Men wrestling: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏾",
-		"label": "People wrestling: medium-dark skin tone"
+		"label": "People wrestling: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏾‍♀️",
-		"label": "Women wrestling: medium-dark skin tone"
+		"label": "Women wrestling: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏾‍♂️",
-		"label": "Men wrestling: medium-dark skin tone"
+		"label": "Men wrestling: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏿",
-		"label": "People wrestling: dark skin tone"
+		"label": "People wrestling: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏿‍♀️",
-		"label": "Women wrestling: dark skin tone"
+		"label": "Women wrestling: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤼🏿‍♂️",
-		"label": "Men wrestling: dark skin tone"
+		"label": "Men wrestling: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽",
-		"label": "Person playing water polo"
+		"label": "Person playing water polo",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽‍♀️",
-		"label": "Woman playing water polo"
+		"label": "Woman playing water polo",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽‍♂️",
-		"label": "Man playing water polo"
+		"label": "Man playing water polo",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏻",
-		"label": "Person playing water polo: light skin tone"
+		"label": "Person playing water polo: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏻‍♀️",
-		"label": "Woman playing water polo: light skin tone"
+		"label": "Woman playing water polo: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏻‍♂️",
-		"label": "Man playing water polo: light skin tone"
+		"label": "Man playing water polo: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏼",
-		"label": "Person playing water polo: medium-light skin tone"
+		"label": "Person playing water polo: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏼‍♀️",
-		"label": "Woman playing water polo: medium-light skin tone"
+		"label": "Woman playing water polo: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏼‍♂️",
-		"label": "Man playing water polo: medium-light skin tone"
+		"label": "Man playing water polo: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏽",
-		"label": "Person playing water polo: medium skin tone"
+		"label": "Person playing water polo: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏽‍♀️",
-		"label": "Woman playing water polo: medium skin tone"
+		"label": "Woman playing water polo: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏽‍♂️",
-		"label": "Man playing water polo: medium skin tone"
+		"label": "Man playing water polo: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏾",
-		"label": "Person playing water polo: medium-dark skin tone"
+		"label": "Person playing water polo: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏾‍♀️",
-		"label": "Woman playing water polo: medium-dark skin tone"
+		"label": "Woman playing water polo: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏾‍♂️",
-		"label": "Man playing water polo: medium-dark skin tone"
+		"label": "Man playing water polo: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏿",
-		"label": "Person playing water polo: dark skin tone"
+		"label": "Person playing water polo: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏿‍♀️",
-		"label": "Woman playing water polo: dark skin tone"
+		"label": "Woman playing water polo: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤽🏿‍♂️",
-		"label": "Man playing water polo: dark skin tone"
+		"label": "Man playing water polo: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾",
-		"label": "Person playing handball"
+		"label": "Person playing handball",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾‍♀️",
-		"label": "Woman playing handball"
+		"label": "Woman playing handball",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾‍♂️",
-		"label": "Man playing handball"
+		"label": "Man playing handball",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏻",
-		"label": "Person playing handball: light skin tone"
+		"label": "Person playing handball: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏻‍♀️",
-		"label": "Woman playing handball: light skin tone"
+		"label": "Woman playing handball: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏻‍♂️",
-		"label": "Man playing handball: light skin tone"
+		"label": "Man playing handball: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏼",
-		"label": "Person playing handball: medium-light skin tone"
+		"label": "Person playing handball: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏼‍♀️",
-		"label": "Woman playing handball: medium-light skin tone"
+		"label": "Woman playing handball: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏼‍♂️",
-		"label": "Man playing handball: medium-light skin tone"
+		"label": "Man playing handball: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏽",
-		"label": "Person playing handball: medium skin tone"
+		"label": "Person playing handball: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏽‍♀️",
-		"label": "Woman playing handball: medium skin tone"
+		"label": "Woman playing handball: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏽‍♂️",
-		"label": "Man playing handball: medium skin tone"
+		"label": "Man playing handball: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏾",
-		"label": "Person playing handball: medium-dark skin tone"
+		"label": "Person playing handball: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏾‍♀️",
-		"label": "Woman playing handball: medium-dark skin tone"
+		"label": "Woman playing handball: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏾‍♂️",
-		"label": "Man playing handball: medium-dark skin tone"
+		"label": "Man playing handball: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏿",
-		"label": "Person playing handball: dark skin tone"
+		"label": "Person playing handball: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏿‍♀️",
-		"label": "Woman playing handball: dark skin tone"
+		"label": "Woman playing handball: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤾🏿‍♂️",
-		"label": "Man playing handball: dark skin tone"
+		"label": "Man playing handball: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🤿",
-		"label": "Diving mask"
+		"label": "Diving mask",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🥀",
-		"label": "Wilted flower"
+		"label": "Wilted flower",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🥁",
-		"label": "Drum"
+		"label": "Drum",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🥂",
-		"label": "Clinking glasses"
+		"label": "Clinking glasses",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥃",
-		"label": "Tumbler glass"
+		"label": "Tumbler glass",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥄",
-		"label": "Spoon"
+		"label": "Spoon",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥅",
-		"label": "Goal net"
+		"label": "Goal net",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🥇",
-		"label": "1st place medal"
+		"label": "1st place medal",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🥈",
-		"label": "2nd place medal"
+		"label": "2nd place medal",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🥉",
-		"label": "3rd place medal"
+		"label": "3rd place medal",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🥊",
-		"label": "Boxing glove"
+		"label": "Boxing glove",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🥋",
-		"label": "Martial arts uniform"
+		"label": "Martial arts uniform",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🥌",
-		"label": "Curling stone"
+		"label": "Curling stone",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🥍",
-		"label": "Lacrosse"
+		"label": "Lacrosse",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🥎",
-		"label": "Softball"
+		"label": "Softball",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🥏",
-		"label": "Flying disc"
+		"label": "Flying disc",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🥐",
-		"label": "Croissant"
+		"label": "Croissant",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥑",
-		"label": "Avocado"
+		"label": "Avocado",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥒",
-		"label": "Cucumber"
+		"label": "Cucumber",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥓",
-		"label": "Bacon"
+		"label": "Bacon",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥔",
-		"label": "Potato"
+		"label": "Potato",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥕",
-		"label": "Carrot"
+		"label": "Carrot",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥖",
-		"label": "Baguette bread"
+		"label": "Baguette bread",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥗",
-		"label": "Green salad"
+		"label": "Green salad",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥘",
-		"label": "Shallow pan of food"
+		"label": "Shallow pan of food",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥙",
-		"label": "Stuffed flatbread"
+		"label": "Stuffed flatbread",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥚",
-		"label": "Egg"
+		"label": "Egg",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥛",
-		"label": "Glass of milk"
+		"label": "Glass of milk",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥜",
-		"label": "Peanuts"
+		"label": "Peanuts",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥝",
-		"label": "Kiwi fruit"
+		"label": "Kiwi fruit",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥞",
-		"label": "Pancakes"
+		"label": "Pancakes",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥟",
-		"label": "Dumpling"
+		"label": "Dumpling",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥠",
-		"label": "Fortune cookie"
+		"label": "Fortune cookie",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥡",
-		"label": "Takeout box"
+		"label": "Takeout box",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥢",
-		"label": "Chopsticks"
+		"label": "Chopsticks",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥣",
-		"label": "Bowl with spoon"
+		"label": "Bowl with spoon",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥤",
-		"label": "Cup with straw"
+		"label": "Cup with straw",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥥",
-		"label": "Coconut"
+		"label": "Coconut",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥦",
-		"label": "Broccoli"
+		"label": "Broccoli",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥧",
-		"label": "Pie"
+		"label": "Pie",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥨",
-		"label": "Pretzel"
+		"label": "Pretzel",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥩",
-		"label": "Cut of meat"
+		"label": "Cut of meat",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥪",
-		"label": "Sandwich"
+		"label": "Sandwich",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥫",
-		"label": "Canned food"
+		"label": "Canned food",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥬",
-		"label": "Leafy green"
+		"label": "Leafy green",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥭",
-		"label": "Mango"
+		"label": "Mango",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥮",
-		"label": "Moon cake"
+		"label": "Moon cake",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥯",
-		"label": "Bagel"
+		"label": "Bagel",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🥰",
-		"label": "Smiling face with hearts"
+		"label": "Smiling face with hearts",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🥱",
-		"label": "Yawning face"
+		"label": "Yawning face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🥲",
-		"label": "Smiling face with tear"
+		"label": "Smiling face with tear",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🥳",
-		"label": "Partying face"
+		"label": "Partying face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🥴",
-		"label": "Woozy face"
+		"label": "Woozy face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🥵",
-		"label": "Hot face"
+		"label": "Hot face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🥶",
-		"label": "Cold face"
+		"label": "Cold face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🥷",
-		"label": "Ninja"
+		"label": "Ninja",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🥷🏻",
-		"label": "Ninja: light skin tone"
+		"label": "Ninja: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🥷🏼",
-		"label": "Ninja: medium-light skin tone"
+		"label": "Ninja: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🥷🏽",
-		"label": "Ninja: medium skin tone"
+		"label": "Ninja: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🥷🏾",
-		"label": "Ninja: medium-dark skin tone"
+		"label": "Ninja: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🥷🏿",
-		"label": "Ninja: dark skin tone"
+		"label": "Ninja: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🥸",
-		"label": "Disguised face"
+		"label": "Disguised face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🥹",
-		"label": "Face holding back tears"
+		"label": "Face holding back tears",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🥺",
-		"label": "Pleading face"
+		"label": "Pleading face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🥻",
-		"label": "Sari"
+		"label": "Sari",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🥼",
-		"label": "Lab coat"
+		"label": "Lab coat",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🥽",
-		"label": "Goggles"
+		"label": "Goggles",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🥾",
-		"label": "Hiking boot"
+		"label": "Hiking boot",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🥿",
-		"label": "Flat shoe"
+		"label": "Flat shoe",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🦀",
-		"label": "Crab"
+		"label": "Crab",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦁",
-		"label": "Lion"
+		"label": "Lion",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦂",
-		"label": "Scorpion"
+		"label": "Scorpion",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦃",
-		"label": "Turkey"
+		"label": "Turkey",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦄",
-		"label": "Unicorn"
+		"label": "Unicorn",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦅",
-		"label": "Eagle"
+		"label": "Eagle",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦆",
-		"label": "Duck"
+		"label": "Duck",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦇",
-		"label": "Bat"
+		"label": "Bat",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦈",
-		"label": "Shark"
+		"label": "Shark",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦉",
-		"label": "Owl"
+		"label": "Owl",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦊",
-		"label": "Fox"
+		"label": "Fox",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦋",
-		"label": "Butterfly"
+		"label": "Butterfly",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦌",
-		"label": "Deer"
+		"label": "Deer",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦍",
-		"label": "Gorilla"
+		"label": "Gorilla",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦎",
-		"label": "Lizard"
+		"label": "Lizard",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦏",
-		"label": "Rhinoceros"
+		"label": "Rhinoceros",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦐",
-		"label": "Shrimp"
+		"label": "Shrimp",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦑",
-		"label": "Squid"
+		"label": "Squid",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦒",
-		"label": "Giraffe"
+		"label": "Giraffe",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦓",
-		"label": "Zebra"
+		"label": "Zebra",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦔",
-		"label": "Hedgehog"
+		"label": "Hedgehog",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦕",
-		"label": "Sauropod"
+		"label": "Sauropod",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦖",
-		"label": "T-Rex"
+		"label": "T-Rex",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦗",
-		"label": "Cricket"
+		"label": "Cricket",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦘",
-		"label": "Kangaroo"
+		"label": "Kangaroo",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦙",
-		"label": "Llama"
+		"label": "Llama",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦚",
-		"label": "Peacock"
+		"label": "Peacock",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦛",
-		"label": "Hippopotamus"
+		"label": "Hippopotamus",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦜",
-		"label": "Parrot"
+		"label": "Parrot",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦝",
-		"label": "Raccoon"
+		"label": "Raccoon",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦞",
-		"label": "Lobster"
+		"label": "Lobster",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦟",
-		"label": "Mosquito"
+		"label": "Mosquito",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦠",
-		"label": "Microbe"
+		"label": "Microbe",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦡",
-		"label": "Badger"
+		"label": "Badger",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦢",
-		"label": "Swan"
+		"label": "Swan",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦣",
-		"label": "Mammoth"
+		"label": "Mammoth",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦤",
-		"label": "Dodo"
+		"label": "Dodo",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦥",
-		"label": "Sloth"
+		"label": "Sloth",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦦",
-		"label": "Otter"
+		"label": "Otter",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦧",
-		"label": "Orangutan"
+		"label": "Orangutan",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦨",
-		"label": "Skunk"
+		"label": "Skunk",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦩",
-		"label": "Flamingo"
+		"label": "Flamingo",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦪",
-		"label": "Oyster"
+		"label": "Oyster",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦫",
-		"label": "Beaver"
+		"label": "Beaver",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦬",
-		"label": "Bison"
+		"label": "Bison",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦭",
-		"label": "Seal"
+		"label": "Seal",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦮",
-		"label": "Guide dog"
+		"label": "Guide dog",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🦯",
-		"label": "White cane"
+		"label": "White cane",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🦴",
-		"label": "Bone"
+		"label": "Bone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦵",
-		"label": "Leg"
+		"label": "Leg",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦵🏻",
-		"label": "Leg: light skin tone"
+		"label": "Leg: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦵🏼",
-		"label": "Leg: medium-light skin tone"
+		"label": "Leg: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦵🏽",
-		"label": "Leg: medium skin tone"
+		"label": "Leg: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦵🏾",
-		"label": "Leg: medium-dark skin tone"
+		"label": "Leg: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦵🏿",
-		"label": "Leg: dark skin tone"
+		"label": "Leg: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦶",
-		"label": "Foot"
+		"label": "Foot",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦶🏻",
-		"label": "Foot: light skin tone"
+		"label": "Foot: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦶🏼",
-		"label": "Foot: medium-light skin tone"
+		"label": "Foot: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦶🏽",
-		"label": "Foot: medium skin tone"
+		"label": "Foot: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦶🏾",
-		"label": "Foot: medium-dark skin tone"
+		"label": "Foot: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦶🏿",
-		"label": "Foot: dark skin tone"
+		"label": "Foot: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦷",
-		"label": "Tooth"
+		"label": "Tooth",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸",
-		"label": "Superhero"
+		"label": "Superhero",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸‍♀️",
-		"label": "Woman superhero"
+		"label": "Woman superhero",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸‍♂️",
-		"label": "Man superhero"
+		"label": "Man superhero",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏻",
-		"label": "Superhero: light skin tone"
+		"label": "Superhero: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏻‍♀️",
-		"label": "Woman superhero: light skin tone"
+		"label": "Woman superhero: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏻‍♂️",
-		"label": "Man superhero: light skin tone"
+		"label": "Man superhero: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏼",
-		"label": "Superhero: medium-light skin tone"
+		"label": "Superhero: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏼‍♀️",
-		"label": "Woman superhero: medium-light skin tone"
+		"label": "Woman superhero: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏼‍♂️",
-		"label": "Man superhero: medium-light skin tone"
+		"label": "Man superhero: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏽",
-		"label": "Superhero: medium skin tone"
+		"label": "Superhero: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏽‍♀️",
-		"label": "Woman superhero: medium skin tone"
+		"label": "Woman superhero: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏽‍♂️",
-		"label": "Man superhero: medium skin tone"
+		"label": "Man superhero: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏾",
-		"label": "Superhero: medium-dark skin tone"
+		"label": "Superhero: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏾‍♀️",
-		"label": "Woman superhero: medium-dark skin tone"
+		"label": "Woman superhero: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏾‍♂️",
-		"label": "Man superhero: medium-dark skin tone"
+		"label": "Man superhero: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏿",
-		"label": "Superhero: dark skin tone"
+		"label": "Superhero: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏿‍♀️",
-		"label": "Woman superhero: dark skin tone"
+		"label": "Woman superhero: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦸🏿‍♂️",
-		"label": "Man superhero: dark skin tone"
+		"label": "Man superhero: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹",
-		"label": "Supervillain"
+		"label": "Supervillain",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹‍♀️",
-		"label": "Woman supervillain"
+		"label": "Woman supervillain",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹‍♂️",
-		"label": "Man supervillain"
+		"label": "Man supervillain",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏻",
-		"label": "Supervillain: light skin tone"
+		"label": "Supervillain: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏻‍♀️",
-		"label": "Woman supervillain: light skin tone"
+		"label": "Woman supervillain: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏻‍♂️",
-		"label": "Man supervillain: light skin tone"
+		"label": "Man supervillain: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏼",
-		"label": "Supervillain: medium-light skin tone"
+		"label": "Supervillain: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏼‍♀️",
-		"label": "Woman supervillain: medium-light skin tone"
+		"label": "Woman supervillain: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏼‍♂️",
-		"label": "Man supervillain: medium-light skin tone"
+		"label": "Man supervillain: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏽",
-		"label": "Supervillain: medium skin tone"
+		"label": "Supervillain: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏽‍♀️",
-		"label": "Woman supervillain: medium skin tone"
+		"label": "Woman supervillain: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏽‍♂️",
-		"label": "Man supervillain: medium skin tone"
+		"label": "Man supervillain: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏾",
-		"label": "Supervillain: medium-dark skin tone"
+		"label": "Supervillain: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏾‍♀️",
-		"label": "Woman supervillain: medium-dark skin tone"
+		"label": "Woman supervillain: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏾‍♂️",
-		"label": "Man supervillain: medium-dark skin tone"
+		"label": "Man supervillain: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏿",
-		"label": "Supervillain: dark skin tone"
+		"label": "Supervillain: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏿‍♀️",
-		"label": "Woman supervillain: dark skin tone"
+		"label": "Woman supervillain: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦹🏿‍♂️",
-		"label": "Man supervillain: dark skin tone"
+		"label": "Man supervillain: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦺",
-		"label": "Safety vest"
+		"label": "Safety vest",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🦻",
-		"label": "Ear with hearing aid"
+		"label": "Ear with hearing aid",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦻🏻",
-		"label": "Ear with hearing aid: light skin tone"
+		"label": "Ear with hearing aid: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦻🏼",
-		"label": "Ear with hearing aid: medium-light skin tone"
+		"label": "Ear with hearing aid: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦻🏽",
-		"label": "Ear with hearing aid: medium skin tone"
+		"label": "Ear with hearing aid: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦻🏾",
-		"label": "Ear with hearing aid: medium-dark skin tone"
+		"label": "Ear with hearing aid: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦻🏿",
-		"label": "Ear with hearing aid: dark skin tone"
+		"label": "Ear with hearing aid: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦼",
-		"label": "Motorized wheelchair"
+		"label": "Motorized wheelchair",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🦽",
-		"label": "Manual wheelchair"
+		"label": "Manual wheelchair",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🦾",
-		"label": "Mechanical arm"
+		"label": "Mechanical arm",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🦿",
-		"label": "Mechanical leg"
+		"label": "Mechanical leg",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧀",
-		"label": "Cheese wedge"
+		"label": "Cheese wedge",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🧁",
-		"label": "Cupcake"
+		"label": "Cupcake",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🧂",
-		"label": "Salt"
+		"label": "Salt",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🧃",
-		"label": "Beverage box"
+		"label": "Beverage box",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🧄",
-		"label": "Garlic"
+		"label": "Garlic",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🧅",
-		"label": "Onion"
+		"label": "Onion",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🧆",
-		"label": "Falafel"
+		"label": "Falafel",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🧇",
-		"label": "Waffle"
+		"label": "Waffle",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🧈",
-		"label": "Butter"
+		"label": "Butter",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🧉",
-		"label": "Mate"
+		"label": "Mate",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🧊",
-		"label": "Ice"
+		"label": "Ice",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🧋",
-		"label": "Bubble tea"
+		"label": "Bubble tea",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🧌",
-		"label": "Troll"
+		"label": "Troll",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍",
-		"label": "Person standing"
+		"label": "Person standing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍‍♀️",
-		"label": "Woman standing"
+		"label": "Woman standing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍‍♂️",
-		"label": "Man standing"
+		"label": "Man standing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏻",
-		"label": "Person standing: light skin tone"
+		"label": "Person standing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏻‍♀️",
-		"label": "Woman standing: light skin tone"
+		"label": "Woman standing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏻‍♂️",
-		"label": "Man standing: light skin tone"
+		"label": "Man standing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏼",
-		"label": "Person standing: medium-light skin tone"
+		"label": "Person standing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏼‍♀️",
-		"label": "Woman standing: medium-light skin tone"
+		"label": "Woman standing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏼‍♂️",
-		"label": "Man standing: medium-light skin tone"
+		"label": "Man standing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏽",
-		"label": "Person standing: medium skin tone"
+		"label": "Person standing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏽‍♀️",
-		"label": "Woman standing: medium skin tone"
+		"label": "Woman standing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏽‍♂️",
-		"label": "Man standing: medium skin tone"
+		"label": "Man standing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏾",
-		"label": "Person standing: medium-dark skin tone"
+		"label": "Person standing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏾‍♀️",
-		"label": "Woman standing: medium-dark skin tone"
+		"label": "Woman standing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏾‍♂️",
-		"label": "Man standing: medium-dark skin tone"
+		"label": "Man standing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏿",
-		"label": "Person standing: dark skin tone"
+		"label": "Person standing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏿‍♀️",
-		"label": "Woman standing: dark skin tone"
+		"label": "Woman standing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧍🏿‍♂️",
-		"label": "Man standing: dark skin tone"
+		"label": "Man standing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎",
-		"label": "Person kneeling"
+		"label": "Person kneeling",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎‍♀️",
-		"label": "Woman kneeling"
+		"label": "Woman kneeling",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎‍♀️‍➡️",
-		"label": "Woman kneeling facing right"
+		"label": "Woman kneeling facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎‍♂️",
-		"label": "Man kneeling"
+		"label": "Man kneeling",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎‍♂️‍➡️",
-		"label": "Man kneeling facing right"
+		"label": "Man kneeling facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎‍➡️",
-		"label": "Person kneeling facing right"
+		"label": "Person kneeling facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏻",
-		"label": "Person kneeling: light skin tone"
+		"label": "Person kneeling: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏻‍♀️",
-		"label": "Woman kneeling: light skin tone"
+		"label": "Woman kneeling: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏻‍♀️‍➡️",
-		"label": "Woman kneeling facing right: light skin tone"
+		"label": "Woman kneeling facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏻‍♂️",
-		"label": "Man kneeling: light skin tone"
+		"label": "Man kneeling: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏻‍♂️‍➡️",
-		"label": "Man kneeling facing right: light skin tone"
+		"label": "Man kneeling facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏻‍➡️",
-		"label": "Person kneeling facing right: light skin tone"
+		"label": "Person kneeling facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏼",
-		"label": "Person kneeling: medium-light skin tone"
+		"label": "Person kneeling: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏼‍♀️",
-		"label": "Woman kneeling: medium-light skin tone"
+		"label": "Woman kneeling: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏼‍♀️‍➡️",
-		"label": "Woman kneeling facing right: medium-light skin tone"
+		"label": "Woman kneeling facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏼‍♂️",
-		"label": "Man kneeling: medium-light skin tone"
+		"label": "Man kneeling: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏼‍♂️‍➡️",
-		"label": "Man kneeling facing right: medium-light skin tone"
+		"label": "Man kneeling facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏼‍➡️",
-		"label": "Person kneeling facing right: medium-light skin tone"
+		"label": "Person kneeling facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏽",
-		"label": "Person kneeling: medium skin tone"
+		"label": "Person kneeling: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏽‍♀️",
-		"label": "Woman kneeling: medium skin tone"
+		"label": "Woman kneeling: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏽‍♀️‍➡️",
-		"label": "Woman kneeling facing right: medium skin tone"
+		"label": "Woman kneeling facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏽‍♂️",
-		"label": "Man kneeling: medium skin tone"
+		"label": "Man kneeling: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏽‍♂️‍➡️",
-		"label": "Man kneeling facing right: medium skin tone"
+		"label": "Man kneeling facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏽‍➡️",
-		"label": "Person kneeling facing right: medium skin tone"
+		"label": "Person kneeling facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏾",
-		"label": "Person kneeling: medium-dark skin tone"
+		"label": "Person kneeling: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏾‍♀️",
-		"label": "Woman kneeling: medium-dark skin tone"
+		"label": "Woman kneeling: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏾‍♀️‍➡️",
-		"label": "Woman kneeling facing right: medium-dark skin tone"
+		"label": "Woman kneeling facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏾‍♂️",
-		"label": "Man kneeling: medium-dark skin tone"
+		"label": "Man kneeling: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏾‍♂️‍➡️",
-		"label": "Man kneeling facing right: medium-dark skin tone"
+		"label": "Man kneeling facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏾‍➡️",
-		"label": "Person kneeling facing right: medium-dark skin tone"
+		"label": "Person kneeling facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏿",
-		"label": "Person kneeling: dark skin tone"
+		"label": "Person kneeling: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏿‍♀️",
-		"label": "Woman kneeling: dark skin tone"
+		"label": "Woman kneeling: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏿‍♀️‍➡️",
-		"label": "Woman kneeling facing right: dark skin tone"
+		"label": "Woman kneeling facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏿‍♂️",
-		"label": "Man kneeling: dark skin tone"
+		"label": "Man kneeling: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏿‍♂️‍➡️",
-		"label": "Man kneeling facing right: dark skin tone"
+		"label": "Man kneeling facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧎🏿‍➡️",
-		"label": "Person kneeling facing right: dark skin tone"
+		"label": "Person kneeling facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏",
-		"label": "Deaf person"
+		"label": "Deaf person",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏‍♀️",
-		"label": "Deaf woman"
+		"label": "Deaf woman",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏‍♂️",
-		"label": "Deaf man"
+		"label": "Deaf man",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏻",
-		"label": "Deaf person: light skin tone"
+		"label": "Deaf person: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏻‍♀️",
-		"label": "Deaf woman: light skin tone"
+		"label": "Deaf woman: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏻‍♂️",
-		"label": "Deaf man: light skin tone"
+		"label": "Deaf man: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏼",
-		"label": "Deaf person: medium-light skin tone"
+		"label": "Deaf person: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏼‍♀️",
-		"label": "Deaf woman: medium-light skin tone"
+		"label": "Deaf woman: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏼‍♂️",
-		"label": "Deaf man: medium-light skin tone"
+		"label": "Deaf man: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏽",
-		"label": "Deaf person: medium skin tone"
+		"label": "Deaf person: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏽‍♀️",
-		"label": "Deaf woman: medium skin tone"
+		"label": "Deaf woman: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏽‍♂️",
-		"label": "Deaf man: medium skin tone"
+		"label": "Deaf man: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏾",
-		"label": "Deaf person: medium-dark skin tone"
+		"label": "Deaf person: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏾‍♀️",
-		"label": "Deaf woman: medium-dark skin tone"
+		"label": "Deaf woman: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏾‍♂️",
-		"label": "Deaf man: medium-dark skin tone"
+		"label": "Deaf man: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏿",
-		"label": "Deaf person: dark skin tone"
+		"label": "Deaf person: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏿‍♀️",
-		"label": "Deaf woman: dark skin tone"
+		"label": "Deaf woman: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧏🏿‍♂️",
-		"label": "Deaf man: dark skin tone"
+		"label": "Deaf man: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧐",
-		"label": "Face with monocle"
+		"label": "Face with monocle",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🧑",
-		"label": "Person"
+		"label": "Person",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍⚕️",
-		"label": "Health worker"
+		"label": "Health worker",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍⚖️",
-		"label": "Judge"
+		"label": "Judge",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍✈️",
-		"label": "Pilot"
+		"label": "Pilot",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🌾",
-		"label": "Farmer"
+		"label": "Farmer",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🍳",
-		"label": "Cook"
+		"label": "Cook",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🍼",
-		"label": "Person feeding baby"
+		"label": "Person feeding baby",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🎄",
-		"label": "Mx Claus"
+		"label": "Mx Claus",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🎓",
-		"label": "Student"
+		"label": "Student",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🎤",
-		"label": "Singer"
+		"label": "Singer",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🎨",
-		"label": "Artist"
+		"label": "Artist",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🏫",
-		"label": "Teacher"
+		"label": "Teacher",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🏭",
-		"label": "Factory worker"
+		"label": "Factory worker",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍💻",
-		"label": "Technologist"
+		"label": "Technologist",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍💼",
-		"label": "Office worker"
+		"label": "Office worker",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🔧",
-		"label": "Mechanic"
+		"label": "Mechanic",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🔬",
-		"label": "Scientist"
+		"label": "Scientist",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🚀",
-		"label": "Astronaut"
+		"label": "Astronaut",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🚒",
-		"label": "Firefighter"
+		"label": "Firefighter",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🤝‍🧑",
-		"label": "People holding hands"
+		"label": "People holding hands",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🦯",
-		"label": "Person with white cane"
+		"label": "Person with white cane",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🦯‍➡️",
-		"label": "Person with white cane facing right"
+		"label": "Person with white cane facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🦰",
-		"label": "Person: red hair"
+		"label": "Person: red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🦱",
-		"label": "Person: curly hair"
+		"label": "Person: curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🦲",
-		"label": "Person: bald"
+		"label": "Person: bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🦳",
-		"label": "Person: white hair"
+		"label": "Person: white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🦼",
-		"label": "Person in motorized wheelchair"
+		"label": "Person in motorized wheelchair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🦼‍➡️",
-		"label": "Person in motorized wheelchair facing right"
+		"label": "Person in motorized wheelchair facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🦽",
-		"label": "Person in manual wheelchair"
+		"label": "Person in manual wheelchair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🦽‍➡️",
-		"label": "Person in manual wheelchair facing right"
+		"label": "Person in manual wheelchair facing right",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🧑‍🧒",
-		"label": "Family: adult, adult, child"
+		"label": "Family: adult, adult, child",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🧑‍🧒‍🧒",
-		"label": "Family: adult, adult, child, child"
+		"label": "Family: adult, adult, child, child",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🧒",
-		"label": "Family: adult, child"
+		"label": "Family: adult, child",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🧒‍🧒",
-		"label": "Family: adult, child, child"
+		"label": "Family: adult, child, child",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑‍🩰",
-		"label": "Ballet dancer"
+		"label": "Ballet dancer",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻",
-		"label": "Person: light skin tone"
+		"label": "Person: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍⚕️",
-		"label": "Health worker: light skin tone"
+		"label": "Health worker: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍⚖️",
-		"label": "Judge: light skin tone"
+		"label": "Judge: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍✈️",
-		"label": "Pilot: light skin tone"
+		"label": "Pilot: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍❤️‍💋‍🧑🏼",
-		"label": "Kiss: person, person, light skin tone, medium-light skin tone"
+		"label": "Kiss: person, person, light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍❤️‍💋‍🧑🏽",
-		"label": "Kiss: person, person, light skin tone, medium skin tone"
+		"label": "Kiss: person, person, light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍❤️‍💋‍🧑🏾",
-		"label": "Kiss: person, person, light skin tone, medium-dark skin tone"
+		"label": "Kiss: person, person, light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍❤️‍💋‍🧑🏿",
-		"label": "Kiss: person, person, light skin tone, dark skin tone"
+		"label": "Kiss: person, person, light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍❤️‍🧑🏼",
-		"label": "Couple with heart: person, person, light skin tone, medium-light skin tone"
+		"label": "Couple with heart: person, person, light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍❤️‍🧑🏽",
-		"label": "Couple with heart: person, person, light skin tone, medium skin tone"
+		"label": "Couple with heart: person, person, light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍❤️‍🧑🏾",
-		"label": "Couple with heart: person, person, light skin tone, medium-dark skin tone"
+		"label": "Couple with heart: person, person, light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍❤️‍🧑🏿",
-		"label": "Couple with heart: person, person, light skin tone, dark skin tone"
+		"label": "Couple with heart: person, person, light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🌾",
-		"label": "Farmer: light skin tone"
+		"label": "Farmer: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🍳",
-		"label": "Cook: light skin tone"
+		"label": "Cook: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🍼",
-		"label": "Person feeding baby: light skin tone"
+		"label": "Person feeding baby: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🎄",
-		"label": "Mx Claus: light skin tone"
+		"label": "Mx Claus: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🎓",
-		"label": "Student: light skin tone"
+		"label": "Student: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🎤",
-		"label": "Singer: light skin tone"
+		"label": "Singer: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🎨",
-		"label": "Artist: light skin tone"
+		"label": "Artist: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🏫",
-		"label": "Teacher: light skin tone"
+		"label": "Teacher: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🏭",
-		"label": "Factory worker: light skin tone"
+		"label": "Factory worker: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🐰‍🧑🏼",
-		"label": "People with bunny ears: light skin tone, medium-light skin tone"
+		"label": "People with bunny ears: light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🐰‍🧑🏽",
-		"label": "People with bunny ears: light skin tone, medium skin tone"
+		"label": "People with bunny ears: light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🐰‍🧑🏾",
-		"label": "People with bunny ears: light skin tone, medium-dark skin tone"
+		"label": "People with bunny ears: light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🐰‍🧑🏿",
-		"label": "People with bunny ears: light skin tone, dark skin tone"
+		"label": "People with bunny ears: light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍💻",
-		"label": "Technologist: light skin tone"
+		"label": "Technologist: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍💼",
-		"label": "Office worker: light skin tone"
+		"label": "Office worker: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🔧",
-		"label": "Mechanic: light skin tone"
+		"label": "Mechanic: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🔬",
-		"label": "Scientist: light skin tone"
+		"label": "Scientist: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🚀",
-		"label": "Astronaut: light skin tone"
+		"label": "Astronaut: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🚒",
-		"label": "Firefighter: light skin tone"
+		"label": "Firefighter: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🤝‍🧑🏻",
-		"label": "People holding hands: light skin tone"
+		"label": "People holding hands: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🤝‍🧑🏼",
-		"label": "People holding hands: light skin tone, medium-light skin tone"
+		"label": "People holding hands: light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🤝‍🧑🏽",
-		"label": "People holding hands: light skin tone, medium skin tone"
+		"label": "People holding hands: light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🤝‍🧑🏾",
-		"label": "People holding hands: light skin tone, medium-dark skin tone"
+		"label": "People holding hands: light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🤝‍🧑🏿",
-		"label": "People holding hands: light skin tone, dark skin tone"
+		"label": "People holding hands: light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🦯",
-		"label": "Person with white cane: light skin tone"
+		"label": "Person with white cane: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🦯‍➡️",
-		"label": "Person with white cane facing right: light skin tone"
+		"label": "Person with white cane facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🦰",
-		"label": "Person: light skin tone, red hair"
+		"label": "Person: light skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🦱",
-		"label": "Person: light skin tone, curly hair"
+		"label": "Person: light skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🦲",
-		"label": "Person: light skin tone, bald"
+		"label": "Person: light skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🦳",
-		"label": "Person: light skin tone, white hair"
+		"label": "Person: light skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🦼",
-		"label": "Person in motorized wheelchair: light skin tone"
+		"label": "Person in motorized wheelchair: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🦼‍➡️",
-		"label": "Person in motorized wheelchair facing right: light skin tone"
+		"label": "Person in motorized wheelchair facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🦽",
-		"label": "Person in manual wheelchair: light skin tone"
+		"label": "Person in manual wheelchair: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🦽‍➡️",
-		"label": "Person in manual wheelchair facing right: light skin tone"
+		"label": "Person in manual wheelchair facing right: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🩰",
-		"label": "Ballet dancer: light skin tone"
+		"label": "Ballet dancer: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🫯‍🧑🏼",
-		"label": "People wrestling: light skin tone, medium-light skin tone"
+		"label": "People wrestling: light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🫯‍🧑🏽",
-		"label": "People wrestling: light skin tone, medium skin tone"
+		"label": "People wrestling: light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🫯‍🧑🏾",
-		"label": "People wrestling: light skin tone, medium-dark skin tone"
+		"label": "People wrestling: light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏻‍🫯‍🧑🏿",
-		"label": "People wrestling: light skin tone, dark skin tone"
+		"label": "People wrestling: light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼",
-		"label": "Person: medium-light skin tone"
+		"label": "Person: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍⚕️",
-		"label": "Health worker: medium-light skin tone"
+		"label": "Health worker: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍⚖️",
-		"label": "Judge: medium-light skin tone"
+		"label": "Judge: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍✈️",
-		"label": "Pilot: medium-light skin tone"
+		"label": "Pilot: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍❤️‍💋‍🧑🏻",
-		"label": "Kiss: person, person, medium-light skin tone, light skin tone"
+		"label": "Kiss: person, person, medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍❤️‍💋‍🧑🏽",
-		"label": "Kiss: person, person, medium-light skin tone, medium skin tone"
+		"label": "Kiss: person, person, medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍❤️‍💋‍🧑🏾",
-		"label": "Kiss: person, person, medium-light skin tone, medium-dark skin tone"
+		"label": "Kiss: person, person, medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍❤️‍💋‍🧑🏿",
-		"label": "Kiss: person, person, medium-light skin tone, dark skin tone"
+		"label": "Kiss: person, person, medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍❤️‍🧑🏻",
-		"label": "Couple with heart: person, person, medium-light skin tone, light skin tone"
+		"label": "Couple with heart: person, person, medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍❤️‍🧑🏽",
-		"label": "Couple with heart: person, person, medium-light skin tone, medium skin tone"
+		"label": "Couple with heart: person, person, medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍❤️‍🧑🏾",
-		"label": "Couple with heart: person, person, medium-light skin tone, medium-dark skin tone"
+		"label": "Couple with heart: person, person, medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍❤️‍🧑🏿",
-		"label": "Couple with heart: person, person, medium-light skin tone, dark skin tone"
+		"label": "Couple with heart: person, person, medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🌾",
-		"label": "Farmer: medium-light skin tone"
+		"label": "Farmer: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🍳",
-		"label": "Cook: medium-light skin tone"
+		"label": "Cook: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🍼",
-		"label": "Person feeding baby: medium-light skin tone"
+		"label": "Person feeding baby: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🎄",
-		"label": "Mx Claus: medium-light skin tone"
+		"label": "Mx Claus: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🎓",
-		"label": "Student: medium-light skin tone"
+		"label": "Student: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🎤",
-		"label": "Singer: medium-light skin tone"
+		"label": "Singer: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🎨",
-		"label": "Artist: medium-light skin tone"
+		"label": "Artist: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🏫",
-		"label": "Teacher: medium-light skin tone"
+		"label": "Teacher: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🏭",
-		"label": "Factory worker: medium-light skin tone"
+		"label": "Factory worker: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🐰‍🧑🏻",
-		"label": "People with bunny ears: medium-light skin tone, light skin tone"
+		"label": "People with bunny ears: medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🐰‍🧑🏽",
-		"label": "People with bunny ears: medium-light skin tone, medium skin tone"
+		"label": "People with bunny ears: medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🐰‍🧑🏾",
-		"label": "People with bunny ears: medium-light skin tone, medium-dark skin tone"
+		"label": "People with bunny ears: medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🐰‍🧑🏿",
-		"label": "People with bunny ears: medium-light skin tone, dark skin tone"
+		"label": "People with bunny ears: medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍💻",
-		"label": "Technologist: medium-light skin tone"
+		"label": "Technologist: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍💼",
-		"label": "Office worker: medium-light skin tone"
+		"label": "Office worker: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🔧",
-		"label": "Mechanic: medium-light skin tone"
+		"label": "Mechanic: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🔬",
-		"label": "Scientist: medium-light skin tone"
+		"label": "Scientist: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🚀",
-		"label": "Astronaut: medium-light skin tone"
+		"label": "Astronaut: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🚒",
-		"label": "Firefighter: medium-light skin tone"
+		"label": "Firefighter: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🤝‍🧑🏻",
-		"label": "People holding hands: medium-light skin tone, light skin tone"
+		"label": "People holding hands: medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🤝‍🧑🏼",
-		"label": "People holding hands: medium-light skin tone"
+		"label": "People holding hands: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🤝‍🧑🏽",
-		"label": "People holding hands: medium-light skin tone, medium skin tone"
+		"label": "People holding hands: medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🤝‍🧑🏾",
-		"label": "People holding hands: medium-light skin tone, medium-dark skin tone"
+		"label": "People holding hands: medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🤝‍🧑🏿",
-		"label": "People holding hands: medium-light skin tone, dark skin tone"
+		"label": "People holding hands: medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🦯",
-		"label": "Person with white cane: medium-light skin tone"
+		"label": "Person with white cane: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🦯‍➡️",
-		"label": "Person with white cane facing right: medium-light skin tone"
+		"label": "Person with white cane facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🦰",
-		"label": "Person: medium-light skin tone, red hair"
+		"label": "Person: medium-light skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🦱",
-		"label": "Person: medium-light skin tone, curly hair"
+		"label": "Person: medium-light skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🦲",
-		"label": "Person: medium-light skin tone, bald"
+		"label": "Person: medium-light skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🦳",
-		"label": "Person: medium-light skin tone, white hair"
+		"label": "Person: medium-light skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🦼",
-		"label": "Person in motorized wheelchair: medium-light skin tone"
+		"label": "Person in motorized wheelchair: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🦼‍➡️",
-		"label": "Person in motorized wheelchair facing right: medium-light skin tone"
+		"label": "Person in motorized wheelchair facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🦽",
-		"label": "Person in manual wheelchair: medium-light skin tone"
+		"label": "Person in manual wheelchair: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🦽‍➡️",
-		"label": "Person in manual wheelchair facing right: medium-light skin tone"
+		"label": "Person in manual wheelchair facing right: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🩰",
-		"label": "Ballet dancer: medium-light skin tone"
+		"label": "Ballet dancer: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🫯‍🧑🏻",
-		"label": "People wrestling: medium-light skin tone, light skin tone"
+		"label": "People wrestling: medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🫯‍🧑🏽",
-		"label": "People wrestling: medium-light skin tone, medium skin tone"
+		"label": "People wrestling: medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🫯‍🧑🏾",
-		"label": "People wrestling: medium-light skin tone, medium-dark skin tone"
+		"label": "People wrestling: medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏼‍🫯‍🧑🏿",
-		"label": "People wrestling: medium-light skin tone, dark skin tone"
+		"label": "People wrestling: medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽",
-		"label": "Person: medium skin tone"
+		"label": "Person: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍⚕️",
-		"label": "Health worker: medium skin tone"
+		"label": "Health worker: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍⚖️",
-		"label": "Judge: medium skin tone"
+		"label": "Judge: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍✈️",
-		"label": "Pilot: medium skin tone"
+		"label": "Pilot: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍❤️‍💋‍🧑🏻",
-		"label": "Kiss: person, person, medium skin tone, light skin tone"
+		"label": "Kiss: person, person, medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍❤️‍💋‍🧑🏼",
-		"label": "Kiss: person, person, medium skin tone, medium-light skin tone"
+		"label": "Kiss: person, person, medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍❤️‍💋‍🧑🏾",
-		"label": "Kiss: person, person, medium skin tone, medium-dark skin tone"
+		"label": "Kiss: person, person, medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍❤️‍💋‍🧑🏿",
-		"label": "Kiss: person, person, medium skin tone, dark skin tone"
+		"label": "Kiss: person, person, medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍❤️‍🧑🏻",
-		"label": "Couple with heart: person, person, medium skin tone, light skin tone"
+		"label": "Couple with heart: person, person, medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍❤️‍🧑🏼",
-		"label": "Couple with heart: person, person, medium skin tone, medium-light skin tone"
+		"label": "Couple with heart: person, person, medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍❤️‍🧑🏾",
-		"label": "Couple with heart: person, person, medium skin tone, medium-dark skin tone"
+		"label": "Couple with heart: person, person, medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍❤️‍🧑🏿",
-		"label": "Couple with heart: person, person, medium skin tone, dark skin tone"
+		"label": "Couple with heart: person, person, medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🌾",
-		"label": "Farmer: medium skin tone"
+		"label": "Farmer: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🍳",
-		"label": "Cook: medium skin tone"
+		"label": "Cook: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🍼",
-		"label": "Person feeding baby: medium skin tone"
+		"label": "Person feeding baby: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🎄",
-		"label": "Mx Claus: medium skin tone"
+		"label": "Mx Claus: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🎓",
-		"label": "Student: medium skin tone"
+		"label": "Student: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🎤",
-		"label": "Singer: medium skin tone"
+		"label": "Singer: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🎨",
-		"label": "Artist: medium skin tone"
+		"label": "Artist: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🏫",
-		"label": "Teacher: medium skin tone"
+		"label": "Teacher: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🏭",
-		"label": "Factory worker: medium skin tone"
+		"label": "Factory worker: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🐰‍🧑🏻",
-		"label": "People with bunny ears: medium skin tone, light skin tone"
+		"label": "People with bunny ears: medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🐰‍🧑🏼",
-		"label": "People with bunny ears: medium skin tone, medium-light skin tone"
+		"label": "People with bunny ears: medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🐰‍🧑🏾",
-		"label": "People with bunny ears: medium skin tone, medium-dark skin tone"
+		"label": "People with bunny ears: medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🐰‍🧑🏿",
-		"label": "People with bunny ears: medium skin tone, dark skin tone"
+		"label": "People with bunny ears: medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍💻",
-		"label": "Technologist: medium skin tone"
+		"label": "Technologist: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍💼",
-		"label": "Office worker: medium skin tone"
+		"label": "Office worker: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🔧",
-		"label": "Mechanic: medium skin tone"
+		"label": "Mechanic: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🔬",
-		"label": "Scientist: medium skin tone"
+		"label": "Scientist: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🚀",
-		"label": "Astronaut: medium skin tone"
+		"label": "Astronaut: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🚒",
-		"label": "Firefighter: medium skin tone"
+		"label": "Firefighter: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🤝‍🧑🏻",
-		"label": "People holding hands: medium skin tone, light skin tone"
+		"label": "People holding hands: medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🤝‍🧑🏼",
-		"label": "People holding hands: medium skin tone, medium-light skin tone"
+		"label": "People holding hands: medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🤝‍🧑🏽",
-		"label": "People holding hands: medium skin tone"
+		"label": "People holding hands: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🤝‍🧑🏾",
-		"label": "People holding hands: medium skin tone, medium-dark skin tone"
+		"label": "People holding hands: medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🤝‍🧑🏿",
-		"label": "People holding hands: medium skin tone, dark skin tone"
+		"label": "People holding hands: medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🦯",
-		"label": "Person with white cane: medium skin tone"
+		"label": "Person with white cane: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🦯‍➡️",
-		"label": "Person with white cane facing right: medium skin tone"
+		"label": "Person with white cane facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🦰",
-		"label": "Person: medium skin tone, red hair"
+		"label": "Person: medium skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🦱",
-		"label": "Person: medium skin tone, curly hair"
+		"label": "Person: medium skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🦲",
-		"label": "Person: medium skin tone, bald"
+		"label": "Person: medium skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🦳",
-		"label": "Person: medium skin tone, white hair"
+		"label": "Person: medium skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🦼",
-		"label": "Person in motorized wheelchair: medium skin tone"
+		"label": "Person in motorized wheelchair: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🦼‍➡️",
-		"label": "Person in motorized wheelchair facing right: medium skin tone"
+		"label": "Person in motorized wheelchair facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🦽",
-		"label": "Person in manual wheelchair: medium skin tone"
+		"label": "Person in manual wheelchair: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🦽‍➡️",
-		"label": "Person in manual wheelchair facing right: medium skin tone"
+		"label": "Person in manual wheelchair facing right: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🩰",
-		"label": "Ballet dancer: medium skin tone"
+		"label": "Ballet dancer: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🫯‍🧑🏻",
-		"label": "People wrestling: medium skin tone, light skin tone"
+		"label": "People wrestling: medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🫯‍🧑🏼",
-		"label": "People wrestling: medium skin tone, medium-light skin tone"
+		"label": "People wrestling: medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🫯‍🧑🏾",
-		"label": "People wrestling: medium skin tone, medium-dark skin tone"
+		"label": "People wrestling: medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏽‍🫯‍🧑🏿",
-		"label": "People wrestling: medium skin tone, dark skin tone"
+		"label": "People wrestling: medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾",
-		"label": "Person: medium-dark skin tone"
+		"label": "Person: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍⚕️",
-		"label": "Health worker: medium-dark skin tone"
+		"label": "Health worker: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍⚖️",
-		"label": "Judge: medium-dark skin tone"
+		"label": "Judge: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍✈️",
-		"label": "Pilot: medium-dark skin tone"
+		"label": "Pilot: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍❤️‍💋‍🧑🏻",
-		"label": "Kiss: person, person, medium-dark skin tone, light skin tone"
+		"label": "Kiss: person, person, medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍❤️‍💋‍🧑🏼",
-		"label": "Kiss: person, person, medium-dark skin tone, medium-light skin tone"
+		"label": "Kiss: person, person, medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍❤️‍💋‍🧑🏽",
-		"label": "Kiss: person, person, medium-dark skin tone, medium skin tone"
+		"label": "Kiss: person, person, medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍❤️‍💋‍🧑🏿",
-		"label": "Kiss: person, person, medium-dark skin tone, dark skin tone"
+		"label": "Kiss: person, person, medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍❤️‍🧑🏻",
-		"label": "Couple with heart: person, person, medium-dark skin tone, light skin tone"
+		"label": "Couple with heart: person, person, medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍❤️‍🧑🏼",
-		"label": "Couple with heart: person, person, medium-dark skin tone, medium-light skin tone"
+		"label": "Couple with heart: person, person, medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍❤️‍🧑🏽",
-		"label": "Couple with heart: person, person, medium-dark skin tone, medium skin tone"
+		"label": "Couple with heart: person, person, medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍❤️‍🧑🏿",
-		"label": "Couple with heart: person, person, medium-dark skin tone, dark skin tone"
+		"label": "Couple with heart: person, person, medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🌾",
-		"label": "Farmer: medium-dark skin tone"
+		"label": "Farmer: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🍳",
-		"label": "Cook: medium-dark skin tone"
+		"label": "Cook: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🍼",
-		"label": "Person feeding baby: medium-dark skin tone"
+		"label": "Person feeding baby: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🎄",
-		"label": "Mx Claus: medium-dark skin tone"
+		"label": "Mx Claus: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🎓",
-		"label": "Student: medium-dark skin tone"
+		"label": "Student: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🎤",
-		"label": "Singer: medium-dark skin tone"
+		"label": "Singer: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🎨",
-		"label": "Artist: medium-dark skin tone"
+		"label": "Artist: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🏫",
-		"label": "Teacher: medium-dark skin tone"
+		"label": "Teacher: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🏭",
-		"label": "Factory worker: medium-dark skin tone"
+		"label": "Factory worker: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🐰‍🧑🏻",
-		"label": "People with bunny ears: medium-dark skin tone, light skin tone"
+		"label": "People with bunny ears: medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🐰‍🧑🏼",
-		"label": "People with bunny ears: medium-dark skin tone, medium-light skin tone"
+		"label": "People with bunny ears: medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🐰‍🧑🏽",
-		"label": "People with bunny ears: medium-dark skin tone, medium skin tone"
+		"label": "People with bunny ears: medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🐰‍🧑🏿",
-		"label": "People with bunny ears: medium-dark skin tone, dark skin tone"
+		"label": "People with bunny ears: medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍💻",
-		"label": "Technologist: medium-dark skin tone"
+		"label": "Technologist: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍💼",
-		"label": "Office worker: medium-dark skin tone"
+		"label": "Office worker: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🔧",
-		"label": "Mechanic: medium-dark skin tone"
+		"label": "Mechanic: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🔬",
-		"label": "Scientist: medium-dark skin tone"
+		"label": "Scientist: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🚀",
-		"label": "Astronaut: medium-dark skin tone"
+		"label": "Astronaut: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🚒",
-		"label": "Firefighter: medium-dark skin tone"
+		"label": "Firefighter: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🤝‍🧑🏻",
-		"label": "People holding hands: medium-dark skin tone, light skin tone"
+		"label": "People holding hands: medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🤝‍🧑🏼",
-		"label": "People holding hands: medium-dark skin tone, medium-light skin tone"
+		"label": "People holding hands: medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🤝‍🧑🏽",
-		"label": "People holding hands: medium-dark skin tone, medium skin tone"
+		"label": "People holding hands: medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🤝‍🧑🏾",
-		"label": "People holding hands: medium-dark skin tone"
+		"label": "People holding hands: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🤝‍🧑🏿",
-		"label": "People holding hands: medium-dark skin tone, dark skin tone"
+		"label": "People holding hands: medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🦯",
-		"label": "Person with white cane: medium-dark skin tone"
+		"label": "Person with white cane: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🦯‍➡️",
-		"label": "Person with white cane facing right: medium-dark skin tone"
+		"label": "Person with white cane facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🦰",
-		"label": "Person: medium-dark skin tone, red hair"
+		"label": "Person: medium-dark skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🦱",
-		"label": "Person: medium-dark skin tone, curly hair"
+		"label": "Person: medium-dark skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🦲",
-		"label": "Person: medium-dark skin tone, bald"
+		"label": "Person: medium-dark skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🦳",
-		"label": "Person: medium-dark skin tone, white hair"
+		"label": "Person: medium-dark skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🦼",
-		"label": "Person in motorized wheelchair: medium-dark skin tone"
+		"label": "Person in motorized wheelchair: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🦼‍➡️",
-		"label": "Person in motorized wheelchair facing right: medium-dark skin tone"
+		"label": "Person in motorized wheelchair facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🦽",
-		"label": "Person in manual wheelchair: medium-dark skin tone"
+		"label": "Person in manual wheelchair: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🦽‍➡️",
-		"label": "Person in manual wheelchair facing right: medium-dark skin tone"
+		"label": "Person in manual wheelchair facing right: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🩰",
-		"label": "Ballet dancer: medium-dark skin tone"
+		"label": "Ballet dancer: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🫯‍🧑🏻",
-		"label": "People wrestling: medium-dark skin tone, light skin tone"
+		"label": "People wrestling: medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🫯‍🧑🏼",
-		"label": "People wrestling: medium-dark skin tone, medium-light skin tone"
+		"label": "People wrestling: medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🫯‍🧑🏽",
-		"label": "People wrestling: medium-dark skin tone, medium skin tone"
+		"label": "People wrestling: medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏾‍🫯‍🧑🏿",
-		"label": "People wrestling: medium-dark skin tone, dark skin tone"
+		"label": "People wrestling: medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿",
-		"label": "Person: dark skin tone"
+		"label": "Person: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍⚕️",
-		"label": "Health worker: dark skin tone"
+		"label": "Health worker: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍⚖️",
-		"label": "Judge: dark skin tone"
+		"label": "Judge: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍✈️",
-		"label": "Pilot: dark skin tone"
+		"label": "Pilot: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍❤️‍💋‍🧑🏻",
-		"label": "Kiss: person, person, dark skin tone, light skin tone"
+		"label": "Kiss: person, person, dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍❤️‍💋‍🧑🏼",
-		"label": "Kiss: person, person, dark skin tone, medium-light skin tone"
+		"label": "Kiss: person, person, dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍❤️‍💋‍🧑🏽",
-		"label": "Kiss: person, person, dark skin tone, medium skin tone"
+		"label": "Kiss: person, person, dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍❤️‍💋‍🧑🏾",
-		"label": "Kiss: person, person, dark skin tone, medium-dark skin tone"
+		"label": "Kiss: person, person, dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍❤️‍🧑🏻",
-		"label": "Couple with heart: person, person, dark skin tone, light skin tone"
+		"label": "Couple with heart: person, person, dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍❤️‍🧑🏼",
-		"label": "Couple with heart: person, person, dark skin tone, medium-light skin tone"
+		"label": "Couple with heart: person, person, dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍❤️‍🧑🏽",
-		"label": "Couple with heart: person, person, dark skin tone, medium skin tone"
+		"label": "Couple with heart: person, person, dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍❤️‍🧑🏾",
-		"label": "Couple with heart: person, person, dark skin tone, medium-dark skin tone"
+		"label": "Couple with heart: person, person, dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🌾",
-		"label": "Farmer: dark skin tone"
+		"label": "Farmer: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🍳",
-		"label": "Cook: dark skin tone"
+		"label": "Cook: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🍼",
-		"label": "Person feeding baby: dark skin tone"
+		"label": "Person feeding baby: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🎄",
-		"label": "Mx Claus: dark skin tone"
+		"label": "Mx Claus: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🎓",
-		"label": "Student: dark skin tone"
+		"label": "Student: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🎤",
-		"label": "Singer: dark skin tone"
+		"label": "Singer: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🎨",
-		"label": "Artist: dark skin tone"
+		"label": "Artist: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🏫",
-		"label": "Teacher: dark skin tone"
+		"label": "Teacher: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🏭",
-		"label": "Factory worker: dark skin tone"
+		"label": "Factory worker: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🐰‍🧑🏻",
-		"label": "People with bunny ears: dark skin tone, light skin tone"
+		"label": "People with bunny ears: dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🐰‍🧑🏼",
-		"label": "People with bunny ears: dark skin tone, medium-light skin tone"
+		"label": "People with bunny ears: dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🐰‍🧑🏽",
-		"label": "People with bunny ears: dark skin tone, medium skin tone"
+		"label": "People with bunny ears: dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🐰‍🧑🏾",
-		"label": "People with bunny ears: dark skin tone, medium-dark skin tone"
+		"label": "People with bunny ears: dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍💻",
-		"label": "Technologist: dark skin tone"
+		"label": "Technologist: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍💼",
-		"label": "Office worker: dark skin tone"
+		"label": "Office worker: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🔧",
-		"label": "Mechanic: dark skin tone"
+		"label": "Mechanic: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🔬",
-		"label": "Scientist: dark skin tone"
+		"label": "Scientist: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🚀",
-		"label": "Astronaut: dark skin tone"
+		"label": "Astronaut: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🚒",
-		"label": "Firefighter: dark skin tone"
+		"label": "Firefighter: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🤝‍🧑🏻",
-		"label": "People holding hands: dark skin tone, light skin tone"
+		"label": "People holding hands: dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🤝‍🧑🏼",
-		"label": "People holding hands: dark skin tone, medium-light skin tone"
+		"label": "People holding hands: dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🤝‍🧑🏽",
-		"label": "People holding hands: dark skin tone, medium skin tone"
+		"label": "People holding hands: dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🤝‍🧑🏾",
-		"label": "People holding hands: dark skin tone, medium-dark skin tone"
+		"label": "People holding hands: dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🤝‍🧑🏿",
-		"label": "People holding hands: dark skin tone"
+		"label": "People holding hands: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🦯",
-		"label": "Person with white cane: dark skin tone"
+		"label": "Person with white cane: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🦯‍➡️",
-		"label": "Person with white cane facing right: dark skin tone"
+		"label": "Person with white cane facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🦰",
-		"label": "Person: dark skin tone, red hair"
+		"label": "Person: dark skin tone, red hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🦱",
-		"label": "Person: dark skin tone, curly hair"
+		"label": "Person: dark skin tone, curly hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🦲",
-		"label": "Person: dark skin tone, bald"
+		"label": "Person: dark skin tone, bald",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🦳",
-		"label": "Person: dark skin tone, white hair"
+		"label": "Person: dark skin tone, white hair",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🦼",
-		"label": "Person in motorized wheelchair: dark skin tone"
+		"label": "Person in motorized wheelchair: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🦼‍➡️",
-		"label": "Person in motorized wheelchair facing right: dark skin tone"
+		"label": "Person in motorized wheelchair facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🦽",
-		"label": "Person in manual wheelchair: dark skin tone"
+		"label": "Person in manual wheelchair: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🦽‍➡️",
-		"label": "Person in manual wheelchair facing right: dark skin tone"
+		"label": "Person in manual wheelchair facing right: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🩰",
-		"label": "Ballet dancer: dark skin tone"
+		"label": "Ballet dancer: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🫯‍🧑🏻",
-		"label": "People wrestling: dark skin tone, light skin tone"
+		"label": "People wrestling: dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🫯‍🧑🏼",
-		"label": "People wrestling: dark skin tone, medium-light skin tone"
+		"label": "People wrestling: dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🫯‍🧑🏽",
-		"label": "People wrestling: dark skin tone, medium skin tone"
+		"label": "People wrestling: dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧑🏿‍🫯‍🧑🏾",
-		"label": "People wrestling: dark skin tone, medium-dark skin tone"
+		"label": "People wrestling: dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧒",
-		"label": "Child"
+		"label": "Child",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧒🏻",
-		"label": "Child: light skin tone"
+		"label": "Child: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧒🏼",
-		"label": "Child: medium-light skin tone"
+		"label": "Child: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧒🏽",
-		"label": "Child: medium skin tone"
+		"label": "Child: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧒🏾",
-		"label": "Child: medium-dark skin tone"
+		"label": "Child: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧒🏿",
-		"label": "Child: dark skin tone"
+		"label": "Child: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧓",
-		"label": "Older person"
+		"label": "Older person",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧓🏻",
-		"label": "Older person: light skin tone"
+		"label": "Older person: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧓🏼",
-		"label": "Older person: medium-light skin tone"
+		"label": "Older person: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧓🏽",
-		"label": "Older person: medium skin tone"
+		"label": "Older person: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧓🏾",
-		"label": "Older person: medium-dark skin tone"
+		"label": "Older person: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧓🏿",
-		"label": "Older person: dark skin tone"
+		"label": "Older person: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔",
-		"label": "Person: beard"
+		"label": "Person: beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔‍♀️",
-		"label": "Woman: beard"
+		"label": "Woman: beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔‍♂️",
-		"label": "Man: beard"
+		"label": "Man: beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏻",
-		"label": "Person: light skin tone, beard"
+		"label": "Person: light skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏻‍♀️",
-		"label": "Woman: light skin tone, beard"
+		"label": "Woman: light skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏻‍♂️",
-		"label": "Man: light skin tone, beard"
+		"label": "Man: light skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏼",
-		"label": "Person: medium-light skin tone, beard"
+		"label": "Person: medium-light skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏼‍♀️",
-		"label": "Woman: medium-light skin tone, beard"
+		"label": "Woman: medium-light skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏼‍♂️",
-		"label": "Man: medium-light skin tone, beard"
+		"label": "Man: medium-light skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏽",
-		"label": "Person: medium skin tone, beard"
+		"label": "Person: medium skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏽‍♀️",
-		"label": "Woman: medium skin tone, beard"
+		"label": "Woman: medium skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏽‍♂️",
-		"label": "Man: medium skin tone, beard"
+		"label": "Man: medium skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏾",
-		"label": "Person: medium-dark skin tone, beard"
+		"label": "Person: medium-dark skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏾‍♀️",
-		"label": "Woman: medium-dark skin tone, beard"
+		"label": "Woman: medium-dark skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏾‍♂️",
-		"label": "Man: medium-dark skin tone, beard"
+		"label": "Man: medium-dark skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏿",
-		"label": "Person: dark skin tone, beard"
+		"label": "Person: dark skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏿‍♀️",
-		"label": "Woman: dark skin tone, beard"
+		"label": "Woman: dark skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧔🏿‍♂️",
-		"label": "Man: dark skin tone, beard"
+		"label": "Man: dark skin tone, beard",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧕",
-		"label": "Woman with headscarf"
+		"label": "Woman with headscarf",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧕🏻",
-		"label": "Woman with headscarf: light skin tone"
+		"label": "Woman with headscarf: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧕🏼",
-		"label": "Woman with headscarf: medium-light skin tone"
+		"label": "Woman with headscarf: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧕🏽",
-		"label": "Woman with headscarf: medium skin tone"
+		"label": "Woman with headscarf: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧕🏾",
-		"label": "Woman with headscarf: medium-dark skin tone"
+		"label": "Woman with headscarf: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧕🏿",
-		"label": "Woman with headscarf: dark skin tone"
+		"label": "Woman with headscarf: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖",
-		"label": "Person in steamy room"
+		"label": "Person in steamy room",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖‍♀️",
-		"label": "Woman in steamy room"
+		"label": "Woman in steamy room",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖‍♂️",
-		"label": "Man in steamy room"
+		"label": "Man in steamy room",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏻",
-		"label": "Person in steamy room: light skin tone"
+		"label": "Person in steamy room: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏻‍♀️",
-		"label": "Woman in steamy room: light skin tone"
+		"label": "Woman in steamy room: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏻‍♂️",
-		"label": "Man in steamy room: light skin tone"
+		"label": "Man in steamy room: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏼",
-		"label": "Person in steamy room: medium-light skin tone"
+		"label": "Person in steamy room: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏼‍♀️",
-		"label": "Woman in steamy room: medium-light skin tone"
+		"label": "Woman in steamy room: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏼‍♂️",
-		"label": "Man in steamy room: medium-light skin tone"
+		"label": "Man in steamy room: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏽",
-		"label": "Person in steamy room: medium skin tone"
+		"label": "Person in steamy room: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏽‍♀️",
-		"label": "Woman in steamy room: medium skin tone"
+		"label": "Woman in steamy room: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏽‍♂️",
-		"label": "Man in steamy room: medium skin tone"
+		"label": "Man in steamy room: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏾",
-		"label": "Person in steamy room: medium-dark skin tone"
+		"label": "Person in steamy room: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏾‍♀️",
-		"label": "Woman in steamy room: medium-dark skin tone"
+		"label": "Woman in steamy room: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏾‍♂️",
-		"label": "Man in steamy room: medium-dark skin tone"
+		"label": "Man in steamy room: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏿",
-		"label": "Person in steamy room: dark skin tone"
+		"label": "Person in steamy room: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏿‍♀️",
-		"label": "Woman in steamy room: dark skin tone"
+		"label": "Woman in steamy room: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧖🏿‍♂️",
-		"label": "Man in steamy room: dark skin tone"
+		"label": "Man in steamy room: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗",
-		"label": "Person climbing"
+		"label": "Person climbing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗‍♀️",
-		"label": "Woman climbing"
+		"label": "Woman climbing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗‍♂️",
-		"label": "Man climbing"
+		"label": "Man climbing",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏻",
-		"label": "Person climbing: light skin tone"
+		"label": "Person climbing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏻‍♀️",
-		"label": "Woman climbing: light skin tone"
+		"label": "Woman climbing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏻‍♂️",
-		"label": "Man climbing: light skin tone"
+		"label": "Man climbing: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏼",
-		"label": "Person climbing: medium-light skin tone"
+		"label": "Person climbing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏼‍♀️",
-		"label": "Woman climbing: medium-light skin tone"
+		"label": "Woman climbing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏼‍♂️",
-		"label": "Man climbing: medium-light skin tone"
+		"label": "Man climbing: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏽",
-		"label": "Person climbing: medium skin tone"
+		"label": "Person climbing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏽‍♀️",
-		"label": "Woman climbing: medium skin tone"
+		"label": "Woman climbing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏽‍♂️",
-		"label": "Man climbing: medium skin tone"
+		"label": "Man climbing: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏾",
-		"label": "Person climbing: medium-dark skin tone"
+		"label": "Person climbing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏾‍♀️",
-		"label": "Woman climbing: medium-dark skin tone"
+		"label": "Woman climbing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏾‍♂️",
-		"label": "Man climbing: medium-dark skin tone"
+		"label": "Man climbing: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏿",
-		"label": "Person climbing: dark skin tone"
+		"label": "Person climbing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏿‍♀️",
-		"label": "Woman climbing: dark skin tone"
+		"label": "Woman climbing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧗🏿‍♂️",
-		"label": "Man climbing: dark skin tone"
+		"label": "Man climbing: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘",
-		"label": "Person in lotus position"
+		"label": "Person in lotus position",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘‍♀️",
-		"label": "Woman in lotus position"
+		"label": "Woman in lotus position",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘‍♂️",
-		"label": "Man in lotus position"
+		"label": "Man in lotus position",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏻",
-		"label": "Person in lotus position: light skin tone"
+		"label": "Person in lotus position: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏻‍♀️",
-		"label": "Woman in lotus position: light skin tone"
+		"label": "Woman in lotus position: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏻‍♂️",
-		"label": "Man in lotus position: light skin tone"
+		"label": "Man in lotus position: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏼",
-		"label": "Person in lotus position: medium-light skin tone"
+		"label": "Person in lotus position: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏼‍♀️",
-		"label": "Woman in lotus position: medium-light skin tone"
+		"label": "Woman in lotus position: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏼‍♂️",
-		"label": "Man in lotus position: medium-light skin tone"
+		"label": "Man in lotus position: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏽",
-		"label": "Person in lotus position: medium skin tone"
+		"label": "Person in lotus position: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏽‍♀️",
-		"label": "Woman in lotus position: medium skin tone"
+		"label": "Woman in lotus position: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏽‍♂️",
-		"label": "Man in lotus position: medium skin tone"
+		"label": "Man in lotus position: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏾",
-		"label": "Person in lotus position: medium-dark skin tone"
+		"label": "Person in lotus position: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏾‍♀️",
-		"label": "Woman in lotus position: medium-dark skin tone"
+		"label": "Woman in lotus position: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏾‍♂️",
-		"label": "Man in lotus position: medium-dark skin tone"
+		"label": "Man in lotus position: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏿",
-		"label": "Person in lotus position: dark skin tone"
+		"label": "Person in lotus position: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏿‍♀️",
-		"label": "Woman in lotus position: dark skin tone"
+		"label": "Woman in lotus position: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧘🏿‍♂️",
-		"label": "Man in lotus position: dark skin tone"
+		"label": "Man in lotus position: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙",
-		"label": "Mage"
+		"label": "Mage",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙‍♀️",
-		"label": "Woman mage"
+		"label": "Woman mage",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙‍♂️",
-		"label": "Man mage"
+		"label": "Man mage",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏻",
-		"label": "Mage: light skin tone"
+		"label": "Mage: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏻‍♀️",
-		"label": "Woman mage: light skin tone"
+		"label": "Woman mage: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏻‍♂️",
-		"label": "Man mage: light skin tone"
+		"label": "Man mage: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏼",
-		"label": "Mage: medium-light skin tone"
+		"label": "Mage: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏼‍♀️",
-		"label": "Woman mage: medium-light skin tone"
+		"label": "Woman mage: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏼‍♂️",
-		"label": "Man mage: medium-light skin tone"
+		"label": "Man mage: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏽",
-		"label": "Mage: medium skin tone"
+		"label": "Mage: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏽‍♀️",
-		"label": "Woman mage: medium skin tone"
+		"label": "Woman mage: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏽‍♂️",
-		"label": "Man mage: medium skin tone"
+		"label": "Man mage: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏾",
-		"label": "Mage: medium-dark skin tone"
+		"label": "Mage: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏾‍♀️",
-		"label": "Woman mage: medium-dark skin tone"
+		"label": "Woman mage: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏾‍♂️",
-		"label": "Man mage: medium-dark skin tone"
+		"label": "Man mage: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏿",
-		"label": "Mage: dark skin tone"
+		"label": "Mage: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏿‍♀️",
-		"label": "Woman mage: dark skin tone"
+		"label": "Woman mage: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧙🏿‍♂️",
-		"label": "Man mage: dark skin tone"
+		"label": "Man mage: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚",
-		"label": "Fairy"
+		"label": "Fairy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚‍♀️",
-		"label": "Woman fairy"
+		"label": "Woman fairy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚‍♂️",
-		"label": "Man fairy"
+		"label": "Man fairy",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏻",
-		"label": "Fairy: light skin tone"
+		"label": "Fairy: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏻‍♀️",
-		"label": "Woman fairy: light skin tone"
+		"label": "Woman fairy: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏻‍♂️",
-		"label": "Man fairy: light skin tone"
+		"label": "Man fairy: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏼",
-		"label": "Fairy: medium-light skin tone"
+		"label": "Fairy: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏼‍♀️",
-		"label": "Woman fairy: medium-light skin tone"
+		"label": "Woman fairy: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏼‍♂️",
-		"label": "Man fairy: medium-light skin tone"
+		"label": "Man fairy: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏽",
-		"label": "Fairy: medium skin tone"
+		"label": "Fairy: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏽‍♀️",
-		"label": "Woman fairy: medium skin tone"
+		"label": "Woman fairy: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏽‍♂️",
-		"label": "Man fairy: medium skin tone"
+		"label": "Man fairy: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏾",
-		"label": "Fairy: medium-dark skin tone"
+		"label": "Fairy: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏾‍♀️",
-		"label": "Woman fairy: medium-dark skin tone"
+		"label": "Woman fairy: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏾‍♂️",
-		"label": "Man fairy: medium-dark skin tone"
+		"label": "Man fairy: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏿",
-		"label": "Fairy: dark skin tone"
+		"label": "Fairy: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏿‍♀️",
-		"label": "Woman fairy: dark skin tone"
+		"label": "Woman fairy: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧚🏿‍♂️",
-		"label": "Man fairy: dark skin tone"
+		"label": "Man fairy: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛",
-		"label": "Vampire"
+		"label": "Vampire",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛‍♀️",
-		"label": "Woman vampire"
+		"label": "Woman vampire",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛‍♂️",
-		"label": "Man vampire"
+		"label": "Man vampire",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏻",
-		"label": "Vampire: light skin tone"
+		"label": "Vampire: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏻‍♀️",
-		"label": "Woman vampire: light skin tone"
+		"label": "Woman vampire: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏻‍♂️",
-		"label": "Man vampire: light skin tone"
+		"label": "Man vampire: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏼",
-		"label": "Vampire: medium-light skin tone"
+		"label": "Vampire: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏼‍♀️",
-		"label": "Woman vampire: medium-light skin tone"
+		"label": "Woman vampire: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏼‍♂️",
-		"label": "Man vampire: medium-light skin tone"
+		"label": "Man vampire: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏽",
-		"label": "Vampire: medium skin tone"
+		"label": "Vampire: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏽‍♀️",
-		"label": "Woman vampire: medium skin tone"
+		"label": "Woman vampire: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏽‍♂️",
-		"label": "Man vampire: medium skin tone"
+		"label": "Man vampire: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏾",
-		"label": "Vampire: medium-dark skin tone"
+		"label": "Vampire: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏾‍♀️",
-		"label": "Woman vampire: medium-dark skin tone"
+		"label": "Woman vampire: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏾‍♂️",
-		"label": "Man vampire: medium-dark skin tone"
+		"label": "Man vampire: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏿",
-		"label": "Vampire: dark skin tone"
+		"label": "Vampire: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏿‍♀️",
-		"label": "Woman vampire: dark skin tone"
+		"label": "Woman vampire: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧛🏿‍♂️",
-		"label": "Man vampire: dark skin tone"
+		"label": "Man vampire: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜",
-		"label": "Merperson"
+		"label": "Merperson",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜‍♀️",
-		"label": "Mermaid"
+		"label": "Mermaid",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜‍♂️",
-		"label": "Merman"
+		"label": "Merman",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏻",
-		"label": "Merperson: light skin tone"
+		"label": "Merperson: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏻‍♀️",
-		"label": "Mermaid: light skin tone"
+		"label": "Mermaid: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏻‍♂️",
-		"label": "Merman: light skin tone"
+		"label": "Merman: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏼",
-		"label": "Merperson: medium-light skin tone"
+		"label": "Merperson: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏼‍♀️",
-		"label": "Mermaid: medium-light skin tone"
+		"label": "Mermaid: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏼‍♂️",
-		"label": "Merman: medium-light skin tone"
+		"label": "Merman: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏽",
-		"label": "Merperson: medium skin tone"
+		"label": "Merperson: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏽‍♀️",
-		"label": "Mermaid: medium skin tone"
+		"label": "Mermaid: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏽‍♂️",
-		"label": "Merman: medium skin tone"
+		"label": "Merman: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏾",
-		"label": "Merperson: medium-dark skin tone"
+		"label": "Merperson: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏾‍♀️",
-		"label": "Mermaid: medium-dark skin tone"
+		"label": "Mermaid: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏾‍♂️",
-		"label": "Merman: medium-dark skin tone"
+		"label": "Merman: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏿",
-		"label": "Merperson: dark skin tone"
+		"label": "Merperson: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏿‍♀️",
-		"label": "Mermaid: dark skin tone"
+		"label": "Mermaid: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧜🏿‍♂️",
-		"label": "Merman: dark skin tone"
+		"label": "Merman: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝",
-		"label": "Elf"
+		"label": "Elf",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝‍♀️",
-		"label": "Woman elf"
+		"label": "Woman elf",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝‍♂️",
-		"label": "Man elf"
+		"label": "Man elf",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏻",
-		"label": "Elf: light skin tone"
+		"label": "Elf: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏻‍♀️",
-		"label": "Woman elf: light skin tone"
+		"label": "Woman elf: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏻‍♂️",
-		"label": "Man elf: light skin tone"
+		"label": "Man elf: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏼",
-		"label": "Elf: medium-light skin tone"
+		"label": "Elf: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏼‍♀️",
-		"label": "Woman elf: medium-light skin tone"
+		"label": "Woman elf: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏼‍♂️",
-		"label": "Man elf: medium-light skin tone"
+		"label": "Man elf: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏽",
-		"label": "Elf: medium skin tone"
+		"label": "Elf: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏽‍♀️",
-		"label": "Woman elf: medium skin tone"
+		"label": "Woman elf: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏽‍♂️",
-		"label": "Man elf: medium skin tone"
+		"label": "Man elf: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏾",
-		"label": "Elf: medium-dark skin tone"
+		"label": "Elf: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏾‍♀️",
-		"label": "Woman elf: medium-dark skin tone"
+		"label": "Woman elf: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏾‍♂️",
-		"label": "Man elf: medium-dark skin tone"
+		"label": "Man elf: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏿",
-		"label": "Elf: dark skin tone"
+		"label": "Elf: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏿‍♀️",
-		"label": "Woman elf: dark skin tone"
+		"label": "Woman elf: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧝🏿‍♂️",
-		"label": "Man elf: dark skin tone"
+		"label": "Man elf: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧞",
-		"label": "Genie"
+		"label": "Genie",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧞‍♀️",
-		"label": "Woman genie"
+		"label": "Woman genie",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧞‍♂️",
-		"label": "Man genie"
+		"label": "Man genie",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧟",
-		"label": "Zombie"
+		"label": "Zombie",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧟‍♀️",
-		"label": "Woman zombie"
+		"label": "Woman zombie",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧟‍♂️",
-		"label": "Man zombie"
+		"label": "Man zombie",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧠",
-		"label": "Brain"
+		"label": "Brain",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🧡",
-		"label": "Orange heart"
+		"label": "Orange heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🧢",
-		"label": "Billed cap"
+		"label": "Billed cap",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧣",
-		"label": "Scarf"
+		"label": "Scarf",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧤",
-		"label": "Gloves"
+		"label": "Gloves",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧥",
-		"label": "Coat"
+		"label": "Coat",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧦",
-		"label": "Socks"
+		"label": "Socks",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧧",
-		"label": "Red envelope"
+		"label": "Red envelope",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🧨",
-		"label": "Firecracker"
+		"label": "Firecracker",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🧩",
-		"label": "Puzzle piece"
+		"label": "Puzzle piece",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🧪",
-		"label": "Test tube"
+		"label": "Test tube",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧫",
-		"label": "Petri dish"
+		"label": "Petri dish",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧬",
-		"label": "Dna"
+		"label": "Dna",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧭",
-		"label": "Compass"
+		"label": "Compass",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🧮",
-		"label": "Abacus"
+		"label": "Abacus",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧯",
-		"label": "Fire extinguisher"
+		"label": "Fire extinguisher",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧰",
-		"label": "Toolbox"
+		"label": "Toolbox",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧱",
-		"label": "Brick"
+		"label": "Brick",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🧲",
-		"label": "Magnet"
+		"label": "Magnet",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧳",
-		"label": "Luggage"
+		"label": "Luggage",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🧴",
-		"label": "Lotion bottle"
+		"label": "Lotion bottle",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧵",
-		"label": "Thread"
+		"label": "Thread",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🧶",
-		"label": "Yarn"
+		"label": "Yarn",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🧷",
-		"label": "Safety pin"
+		"label": "Safety pin",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧸",
-		"label": "Teddy bear"
+		"label": "Teddy bear",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🧹",
-		"label": "Broom"
+		"label": "Broom",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧺",
-		"label": "Basket"
+		"label": "Basket",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧻",
-		"label": "Roll of paper"
+		"label": "Roll of paper",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧼",
-		"label": "Soap"
+		"label": "Soap",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧽",
-		"label": "Sponge"
+		"label": "Sponge",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧾",
-		"label": "Receipt"
+		"label": "Receipt",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🧿",
-		"label": "Nazar amulet"
+		"label": "Nazar amulet",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🩰",
-		"label": "Ballet shoes"
+		"label": "Ballet shoes",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🩱",
-		"label": "One-piece swimsuit"
+		"label": "One-piece swimsuit",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🩲",
-		"label": "Briefs"
+		"label": "Briefs",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🩳",
-		"label": "Shorts"
+		"label": "Shorts",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🩴",
-		"label": "Thong sandal"
+		"label": "Thong sandal",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🩵",
-		"label": "Light blue heart"
+		"label": "Light blue heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🩶",
-		"label": "Grey heart"
+		"label": "Grey heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🩷",
-		"label": "Pink heart"
+		"label": "Pink heart",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🩸",
-		"label": "Drop of blood"
+		"label": "Drop of blood",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🩹",
-		"label": "Adhesive bandage"
+		"label": "Adhesive bandage",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🩺",
-		"label": "Stethoscope"
+		"label": "Stethoscope",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🩻",
-		"label": "X-ray"
+		"label": "X-ray",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🩼",
-		"label": "Crutch"
+		"label": "Crutch",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪀",
-		"label": "Yo-yo"
+		"label": "Yo-yo",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🪁",
-		"label": "Kite"
+		"label": "Kite",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🪂",
-		"label": "Parachute"
+		"label": "Parachute",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🪃",
-		"label": "Boomerang"
+		"label": "Boomerang",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪄",
-		"label": "Magic wand"
+		"label": "Magic wand",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🪅",
-		"label": "Piñata"
+		"label": "Piñata",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🪆",
-		"label": "Nesting dolls"
+		"label": "Nesting dolls",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🪇",
-		"label": "Maracas"
+		"label": "Maracas",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪈",
-		"label": "Flute"
+		"label": "Flute",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪉",
-		"label": "Harp"
+		"label": "Harp",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪊",
-		"label": "Trombone"
+		"label": "Trombone",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪎",
-		"label": "Treasure chest"
+		"label": "Treasure chest",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪏",
-		"label": "Shovel"
+		"label": "Shovel",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪐",
-		"label": "Ringed planet"
+		"label": "Ringed planet",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🪑",
-		"label": "Chair"
+		"label": "Chair",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪒",
-		"label": "Razor"
+		"label": "Razor",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪓",
-		"label": "Axe"
+		"label": "Axe",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪔",
-		"label": "Diya lamp"
+		"label": "Diya lamp",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪕",
-		"label": "Banjo"
+		"label": "Banjo",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪖",
-		"label": "Military helmet"
+		"label": "Military helmet",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪗",
-		"label": "Accordion"
+		"label": "Accordion",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪘",
-		"label": "Long drum"
+		"label": "Long drum",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪙",
-		"label": "Coin"
+		"label": "Coin",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪚",
-		"label": "Carpentry saw"
+		"label": "Carpentry saw",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪛",
-		"label": "Screwdriver"
+		"label": "Screwdriver",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪜",
-		"label": "Ladder"
+		"label": "Ladder",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪝",
-		"label": "Hook"
+		"label": "Hook",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪞",
-		"label": "Mirror"
+		"label": "Mirror",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪟",
-		"label": "Window"
+		"label": "Window",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪠",
-		"label": "Plunger"
+		"label": "Plunger",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪡",
-		"label": "Sewing needle"
+		"label": "Sewing needle",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🪢",
-		"label": "Knot"
+		"label": "Knot",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🪣",
-		"label": "Bucket"
+		"label": "Bucket",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪤",
-		"label": "Mouse trap"
+		"label": "Mouse trap",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪥",
-		"label": "Toothbrush"
+		"label": "Toothbrush",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪦",
-		"label": "Headstone"
+		"label": "Headstone",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪧",
-		"label": "Placard"
+		"label": "Placard",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪨",
-		"label": "Rock"
+		"label": "Rock",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🪩",
-		"label": "Mirror ball"
+		"label": "Mirror ball",
+		"group": "Activities"
 	},
 	{
 		"emoji": "🪪",
-		"label": "Identification card"
+		"label": "Identification card",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪫",
-		"label": "Low battery"
+		"label": "Low battery",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪬",
-		"label": "Hamsa"
+		"label": "Hamsa",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪭",
-		"label": "Folding hand fan"
+		"label": "Folding hand fan",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪮",
-		"label": "Hair pick"
+		"label": "Hair pick",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🪯",
-		"label": "Khanda"
+		"label": "Khanda",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🪰",
-		"label": "Fly"
+		"label": "Fly",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🪱",
-		"label": "Worm"
+		"label": "Worm",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🪲",
-		"label": "Beetle"
+		"label": "Beetle",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🪳",
-		"label": "Cockroach"
+		"label": "Cockroach",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🪴",
-		"label": "Potted plant"
+		"label": "Potted plant",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🪵",
-		"label": "Wood"
+		"label": "Wood",
+		"group": "Travel & Places"
 	},
 	{
 		"emoji": "🪶",
-		"label": "Feather"
+		"label": "Feather",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🪷",
-		"label": "Lotus"
+		"label": "Lotus",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🪸",
-		"label": "Coral"
+		"label": "Coral",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🪹",
-		"label": "Empty nest"
+		"label": "Empty nest",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🪺",
-		"label": "Nest with eggs"
+		"label": "Nest with eggs",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🪻",
-		"label": "Hyacinth"
+		"label": "Hyacinth",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🪼",
-		"label": "Jellyfish"
+		"label": "Jellyfish",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🪽",
-		"label": "Wing"
+		"label": "Wing",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🪾",
-		"label": "Leafless tree"
+		"label": "Leafless tree",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🪿",
-		"label": "Goose"
+		"label": "Goose",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🫀",
-		"label": "Anatomical heart"
+		"label": "Anatomical heart",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫁",
-		"label": "Lungs"
+		"label": "Lungs",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫂",
-		"label": "People hugging"
+		"label": "People hugging",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫃",
-		"label": "Pregnant man"
+		"label": "Pregnant man",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫃🏻",
-		"label": "Pregnant man: light skin tone"
+		"label": "Pregnant man: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫃🏼",
-		"label": "Pregnant man: medium-light skin tone"
+		"label": "Pregnant man: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫃🏽",
-		"label": "Pregnant man: medium skin tone"
+		"label": "Pregnant man: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫃🏾",
-		"label": "Pregnant man: medium-dark skin tone"
+		"label": "Pregnant man: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫃🏿",
-		"label": "Pregnant man: dark skin tone"
+		"label": "Pregnant man: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫄",
-		"label": "Pregnant person"
+		"label": "Pregnant person",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫄🏻",
-		"label": "Pregnant person: light skin tone"
+		"label": "Pregnant person: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫄🏼",
-		"label": "Pregnant person: medium-light skin tone"
+		"label": "Pregnant person: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫄🏽",
-		"label": "Pregnant person: medium skin tone"
+		"label": "Pregnant person: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫄🏾",
-		"label": "Pregnant person: medium-dark skin tone"
+		"label": "Pregnant person: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫄🏿",
-		"label": "Pregnant person: dark skin tone"
+		"label": "Pregnant person: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫅",
-		"label": "Person with crown"
+		"label": "Person with crown",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫅🏻",
-		"label": "Person with crown: light skin tone"
+		"label": "Person with crown: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫅🏼",
-		"label": "Person with crown: medium-light skin tone"
+		"label": "Person with crown: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫅🏽",
-		"label": "Person with crown: medium skin tone"
+		"label": "Person with crown: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫅🏾",
-		"label": "Person with crown: medium-dark skin tone"
+		"label": "Person with crown: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫅🏿",
-		"label": "Person with crown: dark skin tone"
+		"label": "Person with crown: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫆",
-		"label": "Fingerprint"
+		"label": "Fingerprint",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫈",
-		"label": "Hairy creature"
+		"label": "Hairy creature",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫍",
-		"label": "Orca"
+		"label": "Orca",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🫎",
-		"label": "Moose"
+		"label": "Moose",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🫏",
-		"label": "Donkey"
+		"label": "Donkey",
+		"group": "Animals & Nature"
 	},
 	{
 		"emoji": "🫐",
-		"label": "Blueberries"
+		"label": "Blueberries",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🫑",
-		"label": "Bell pepper"
+		"label": "Bell pepper",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🫒",
-		"label": "Olive"
+		"label": "Olive",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🫓",
-		"label": "Flatbread"
+		"label": "Flatbread",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🫔",
-		"label": "Tamale"
+		"label": "Tamale",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🫕",
-		"label": "Fondue"
+		"label": "Fondue",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🫖",
-		"label": "Teapot"
+		"label": "Teapot",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🫗",
-		"label": "Pouring liquid"
+		"label": "Pouring liquid",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🫘",
-		"label": "Beans"
+		"label": "Beans",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🫙",
-		"label": "Jar"
+		"label": "Jar",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🫚",
-		"label": "Ginger root"
+		"label": "Ginger root",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🫛",
-		"label": "Pea pod"
+		"label": "Pea pod",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🫜",
-		"label": "Root vegetable"
+		"label": "Root vegetable",
+		"group": "Food & Drink"
 	},
 	{
 		"emoji": "🫟",
-		"label": "Splatter"
+		"label": "Splatter",
+		"group": "Symbols"
 	},
 	{
 		"emoji": "🫠",
-		"label": "Melting face"
+		"label": "Melting face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🫡",
-		"label": "Saluting face"
+		"label": "Saluting face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🫢",
-		"label": "Face with open eyes and hand over mouth"
+		"label": "Face with open eyes and hand over mouth",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🫣",
-		"label": "Face with peeking eye"
+		"label": "Face with peeking eye",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🫤",
-		"label": "Face with diagonal mouth"
+		"label": "Face with diagonal mouth",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🫥",
-		"label": "Dotted line face"
+		"label": "Dotted line face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🫦",
-		"label": "Biting lip"
+		"label": "Biting lip",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫧",
-		"label": "Bubbles"
+		"label": "Bubbles",
+		"group": "Objects"
 	},
 	{
 		"emoji": "🫨",
-		"label": "Shaking face"
+		"label": "Shaking face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🫩",
-		"label": "Face with bags under eyes"
+		"label": "Face with bags under eyes",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🫪",
-		"label": "Distorted face"
+		"label": "Distorted face",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🫯",
-		"label": "Fight cloud"
+		"label": "Fight cloud",
+		"group": "Smileys & Emotion"
 	},
 	{
 		"emoji": "🫰",
-		"label": "Hand with index finger and thumb crossed"
+		"label": "Hand with index finger and thumb crossed",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫰🏻",
-		"label": "Hand with index finger and thumb crossed: light skin tone"
+		"label": "Hand with index finger and thumb crossed: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫰🏼",
-		"label": "Hand with index finger and thumb crossed: medium-light skin tone"
+		"label": "Hand with index finger and thumb crossed: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫰🏽",
-		"label": "Hand with index finger and thumb crossed: medium skin tone"
+		"label": "Hand with index finger and thumb crossed: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫰🏾",
-		"label": "Hand with index finger and thumb crossed: medium-dark skin tone"
+		"label": "Hand with index finger and thumb crossed: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫰🏿",
-		"label": "Hand with index finger and thumb crossed: dark skin tone"
+		"label": "Hand with index finger and thumb crossed: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱",
-		"label": "Rightwards hand"
+		"label": "Rightwards hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏻",
-		"label": "Rightwards hand: light skin tone"
+		"label": "Rightwards hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏻‍🫲🏼",
-		"label": "Handshake: light skin tone, medium-light skin tone"
+		"label": "Handshake: light skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏻‍🫲🏽",
-		"label": "Handshake: light skin tone, medium skin tone"
+		"label": "Handshake: light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏻‍🫲🏾",
-		"label": "Handshake: light skin tone, medium-dark skin tone"
+		"label": "Handshake: light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏻‍🫲🏿",
-		"label": "Handshake: light skin tone, dark skin tone"
+		"label": "Handshake: light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏼",
-		"label": "Rightwards hand: medium-light skin tone"
+		"label": "Rightwards hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏼‍🫲🏻",
-		"label": "Handshake: medium-light skin tone, light skin tone"
+		"label": "Handshake: medium-light skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏼‍🫲🏽",
-		"label": "Handshake: medium-light skin tone, medium skin tone"
+		"label": "Handshake: medium-light skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏼‍🫲🏾",
-		"label": "Handshake: medium-light skin tone, medium-dark skin tone"
+		"label": "Handshake: medium-light skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏼‍🫲🏿",
-		"label": "Handshake: medium-light skin tone, dark skin tone"
+		"label": "Handshake: medium-light skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏽",
-		"label": "Rightwards hand: medium skin tone"
+		"label": "Rightwards hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏽‍🫲🏻",
-		"label": "Handshake: medium skin tone, light skin tone"
+		"label": "Handshake: medium skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏽‍🫲🏼",
-		"label": "Handshake: medium skin tone, medium-light skin tone"
+		"label": "Handshake: medium skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏽‍🫲🏾",
-		"label": "Handshake: medium skin tone, medium-dark skin tone"
+		"label": "Handshake: medium skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏽‍🫲🏿",
-		"label": "Handshake: medium skin tone, dark skin tone"
+		"label": "Handshake: medium skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏾",
-		"label": "Rightwards hand: medium-dark skin tone"
+		"label": "Rightwards hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏾‍🫲🏻",
-		"label": "Handshake: medium-dark skin tone, light skin tone"
+		"label": "Handshake: medium-dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏾‍🫲🏼",
-		"label": "Handshake: medium-dark skin tone, medium-light skin tone"
+		"label": "Handshake: medium-dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏾‍🫲🏽",
-		"label": "Handshake: medium-dark skin tone, medium skin tone"
+		"label": "Handshake: medium-dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏾‍🫲🏿",
-		"label": "Handshake: medium-dark skin tone, dark skin tone"
+		"label": "Handshake: medium-dark skin tone, dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏿",
-		"label": "Rightwards hand: dark skin tone"
+		"label": "Rightwards hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏿‍🫲🏻",
-		"label": "Handshake: dark skin tone, light skin tone"
+		"label": "Handshake: dark skin tone, light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏿‍🫲🏼",
-		"label": "Handshake: dark skin tone, medium-light skin tone"
+		"label": "Handshake: dark skin tone, medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏿‍🫲🏽",
-		"label": "Handshake: dark skin tone, medium skin tone"
+		"label": "Handshake: dark skin tone, medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫱🏿‍🫲🏾",
-		"label": "Handshake: dark skin tone, medium-dark skin tone"
+		"label": "Handshake: dark skin tone, medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫲",
-		"label": "Leftwards hand"
+		"label": "Leftwards hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫲🏻",
-		"label": "Leftwards hand: light skin tone"
+		"label": "Leftwards hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫲🏼",
-		"label": "Leftwards hand: medium-light skin tone"
+		"label": "Leftwards hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫲🏽",
-		"label": "Leftwards hand: medium skin tone"
+		"label": "Leftwards hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫲🏾",
-		"label": "Leftwards hand: medium-dark skin tone"
+		"label": "Leftwards hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫲🏿",
-		"label": "Leftwards hand: dark skin tone"
+		"label": "Leftwards hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫳",
-		"label": "Palm down hand"
+		"label": "Palm down hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫳🏻",
-		"label": "Palm down hand: light skin tone"
+		"label": "Palm down hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫳🏼",
-		"label": "Palm down hand: medium-light skin tone"
+		"label": "Palm down hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫳🏽",
-		"label": "Palm down hand: medium skin tone"
+		"label": "Palm down hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫳🏾",
-		"label": "Palm down hand: medium-dark skin tone"
+		"label": "Palm down hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫳🏿",
-		"label": "Palm down hand: dark skin tone"
+		"label": "Palm down hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫴",
-		"label": "Palm up hand"
+		"label": "Palm up hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫴🏻",
-		"label": "Palm up hand: light skin tone"
+		"label": "Palm up hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫴🏼",
-		"label": "Palm up hand: medium-light skin tone"
+		"label": "Palm up hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫴🏽",
-		"label": "Palm up hand: medium skin tone"
+		"label": "Palm up hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫴🏾",
-		"label": "Palm up hand: medium-dark skin tone"
+		"label": "Palm up hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫴🏿",
-		"label": "Palm up hand: dark skin tone"
+		"label": "Palm up hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫵",
-		"label": "Index pointing at the viewer"
+		"label": "Index pointing at the viewer",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫵🏻",
-		"label": "Index pointing at the viewer: light skin tone"
+		"label": "Index pointing at the viewer: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫵🏼",
-		"label": "Index pointing at the viewer: medium-light skin tone"
+		"label": "Index pointing at the viewer: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫵🏽",
-		"label": "Index pointing at the viewer: medium skin tone"
+		"label": "Index pointing at the viewer: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫵🏾",
-		"label": "Index pointing at the viewer: medium-dark skin tone"
+		"label": "Index pointing at the viewer: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫵🏿",
-		"label": "Index pointing at the viewer: dark skin tone"
+		"label": "Index pointing at the viewer: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫶",
-		"label": "Heart hands"
+		"label": "Heart hands",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫶🏻",
-		"label": "Heart hands: light skin tone"
+		"label": "Heart hands: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫶🏼",
-		"label": "Heart hands: medium-light skin tone"
+		"label": "Heart hands: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫶🏽",
-		"label": "Heart hands: medium skin tone"
+		"label": "Heart hands: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫶🏾",
-		"label": "Heart hands: medium-dark skin tone"
+		"label": "Heart hands: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫶🏿",
-		"label": "Heart hands: dark skin tone"
+		"label": "Heart hands: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫷",
-		"label": "Leftwards pushing hand"
+		"label": "Leftwards pushing hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫷🏻",
-		"label": "Leftwards pushing hand: light skin tone"
+		"label": "Leftwards pushing hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫷🏼",
-		"label": "Leftwards pushing hand: medium-light skin tone"
+		"label": "Leftwards pushing hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫷🏽",
-		"label": "Leftwards pushing hand: medium skin tone"
+		"label": "Leftwards pushing hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫷🏾",
-		"label": "Leftwards pushing hand: medium-dark skin tone"
+		"label": "Leftwards pushing hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫷🏿",
-		"label": "Leftwards pushing hand: dark skin tone"
+		"label": "Leftwards pushing hand: dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫸",
-		"label": "Rightwards pushing hand"
+		"label": "Rightwards pushing hand",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫸🏻",
-		"label": "Rightwards pushing hand: light skin tone"
+		"label": "Rightwards pushing hand: light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫸🏼",
-		"label": "Rightwards pushing hand: medium-light skin tone"
+		"label": "Rightwards pushing hand: medium-light skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫸🏽",
-		"label": "Rightwards pushing hand: medium skin tone"
+		"label": "Rightwards pushing hand: medium skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫸🏾",
-		"label": "Rightwards pushing hand: medium-dark skin tone"
+		"label": "Rightwards pushing hand: medium-dark skin tone",
+		"group": "People & Body"
 	},
 	{
 		"emoji": "🫸🏿",
-		"label": "Rightwards pushing hand: dark skin tone"
+		"label": "Rightwards pushing hand: dark skin tone",
+		"group": "People & Body"
 	}
 ] as const;
