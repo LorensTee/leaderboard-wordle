@@ -1,15 +1,15 @@
 # Pre-Phase 6 — Production Data Finalization
 
-Status: **COMPLETE (2026-09-05)** — repository data is finalized and verified; Phase-6 PLANNING may start. No Phase-6 deployment or production provisioning was performed.
+Status: **COMPLETE (2026-09-05)** — repository data is finalized and verified; pre-phase-6 planning proceeded from here. No Phase-6 (Deployment) work or production provisioning was performed.
 
 Authoritative decisions: `docs/phases/pre-phase-6/pre-phase-6-production-data-lock.md` + `production-inputs-manifest.json` (unchanged). This document is the verification/provenance record the lock requires.
 
 ## 1. Product decisions (recorded, NOT changed)
 
-- **Admin emails** (configuration values for the Phase-6 deployment plan, not secrets):
+- **Admin emails** (configuration values for the real Phase-6 (Deployment) plan, not secrets):
   - `tee.johnlor@gmail.com`
   - `leaderboardwordle@gmail.com`
-  - The runtime gate stays `env.ADMIN_EMAIL` in the existing bootstrap (`src/server/middleware/auth.ts`); Phase-6 deployment must configure these two addresses.
+  - The runtime gate stays `env.ADMIN_EMAIL` in the existing bootstrap (`src/server/middleware/auth.ts`); Phase-6 (Deployment) must configure these two addresses.
 - **Leaderboard qualification thresholds** — already implemented, verified unchanged:
   - `WEEKLY_QUALIFICATION_COMPLETED_DAYS = 3` (`src/server/leaderboard/constants.ts:18`)
   - `MONTHLY_QUALIFICATION_COMPLETED_DAYS = 8` (`src/server/leaderboard/constants.ts:21`)
@@ -109,9 +109,9 @@ bun run verify:bundle    # bundle secrecy OK — 0 non-public pool word(s) in 11
 
 NOT run locally (CI-gated; need the non-production `DATABASE_URL`): `bun run test:integration`, `bun run test:e2e`. Their source was updated for the avatar policy where needed (§7) and will run in CI.
 
-## 9. Unresolved issues / Phase-6 notes
+## 9. Unresolved issues / notes for the real Phase-6 (Deployment)
 
 - `scripts/seed/answer-pool.source.txt` must be seeded into each target (non-production first) DB with `DATABASE_URL=... bun run seed:answers` — not run here (no DB).
-- Phase-6 deployment configuration must set `ADMIN_EMAIL` to BOTH `tee.johnlor@gmail.com` and `leaderboardwordle@gmail.com` per the existing promotion semantics (bootstrap promotes each listed address; see `src/server/middleware/auth.ts`).
-- Avatar picker UI now renders ~3,944 choices (product decision; a search/filter or grouped layout may be a Phase-6 UX consideration — NOT changed here).
+- Phase-6 (Deployment) configuration must set `ADMIN_EMAIL` to BOTH `tee.johnlor@gmail.com` and `leaderboardwordle@gmail.com` per the existing promotion semantics (bootstrap promotes each listed address; see `src/server/middleware/auth.ts`).
+- Avatar picker UI now renders ~3,944 choices (product decision; a search/filter or grouped layout was a pre-phase-6 UX consideration — NOT changed here by data finalization; resolved in the pre-phase-6 plan, see `pre-phase-6-plan.md` §4).
 - The deedy/wordle-solver answers file (`official_wordle_common.txt`) is the pre-NYT pool; the project's answer scheduling reads the DB `answer_dictionary` — no code change needed.

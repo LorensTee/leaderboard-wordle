@@ -1,16 +1,16 @@
 # Pre-Phase 6 → Phase 6 Handoff
 
-A fresh Phase-6 chat can continue from this file **without** the pre-phase-6 conversation history. Everything needed to start Phase-6 PLANNING is below or one link away.
+A fresh chat can continue the pre-phase-6 work from this file **without** the previous conversation history. Everything needed for the pre-phase-6 planning/implementation is below or one link away. (Real Phase 6 = **Deployment** — `Architecture-v3.md` §"Phase 6 — Deployment"; this folder prepares it but is not it.)
 
 ## What just happened (pre-phase-6, 2026-09-05)
 
-Production data finalization: the three product datasets were imported from their real upstream sources, verified, and committed; two handoff docs were written. **No Phase-6 deployment or production provisioning was started.**
+Production data finalization: the three product datasets were imported from their real upstream sources, verified, and committed; two handoff docs were written. **No Phase-6 (Deployment) work or production provisioning was started.**
 
 Detailed record: [`docs/phases/pre-phase-6/production-data-finalization.md`](./production-data-finalization.md)
 Product lock (authoritative): [`docs/phases/pre-phase-6/pre-phase-6-production-data-lock.md`](./pre-phase-6-production-data-lock.md)
 Inputs manifest: [`docs/phases/pre-phase-6/production-inputs-manifest.json`](./production-inputs-manifest.json)
 
-## Finalized values (Phase-6 must reference these — no placeholders remain)
+## Finalized values (the real Phase-6 Deployment plan must reference these — no placeholders remain)
 
 | Item | Value |
 |---|---|
@@ -39,15 +39,15 @@ Not run locally (CI-gated, need non-production `DATABASE_URL`): integration + e2
 - Scripts/docs: `scripts/build-avatar-list.ts` (header comment), `scripts/seed/README.md` (provenance), `docs/contradictions-and-gaps.md` (avatar-set supersession + admin-secrecy scan-design records)
 - New docs: `docs/phases/pre-phase-6/production-data-finalization.md`, `docs/phases/pre-phase-6/handoff.md` (this file)
 
-## Open items for Phase-6 (not blockers to PLANNING)
+## Open items for the real Phase-6 (Deployment) planning (not blockers to pre-phase-6)
 
 1. **Seed the answer pool into each target DB** before any deployment that schedules real answers:
    `DATABASE_URL=<non-production first> bun run seed:answers` (idempotent; validates `answers ⊂ valid guesses` again at seed time).
 2. **Deployment config**: set `ADMIN_EMAIL` for BOTH admin addresses.
-3. **UX consideration (not a data task)**: the avatar picker now has 3,944 choices — search/filter or grouped layout is a Phase-6 product/UX decision.
+3. **UX consideration (not a data task)**: the avatar picker now has 3,944 choices — search/filter or grouped layout was a pre-phase-6 product/UX decision (resolved in the pre-phase-6 plan: search + 9 Unicode groups + windowing; see `pre-phase-6-plan.md` §4).
 4. Integration/e2e suites will run against the non-production DB in CI with the updated avatar-policy cases.
 
-## What Phase-6 PLANNING should NOT redo
+## What pre-phase-6 planning should NOT redo
 
 - Do not re-derive or re-download the word lists/emoji data (provenance is pinned above).
 - Do not change the admin emails or the 3/8 thresholds (product lock).

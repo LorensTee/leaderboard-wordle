@@ -160,9 +160,9 @@ Pre-Phase-6 is complete only when:
 - the avatar allow-list is replaced according to the Unicode/Discord policy;
 - Unicode version/provenance is recorded;
 - server/client avatar artifacts are generated and parity-tested;
-- the two admin emails are recorded in the Phase-6 deployment configuration plan;
+- the two admin emails are recorded in the real Phase-6 (Deployment) configuration plan;
 - weekly threshold is finalized at 3;
 - monthly threshold is finalized at 8;
 - no Phase-1–5 invariant or security gate is weakened;
-- a Phase-6 plan can reference these values without any remaining product-data placeholders.
+- the pre-phase-6 plan (and the real Phase-6 (Deployment) plan) can reference these values without any remaining product-data placeholders.
 

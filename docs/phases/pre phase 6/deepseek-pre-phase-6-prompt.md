@@ -4,7 +4,7 @@ You are now performing **PRE-PHASE 6** work for `leaderboard-wordle`.
 
 Do not start Phase-6 deployment yet.
 
-Your job is to turn the already-finalized product inputs into verified, reproducible repository data and a clean Phase-6 starting state.
+Your job is to turn the already-finalized product inputs into verified, reproducible repository data and a clean starting state for real Phase-6 (Deployment) planning.
 
 ## Read first
 
@@ -170,7 +170,7 @@ Then create:
 
 `docs/phases/pre-phase-6/handoff.md`
 
-A fresh Phase-6 chat must be able to continue from this handoff without this conversation's history.
+A fresh chat must be able to continue the pre-phase-6 work from this handoff without this conversation's history.
 
 ## Critical honesty rules
 
@@ -200,6 +200,6 @@ Report:
 6. files changed;
 7. tests/commands run;
 8. any remaining blocker;
-9. whether the repository is now ready for Phase-6 PLANNING.
+9. whether the repository is now ready for pre-phase-6 planning.
 
 Do not begin Phase-6 deployment or production provisioning in this task.
