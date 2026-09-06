@@ -8,6 +8,14 @@ export default async function setup(): Promise<() => Promise<void>> {
 		// Unit/test runs without the DB env skip the mutex entirely.
 		return async () => {};
 	}
+	// CI-7 — LOCAL_PG=1 runs against an EPHEMERAL job-scoped postgres
+	// (CI service container / local throwaway DB): nothing shares it, so the
+	// shared-DB advisory lock is unnecessary — and the Neon WebSocket driver
+	// used by db-mutex cannot connect to a plain postgres anyway.
+	if (process.env.LOCAL_PG === '1') {
+		console.log('[db-mutex] LOCAL_PG=1 — ephemeral job-local database, mutex skipped');
+		return async () => {};
+	}
 	const release = await acquireDbMutex(url);
 	console.log('[db-mutex] shared test database locked for this run');
 	return release;

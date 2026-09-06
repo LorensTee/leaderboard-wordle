@@ -1,9 +1,13 @@
 # NG23 — CI pipeline: install → lint → word-list → auth-schema parity →
 # check → unit tests → build → types:check → bundle-secrecy proof → e2e
-# (Playwright). All DB-dependent integration tests run against a
-# NON-production database (credentials injected as GitHub secrets; see B6
-# integration job extension — the DB gate is MANDATORY and fails when the
-# secret is missing).
+# (Playwright). DB suites (CI-7, 2026-09-06):
+#   - integration: MANDATORY DB gate (Phase-0 B6/B7) against an EPHEMERAL
+#     postgres service container (LOCAL_PG=1, node-postgres harness seam) —
+#     no secrets, no shared-DB races, no per-query network RTT;
+#   - e2e: the ONLY suite on the shared non-production Neon (real
+#     neon-serverless driver path + session fixture); mutex-protected (CI-2);
+#   - smoke: DB-free Playwright project, own job, runs in parallel.
+# Both DB jobs stay gated to main pushes (CI-3).
 name: CI
 
 on:
@@ -80,27 +84,39 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     needs: unit-and-build
-    # CI-3 — the integration + e2e jobs TRUNCATE the SHARED non-production
-    # Neon database; only main pushes execute them (a dependabot/PR run's
-    # e2e job wiped a concurrent main-push integration run — contradictions
-    # log CI-1). PRs keep the DB-free unit-and-build job; the mandatory
-    # secret gate below stays binding for every push to main.
+    # CI-7 (2026-09-06) — the integration suite runs against an EPHEMERAL
+    # postgres service container on the runner instead of the shared
+    # non-production Neon: per-query network RTT disappears (the old
+    # Neon-Singapore round-trips roughly doubled suite latency — see the
+    # vitest 60s-timeout comment), the shared-DB wipe race is gone, and the
+    # MANDATORY DB gate (Phase-0 B6/B7) no longer depends on a secret — it
+    # can never silently skip. Neon-WebSocket transport verification (B7)
+    # remains covered by the e2e job, which still runs the real app against
+    # the shared Neon on main pushes. Only main pushes execute this job
+    # (CI-3 discipline, unchanged).
     if: github.event_name == 'push'
-    # B6/B7 external gate — runs the DB integration suite (migration applied
-    # first) against a NON-production database; exercises the app's real
-    # neon-serverless driver path. FINAL Phase-0 policy: the integration gate
-    # is MANDATORY. If the non-production DATABASE_URL secret is not
-    # configured the job FAILS — DB verification must never silently skip.
-    #
-    # Context rules (docs.github.com contexts reference): `secrets` and `env`
-    # are NOT available in `jobs.<job_id>.if` (only github/needs/vars/inputs).
-    # `secrets` IS available in job-level `env`, and `env` IS available in
-    # step-level `if` — so the secret is injected as a job env var and the
-    # gate lives on the DB steps. Without the secret the guard step fails the
-    # job explicitly (no silent skip; fork PRs without the secret fail loudly
-    # so the missing gate cannot be mistaken for a pass).
+    # PostgreSQL 16 — the Neon-equivalent major (matching the schema the
+    # suites assert against in production). The harness switches to the
+    # node-postgres driver with LOCAL_PG=1 (tests/integration/helpers.ts);
+    # the probe + migration scripts are already pg-based (scripts/ci-db-probe.ts,
+    # scripts/ci-migrate.ts), so no test code changes were needed.
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+      LOCAL_PG: '1'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
@@ -108,44 +124,41 @@ jobs:
           bun-version: latest
       - name: Install
         run: bun install --frozen-lockfile
-      - name: Fail if DATABASE_URL secret is not configured (mandatory DB gate)
-        if: ${{ env.DATABASE_URL == '' }}
-        run: |
-          echo "::error::DATABASE_URL non-production secret is required for the mandatory integration gate (Phase-0 B6/B7 policy). Configure it in the repository secrets, or the DB verification is lost."
-          exit 1
       # Redacted connection diagnostics: URL facts (no credentials) + the pg
       # driver error (code + first line). Fails before the migration so the
       # runner log carries the actual cause (run-3 failure surfaced no message
       # between 'Using pg driver' and the exit).
       - name: DB connection probe (redacted diagnostics)
-        if: ${{ env.DATABASE_URL != '' }}
         run: bun ./scripts/ci-db-probe.ts
-      - name: Apply migrations (non-production database)
+      - name: Apply migrations (ephemeral job-local postgres)
         # programmatic migrator — drizzle-kit CLI exits 1 silently on this
         # runner (~140ms after 'Using pg driver', no message); ci-migrate.ts
         # prints the real error/stack if anything fails.
-        if: ${{ env.DATABASE_URL != '' }}
         run: bun ./scripts/ci-migrate.ts
       - name: Integration tests (FOR UPDATE, NG9 lock orders, M3, NG2/NG3)
-        if: ${{ env.DATABASE_URL != '' }}
         run: bun run test:integration
 
   e2e:
     runs-on: ubuntu-latest
-    # CI-3 — see the integration job: only main pushes run DB-truncating
-    # suites against the shared non-production database.
+    # CI-3/CI-7 (2026-09-06) — only main pushes run the DB-truncating e2e
+    # suite against the shared non-production Neon (a dependabot/PR run
+    # wiped a concurrent main-push integration run — contradictions log
+    # CI-1). The integration job now uses an EPHEMERAL job-local postgres,
+    # so e2e is the ONLY consumer of the shared DB: no serialization needed,
+    # this job runs in parallel with integration + smoke. Concurrent runs of
+    # THIS job are still protected by the advisory-lock mutex (CI-2) — the
+    # lock fails loudly after 300 s instead of wiping each other.
     if: github.event_name == 'push'
-    # Serialized AFTER integration: both jobs TRUNCATE the app tables on the
-    # same non-production database — running them in parallel would race the
-    # fixtures (a job can wipe the other's rows mid-run).
-    needs: [unit-and-build, integration]
+    needs: unit-and-build
     # Phase-1: the authenticated gameplay spec uses the deterministic session
     # fixture (tests/e2e/helpers/auth-fixture.ts) — real user+session rows on
     # the non-production DB and the exact Better Auth signed cookie, so no
     # live Google OAuth round-trip. When these secrets are configured the
     # full gameplay flow runs; without them the spec skips explicitly (the
-    # unauthenticated smoke spec always runs). The integration job above is
-    # the MANDATORY DB gate; this one stays green either way.
+    # DB-free smoke spec now lives in its own job — project 'smoke'). The
+    # MANDATORY DB gate is the integration job (ephemeral postgres, CI-7);
+    # this e2e job stays green either way (with the fixture env it is the B7
+    # real-Neon-transport verification).
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
@@ -164,5 +177,31 @@ jobs:
         run: bunx playwright install --with-deps chromium
       - name: Build
         run: bun run build
-      - name: E2E smoke (production preview → Hono chain)
-        run: bun run test:e2e
+      # CI-7 — the DB-free smoke spec runs in its OWN job (project 'smoke');
+      # this job keeps only the DB-touching specs via the 'app' project.
+      - name: E2E suites (production preview → Hono chain)
+        run: bun run test:e2e:app
+
+  smoke:
+    runs-on: ubuntu-latest
+    # CI-7 — the DB-free smoke spec (homepage render + NG21 404 envelope,
+    # tests/e2e/smoke.spec.ts) has its own Playwright project and its own
+    # job: it needs only unit-and-build and runs in PARALLEL with the
+    # DB-consuming integration + e2e jobs instead of tailing them.
+    # No DATABASE_URL / BETTER_AUTH_SECRET / ALLOW_DB_WIPE here — without
+    # the auth-fixture env the Playwright globalSetup mutex is a no-op, so
+    # this job can never race the shared test database.
+    needs: [unit-and-build]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: latest
+      - name: Install
+        run: bun install --frozen-lockfile
+      - name: Install Playwright browsers
+        run: bunx playwright install --with-deps chromium
+      - name: Build
+        run: bun run build
+      - name: E2E smoke (DB-free project)
+        run: bun run test:smoke

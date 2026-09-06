@@ -5,6 +5,21 @@ export default defineConfig({
 	// CI-2 — hold the shared-DB advisory-lock mutex for the whole e2e run
 	// (the auth fixture TRUNCATEs the shared non-production Neon).
 	globalSetup: './tests/e2e/global-setup.ts',
+	// CI-7 — the DB-free smoke spec has its own project so a CI job can run
+	// it in parallel with the DB-touching suites (no DATABASE_URL or auth
+	// fixture env — the globalSetup mutex stays a no-op then). `test:e2e`
+	// (bare `playwright test`) still runs BOTH projects, preserving the
+	// pre-split local behavior.
+	projects: [
+		{
+			name: 'app',
+			testIgnore: /smoke\.spec\.ts/
+		},
+		{
+			name: 'smoke',
+			testMatch: /smoke\.spec\.ts/
+		}
+	],
 	// The authenticated specs share ONE non-production database and TRUNCATE
 	// the app tables per fixture (tests/e2e/helpers/auth-fixture.ts) — files
 	// must never run in parallel (a second worker's TRUNCATE would wipe the

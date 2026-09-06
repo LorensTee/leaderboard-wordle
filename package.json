@@ -29,7 +29,9 @@
 		"verify:bundle": "bun ./scripts/verify-bundle-secrecy.ts",
 		"test:unit": "vitest run",
 		"test:integration": "vitest run tests/integration",
-		"test:e2e": "playwright test"
+		"test:e2e": "playwright test",
+		"test:e2e:app": "playwright test --project=app",
+		"test:smoke": "playwright test --project=smoke"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^5.20260823.1",
