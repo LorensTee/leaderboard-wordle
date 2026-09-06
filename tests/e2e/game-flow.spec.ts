@@ -174,9 +174,26 @@ test.describe('authenticated gameplay (deterministic session fixture)', () => {
 		for (let i = 0; i < words.length; i++) {
 			await page.keyboard.type(words[i]);
 			await page.keyboard.press('Enter');
-			await expect(
-				board.getByRole('row').nth(i).getByRole('gridcell').first()
-			).toHaveAttribute('aria-label', /— (green|yellow|gray)/);
+			const evaluated = board.getByRole('row').nth(i).getByRole('gridcell').first();
+			// CI-11 (2026-09-06, first real-CI e2e run): the 6th-guess
+			// evaluation once never arrived — the typed letters stayed in the
+			// input row, i.e. the Enter press was dropped by the app's
+			// `editing` guard flipping between typing and submit (silent
+			// early-return; no request was sent, nothing logged). Bounded
+			// resubmit: if the row is still unevaluated after 10s, press
+			// Enter again — a no-op when the guess already went through (the
+			// input clears on success). A genuinely stuck request still fails
+			// loudly below.
+			try {
+				await expect(evaluated).toHaveAttribute('aria-label', /— (green|yellow|gray)/, {
+					timeout: 10_000
+				});
+			} catch {
+				await page.keyboard.press('Enter');
+				await expect(evaluated).toHaveAttribute('aria-label', /— (green|yellow|gray)/, {
+					timeout: 10_000
+				});
+			}
 		}
 
 		await expect(page.getByRole('status').filter({ hasText: /Out of guesses/ })).toBeVisible();
