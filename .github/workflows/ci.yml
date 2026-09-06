@@ -176,18 +176,31 @@ jobs:
           bun-version: latest
       - name: Install
         run: bun install --frozen-lockfile
-      # CI-9 — MANDATORY e2e gate (mirror of the integration job's old
-      # mandatory-secret gate, removed in CI-7): e2eAuthAvailable() skips
-      # every authenticated spec when the fixture env is incomplete, and the
-      # e2e job is the ONLY B7 real-Neon-transport verification on main
-      # pushes — a silent skip is a hollow green. `secrets` are not
+      # CI-9/CI-10 — the fixture env is a MANDATORY gate: `secrets` are not
       # available in `jobs.<job_id>.if`, so they are injected as job env
-      # vars (same mechanism the integration gate used) and checked here.
+      # vars and checked here (CI-9 — a silent skip would be a hollow green).
+      # NOTE (CI-10): job env reaches ONLY the Playwright process — the
+      # adapter-cloudflare PREVIEW server builds event.platform.env via
+      # wrangler's getPlatformProxy, which loads wrangler.toml [vars] + the
+      # gitignored .dev.vars FILE, so without the materialization step below
+      # every authenticated request 500s ('BETTER_AUTH_SECRET is required')
+      # — first real-with-secret run, 2026-09-06.
       - name: Fail if the auth-fixture env is incomplete (mandatory e2e gate)
         if: ${{ env.DATABASE_URL == '' || env.BETTER_AUTH_SECRET == '' }}
         run: |
           echo "::error::The e2e authenticated-fixture gate needs DATABASE_URL and BETTER_AUTH_SECRET repository secrets. Without them 41/43 e2e specs SKIP silently on every main push and the B7 real-Neon-WebSocket transport verification is lost. Configure non-empty secrets (ALLOW_DB_WIPE is hardcoded to 'true' in this job), or the e2e job fails here on purpose — a green checkmark must always mean the authenticated suite actually ran."
           exit 1
+      # CI-10 — materialize the secrets the way LOCAL runs have them: the
+      # preview server's platform env comes from wrangler's getPlatformProxy
+      # (wrangler.toml vars + .dev.vars), NOT from process env. Quoted 'EOF'
+      # keeps the values literal even if a secret contains '$' or '\'.
+      # .dev.vars is gitignored; the runner is ephemeral.
+      - name: Materialize .dev.vars for the preview platform proxy (CI-10)
+        run: |
+          cat > .dev.vars <<'EOF'
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
+          BETTER_AUTH_SECRET=${{ secrets.BETTER_AUTH_SECRET }}
+          EOF
       - name: Install Playwright browsers
         run: bunx playwright install --with-deps chromium
       - name: Build
