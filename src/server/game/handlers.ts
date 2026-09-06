@@ -81,7 +81,22 @@ export function registerGameRoutes<T extends Hono<AppEnv>>(app: T, deps: GameRou
 				throw new AppError(ERROR_CODES.GAME_NOT_FOUND, 'Game not found', 404);
 			}
 			const { word } = c.req.valid('json');
+			// CI-15 diagnostic — start/end markers for a guess request. The
+			// e2e trace showed a guess POST that never returned (status -1)
+			// under real-Neon latency; these markers pin WHERE it died:
+			//   no "start"  → the request never reached this handler
+			//   "start" only → hung inside submitGuess (DB/Neon)
+			//   "start"+"done" → the handler completed; the response was lost
+			//                    on the wire after c.json
+			// console.error surfaces in the CI [WebServer] output (same as the
+			// settlement/admin logger defaults).
+			console.error(
+				`[game-guess] start user=${user.id} game=${gameId} word=${word}`
+			);
 			const outcome = await deps.getService(c).submitGuess(user.id, gameId, word);
+			console.error(
+				`[game-guess] done user=${user.id} game=${gameId} word=${word} guess=${outcome.guess.guessNumber} status=${outcome.game.status}`
+			);
 			return c.json(outcome, 200);
 		});
 }
