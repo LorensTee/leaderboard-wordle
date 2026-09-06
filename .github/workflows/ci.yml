@@ -153,12 +153,15 @@ jobs:
     # Phase-1: the authenticated gameplay spec uses the deterministic session
     # fixture (tests/e2e/helpers/auth-fixture.ts) — real user+session rows on
     # the non-production DB and the exact Better Auth signed cookie, so no
-    # live Google OAuth round-trip. When these secrets are configured the
-    # full gameplay flow runs; without them the spec skips explicitly (the
-    # DB-free smoke spec now lives in its own job — project 'smoke'). The
-    # MANDATORY DB gate is the integration job (ephemeral postgres, CI-7);
-    # this e2e job stays green either way (with the fixture env it is the B7
-    # real-Neon-transport verification).
+    # live Google OAuth round-trip. CI-9 (2026-09-06): the fixture env is a
+    # MANDATORY gate — without DATABASE_URL + BETTER_AUTH_SECRET the
+    # authenticated specs would SKIP silently (41/43 + the B7 real-Neon-
+    # transport verification would be lost), so this job FAILS LOUDLY via
+    # the guard step below instead of reporting a hollow green (explicit
+    # skip stays the LOCAL-dev behavior). ALLOW_DB_WIPE is a hardcoded
+    # constant in this job env. The DB-free smoke spec lives in its own job
+    # (project 'smoke'); the mandatory Postgres-semantics gate is the
+    # integration job (ephemeral postgres, CI-7).
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
@@ -173,6 +176,18 @@ jobs:
           bun-version: latest
       - name: Install
         run: bun install --frozen-lockfile
+      # CI-9 — MANDATORY e2e gate (mirror of the integration job's old
+      # mandatory-secret gate, removed in CI-7): e2eAuthAvailable() skips
+      # every authenticated spec when the fixture env is incomplete, and the
+      # e2e job is the ONLY B7 real-Neon-transport verification on main
+      # pushes — a silent skip is a hollow green. `secrets` are not
+      # available in `jobs.<job_id>.if`, so they are injected as job env
+      # vars (same mechanism the integration gate used) and checked here.
+      - name: Fail if the auth-fixture env is incomplete (mandatory e2e gate)
+        if: ${{ env.DATABASE_URL == '' || env.BETTER_AUTH_SECRET == '' }}
+        run: |
+          echo "::error::The e2e authenticated-fixture gate needs DATABASE_URL and BETTER_AUTH_SECRET repository secrets. Without them 41/43 e2e specs SKIP silently on every main push and the B7 real-Neon-WebSocket transport verification is lost. Configure non-empty secrets (ALLOW_DB_WIPE is hardcoded to 'true' in this job), or the e2e job fails here on purpose — a green checkmark must always mean the authenticated suite actually ran."
+          exit 1
       - name: Install Playwright browsers
         run: bunx playwright install --with-deps chromium
       - name: Build
