@@ -153,7 +153,7 @@
 						<span aria-hidden="true">{avatar.emoji}</span>
 						{#if value === avatar.emoji}
 							<span
-								class="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-tile-green text-white"
+								class="absolute right-0.5 top-0.5 z-10 grid size-5 place-items-center rounded-full bg-tile-green text-white"
 								aria-hidden="true"
 							>
 								<Check size={12} stroke-width={3} />
