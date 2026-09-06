@@ -421,13 +421,19 @@ suite('leaderboard (real Neon: boards, aggregation, qualification)', () => {
 			}))
 		);
 		// B: one completed day (yesterday), one FAILED, one FORFEITED (when
-		// days allow) + a FAILED game TODAY (ignored — no slot until finalization).
-		await insertGame('B', puzzleIds[past - 1], {
-			status: 'COMPLETED',
-			completionTimeMs: 30_000,
-			guessCount: 4,
-			completedAt: sql`transaction_timestamp() - interval '9 hours'`
-		});
+		// days allow) + a FAILED game TODAY (ignored — no slot until
+		// finalization). On a Manila-Monday the week frame holds NO past day
+		// (dowIndex 0), so the yesterday slot must be guarded: seedFinalizedDays
+		// returns [], and puzzleIds[past - 1] would be undefined → drizzle maps
+		// it to `default` → puzzle_id NULL → NOT-NULL violation (CI-14).
+		if (past >= 1) {
+			await insertGame('B', puzzleIds[past - 1], {
+				status: 'COMPLETED',
+				completionTimeMs: 30_000,
+				guessCount: 4,
+				completedAt: sql`transaction_timestamp() - interval '9 hours'`
+			});
+		}
 		if (past >= 2) await insertGame('B', puzzleIds[past - 2], { status: 'FAILED', guessCount: 6 });
 		if (past >= 3) await insertGame('B', puzzleIds[past - 3], { status: 'FORFEITED', guessCount: 3 });
 		await insertGame('B', todayPuzzle.id, { status: 'FAILED', guessCount: 6 });
@@ -482,12 +488,12 @@ suite('leaderboard (real Neon: boards, aggregation, qualification)', () => {
 			expect(resA.entries).toEqual([]);
 			expect(resA.currentUser.qualified).toBe(false);
 			expect(resA.currentUser.completedDays).toBe(aCompleted);
-			expect(resB.currentUser.completedDays).toBe(1);
+			expect(resB.currentUser.completedDays).toBe(past >= 1 ? 1 : 0);
 			expect(resD.currentUser.completedDays).toBe(0);
 		}
 
 		// Today's FAILED-for-B is ignored in every case (finalized-day count only).
-		expect(resB.currentUser.completedDays).toBe(1);
+		expect(resB.currentUser.completedDays).toBe(past >= 1 ? 1 : 0);
 	});
 
 	// ─── I9: month aggregation + month-start boundary ─────────────────────────
