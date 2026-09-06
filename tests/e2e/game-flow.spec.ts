@@ -4,7 +4,7 @@
 // and the exact Better Auth signed cookie — no live Google OAuth round-trip.
 // The suite skips explicitly when DATABASE_URL / BETTER_AUTH_SECRET are
 // unavailable (CI injects them; the unauthenticated smoke spec never skips).
-import { expect, test } from '@playwright/test';
+import { expect, test, type Locator, type Page } from '@playwright/test';
 import {
 	createAuthenticatedUser,
 	createUserOnly,
@@ -22,6 +22,60 @@ async function addSessionCookie(
 	await context.addCookies([
 		{ name: 'better-auth.session_token', value: cookie, url: 'http://127.0.0.1:4173' }
 	]);
+}
+
+/**
+ * CI-15 — type a guess and wait for its row to evaluate, recovering from the
+ * failure mode the E7 trace exposed: a guess POST the server never answers
+ * used to pin `guessMutation.isPending` forever — the keyboard stayed
+ * disabled (the `editing` guard) and every retry Enter was silently dropped.
+ * The app now aborts the request after GUESS_REQUEST_TIMEOUT_MS (15s,
+ * src/lib/shared/api/game.ts) and re-enables input with the typed letters
+ * intact. This loop waits for evaluation; when the mutation has settled
+ * without confirming, it rebuilds the in-progress row from its aria-labels
+ * (typed tiles render a single uppercase letter; evaluated tiles carry
+ * " — color" and are skipped), retypes any dropped letters, and resubmits.
+ * A request that genuinely never settles still fails loudly at the deadline.
+ */
+async function submitGuessWithRecovery(
+	page: Page,
+	board: Locator,
+	word: string,
+	rowIndex: number
+): Promise<void> {
+	const keyboard = page.getByRole('group', { name: 'Keyboard' });
+	const evaluated = board.getByRole('row').nth(rowIndex).getByRole('gridcell').first();
+	const evaluatedLabel = /— (green|yellow|gray)/;
+
+	await page.keyboard.type(word);
+	await page.keyboard.press('Enter');
+
+	// 15s client timeout + a resubmit round trip, plus margin.
+	const deadline = Date.now() + 25_000;
+	while (Date.now() < deadline) {
+		try {
+			await expect(evaluated).toHaveAttribute('aria-label', evaluatedLabel, { timeout: 1_500 });
+			return;
+		} catch {
+			// Not evaluated yet — inspect the app state below.
+		}
+		if (await keyboard.isDisabled().catch(() => true)) {
+			// A request is still in flight (or the client timeout hasn't fired).
+			await page.waitForTimeout(400);
+			continue;
+		}
+		// The previous submit settled without confirming: rebuild the input
+		// row and resubmit.
+		const cells = board.getByRole('row').nth(rowIndex).getByRole('gridcell');
+		let typed = '';
+		for (let c = 0; c < (await cells.count()); c++) {
+			const label = await cells.nth(c).getAttribute('aria-label');
+			if (label && /^[A-Z]$/.test(label)) typed += label.toLowerCase();
+		}
+		if (typed !== word) await page.keyboard.type(word.slice(typed.length));
+		await page.keyboard.press('Enter');
+	}
+	throw new Error(`guess "${word}" never evaluated (row ${rowIndex + 1})`);
 }
 
 test.describe('authenticated gameplay (deterministic session fixture)', () => {
@@ -153,6 +207,11 @@ test.describe('authenticated gameplay (deterministic session fixture)', () => {
 		context,
 		page
 	}) => {
+		// CI-15 — worst case every guess hangs once (15s client timeout) plus
+		// a resubmit round trip; the default 30s cap cannot hold six of those,
+		// so this test gets an explicit larger budget.
+		test.setTimeout(180_000);
+
 		const { cookie } = await createAuthenticatedUser(undefined, 'Stuck Player', {
 			onboarded: true,
 			avatarEmoji: '🙂'
@@ -170,30 +229,11 @@ test.describe('authenticated gameplay (deterministic session fixture)', () => {
 		await expect(board).toBeVisible();
 		const words = ['about', 'after', 'again', 'below', 'candy', 'drain'];
 		// Submit one guess at a time: the input is disabled while the guess
-		// mutation is pending — a racing keystroke would be dropped.
+		// mutation is pending — a racing keystroke would be dropped. Each
+		// guess waits for its row to evaluate and recovers from a hung
+		// response (CI-15).
 		for (let i = 0; i < words.length; i++) {
-			await page.keyboard.type(words[i]);
-			await page.keyboard.press('Enter');
-			const evaluated = board.getByRole('row').nth(i).getByRole('gridcell').first();
-			// CI-11 (2026-09-06, first real-CI e2e run): the 6th-guess
-			// evaluation once never arrived — the typed letters stayed in the
-			// input row, i.e. the Enter press was dropped by the app's
-			// `editing` guard flipping between typing and submit (silent
-			// early-return; no request was sent, nothing logged). Bounded
-			// resubmit: if the row is still unevaluated after 10s, press
-			// Enter again — a no-op when the guess already went through (the
-			// input clears on success). A genuinely stuck request still fails
-			// loudly below.
-			try {
-				await expect(evaluated).toHaveAttribute('aria-label', /— (green|yellow|gray)/, {
-					timeout: 10_000
-				});
-			} catch {
-				await page.keyboard.press('Enter');
-				await expect(evaluated).toHaveAttribute('aria-label', /— (green|yellow|gray)/, {
-					timeout: 10_000
-				});
-			}
+			await submitGuessWithRecovery(page, board, words[i], i);
 		}
 
 		await expect(page.getByRole('status').filter({ hasText: /Out of guesses/ })).toBeVisible();
