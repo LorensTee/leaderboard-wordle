@@ -5,7 +5,6 @@
 	// + windowed pages (96 per page, "Show more") + client-side CLDR-label
 	// search. Selection is LOCAL state until the form submits; the server
 	// allow-list is authoritative (Spec §15: the client picker is not trusted).
-	import { browser } from '$app/environment';
 	import { Check, Search } from '@lucide/svelte';
 	import {
 		AVATAR_EMOJIS,
@@ -37,47 +36,6 @@
 		labelledby?: string;
 	} = $props();
 
-	// ─── Recently used (localStorage; P6-8 enhancement) ──────────────────────
-	const RECENT_KEY = 'avatar-recent';
-	const RECENT_LIMIT = 24;
-	const labelByEmoji = new Map(AVATAR_EMOJIS.map((e) => [e.emoji, e.label]));
-	const allowed = new Set(AVATAR_EMOJIS.map((e) => e.emoji));
-
-	function loadRecent(): string[] {
-		if (!browser) return [];
-		try {
-			const raw = localStorage.getItem(RECENT_KEY);
-			if (!raw) return [];
-			const parsed: unknown = JSON.parse(raw);
-			if (!Array.isArray(parsed)) return [];
-			return parsed
-				.filter((e): e is string => typeof e === 'string' && allowed.has(e))
-				.slice(0, RECENT_LIMIT);
-		} catch {
-			return [];
-		}
-	}
-
-	function saveRecent(list: string[]): void {
-		if (!browser) return;
-		try {
-			localStorage.setItem(RECENT_KEY, JSON.stringify(list));
-		} catch {
-			// Storage unavailable (private mode/quota) — recent is a nicety only.
-		}
-	}
-
-	let recent = $state<string[]>(loadRecent());
-
-	function pushRecent(emoji: string): void {
-		recent = [emoji, ...recent.filter((e) => e !== emoji)].slice(0, RECENT_LIMIT);
-		saveRecent(recent);
-	}
-
-	function emojiLabel(emoji: string): string {
-		return labelByEmoji.get(emoji) ?? 'Avatar';
-	}
-
 	// ─── Search / category / windowed-rendering state ────────────────────────
 	let query = $state('');
 	let activeGroup = $state(AVATAR_GROUPS[0]);
@@ -95,7 +53,6 @@
 
 	function select(emoji: string): void {
 		onselect(emoji);
-		pushRecent(emoji);
 	}
 
 	function onSearchInput(e: Event): void {
@@ -128,6 +85,22 @@
 		focusIndex = 0;
 	}
 
+	// Representative icon per category tab (native emoji-picker pattern: one
+	// compact row instead of wrapped text rows). Each icon is a verified
+	// member of its group in the generated allow-list; the accessible name
+	// stays the full group name via aria-label, with title as hover tooltip.
+	const TAB_ICONS: Record<string, string> = {
+		'Smileys & Emotion': '😀',
+		'People & Body': '👋',
+		'Animals & Nature': '🐻',
+		'Food & Drink': '🍎',
+		'Travel & Places': '✈️',
+		Activities: '⚽',
+		Objects: '💡',
+		Symbols: '♻️',
+		Flags: '🚩'
+	};
+
 	function showMore(): void {
 		visibleCount += AVATAR_PAGE_SIZE;
 	}
@@ -152,8 +125,7 @@
 	}
 </script>
 
-	// ─── Shared grid markup (category mode + search mode) ────────────────────
-	{#snippet avatarGrid()}
+{#snippet avatarGrid()}
 		<div
 			data-avatar-grid
 			role="group"
@@ -218,39 +190,6 @@
 		/>
 	</div>
 
-	{#if !searching && recent.length > 0}
-		<div class="flex flex-col gap-1.5">
-			<span class="text-xs font-medium text-black/50 dark:text-white/50">Recently used</span>
-			<div class="grid grid-cols-6 gap-2 sm:grid-cols-8" role="group" aria-label="Recently used avatars">
-				{#each recent as emoji (emoji)}
-					<button
-						type="button"
-						onclick={() => select(emoji)}
-						aria-label="{emojiLabel(emoji)} avatar"
-						aria-pressed={value === emoji}
-						title={emojiLabel(emoji)}
-						class={[
-							'relative grid size-12 place-items-center rounded-xl border text-2xl transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tile-green',
-							value === emoji
-								? 'border-tile-green bg-tile-green/15'
-								: 'border-black/10 hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/10'
-						].join(' ')}
-					>
-						<span aria-hidden="true">{emoji}</span>
-						{#if value === emoji}
-							<span
-								class="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-tile-green text-white"
-								aria-hidden="true"
-							>
-								<Check size={12} stroke-width={3} />
-							</span>
-						{/if}
-					</button>
-				{/each}
-			</div>
-		</div>
-	{/if}
-
 	{#if searching}
 		<p class="text-xs text-black/45 dark:text-white/45" aria-live="polite">
 			{resultCount === 1 ? '1 result' : `${resultCount} results`}
@@ -260,9 +199,22 @@
 		</div>
 	{:else}
 		<Tabs value={activeGroup} onValueChange={switchGroup} class="w-full">
-			<TabsList variant="line" class="flex-wrap gap-1">
+			<!-- Category tabs as representative emoji (native-picker pattern):
+				one compact row instead of 2–3 wrapped text rows. Each icon is a
+				verified member of its category; the accessible name stays the
+				full group name (aria-label), title is the hover tooltip, and the
+				shared list's fixed `h-9` is freed (`h-auto!`) with `pb-2`
+				reserving room for the active tab's underline. -->
+			<TabsList variant="line" class="h-auto! flex-wrap justify-start gap-1 pb-2">
 				{#each AVATAR_GROUPS as group (group)}
-					<TabsTrigger value={group} class="flex-none px-2 text-xs">{group}</TabsTrigger>
+					<TabsTrigger
+						value={group}
+						class="size-8 flex-none justify-center rounded-lg p-0 text-xl"
+						aria-label={group}
+						title={group}
+					>
+						<span aria-hidden="true">{TAB_ICONS[group]}</span>
+					</TabsTrigger>
 				{/each}
 			</TabsList>
 			<TabsContent value={activeGroup} class="max-h-72 overflow-y-auto pr-1">

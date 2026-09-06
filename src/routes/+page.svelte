@@ -56,8 +56,8 @@
 		</span>
 		<h1 class="text-3xl font-extrabold tracking-tight">Leaderboard Wordle</h1>
 		<p class="max-w-sm text-pretty text-sm text-black/60 dark:text-white/60">
-			One puzzle a day for your group of friends. Six guesses, green and yellow
-			tiles, and a timer that only the server can read.
+			One puzzle a day. Six guesses, green and yellow tiles, and a timer that
+			only the server can read.
 		</p>
 	</div>
 

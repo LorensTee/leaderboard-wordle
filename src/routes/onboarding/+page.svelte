@@ -80,9 +80,9 @@
 
 <section class="mx-auto w-full max-w-md py-8 sm:py-14">
 	<div class="mb-7 text-center">
-		<h1 class="text-2xl font-bold tracking-tight">Welcome to the group</h1>
+		<h1 class="text-2xl font-bold tracking-tight">Set up your profile</h1>
 		<p class="mt-1.5 text-sm text-black/60 dark:text-white/60">
-			Pick a display name and avatar — this is how your friends will know it's you.
+			Pick a display name and avatar — this is how you'll appear on the leaderboard.
 		</p>
 	</div>
 

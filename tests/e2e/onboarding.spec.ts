@@ -39,7 +39,7 @@ test('2. authenticated incomplete user is sent to /onboarding from every applica
 	for (const route of ['/play', '/profile', '/leaderboard', '/admin']) {
 		await page.goto(route);
 		await expect(
-			page.getByRole('heading', { name: 'Welcome to the group' }),
+			page.getByRole('heading', { name: 'Set up your profile' }),
 			`${route} must redirect to /onboarding`
 		).toBeVisible();
 	}
