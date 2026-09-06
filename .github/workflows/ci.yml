@@ -150,6 +150,15 @@ jobs:
     # lock fails loudly after 300 s instead of wiping each other.
     if: github.event_name == 'push'
     needs: unit-and-build
+    # CI-13 — the workflow-wide `permissions: contents: read` leaves the
+    # `actions` scope unset, but actions/upload-artifact@v4 needs
+    # `actions: write` on the GITHUB_TOKEN to create run artifacts. Job-level
+    # permissions REPLACE the workflow defaults, so `contents: read` must be
+    # re-declared here for actions/checkout. Scoped to this job — the only
+    # uploader in the workflow.
+    permissions:
+      contents: read
+      actions: write
     # Phase-1: the authenticated gameplay spec uses the deterministic session
     # fixture (tests/e2e/helpers/auth-fixture.ts) — real user+session rows on
     # the non-production DB and the exact Better Auth signed cookie, so no
@@ -209,6 +218,21 @@ jobs:
       # this job keeps only the DB-touching specs via the 'app' project.
       - name: E2E suites (production preview → Hono chain)
         run: bun run test:e2e:app
+      # CI-13 — Playwright's `trace: 'retain-on-failure'` (playwright.config.ts)
+      # already persists error-context.md + trace.zip per failing test under
+      # test-results/, but nothing uploaded them: the E7 failure run (#45)
+      # shipped 0 artifacts, so the trace the CI-11 record says to pull
+      # BEFORE touching gameplay code was lost with the ephemeral runner.
+      # Diagnostic-only — uploads ONLY on failure (a green suite has no
+      # test-results worth shipping); no test or application code changes.
+      - name: Upload Playwright failure artifacts (traces + error-context)
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: e2e-playwright-test-results
+          path: test-results/
+          if-no-files-found: warn
+          retention-days: 14
 
   smoke:
     runs-on: ubuntu-latest
