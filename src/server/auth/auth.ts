@@ -4,7 +4,7 @@
 // Worker environment (Hono bindings) instead of process.env at import time.
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { createDb } from '../db/client';
+import { createDb, type Db } from '../db/client';
 
 // Subset of HonoBindings consumed by auth. Structural typing — HonoBindings
 // satisfies this (see routes.ts).
@@ -32,7 +32,7 @@ export const INERT_DB_URL = 'postgresql://unused:unused@localhost:5432/unused';
 const DEV_SECRET = 'dev-only-secret-change-me';
 const NON_PRODUCTION_ENVS = new Set(['development', 'test']);
 
-export function createAuth(env: AuthBindings) {
+export function createAuth(env: AuthBindings, db?: Db) {
 	const secret =
 		env.BETTER_AUTH_SECRET ??
 		(NON_PRODUCTION_ENVS.has(process.env.NODE_ENV ?? '') ? DEV_SECRET : undefined);
@@ -52,7 +52,7 @@ export function createAuth(env: AuthBindings) {
 		// against arbitrary origins).
 		trustedOrigins: ['http://localhost:5173', 'http://127.0.0.1:4173'],
 		database: drizzleAdapter(
-			createDb(env.DATABASE_URL || INERT_DB_URL),
+			db ?? createDb(env.DATABASE_URL || INERT_DB_URL),
 			{ provider: 'pg' }
 		),
 		requireEmailVerification: true,
@@ -111,10 +111,14 @@ export type SessionData = Auth['$Infer']['Session'];
 let cachedAuth: Auth | null = null;
 let cachedKey = '';
 
-export function getAuth(env: AuthBindings): Auth {
-	const key = [env.DATABASE_URL, env.BETTER_AUTH_SECRET ?? ''].join('\u0000');
+export function getAuth(env: AuthBindings, db?: Db): Auth {
+	// Caller-injected client (integration harness under LOCAL_PG=1) is a
+	// different identity than the env-derived Neon client — keep it out of
+	// the memo key namespace so an override can never reuse a cached
+	// instance built with the wrong driver.
+	const key = [env.DATABASE_URL, env.BETTER_AUTH_SECRET ?? '', db ? '\u0000client-override' : ''].join('\u0000');
 	if (!cachedAuth || cachedKey !== key) {
-		cachedAuth = createAuth(env);
+		cachedAuth = createAuth(env, db);
 		cachedKey = key;
 	}
 	return cachedAuth;

@@ -19,6 +19,7 @@ import { sql } from 'drizzle-orm';
 import type { SessionData } from '../auth/auth';
 import { getAuth, type AuthBindings } from '../auth/auth';
 import { getDb } from '../db/memo';
+import type { Db } from '../db/client';
 import { ERROR_CODES, errorEnvelope } from '../lib/errors';
 
 // Session cookie owned by Better Auth (same name `hooks.server.ts` fast-path
@@ -68,7 +69,14 @@ export const resolveAuthSession: SessionResolver = async (env, headers) => {
  */
 export async function applyAdminBootstrap(
 	env: (AuthBindings & { ADMIN_EMAIL?: string }) | undefined,
-	auth: NonNullable<AuthContext>
+	auth: NonNullable<AuthContext>,
+	// Injectable client seam (CI-8): production defaults to the env-derived
+	// Neon client (getDb); the integration harness passes its node-postgres
+	// client under LOCAL_PG=1 so the bootstrap runs against the same
+	// ephemeral job-local database as the rest of the suite. Resolved AFTER
+	// the guards so DB-free unit paths (env undefined / no matching email)
+	// never trigger a client construction.
+	db?: Db
 ): Promise<NonNullable<AuthContext>> {
 	// `c.env` can be undefined in Hono's app.request() test path (routes.ts
 	// guards the same case for /api/auth/*) — a missing env means no
@@ -87,7 +95,7 @@ export async function applyAdminBootstrap(
 	) {
 		return auth;
 	}
-	await getDb(env).execute(
+	await (db ?? getDb(env)).execute(
 		sql`UPDATE "user" SET role = 'admin' WHERE id = ${auth.user.id} AND role <> 'admin'`
 	);
 	// Refresh the context user — the promotion is visible to THIS request.

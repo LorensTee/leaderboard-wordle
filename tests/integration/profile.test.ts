@@ -1,5 +1,7 @@
 // Phase-2 profile/onboarding/admin-bootstrap integration suite (plan §12) —
-// REAL PostgreSQL semantics on live Neon: onboarding persistence (DB time),
+// REAL PostgreSQL semantics on a live database (Neon at the external gate;
+// ephemeral job-local postgres 16 with the LOCAL_PG=1 node-postgres seam in
+// CI/dev): onboarding persistence (DB time),
 // atomicity, uniqueness (pre-check + UNIQUE final guard), moderation,
 // avatar allow-list, post-onboarding edits, NG18 admin bootstrap
 // (promote once / never demote / non-match untouched / ADMIN_EMAIL change
@@ -50,7 +52,7 @@ async function errOf(p: Promise<unknown>): Promise<AppError> {
 	throw new Error('expected the promise to reject');
 }
 
-suite('Phase-2 profile domain (live Neon)', () => {
+suite('Phase-2 profile domain (live Postgres)', () => {
 	beforeAll(async () => {
 		db = await createIntegrationDb();
 		// The suite owns the user table on the dedicated non-production DB
@@ -214,13 +216,13 @@ suite('Phase-2 profile domain (live Neon)', () => {
 		};
 
 		// 1. Match → promoted.
-		const promoted = await applyAdminBootstrap(appEnv(adminEmail), { session: {} as never, user: adminUser as never });
+		const promoted = await applyAdminBootstrap(appEnv(adminEmail), { session: {} as never, user: adminUser as never }, db);
 		expect(promoted.user.role).toBe('admin');
 		const [row1] = await db.select().from(schema.user).where(sql`${schema.user.id} = ${admin.id}`).limit(1);
 		expect(row1.role).toBe('admin');
 
 		// 2. Second resolution → still admin, and refresh shows admin (WHERE no-op).
-		const again = await applyAdminBootstrap(appEnv(adminEmail), { session: {} as never, user: { ...adminUser, role: 'admin' } as never });
+		const again = await applyAdminBootstrap(appEnv(adminEmail), { session: {} as never, user: { ...adminUser, role: 'admin' } as never }, db);
 		expect(again.user.role).toBe('admin');
 		const [row2] = await db.select().from(schema.user).where(sql`${schema.user.id} = ${admin.id}`).limit(1);
 		expect(row2.role).toBe('admin');
@@ -230,7 +232,7 @@ suite('Phase-2 profile domain (live Neon)', () => {
 		const untouched = await applyAdminBootstrap(appEnv(adminEmail), {
 			session: {} as never,
 			user: { id: other.id, email: other.email, name: other.name, role: other.role } as never
-		});
+		}, db);
 		expect(untouched.user.role).toBe('player');
 		const [row3] = await db.select().from(schema.user).where(sql`${schema.user.id} = ${other.id}`).limit(1);
 		expect(row3.role).toBe('player');
@@ -239,13 +241,13 @@ suite('Phase-2 profile domain (live Neon)', () => {
 		const differentAdmin = await applyAdminBootstrap(appEnv(`someone-else-${randomUUID()}@test.dev`), {
 			session: {} as never,
 			user: { ...adminUser, role: 'admin' } as never
-		});
+		}, db);
 		expect(differentAdmin.user.role).toBe('admin');
 		const [row4] = await db.select().from(schema.user).where(sql`${schema.user.id} = ${admin.id}`).limit(1);
 		expect(row4.role).toBe('admin');
 
 		// 5. No ADMIN_EMAIL configured → nobody promoted.
-		const noConf = await applyAdminBootstrap(appEnv(undefined), { session: {} as never, user: { ...adminUser, role: 'player' } as never });
+		const noConf = await applyAdminBootstrap(appEnv(undefined), { session: {} as never, user: { ...adminUser, role: 'player' } as never }, db);
 		expect(noConf.user.role).toBe('player');
 
 		// 6. Email identity is case-insensitive + whitespace-tolerant (review
@@ -257,7 +259,7 @@ suite('Phase-2 profile domain (live Neon)', () => {
 		const promotedMixed = await applyAdminBootstrap(appEnv(mixedConfig), {
 			session: {} as never,
 			user: { id: mixed.id, email: mixed.email, name: 'Mixed', role: 'player' } as never
-		});
+		}, db);
 		expect(promotedMixed.user.role).toBe('admin');
 		const [rowMixed] = await db.select().from(schema.user).where(sql`${schema.user.id} = ${mixed.id}`).limit(1);
 		expect(rowMixed.role).toBe('admin');
@@ -268,7 +270,7 @@ suite('Phase-2 profile domain (live Neon)', () => {
 		const untouchedMixed = await applyAdminBootstrap(appEnv(mixedConfig), {
 			session: {} as never,
 			user: { id: nonMatchMixed.id, email: nonMatchMixed.email, name: 'Other', role: 'player' } as never
-		});
+		}, db);
 		expect(untouchedMixed.user.role).toBe('player');
 	});
 
@@ -287,7 +289,7 @@ suite('Phase-2 profile domain (live Neon)', () => {
 			expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
 		});
 		const signature = createHmac('sha256', SECRET).update(token).digest('base64');
-		const auth = getAuth(appEnv(undefined));
+		const auth = getAuth(appEnv(undefined), db);
 		const resolved = await auth.api.getSession({
 			headers: new Headers({ cookie: `better-auth.session_token=${token}.${signature}` })
 		});
@@ -305,7 +307,7 @@ suite('Phase-2 profile domain (live Neon)', () => {
 		await applyAdminBootstrap(appEnv(`nobody-${randomUUID()}@test.dev`), {
 			session: {} as never,
 			user: { id: user.id, email, name: 'app name', role: 'player' } as never
-		});
+		}, db);
 		const [row2] = await db.select().from(schema.user).where(sql`${schema.user.id} = ${user.id}`).limit(1);
 		expect(row2.name).toBe('app name');
 		expect(row2.display_name_normalized).toBe('app name');
