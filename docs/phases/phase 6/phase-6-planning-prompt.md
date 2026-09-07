@@ -34,19 +34,24 @@ The authoritative starting points are:
 - `docs/phases/pre phase 6/pre-phase-6-production-data-lock.md` — the product lock
 - `Architecture-v3.md` — especially §"Phase 6 — Deployment" and §"Answer pool deployment"
 - `Specifications-v1.md`
-- `docs/contradictions-and-gaps.md` — **read the CI-1 … CI-11 records fully** (CI-7 … CI-11 changed the CI architecture this phase must not regress)
+- `docs/contradictions-and-gaps.md` — **read the CI-1 … CI-15 records fully** (CI-7 … CI-15 changed and hardened the CI architecture this phase must not regress)
 - `docs/phases/phase 5/phase-5-implementation-handoff-final.md`
 - all earlier Phase 0–5 planning/implementation/handoff documents as needed
 - current source code, `wrangler.toml`, `_headers`, `package.json`, `.github/workflows/ci.yml`, migrations, seed tooling, and the current CI gate receipts
 
 Important rules:
 
-- Phases 0–5 and pre-Phase-6 are COMPLETE (including the post-CI-7/8/10/11 rework, CI fully green and meaningful on `main`).
+- Phases 0–5 and pre-Phase-6 feature work are COMPLETE.
+- CI hardening after the original Phase-6 planning prompt is also part of the current baseline: CI-13, CI-14, and CI-15 MUST be treated as current repository state, not ignored as post-prompt noise.
+- A green CI run on an older commit does not establish readiness for the current HEAD.
 - Do not reimplement or redesign any prior phase.
 - The current repository state wins over stale planning documents.
 - Do not silently change product decisions already made (admin emails, 3/8 thresholds, datasets, answer-pool secrecy).
 - Do not invent requirements unsupported by the architecture, specification, or the deployment surface.
 - Do not assume a deployment capability exists merely because the architecture mentions it — verify every item against actual config/code/CI.
+- **This prompt was originally authored at commit `f031dc4`; the repository has since advanced.** At planning time, inspect the actual current `main` HEAD and all commits after `f031dc4`. Never treat historical references in this prompt as current facts.
+- At the time of this revision, known post-prompt commits include `812b0a8` (avatar selected-badge clipping fix), `fab307c` (CI-14 Monday integration-test correction), `fcab2cf` (CI-13 Playwright failure-artifact upload), `1d1de4a` (CI-15 guess-request timeout/recovery), and `294ff0b` (CI-15 request start/end diagnostics). Verify the real repository rather than assuming this list is exhaustive.
+- Classify every finding as **verified current state**, **planned/missing**, **operator-provisioned**, or **unresolved**. Never infer that an external deployment operation happened merely because configuration exists.
 
 ---
 
@@ -65,7 +70,7 @@ Trace the intended Phase 6 scope through:
 - `src/server/auth/auth.ts` (BETTER_AUTH_URL, trustedOrigins, Google OIDC bindings, secret policy)
 - `src/server/middleware/security-headers.ts` and the CSP pre-paint theme script
 - `package.json` scripts (is there a `deploy` script? a `preview`/`types`?) and `wrangler.toml`
-- the current CI workflow (unit-and-build / integration / smoke / e2e) — note there is **no deploy job yet**
+- the current CI workflow (unit-and-build / integration / smoke / e2e) — note there is **no deploy job yet**, and inspect the actual current workflow rather than assuming its permissions or steps from this prompt
 - Neon (Singapore) `DATABASE_URL` usage through the neon-serverless WebSocket driver (`src/server/db/client.ts`)
 
 Explicitly answer:
@@ -88,7 +93,11 @@ At minimum investigate the Phase-6 areas referenced by the architecture and the 
 - settlement cron production verification (UTC `0 16 * * *` = Asia/Manila midnight; `scheduled` export appended by the build patch; `runSettlement` behavior)
 - production origin/CSRF: `BETTER_AUTH_URL` and `trustedOrigins` (currently `localhost:5173` / `127.0.0.1:4173` only) — determine exactly what production requires so Google OIDC and the CSRF origin checks keep working
 - real-user latency measurement from the Philippines: define a concrete, evidence-based methodology (what is measured, where it is sampled from, what the "optimize only with evidence" gate is, and what a regression would look like)
-- a CI **deploy** job (currently absent) that keeps the existing CI-7 … CI-11 architecture intact and only deploys from `main` on a controlled trigger
+- a CI **deploy** job (currently absent) that keeps the existing CI-7 … CI-15 architecture intact and only deploys from `main` on a controlled trigger
+- post-prompt CI changes: CI-13 failure-artifact upload/permissions, CI-14 Monday-specific integration coverage correction, and CI-15 real-Neon guess-request timeout/recovery + diagnostics
+- the current gameplay request path (`src/lib/shared/api/game.ts`, `tests/e2e/game-flow.spec.ts`, `src/server/game/handlers.ts`) specifically for CI-15 deployment implications
+- whether any temporary CI-15 diagnostic logging is still present and must be removed before production
+- the current pre-Phase-6 visual-review status; do not assume automated layout checks constitute final visual sign-off
 
 Do not broaden the phase into unrelated product work.
 
@@ -125,13 +134,35 @@ Audit at minimum:
 
 - settlement cron: how to verify the first production run (wrangler deployments/logs, manual trigger, the `runSettlement` behavior, expected idempotent outcome)
 - latency measurement from the Philippines: define concrete methodology and acceptance evidence (what tooling/probes/RUM, what the baseline is, the evidence gate before any optimization)
+- explicitly distinguish GitHub Actions/CI-runner → Neon latency evidence from real Philippines-user → Cloudflare Worker → Neon latency evidence; CI observations are diagnostic evidence, not the production-user baseline
 - rollback path: versioned deployments / `wrangler rollback`; what "deploy failed" looks like and how to recover
+- CI-15 production-resilience audit: determine whether the 15-second client timeout/recovery is appropriate for production, whether a timed-out request could still commit server-side, how retries interact with server locking/idempotency, and what evidence is needed before changing this behavior
+- temporary diagnostic logging audit: determine whether current `[game-guess] ... word=...` markers leak sensitive/private answer material into logs and explicitly decide what must be removed or retained before production
 
 ### CI deploy workflow
 
-- the existing four-job CI (unit-and-build, integration on ephemeral postgres, smoke, e2e on shared Neon with the CI-9/CI-10 gates) — Phase 6 must preserve it
-- what a deploy job must do: gate on the four jobs, build the production artifact, run `verify:bundle`, provision/validate secrets + rate-limit namespaces, seed the answer pool, deploy, and smoke the deployed URL
-- where credentials for deployment live (GitHub secrets / OIDC) and what the minimum permissions are (the current `permissions` block is `contents: read` only — deployment will need more; specify exactly what)
+- the existing four-job CI (unit-and-build, integration on ephemeral postgres, smoke, e2e on shared Neon with the CI-9/CI-10 gates), plus later CI-13 artifact-upload behavior, CI-14 Monday coverage correction, and CI-15 timeout/recovery diagnostics — Phase 6 must preserve the current behavior unless the plan explicitly identifies a deployment remediation
+- inspect the actual current `.github/workflows/ci.yml`; do not assume the workflow-wide `permissions` block describes every job, because CI-13 added a job-level `actions: write` permission for failure-artifact upload
+- what a deploy job must do: gate on the current verification jobs, build the production artifact, run `verify:bundle`, validate required secrets/bindings and rate-limit namespaces, handle the private answer-pool seed under the defined secrecy contract, deploy, and smoke the deployed URL
+- distinguish operator-provisioned one-time infrastructure/configuration (production secrets, production origin, rate-limit namespace creation, private seed source) from repeatable CI deployment actions; do not assume CI should mutate production infrastructure on every deploy
+- where deployment credentials live (GitHub secrets / OIDC) and the minimum exact GitHub permissions required by the chosen deployment mechanism; do not broaden permissions merely because deployment exists
+
+---
+
+## 3A. Separate three readiness states
+
+The planning package MUST distinguish these three states:
+
+### Planning readiness
+The repository contains enough verified information to define an implementation-grade Phase 6 plan.
+
+### Implementation readiness
+The Phase 6 plan, handoff, and implementation prompt are complete enough that a separate implementation agent can execute the deployment work without guessing.
+
+### Production-provisioning readiness
+The actual external prerequisites are available and verified: production Cloudflare configuration, real rate-limit namespace IDs, production secrets, production origin/domain, the private answer-pool seed source, and required deployment credentials.
+
+Do not label the repository "production-ready" merely because it is planning-ready or because local/CI checks are green.
 
 ---
 
@@ -149,7 +180,7 @@ Likely areas include:
 - production origin/CSRF/OIDC configuration (`BETTER_AUTH_URL`, `trustedOrigins`)
 - settlement cron production verification plan
 - real-user latency measurement methodology from the Philippines (evidence gate before optimization)
-- CI deploy workflow (without regressing CI-7 … CI-11)
+- CI deploy workflow (without regressing CI-7 … CI-15)
 - rollback and incident-recovery steps
 
 But do not mark anything in scope just because it sounds deploy-related. Every item must be justified by repository evidence.
@@ -163,7 +194,7 @@ Explicitly identify things such as:
 - changing product thresholds (3/8), admin emails, or datasets
 - loosening any security/secrecy gate
 - speculative performance optimization without a measured baseline
-- redesigning the CI architecture already established in CI-7 … CI-11
+- redesigning the CI architecture already established in CI-7 … CI-15
 - anything that belongs to a later phase
 
 ---
@@ -282,7 +313,13 @@ Record anything that should remain product-tunable or be deferred (e.g. exact ra
 
 ## P. Explicit invariants
 
-List the Phase 0–5 + pre-Phase-6 + CI-7…CI-11 behavior that Phase 6 MUST NOT break.
+List the Phase 0–5 + pre-Phase-6 + CI-7…CI-15 behavior that Phase 6 MUST NOT break.
+
+This includes, at minimum:
+- CI-13 failure-artifact upload behavior and its narrowly scoped permissions
+- CI-14 Monday-safe integration-test behavior
+- CI-15 guess-request timeout/recovery behavior unless the Phase 6 plan explicitly justifies a deployment remediation
+- answer secrecy: do not introduce permanent production logs containing guess words or private answer material
 
 A Phase 6 plan is NOT complete until another agent can implement it without guessing what "deployed" means.
 
@@ -297,7 +334,7 @@ Create:
 This must allow a fresh implementation chat to continue without access to the reasoning history. Include:
 
 - exact repository HEAD/branch
-- pre-Phase-6 and CI-7 … CI-11 dependency summary
+- pre-Phase-6 and CI-7 … CI-15 dependency summary
 - deployment-readiness baseline
 - every unresolved decision (never silently resolved)
 - the implementation slices
@@ -335,7 +372,7 @@ This must be the executable prompt for a separate implementation chat. It must t
 
 The implementation prompt must explicitly state:
 
-**Do not modify Phase 0–5 / pre-Phase-6 behavior, the zero-migration invariant, answer-pool secrecy, or the CI-7 … CI-11 architecture unless the Phase 6 plan explicitly identifies it as a deployment remediation.**
+**Do not modify Phase 0–5 / pre-Phase-6 behavior, the zero-migration invariant, answer-pool secrecy, or the CI-7 … CI-15 architecture unless the Phase 6 plan explicitly identifies it as a deployment remediation.**
 
 ---
 
@@ -369,10 +406,12 @@ Those belong to the later Phase 6 implementation pass.
 
 Before finishing, perform a final cross-check. Verify:
 
-- the Phase 6 plan matches the current repository and deployment surface
+- the Phase 6 plan matches the **current** repository and deployment surface, including commits made after this prompt was authored
 - the Phase 6 plan matches Architecture-v3 and Specifications-v1
 - Phase 0–5 / pre-Phase-6 invariants are preserved (zero migration, answer secrecy, thresholds, admin emails)
-- CI-7 … CI-11 architecture is preserved
+- CI-7 … CI-15 architecture and hardening are preserved
+- CI-15 timeout/recovery is explicitly assessed for production suitability
+- temporary CI-15 guess-word diagnostics are explicitly resolved before production
 - every secret/binding/namespace is fully specified (placeholders flagged, not invented)
 - production origin/CSRF/OIDC is fully specified
 - seeding and cron verification are fully specified
@@ -387,4 +426,5 @@ Finally, give me:
 2. the highest-risk deployment gaps discovered
 3. any genuine blockers to implementation
 4. the exact files created
-5. confirmation that NO deployment or source-code implementation was performed
+5. confirmation that NO deployment, secret/binding provisioning, database seeding, or source-code/CI implementation was performed
+6. a separate classification of planning readiness, implementation readiness, and production-provisioning readiness
