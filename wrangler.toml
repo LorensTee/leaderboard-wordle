@@ -25,22 +25,22 @@ crons = ["0 16 * * *"]
 # deploy — never invent credentials; exact steps in the Phase-5 handoff.
 [[ratelimits]]
 name = "AUTH_RATE_LIMITER"
-namespace_id = "00000000-0000-0000-0000-000000000000"
+namespace_id = "1001"
 simple = { limit = 10, period = 60 }
 
 [[ratelimits]]
 name = "GAME_RATE_LIMITER"
-namespace_id = "00000000-0000-0000-0000-000000000000"
+namespace_id = "1002"
 simple = { limit = 30, period = 60 }
 
 [[ratelimits]]
 name = "ME_RATE_LIMITER"
-namespace_id = "00000000-0000-0000-0000-000000000000"
+namespace_id = "1003"
 simple = { limit = 10, period = 60 }
 
 [[ratelimits]]
 name = "ADMIN_RATE_LIMITER"
-namespace_id = "00000000-0000-0000-0000-000000000000"
+namespace_id = "1004"
 simple = { limit = 20, period = 60 }
 
 # Phase-6 J-A2 — Analytics Engine dataset for the game-API timing beacon
