@@ -1,4 +1,4 @@
-// Phase-6 production OAuth regression — request-scoped database lifecycle.
+// Phase-6 production OAuth regression — database lifecycle per runtime.
 //
 // Root cause: getDb()/getAuth() used module-level memos, so every request
 // after the first reused a Neon WebSocket client created inside request #1.
@@ -7,26 +7,49 @@
 // from a different request handler), which is exactly what the production
 // Google OAuth callback hit when Better Auth read the `verification` table.
 //
-// The unit layer cannot reproduce workerd's runtime error, so these tests
-// pin the INVARIANT that makes it impossible: a database client (and the
-// Better Auth instance embedding it) belongs to exactly one request
-// invocation — never a module-level memo shared across invocations.
-import { describe, expect, it, vi } from 'vitest';
-import { getDb, getRequestStore, withDbScope } from '../../src/server/db/memo';
+// The lifecycle is runtime-selected (src/server/db/memo.ts):
+//   - workerd (production, wrangler dev): one client per request/invocation
+//     — never shared across invocations, closed at scope exit. These tests
+//     PIN that invariant (mode forced to 'workerd'); the unit layer cannot
+//     reproduce workerd's runtime error, so the invariant is what makes the
+//     error impossible.
+//   - Node/Bun (vite dev, vite preview/E2E, CI, tests): warm per-URL memo —
+//     no request-bound I/O exists there, and a per-request connection costs
+//     seconds from far runners (the E2E CI regression). The second group
+//     pins that behavior so the two modes cannot silently drift.
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { getDb, getRequestStore, isWorkerdRuntime, setDbRuntimeMode, withDbScope } from '../../src/server/db/memo';
 import { getAuth } from '../../src/server/auth/auth';
 import { createDb, type Db } from '../../src/server/db/client';
 
 const URL = 'postgresql://unused:unused@localhost:5432/unused';
+const OTHER_URL = 'postgresql://other:other@localhost:5432/other';
 const ENV = { DATABASE_URL: URL, BETTER_AUTH_SECRET: 'test-secret' };
 
 function spyOnEnd(db: Db) {
-	// The pools never connect in unit tests (inert URL); stub `end` so the
+	// The pools never connect in unit tests (inert URLs); stub `end` so the
 	// close path is observable without touching the network.
 	return vi.spyOn(db.$client, 'end').mockResolvedValue(undefined);
 }
 
-describe('request-scoped database lifecycle (Workers cross-request I/O regression)', () => {
-	// --- no module-level memo anywhere (the production bug) ---
+describe('runtime selection', () => {
+	afterAll(() => setDbRuntimeMode('auto'));
+
+	it('auto-detects the Node/Bun family under vitest (warm mode)', () => {
+		expect(isWorkerdRuntime()).toBe(false);
+	});
+
+	it('can be pinned to workerd or node for tests/ops', () => {
+		setDbRuntimeMode('workerd');
+		expect(isWorkerdRuntime()).toBe(true);
+		setDbRuntimeMode('node');
+		expect(isWorkerdRuntime()).toBe(false);
+	});
+});
+
+describe('workerd runtime (production): one client per request, never shared', () => {
+	beforeAll(() => setDbRuntimeMode('workerd'));
+	afterAll(() => setDbRuntimeMode('auto'));
 
 	it('sequential request invocations never share a database client', () => {
 		const first = getDb(ENV);
@@ -45,8 +68,6 @@ describe('request-scoped database lifecycle (Workers cross-request I/O regressio
 		});
 		expect(() => getDb({})).toThrow('DATABASE_URL is not configured');
 	});
-
-	// --- withDbScope: one client per request, shared inside the request ---
 
 	it('sequential scopes (simulated sequential Worker requests) never share a client, and each closes its own pool', async () => {
 		const first = { db: undefined as unknown as Db, end: undefined as unknown as ReturnType<typeof spyOnEnd> };
@@ -121,5 +142,39 @@ describe('request-scoped database lifecycle (Workers cross-request I/O regressio
 			expect(getRequestStore()?.owned.size).toBe(0);
 		});
 		expect(end).not.toHaveBeenCalled();
+	});
+});
+
+describe('node/Bun runtime (dev, preview/E2E, CI): warm per-URL memo', () => {
+	beforeAll(() => setDbRuntimeMode('node'));
+	afterAll(() => setDbRuntimeMode('auto'));
+
+	it('getDb returns the same warm client across invocations (one pool per DATABASE_URL)', () => {
+		const first = getDb(ENV);
+		const second = getDb(ENV);
+		expect(first).toBe(second);
+		expect(first.$client).toBe(second.$client);
+	});
+
+	it('different DATABASE_URL values get separate pools', () => {
+		expect(getDb(ENV)).not.toBe(getDb({ DATABASE_URL: OTHER_URL }));
+	});
+
+	it('getAuth returns the same warm instance across invocations', () => {
+		expect(getAuth(ENV)).toBe(getAuth(ENV));
+	});
+
+	it('withDbScope is a passthrough: no store, no close, nothing leaks into the warm memo', async () => {
+		const db = getDb(ENV);
+		const end = spyOnEnd(db);
+		await withDbScope(async () => {
+			expect(getDb(ENV)).toBe(db);
+			expect(getRequestStore()).toBeUndefined();
+		});
+		expect(end).not.toHaveBeenCalled();
+	});
+
+	it('getDb still fails closed without DATABASE_URL (settlement/CLI contract)', () => {
+		expect(() => getDb({})).toThrow('DATABASE_URL is not configured');
 	});
 });

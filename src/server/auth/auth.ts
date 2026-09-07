@@ -5,7 +5,7 @@
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { createDb, type Db } from '../db/client';
-import { getDbForAuth, getRequestStore, INERT_DB_URL } from '../db/memo';
+import { getDbForAuth, getRequestStore, INERT_DB_URL, isWorkerdRuntime } from '../db/memo';
 
 export { INERT_DB_URL };
 
@@ -104,17 +104,22 @@ export type Auth = ReturnType<typeof createAuth>;
 /** getSession result shape: { session, user } (docs: integrations/svelte-kit). */
 export type SessionData = Auth['$Infer']['Session'];
 
-// Request-scoped instance cache (Phase-6 fix): a Better Auth instance must
-// not outlive the request that built it — it embeds the Neon WebSocket
-// client (via getDbForAuth unless a client is injected), and reusing that
-// request-bound I/O object across Worker requests is exactly what the
-// runtime rejects with "Cannot perform I/O on behalf of a different
-// request". Authorization/session state never lives on the instance (all
-// state is in the DB), so per-request instances are behavior-identical;
-// rotation and misconfiguration still fail fast because every request
-// rebuilds from the current bindings. The cache key covers the binding
-// values that define the session-signing identity (DATABASE_URL +
-// BETTER_AUTH_SECRET).
+// Instance lifecycle follows the database lifecycle (src/server/db/memo.ts;
+// runtime-selected by navigator UA): a Better Auth instance must not
+// outlive the request that built it ON workerd — it embeds the request-
+// bound Neon WebSocket client, and reusing it across Worker requests is
+// exactly what the runtime rejects with "Cannot perform I/O on behalf of a
+// different request". Authorization/session state never lives on the
+// instance (all state is in the DB), so per-request instances are
+// behavior-identical; rotation and misconfiguration still fail fast
+// because every request rebuilds from the current bindings. On Node/Bun
+// (dev, preview/E2E, tests) there is no request-bound I/O, so the auth
+// instance is cached warm — the historical pre-fix behavior CI was tuned
+// on. The cache key covers the binding values that define the
+// session-signing identity (DATABASE_URL + BETTER_AUTH_SECRET).
+let cachedAuth: Auth | null = null;
+let cachedKey = '';
+
 export function getAuth(env: AuthBindings, db?: Db): Auth {
 	// Caller-injected client (integration harness under LOCAL_PG=1) is a
 	// different identity than the env-derived Neon client — keep it out of
@@ -124,9 +129,9 @@ export function getAuth(env: AuthBindings, db?: Db): Auth {
 	const authDb = db ?? getDbForAuth(env);
 	const store = getRequestStore();
 	if (store) {
-		// One Auth per request (shared by the SvelteKit hooks and the Hono
-		// surface); its database client is closed by withDbScope when the
-		// request ends.
+		// workerd, inside a request scope: one Auth per request (shared by
+		// the SvelteKit hooks and the Hono surface); its database client is
+		// closed by withDbScope when the request ends.
 		let auth = store.auths.get(key);
 		if (!auth) {
 			auth = createAuth(env, authDb);
@@ -134,9 +139,18 @@ export function getAuth(env: AuthBindings, db?: Db): Auth {
 		}
 		return auth;
 	}
-	// Outside a request scope (CLI/unit tests): a fresh instance per call —
-	// never a module-level memo (see the lifecycle note in src/server/db/
-	// memo.ts). Cross-request reuse of request-bound Neon clients is
-	// impossible by construction.
-	return createAuth(env, authDb);
+	if (isWorkerdRuntime()) {
+		// workerd outside a scope (a code path that skipped withDbScope): a
+		// fresh instance per call — NEVER a module-level memo (see the
+		// lifecycle note above; cross-request reuse of request-bound Neon
+		// clients must stay impossible by construction).
+		return createAuth(env, authDb);
+	}
+	// Node/Bun: warm module memo. Same keying as the workerd per-request
+	// memo; a key change rebuilds, never silently reuses.
+	if (!cachedAuth || cachedKey !== key) {
+		cachedAuth = createAuth(env, authDb);
+		cachedKey = key;
+	}
+	return cachedAuth;
 }
