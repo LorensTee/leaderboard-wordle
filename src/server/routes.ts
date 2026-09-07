@@ -20,6 +20,7 @@ import { registerGameRoutes } from './game/handlers';
 import { createGameService } from './game/service';
 import { registerLeaderboardRoutes } from './leaderboard/handlers';
 import { createLeaderboardService } from './leaderboard/service';
+import { registerTelemetryRoutes, writeLatencyDataPoint, type AnalyticsEngineDatasetBinding } from './telemetry/handlers';
 import { authContext, requireAdmin, requireAuth, type AuthContext } from './middleware/auth';
 import { csrfProtection } from './middleware/csrf';
 import {
@@ -52,6 +53,9 @@ export type HonoBindings = {
 	GAME_RATE_LIMITER?: RateLimitBinding;
 	ME_RATE_LIMITER?: RateLimitBinding;
 	ADMIN_RATE_LIMITER?: RateLimitBinding;
+	// Phase-6 J-A2 — Analytics Engine dataset for the game-API timing beacon.
+	// Optional: absent (local dev / tests / preview) → telemetry no-ops.
+	LATENCY?: AnalyticsEngineDatasetBinding;
 };
 
 /** Rate-limit binding resolver: undefined (→ pass-through) when absent. */
@@ -150,6 +154,16 @@ const base = new Hono<AppEnv>()
 			getBinding: getRateLimitBinding(RATE_LIMIT_CLASSES.me.bindingName)
 		})
 	)
+	// Phase-6 J-A2 — the telemetry beacon shares the `me` class (plan §E.8:
+	// identity known after requireAuth → per-user key; a beacon burst does
+	// not affect other classes). Beacon 429s are client-ignored (sendBeacon).
+	.use('/api/telemetry', requireAuth)
+	.use(
+		'/api/telemetry',
+		createRateLimitMiddleware('me', {
+			getBinding: getRateLimitBinding(RATE_LIMIT_CLASSES.me.bindingName)
+		})
+	)
 	.use(
 		'/api/admin/*',
 		createRateLimitMiddleware('admin', {
@@ -170,23 +184,28 @@ const base = new Hono<AppEnv>()
 // Phase-2 profile routes chain AFTER the game routes so the Hono AppType
 // accumulates both schemas (chain-preserved RPC typing). Phase-3 leaderboard
 // and Phase-4 admin routes chain last with the same pattern.
-export const app = registerAdminRoutes(
-	registerLeaderboardRoutes(
-		registerProfileRoutes(
-			registerGameRoutes(base, {
-				getService: (c) => createGameService(getDb(c.env))
-			}),
+export const app = registerTelemetryRoutes(
+	registerAdminRoutes(
+		registerLeaderboardRoutes(
+			registerProfileRoutes(
+				registerGameRoutes(base, {
+					getService: (c) => createGameService(getDb(c.env))
+				}),
+				{
+					getService: (c) => createProfileService(getDb(c.env))
+				}
+			),
 			{
-				getService: (c) => createProfileService(getDb(c.env))
+				getService: (c) => createLeaderboardService(getDb(c.env))
 			}
 		),
 		{
-			getService: (c) => createLeaderboardService(getDb(c.env))
+			getService: (c) => createAdminPuzzleService(getDb(c.env))
 		}
 	),
-	{
-		getService: (c) => createAdminPuzzleService(getDb(c.env))
-	}
+	// Phase-6 J-A2 — Analytics Engine writer (PH-filtered; no-op without the
+	// binding). Chained last so the AppType accumulates the telemetry schema.
+	{ write: writeLatencyDataPoint }
 )
 	// NG21 — centralized error/notFound handling.
 	.onError(onErrorHandler)

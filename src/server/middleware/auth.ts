@@ -50,6 +50,28 @@ export type AuthVariables = { auth: AuthContext };
 export type SessionResolver = (env: AuthBindings, headers: Headers) => Promise<AuthContext>;
 
 /**
+ * D-ADMINSEP — parse the `ADMIN_EMAIL` allowlist (Phase-6 deployment
+ * remediation, plan §E.3: the product lock requires BOTH admin addresses; a
+ * single-string exact match could only ever promote one). Separator: comma
+ * (`,`), pinned by tests. Each entry is trimmed + lowercased (email identity
+ * is case-insensitive — better-auth compares lowercased emails; Google
+ * Workspace identities may be stored mixed-case verbatim), empty entries are
+ * ignored, duplicates are deduped. Empty/missing input → empty allowlist →
+ * no admin ever promotes (NG18: manual operator bootstrap).
+ */
+export function parseAdminEmailAllowlist(raw: string | undefined): string[] {
+	if (!raw) return [];
+	return [
+		...new Set(
+			raw
+				.split(',')
+				.map((entry) => entry.trim().toLowerCase())
+				.filter((entry) => entry.length > 0)
+		)
+	];
+}
+
+/**
  * Default resolver: Better Auth's own session lookup (cookies/headers only —
  * never SvelteKit `event.locals`).
  */
@@ -62,9 +84,9 @@ export const resolveAuthSession: SessionResolver = async (env, headers) => {
 /**
  * NG18 admin bootstrap — promote-only, idempotent, keyed on the verified
  * email (Architecture §Admin bootstrap). Runs from authContext on every
- * resolved session for the configured email; the WHERE clause makes it a
- * no-op after the first promotion. NEVER demotes: changing ADMIN_EMAIL
- * demotes nobody; a no-admin state is a manual operator bootstrap.
+ * resolved session whose email is IN the ADMIN_EMAIL allowlist; the WHERE
+ * clause makes it a no-op after the first promotion. NEVER demotes: changing
+ * ADMIN_EMAIL demotes nobody; a no-admin state is a manual operator bootstrap.
  * Exported for the integration suite (real DB semantics against Neon).
  */
 export async function applyAdminBootstrap(
@@ -80,17 +102,17 @@ export async function applyAdminBootstrap(
 ): Promise<NonNullable<AuthContext>> {
 	// `c.env` can be undefined in Hono's app.request() test path (routes.ts
 	// guards the same case for /api/auth/*) — a missing env means no
-	// bootstrap to apply.
-	// Email identity is case-insensitive (better-auth's own account linking
-	// compares lowercased emails; Google Workspace identities may be stored
-	// mixed-case verbatim) — compare trimmed + lowercased on BOTH sides so a
-	// mixed-case ADMIN_EMAIL binding still promotes (review finding).
-	const configured = env?.ADMIN_EMAIL?.trim();
+	// bootstrap to apply. The allowlist was compared trimmed + lowercased on
+	// BOTH sides by parseAdminEmailAllowlist + the user-email normalization
+	// below, so a mixed-case/padded ADMIN_EMAIL binding still promotes
+	// (review finding, preserved from the single-address era).
+	const allowlist = parseAdminEmailAllowlist(env?.ADMIN_EMAIL);
 	const userEmail = auth.user.email?.trim().toLowerCase();
 	if (
-		!configured ||
 		!env ||
-		userEmail !== configured.toLowerCase() ||
+		allowlist.length === 0 ||
+		!userEmail ||
+		!allowlist.includes(userEmail) ||
 		auth.user.role === 'admin'
 	) {
 		return auth;

@@ -42,3 +42,22 @@ simple = { limit = 10, period = 60 }
 name = "ADMIN_RATE_LIMITER"
 namespace_id = "00000000-0000-0000-0000-000000000000"
 simple = { limit = 20, period = 60 }
+
+# Phase-6 J-A2 — Analytics Engine dataset for the game-API timing beacon
+# (mandatory verification infrastructure, plan §J; timings only, never
+# words/secrets/user ids). The operator creates the `latency` dataset;
+# binding name LATENCY follows the uppercase binding convention (ASSETS /
+# *_RATE_LIMITER). Absent binding ⇒ telemetry no-ops (local/tests/preview).
+[[analytics_engine_datasets]]
+binding = "LATENCY"
+dataset = "latency"
+
+# Phase-6 F.1 — required Worker secrets (defense-in-depth; enforced at
+# `wrangler deploy`/`wrangler versions upload`, warning-only in the local
+# preview/.dev.vars path so the CI e2e preview is unaffected). Values are
+# NEVER in this repo — provisioned per plan §I.3 on the first bootstrap
+# (`wrangler versions secret put`/dashboard, not a gate-bypassing `wrangler
+# secret put`), `wrangler secret put` afterwards. deploy.yml Gate 5
+# (`wrangler secret list` names) remains the explicit pre-deploy gate.
+[secrets]
+required = ["DATABASE_URL", "BETTER_AUTH_SECRET", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "ADMIN_EMAIL", "BETTER_AUTH_URL"]

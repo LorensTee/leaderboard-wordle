@@ -89,13 +89,18 @@ export function registerGameRoutes<T extends Hono<AppEnv>>(app: T, deps: GameRou
 			//   "start"+"done" → the handler completed; the response was lost
 			//                    on the wire after c.json
 			// console.error surfaces in the CI [WebServer] output (same as the
-			// settlement/admin logger defaults).
-			console.error(
-				`[game-guess] start user=${user.id} game=${gameId} word=${word}`
-			);
+			// settlement/admin logger defaults). PHASE-6 REMEDIATION (plan
+			// E.2): the markers must NEVER carry the guess word (for a solved
+			// day it equals the answer) or user.id (PII) — production logs
+			// are answer-free by construction. Timing + status stay (both are
+			// already in the response payload); requestId correlates the pair
+			// without identity data.
+			const startedAt = Date.now();
+			const requestId = crypto.randomUUID();
+			console.error(`[game-guess] start game=${gameId} requestId=${requestId}`);
 			const outcome = await deps.getService(c).submitGuess(user.id, gameId, word);
 			console.error(
-				`[game-guess] done user=${user.id} game=${gameId} word=${word} guess=${outcome.guess.guessNumber} status=${outcome.game.status}`
+				`[game-guess] done game=${gameId} requestId=${requestId} guess=${outcome.guess.guessNumber} status=${outcome.game.status} duration_ms=${Date.now() - startedAt}`
 			);
 			return c.json(outcome, 200);
 		});

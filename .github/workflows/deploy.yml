@@ -1,0 +1,158 @@
+# Phase-6 K — controlled production deployment (plan docs/phases/phase 6/phase-6-plan.md §K).
+#
+# Design (plan §K.1/K.2): deployment is a SEPARATE workflow, manually
+# dispatched, that consumes an already-successful ci.yml run for the exact
+# SHA being deployed — ci.yml has no workflow_dispatch and its integration/
+# e2e jobs are push-gated, so an in-workflow deploy job could never satisfy
+# `needs`. ci.yml stays byte-identical (CI-7…CI-15 preserved).
+#
+# Invariants:
+#   - checked-out SHA = CI-tested SHA = deployed SHA (Gates 1+2);
+#   - the six Worker runtime secret VALUES never enter GitHub — they are
+#     verified by NAME pre-deploy (Gate 5) and post-deploy (receipt);
+#   - the rate-limit namespace id placeholders can never ship (Gate 3);
+#   - permissions: contents: read + actions: read only; NO write scope.
+#
+# First-ever bootstrap (plan §I.3): create/upload the initial Worker version
+# WITHOUT a public deployment (`wrangler versions upload` or dashboard) and
+# set the six secrets via `wrangler versions secret put` or the dashboard
+# "Variables and Secrets" — ordinary `wrangler secret put` may
+# create+deploy a version and bypass this workflow's gates.
+name: Deploy (production)
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'git ref to deploy (must be main)'
+        required: false
+        default: 'main'
+
+permissions:
+  contents: read
+  actions: read        # needed to query ci.yml run status via the API (read-only)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref || 'main' }}
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: latest
+      # GATE 1 — only main is deployable. The `ref` input is future-proofing only;
+      # anything other than main aborts before anything is built or deployed.
+      - name: Gate — ref input must be main
+        run: |
+          if [ "${{ inputs.ref }}" != "main" ]; then
+            echo "::error::deploy.yml only deploys main (inputs.ref=${{ inputs.ref }})"
+            exit 1
+          fi
+      # GATE 2 — the EXACT checked-out commit is the commit with a green ci.yml run.
+      # Resolve the actual checked-out SHA (not $GITHUB_SHA, whose meaning differs on
+      # workflow_dispatch) and require: checked-out SHA == dispatch-time main SHA AND
+      # that exact SHA has a successful push-triggered ci.yml run. If main advanced
+      # between dispatch and checkout, DEPLOY_SHA != GITHUB_SHA and the CI query has
+      # no green run for DEPLOY_SHA yet → fail and ask for a re-dispatch. Invariant:
+      # checked-out SHA = CI-tested SHA = deployed SHA. The query uses the
+      # workflow-SPECIFIC endpoint (actions/workflows/ci.yml/runs) with exact head_sha
+      # (no per_page truncation — an older but valid SHA is never rejected because newer
+      # green runs exist), so ONLY a successful ci.yml run can satisfy the gate — not a
+      # run of any other workflow. `gh` is preinstalled on ubuntu-latest; GH_TOKEN
+      # scoped to actions: read.
+      - name: Gate — green CI run exists for the exact checked-out SHA
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DEPLOY_SHA="$(git rev-parse HEAD)"
+          echo "Deploying SHA: $DEPLOY_SHA"
+          if [ "$DEPLOY_SHA" != "$GITHUB_SHA" ]; then
+            echo "::error::checked-out SHA ($DEPLOY_SHA) differs from the dispatch-time main SHA ($GITHUB_SHA) — main advanced between dispatch and checkout; re-dispatch"
+            exit 1
+          fi
+          COUNT=$(gh api "repos/${{ github.repository }}/actions/workflows/ci.yml/runs?head_sha=$DEPLOY_SHA&branch=main&event=push&status=success&per_page=1" --jq '.total_count')
+          if [ "${COUNT:-0}" -lt 1 ]; then
+            echo "::error::no successful ci.yml run found for exact SHA $DEPLOY_SHA on main — wait for CI or re-run it"
+            exit 1
+          fi
+      - name: Install
+        run: bun install --frozen-lockfile
+      - name: Production build (Cloudflare Workers)
+        run: bun run build
+      - name: Patched-worker assertion (cron `scheduled` export present)
+        run: grep -q "export { scheduled }" .svelte-kit/cloudflare/_worker.js
+      - name: Answer-pool secrecy proof
+        run: bun run verify:bundle
+      # GATE 3 — no placeholder rate-limit namespace ids ship to production.
+      - name: Gate — rate-limit namespace placeholders absent
+        run: |
+          if grep -q '00000000-' wrangler.toml; then
+            echo "::error::rate-limit namespace_id placeholders still in wrangler.toml — provision namespaces first (plan I.1)"
+            exit 1
+          fi
+      # GATE 4 — the GitHub deployment credentials exist.
+      - name: Gate — Cloudflare deployment credentials present
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID secrets are required"
+            exit 1
+          fi
+          if [ -z "$PRODUCTION_URL" ]; then
+            echo "::error::PRODUCTION_URL variable is required (set to https://<origin> once the origin decision is made)"
+            exit 1
+          fi
+      # GATE 5 — PRE-DEPLOY Worker runtime secrets present by NAME (values never in GitHub).
+      # Runs BEFORE deploy so a missing BETTER_AUTH_SECRET / DATABASE_URL / … blocks the
+      # deploy instead of shipping a broken version and failing after the fact. On the
+      # first-ever bootstrap, provision the six secrets per plan §I.3 (versioned/
+      # non-deploying mechanism or dashboard bootstrap — NOT ordinary `wrangler secret
+      # put`, which can create+deploy a version and bypass this gate).
+      - name: Pre-deploy gate — Worker runtime secrets present (names only)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          LIST=$(npx wrangler secret list) || { echo "::error::wrangler secret list failed — the six Worker secrets must exist before deploy; on the FIRST-ever bootstrap follow plan §I.3 (wrangler versions secret put or the dashboard bootstrap — ordinary \`wrangler secret put\` may create+deploy a version and bypass the deploy gate)"; exit 1; }
+          for s in DATABASE_URL BETTER_AUTH_SECRET GOOGLE_CLIENT_ID GOOGLE_CLIENT_SECRET ADMIN_EMAIL BETTER_AUTH_URL; do
+            echo "$LIST" | grep -q "$s" || { echo "::error::Worker secret $s missing — set it via \`wrangler secret put $s\` (plan F.1)"; exit 1; }
+          done
+      # GATE 6 — namespace/binding validation: placeholder grep + wrangler dry-run so the
+      # actual rate-limit and ASSETS bindings resolve before any deploy (a typo'd or
+      # non-UUID namespace_id is caught here, not at deploy time).
+      - name: Pre-deploy gate — wrangler dry-run (bindings resolve)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy --dry-run
+      - name: Deploy (versioned deployment)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy
+      # RECEIPT — post-deploy Worker-secret confirmation (Gate 5 pre-deploy is the actual
+      # gate; this confirms the deployed environment still carries the secrets).
+      - name: Post-deploy confirmation — Worker runtime secrets present (names only)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          LIST=$(npx wrangler secret list)
+          for s in DATABASE_URL BETTER_AUTH_SECRET GOOGLE_CLIENT_ID GOOGLE_CLIENT_SECRET ADMIN_EMAIL BETTER_AUTH_URL; do
+            echo "$LIST" | grep -q "$s" || { echo "::error::Worker secret $s missing after deploy — environment drift"; exit 1; }
+          done
+      # SMOKE — post-deploy smoke against the production URL.
+      - name: Post-deploy smoke
+        env:
+          PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
+        run: |
+          code=$(curl -fsS -o /dev/null -w '%{http_code}' "$PRODUCTION_URL/" ) || exit 1
+          [ "$code" = "200" ] || { echo "::error::$PRODUCTION_URL/ returned $code"; exit 1; }
+          body=$(curl -fsS "$PRODUCTION_URL/api/game/current") || exit 1
+          echo "$body" | grep -q '"UNAUTHORIZED"' || { echo "::error::/api/game/current did not return the NG21 401 UNAUTHORIZED envelope"; exit 1; }
+          curl -fsSI "$PRODUCTION_URL/" | grep -qi 'x-content-type-options: nosniff' || exit 1
