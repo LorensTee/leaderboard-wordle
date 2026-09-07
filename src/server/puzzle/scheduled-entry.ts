@@ -13,7 +13,7 @@
 // project's TS program (wrangler types --include-runtime=false; the DOM libs
 // would conflict), so the consumed platform shapes are declared structurally
 // below — identical at runtime, hermetic to type-check.
-import { getDb } from '../db/memo';
+import { getDb, withDbScope } from '../db/memo';
 import type { HonoBindings } from '../routes';
 import { runSettlement } from './settlement';
 
@@ -55,31 +55,33 @@ export type ExportedHandlerScheduledHandler<Env = unknown> = (
  * The awaited work itself keeps the worker alive (no ctx.wrap needed for the
  * settled work — the handler promise covers it).
  */
-export const scheduled: ExportedHandlerScheduledHandler<HonoBindings> = async (
-	controller,
-	env
-) => {
-	const startedAt = new Date().toISOString();
-	try {
-		const report = await runSettlement(getDb(env));
-		console.log('[settlement] run complete', {
-			cron: controller.cron,
-			startedAt,
-			finalized: report.finalized.length,
-			forfeitedCount: report.forfeitedCount,
-			completedCount: report.completedCount,
-			activatedToday: report.activatedToday,
-			alreadyActive: report.alreadyActive,
-			missingToday: report.missingToday
-		});
-	} catch (err) {
-		console.error(
-			'[settlement] run failed',
-			{ cron: controller.cron, startedAt, error: err instanceof Error ? err.message : String(err) },
-			err
-		);
-		// Surface the failure: the invocation must be marked FAILED (see the
-		// failure-surfacing note above). Never swallow.
-		throw err;
-	}
-};
+export const scheduled: ExportedHandlerScheduledHandler<HonoBindings> = (controller, env) =>
+	// Phase-6 fix — a cron invocation is its own context: give it a
+	// request-scoped database client (same Workers rule as fetch: request-
+	// bound Neon I/O must not be reused across invocations) and close it
+	// when the run completes.
+	withDbScope(async () => {
+		const startedAt = new Date().toISOString();
+		try {
+			const report = await runSettlement(getDb(env));
+			console.log('[settlement] run complete', {
+				cron: controller.cron,
+				startedAt,
+				finalized: report.finalized.length,
+				forfeitedCount: report.forfeitedCount,
+				completedCount: report.completedCount,
+				activatedToday: report.activatedToday,
+				alreadyActive: report.alreadyActive,
+				missingToday: report.missingToday
+			});
+		} catch (err) {
+			console.error(
+				'[settlement] run failed',
+				{ cron: controller.cron, startedAt, error: err instanceof Error ? err.message : String(err) },
+				err
+			);
+			// Surface the failure: the invocation must be marked FAILED (see the
+			// failure-surfacing note above). Never swallow.
+			throw err;
+		}
+	});

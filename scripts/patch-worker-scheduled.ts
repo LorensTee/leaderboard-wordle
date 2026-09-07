@@ -53,7 +53,16 @@ export async function buildSettlementChunk(
 		// The entry never imports cloudflare:workers (its platform types are
 		// structural, compile-time only) — extern it anyway so a future
 		// platform import stays a runtime binding rather than a bundle error.
-		external: ['cloudflare:workers'],
+		external: [
+			'cloudflare:workers',
+			// Phase-6 fix — the request-scoped db lifecycle (src/server/db/
+			// memo.ts) uses node:async_hooks; esbuild cannot resolve the
+			// `node:` scheme under platform:'browser', but workerd provides
+			// the module at runtime under nodejs_compat (already required by
+			// this deployment), so it stays a runtime binding like
+			// cloudflare:workers.
+			'node:async_hooks'
+		],
 		logLevel: 'warning'
 	};
 	await onBuild(options);

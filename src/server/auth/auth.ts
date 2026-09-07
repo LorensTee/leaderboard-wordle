@@ -5,6 +5,9 @@
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { createDb, type Db } from '../db/client';
+import { getDbForAuth, getRequestStore, INERT_DB_URL } from '../db/memo';
+
+export { INERT_DB_URL };
 
 // Subset of HonoBindings consumed by auth. Structural typing — HonoBindings
 // satisfies this (see routes.ts).
@@ -16,9 +19,10 @@ export type AuthBindings = {
 	GOOGLE_CLIENT_SECRET?: string;
 };
 
-// Inert fallback so this module can be imported without a .env (schema
-// generation, structural tests). Never a real credential.
-export const INERT_DB_URL = 'postgresql://unused:unused@localhost:5432/unused';
+// Inert fallback URL re-exported from the db lifecycle module (src/server/
+// db/memo.ts) so imports like auth.generate.ts keep working. Never a real
+// credential — it lets schema generation / structural tests construct the
+// auth factory without a .env.
 
 // Dev/test-only session secret. Production is the DEFAULT: Workers never
 // set NODE_ENV (nodejs_compat → undefined), so without a real binding the
@@ -100,26 +104,39 @@ export type Auth = ReturnType<typeof createAuth>;
 /** getSession result shape: { session, user } (docs: integrations/svelte-kit). */
 export type SessionData = Auth['$Infer']['Session'];
 
-// Per-isolate memo. The cache key covers the binding values that define the
-// session-signing identity (DATABASE_URL + BETTER_AUTH_SECRET): rotation
-// rebuilds, never silently reuses. Provider/URL overrides intentionally
-// stay out of the key — they are stable per deployment and have no isolated
-// security consequence. Worker env is stable per deployment; a misconfigured
-// deploy therefore fails fast on the first request (module scope cannot read
-// env in workers — the fetch handler is the earliest point) and every
-// subsequent request re-throws.
-let cachedAuth: Auth | null = null;
-let cachedKey = '';
-
+// Request-scoped instance cache (Phase-6 fix): a Better Auth instance must
+// not outlive the request that built it — it embeds the Neon WebSocket
+// client (via getDbForAuth unless a client is injected), and reusing that
+// request-bound I/O object across Worker requests is exactly what the
+// runtime rejects with "Cannot perform I/O on behalf of a different
+// request". Authorization/session state never lives on the instance (all
+// state is in the DB), so per-request instances are behavior-identical;
+// rotation and misconfiguration still fail fast because every request
+// rebuilds from the current bindings. The cache key covers the binding
+// values that define the session-signing identity (DATABASE_URL +
+// BETTER_AUTH_SECRET).
 export function getAuth(env: AuthBindings, db?: Db): Auth {
 	// Caller-injected client (integration harness under LOCAL_PG=1) is a
 	// different identity than the env-derived Neon client — keep it out of
 	// the memo key namespace so an override can never reuse a cached
 	// instance built with the wrong driver.
 	const key = [env.DATABASE_URL, env.BETTER_AUTH_SECRET ?? '', db ? '\u0000client-override' : ''].join('\u0000');
-	if (!cachedAuth || cachedKey !== key) {
-		cachedAuth = createAuth(env, db);
-		cachedKey = key;
+	const authDb = db ?? getDbForAuth(env);
+	const store = getRequestStore();
+	if (store) {
+		// One Auth per request (shared by the SvelteKit hooks and the Hono
+		// surface); its database client is closed by withDbScope when the
+		// request ends.
+		let auth = store.auths.get(key);
+		if (!auth) {
+			auth = createAuth(env, authDb);
+			store.auths.set(key, auth);
+		}
+		return auth;
 	}
-	return cachedAuth;
+	// Outside a request scope (CLI/unit tests): a fresh instance per call —
+	// never a module-level memo (see the lifecycle note in src/server/db/
+	// memo.ts). Cross-request reuse of request-bound Neon clients is
+	// impossible by construction.
+	return createAuth(env, authDb);
 }
