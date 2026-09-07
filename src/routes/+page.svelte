@@ -55,10 +55,6 @@
 			<Sparkles size={26} />
 		</span>
 		<h1 class="text-3xl font-extrabold tracking-tight">Leaderboard Wordle</h1>
-		<p class="max-w-sm text-pretty text-sm text-black/60 dark:text-white/60">
-			One puzzle a day. Six guesses, green and yellow tiles, and a timer that
-			only the server can read.
-		</p>
 	</div>
 
 	{#if user}
@@ -94,8 +90,5 @@
 				Sign in with Google
 			{/if}
 		</button>
-		<p class="text-xs text-black/60 dark:text-white/60">
-			Private play for your group — Google account required.
-		</p>
 	{/if}
 </section>
