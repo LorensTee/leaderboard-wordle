@@ -146,13 +146,20 @@ jobs:
           for s in DATABASE_URL BETTER_AUTH_SECRET GOOGLE_CLIENT_ID GOOGLE_CLIENT_SECRET ADMIN_EMAIL BETTER_AUTH_URL; do
             echo "$LIST" | grep -q "$s" || { echo "::error::Worker secret $s missing after deploy — environment drift"; exit 1; }
           done
-      # SMOKE — post-deploy smoke against the production URL.
+      # SMOKE — post-deploy smoke against the production URL. /api/game/current
+      # is deliberately protected: an unauthenticated request MUST return 401.
+      # Status codes are therefore captured explicitly — `curl -f` must not be
+      # used here, it would treat the correct 401 as a failure (exit 22).
       - name: Post-deploy smoke
         env:
           PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
         run: |
-          code=$(curl -fsS -o /dev/null -w '%{http_code}' "$PRODUCTION_URL/" ) || exit 1
-          [ "$code" = "200" ] || { echo "::error::$PRODUCTION_URL/ returned $code"; exit 1; }
-          body=$(curl -fsS "$PRODUCTION_URL/api/game/current") || exit 1
+          code=$(curl -sS -o /dev/null -w '%{http_code}' "$PRODUCTION_URL/") || { echo "::error::homepage request failed ($PRODUCTION_URL/)"; exit 1; }
+          [ "$code" = "200" ] || { echo "::error::$PRODUCTION_URL/ returned $code, expected 200"; exit 1; }
+          body_file=$(mktemp)
+          code=$(curl -sS -o "$body_file" -w '%{http_code}' "$PRODUCTION_URL/api/game/current") || { echo "::error::/api/game/current request failed"; rm -f "$body_file"; exit 1; }
+          body=$(cat "$body_file")
+          rm -f "$body_file"
+          [ "$code" = "401" ] || { echo "::error::/api/game/current returned $code, expected 401"; exit 1; }
           echo "$body" | grep -q '"UNAUTHORIZED"' || { echo "::error::/api/game/current did not return the NG21 401 UNAUTHORIZED envelope"; exit 1; }
           curl -fsSI "$PRODUCTION_URL/" | grep -qi 'x-content-type-options: nosniff' || exit 1
