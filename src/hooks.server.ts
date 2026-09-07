@@ -8,6 +8,7 @@ import {
 	HSTS_HEADER_VALUE,
 	PAGE_HEADER_BASELINE
 } from '$server/middleware/security-headers';
+import { hasSessionCookie } from '$server/middleware/auth';
 
 export const handle: Handle = ({ event, resolve }) =>
 	// Phase-6 fix — request-scoped database lifecycle. The Neon WebSocket
@@ -20,13 +21,11 @@ export const handle: Handle = ({ event, resolve }) =>
 	withDbScope(async () => {
 		// Fast path: without the Better Auth session cookie there is nothing to
 		// resolve (keeps asset requests and logged-out browsing DB-free).
-		// Boundary match on the parsed cookie list — a lookalike cookie name
-		// must not trigger a session lookup (getSession verifies the signature).
-		const cookie = event.request.headers.get('cookie') ?? '';
-		const hasSessionCookie = cookie
-			.split(';')
-			.some((pair) => pair.trim().startsWith('better-auth.session_token='));
-		if (!hasSessionCookie) {
+		// Accepts both exact Better Auth cookie names (base + `__Secure-`
+		// production prefix — shared predicate with the Hono middleware);
+		// boundary match — a lookalike cookie name must not trigger a session
+		// lookup (getSession verifies the signature).
+		if (!hasSessionCookie(event.request.headers.get('cookie'))) {
 			event.locals.session = null;
 			event.locals.user = null;
 		} else {

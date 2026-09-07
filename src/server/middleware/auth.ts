@@ -22,10 +22,40 @@ import { getDb } from '../db/memo';
 import type { Db } from '../db/client';
 import { ERROR_CODES, errorEnvelope } from '../lib/errors';
 
-// Session cookie owned by Better Auth (same name `hooks.server.ts` fast-path
-// checks). The helper resolves the session only when this cookie is present;
-// otherwise the request is treated as unauthenticated without a DB round-trip.
+// Session cookie owned by Better Auth (same names `hooks.server.ts` fast-path
+// checks). Better Auth composes the name as
+// `${secureCookiePrefix}${advanced.cookiePrefix || 'better-auth'}.session_token`,
+// where the `__Secure-` prefix is applied exactly when the effective baseURL
+// is https (better-auth 1.7.1 dist/cookies/index.mjs createCookieGetter).
+// The app configures no cookie overrides, so exactly two names are ever
+// issued: the base name (http baseURL — local dev/preview) and the
+// `__Secure-`-prefixed name (https baseURL — production). Better Auth's own
+// in-request reader accepts both exact names (secure first, then base), and
+// the fast-path predicate below mirrors that. The helper resolves the
+// session only when such a cookie is present; otherwise the request is
+// treated as unauthenticated without a DB round-trip.
 export const SESSION_COOKIE_NAME = 'better-auth.session_token';
+export const SECURE_SESSION_COOKIE_NAME = `__Secure-${SESSION_COOKIE_NAME}`;
+
+/**
+ * Fast-path presence check shared by the Hono middleware and SvelteKit hooks:
+ * true when the raw Cookie header carries a Better Auth session cookie under
+ * either of the two exact names Better Auth issues (base or `__Secure-`
+ * prefixed). Boundary match on the parsed cookie list — a lookalike name
+ * (e.g. `__Securebetter-auth.session_token`, `foo-better-auth.session_token`
+ * or `__Host-...`) must not count; the signed-cookie verification in
+ * getSession() remains authoritative either way.
+ */
+export function hasSessionCookie(rawCookie: string | null | undefined): boolean {
+	const cookie = rawCookie ?? '';
+	return cookie.split(';').some((pair) => {
+		const name = pair.trim();
+		return (
+			name.startsWith(`${SESSION_COOKIE_NAME}=`) ||
+			name.startsWith(`${SECURE_SESSION_COOKIE_NAME}=`)
+		);
+	});
+}
 
 /** Resolved identity for a request, or null when unauthenticated. */
 export type AuthContext =
@@ -136,14 +166,11 @@ export function createAuthContext(resolver: SessionResolver = resolveAuthSession
 	return async function authContext(c: Context<AuthMiddlewareEnv>, next: Next) {
 		// Fast path: without the session cookie there is nothing to resolve
 		// (mirrors hooks.server.ts; keeps logged-out API calls DB-free).
-		// Boundary match on the parsed cookie list — a lookalike cookie name
-		// must not trigger a resolver call (the signed-cookie verification
-		// remains authoritative either way).
-		const cookie = c.req.header('cookie') ?? '';
-		const hasSessionCookie = cookie
-			.split(';')
-			.some((pair) => pair.trim().startsWith(`${SESSION_COOKIE_NAME}=`));
-		if (!hasSessionCookie) {
+		// Both exact Better Auth cookie names (base + `__Secure-` prefix) are
+		// accepted; boundary match on the parsed cookie list — a lookalike
+		// cookie name must not trigger a resolver call (the signed-cookie
+		// verification remains authoritative either way).
+		if (!hasSessionCookie(c.req.header('cookie'))) {
 			c.set('auth', null);
 			return next();
 		}

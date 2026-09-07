@@ -79,6 +79,32 @@ describe('Hono-side authentication helper (Phase 0 B4)', () => {
 		expect(resolver).not.toHaveBeenCalled();
 	});
 
+	it('resolves a session from the production __Secure- cookie name', async () => {
+		const resolver = vi.fn<SessionResolver>(async () => fakeSession);
+		const m = miniApp(resolver);
+		const res = await m.request(`${BASE}/api/me/profile`, {
+			headers: { cookie: '__Secure-better-auth.session_token=signed-token' }
+		});
+		expect(res.status).toBe(200);
+		expect(await res.json()).toEqual({ userId: 'user-1' });
+		expect(resolver).toHaveBeenCalledTimes(1);
+	});
+
+	it('fast-path: lookalike cookie names never trigger a session lookup', async () => {
+		for (const cookie of [
+			'__Securebetter-auth.session_token=signed',
+			'__Host-better-auth.session_token=signed',
+			'foo-better-auth.session_token=signed',
+			'better-auth.session_tokenx=signed'
+		]) {
+			const resolver = vi.fn(async () => null);
+			const m = miniApp(resolver);
+			const res = await m.request(`${BASE}/api/me/profile`, { headers: { cookie } });
+			expect(res.status).toBe(401);
+			expect(resolver).not.toHaveBeenCalled();
+		}
+	});
+
 	it('composed app: unauthenticated /api/game/* mutation → 401 envelope (CSRF still passes)', async () => {
 		const res = await app.request(
 			`${BASE}/api/game/start`,

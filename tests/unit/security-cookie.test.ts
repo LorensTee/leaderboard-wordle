@@ -18,11 +18,41 @@
 import { createHMAC } from '@better-auth/utils/hmac';
 import { createHmac, randomUUID } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
-import { SESSION_COOKIE_NAME } from '../../src/server/middleware/auth';
+import {
+	SECURE_SESSION_COOKIE_NAME,
+	SESSION_COOKIE_NAME,
+	hasSessionCookie
+} from '../../src/server/middleware/auth';
 
 describe('session-cookie contract (S3a)', () => {
-	it('app constant, hooks fast-path, and fixture use the same cookie name', () => {
+	it('app constants, hooks fast-path, and fixture use the same cookie names', () => {
 		expect(SESSION_COOKIE_NAME).toBe('better-auth.session_token');
+		// Production https baseURL gets the `__Secure-` prefix (better-auth
+		// 1.7.1 createCookieGetter); the base name covers http local envs.
+		expect(SECURE_SESSION_COOKIE_NAME).toBe('__Secure-better-auth.session_token');
+	});
+
+	it('fast-path predicate accepts both exact Better Auth cookie names', () => {
+		expect(hasSessionCookie(`better-auth.session_token=token.signature`)).toBe(true);
+		expect(hasSessionCookie(`__Secure-better-auth.session_token=token.signature`)).toBe(true);
+		// Mixed cookie list, any position.
+		expect(hasSessionCookie(`theme=dark; __Secure-better-auth.session_token=abc; other=1`)).toBe(
+			true
+		);
+		expect(hasSessionCookie(`theme=dark; better-auth.session_token=abc; other=1`)).toBe(true);
+	});
+
+	it('fast-path predicate is boundary-exact: no lookalike cookie names match', () => {
+		// Missing cookie / empty header.
+		expect(hasSessionCookie(undefined)).toBe(false);
+		expect(hasSessionCookie('')).toBe(false);
+		expect(hasSessionCookie('theme=dark; other=1')).toBe(false);
+		// Lookalike names must NOT trigger a session lookup.
+		expect(hasSessionCookie('__Securebetter-auth.session_token=abc')).toBe(false);
+		expect(hasSessionCookie('__Host-better-auth.session_token=abc')).toBe(false);
+		expect(hasSessionCookie('foo-better-auth.session_token=abc')).toBe(false);
+		expect(hasSessionCookie('better-auth.session_token2=abc')).toBe(false);
+		expect(hasSessionCookie('better-auth.session_token=abc-suffix')).toBe(true);
 	});
 
 	it('the fixture signature scheme matches Better Auth’s own HMAC serializer', async () => {
