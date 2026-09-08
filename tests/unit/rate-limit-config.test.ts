@@ -2,16 +2,15 @@
 // The SAME implementation runs in deploy.yml Gate 3, so these tests pin the
 // production gate against the CURRENT Cloudflare schema (verified
 // 2026-09-08): namespace_id is a string containing a POSITIVE INTEGER
-// (docs example "1001") — NOT a UUID (S1k-C correction). 1001–1005 are
-// rejected only as an explicit PROJECT placeholder policy (they are
-// format-valid per Cloudflare); other positive integers pass; shared
-// namespace_ids are allowed only with identical limits (counter sharing).
+// (docs example "1001") — NOT a UUID (S1k-C correction). There is NO
+// reserved-placeholder policy (S1k-D): this project's namespace ids ARE
+// 1001–1005, so they must pass; malformed ids fail; shared namespace_ids
+// are allowed only with identical limits (counter sharing).
 import { describe, expect, it } from 'vitest';
 import {
 	NAMESPACE_ID_PATTERN,
 	parseRateLimitBlocks,
 	REQUIRED_BINDING_NAMES,
-	RESERVED_PLACEHOLDER_IDS,
 	validateRateLimitConfig
 } from '../../scripts/check-rate-limit-config';
 
@@ -44,7 +43,10 @@ required = ["DATABASE_URL"]
 }
 
 describe('check-rate-limit-config (deploy.yml Gate 3)', () => {
-	it('reserved placeholders 1001–1005 fail — as PROJECT policy, not Cloudflare format', () => {
+	it('the project namespace ids 1001–1005 pass (no reserved-placeholder policy — S1k-D)', () => {
+		// 1001–1004 were the working production ids before the leaderboard
+		// work; 1005 is the new leaderboard class. All are plain positive
+		// integers per the Cloudflare schema, so the gate must accept them.
 		const issues = validateRateLimitConfig(
 			tomlWith({
 				AUTH_RATE_LIMITER: '1001',
@@ -54,17 +56,10 @@ describe('check-rate-limit-config (deploy.yml Gate 3)', () => {
 				LEADERBOARD_RATE_LIMITER: '1005'
 			})
 		);
-		expect(issues.length).toBe(5);
-		for (const issue of issues) {
-			// The message must distinguish the layers: format-valid per
-			// Cloudflare, but reserved by THIS project.
-			expect(issue).toMatch(/PROJECT-RESERVED placeholder/);
-			expect(issue).not.toMatch(/not a positive integer/);
-		}
+		expect(issues).toEqual([]);
 	});
 
-	it('other positive-integer ids pass the gate (the docs example "1001" itself is valid format)', () => {
-		expect(RESERVED_PLACEHOLDER_IDS.has('1001')).toBe(true);
+	it('other positive-integer ids also pass (the docs example "1001" itself is valid format)', () => {
 		expect(validateRateLimitConfig(tomlWith(REAL_IDS))).toEqual([]);
 		expect(
 			validateRateLimitConfig(
@@ -73,7 +68,7 @@ describe('check-rate-limit-config (deploy.yml Gate 3)', () => {
 					GAME_RATE_LIMITER: '42',
 					ME_RATE_LIMITER: '999999',
 					ADMIN_RATE_LIMITER: '314159265358979',
-					LEADERBOARD_RATE_LIMITER: '1006' // just outside the reserved set
+					LEADERBOARD_RATE_LIMITER: '1006'
 				})
 			)
 		).toEqual([]);

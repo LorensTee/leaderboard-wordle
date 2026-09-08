@@ -13,12 +13,12 @@
 // namespace_id share counters, even across Workers on the same account — so
 // sharing is only consistent when the declared limits are identical.
 //
-// Project placeholder policy (explicit, NOT a Cloudflare format rule): the
-// values 1001–1005 are RESERVED as development placeholders (wrangler.toml +
-// Phase-5 handoff). They are format-valid per Cloudflare but must never
-// ship. The operator chooses five DISTINCT positive-integer ids that are
-// unique within the Cloudflare account (not used by any other rate-limit
-// binding on the account) and pastes them into wrangler.toml.
+// This project's namespace ids ARE 1001–1005 (1001–1004 pre-date the
+// leaderboard work and are the account's working ids; 1005 is the leader-
+// board read class — operator decision S1k-D). There is NO reserved/
+// placeholder policy: the gate enforces only Cloudflare's schema. The ids
+// must stay unique within the Cloudflare account (not used by any other
+// rate-limit binding on the account).
 //
 // Usage: bun ./scripts/check-rate-limit-config.ts [path-to-wrangler.toml]
 import { readFileSync } from 'node:fs';
@@ -39,14 +39,6 @@ export const REQUIRED_BINDING_NAMES = [
  * "1001" and "01001" cannot silently become two different namespaces.
  */
 export const NAMESPACE_ID_PATTERN = /^[1-9][0-9]*$/;
-
-/**
- * Project placeholder policy (recorded in contradictions log S1k): these
- * five values are RESERVED for development. Format-valid per Cloudflare's
- * schema, but this project never ships them — the operator picks different
- * positive-integer ids unique within the account.
- */
-export const RESERVED_PLACEHOLDER_IDS = new Set(['1001', '1002', '1003', '1004', '1005']);
 
 export type RateLimitBlock = {
 	name?: string;
@@ -122,10 +114,6 @@ export function validateRateLimitConfig(toml: string): string[] {
 		}
 		if (block.namespaceId === undefined) {
 			issues.push(`[[ratelimits]] ${label} is missing \`namespace_id\``);
-		} else if (RESERVED_PLACEHOLDER_IDS.has(block.namespaceId)) {
-			issues.push(
-				`[[ratelimits]] ${label}: namespace_id "${block.namespaceId}" is a PROJECT-RESERVED placeholder (1001–1005) — format-valid per Cloudflare, but this project never ships them; pick a different positive-integer id unique within the account (contradictions log S1k)`
-			);
 		} else if (!NAMESPACE_ID_PATTERN.test(block.namespaceId)) {
 			issues.push(
 				`[[ratelimits]] ${label}: namespace_id "${block.namespaceId}" is not a positive integer — Cloudflare schema requires a string containing a positive integer (docs example "1001")`
@@ -178,12 +166,12 @@ if (import.meta.main) {
 	}
 	if (issues.length > 0) {
 		console.error(
-			'[check-rate-limit-config] FAILED — replace the reserved placeholders with real account-unique positive-integer namespace ids first (Phase-5 handoff operator steps)'
+			'[check-rate-limit-config] FAILED — fix the namespace/limit configuration to match Cloudflare\u2019s schema (positive-integer namespace ids, period 10|60, all five bindings)'
 		);
 		process.exit(1);
 	}
 	console.log(
-		`[check-rate-limit-config] OK — ${parseRateLimitBlocks(toml).length} [[ratelimits]] namespaces: positive-integer ids, no reserved placeholders, all required bindings declared`
+		`[check-rate-limit-config] OK — ${parseRateLimitBlocks(toml).length} [[ratelimits]] namespaces: positive-integer ids, consistent limits, all required bindings declared`
 	);
 	process.exit(0);
 }

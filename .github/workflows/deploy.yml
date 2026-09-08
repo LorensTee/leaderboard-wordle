@@ -85,16 +85,16 @@ jobs:
         run: grep -q "export { scheduled }" .svelte-kit/cloudflare/_worker.js
       - name: Answer-pool secrecy proof
         run: bun run verify:bundle
-      # GATE 3 — no project-reserved placeholder namespace ids ship to
-      # production, and every per-class binding the middleware requires is
-      # declared. Shared logic: scripts/check-rate-limit-config.ts (also
-      # unit-tested — tests/unit/rate-limit-config.test.ts), so the gate and
-      # its tests cannot drift. Cloudflare schema (S1k-C): namespace_id is a
-      # positive-integer string the operator defines (docs example "1001").
-      # The gate rejects 1001–1005 (reserved as PROJECT placeholders),
-      # malformed ids, and shared ids with conflicting limits; it accepts
-      # any other positive-integer ids.
-      - name: Gate — rate-limit namespace ids chosen and correctly formed
+      # GATE 3 — the rate-limit namespace config must match Cloudflare's schema:
+      # every per-class binding the middleware requires is declared, and
+      # each namespace_id is a positive-integer string (docs example "1001";
+      # NOT a UUID — S1k-C). Shared ids are allowed only with identical
+      # limits (counter-sharing semantics). This project's ids ARE 1001–1005
+      # (S1k-D) — there is no reserved-placeholder policy. Shared logic:
+      # scripts/check-rate-limit-config.ts (also unit-tested —
+      # tests/unit/rate-limit-config.test.ts), so the gate and its tests
+      # cannot drift.
+      - name: Gate — rate-limit namespace ids correctly formed
         run: bun ./scripts/check-rate-limit-config.ts
       # GATE 4 — the GitHub deployment credentials exist.
       - name: Gate — Cloudflare deployment credentials present
