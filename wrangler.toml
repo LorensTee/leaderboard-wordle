@@ -20,9 +20,15 @@ crons = ["0 16 * * *"]
 # 4.125, which supports `simple` only, period 10|60; see contradictions log
 # S1a/S1b). Config key is `ratelimits` in wrangler 4.125 (newer wranglers
 # renamed it `rate.limit`; 4.125 rejects the new key with "try upgrading" —
-# recorded in the contradictions log S1a). namespace_id values are
-# OPERATOR-PROVISIONED (dashboard/API): replace the placeholders before
-# deploy — never invent credentials; exact steps in the Phase-5 handoff.
+# recorded in the contradictions log S1a). namespace_id is a POSITIVE
+# INTEGER STRING that the operator DEFINES, unique within their Cloudflare
+# account (docs example "1001"; NOT a UUID — S1k-C). The values 1001–1005
+# are PROJECT-RESERVED placeholders: format-valid per Cloudflare but never
+# shipped — replace them before deploy per the Phase-5 handoff (the deploy
+# gate scripts/check-rate-limit-config.ts enforces this project policy).
+# S1k — LEADERBOARD_RATE_LIMITER closes the /api/leaderboard/* read-class
+# QA finding (100 req/min per the Architecture §Rate limiting read row;
+# contradictions log S1k).
 [[ratelimits]]
 name = "AUTH_RATE_LIMITER"
 namespace_id = "1001"
@@ -42,6 +48,11 @@ simple = { limit = 10, period = 60 }
 name = "ADMIN_RATE_LIMITER"
 namespace_id = "1004"
 simple = { limit = 20, period = 60 }
+
+[[ratelimits]]
+name = "LEADERBOARD_RATE_LIMITER"
+namespace_id = "1005"
+simple = { limit = 100, period = 60 }
 
 # Phase-6 J-A2 — Analytics Engine dataset for the game-API timing beacon
 # (mandatory verification infrastructure, plan §J; timings only, never

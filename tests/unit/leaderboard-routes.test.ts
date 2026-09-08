@@ -11,6 +11,10 @@ import { createAuthContext, requireAuth, type SessionResolver } from '../../src/
 import { csrfProtection } from '../../src/server/middleware/csrf';
 import { requestIdMiddleware } from '../../src/server/middleware/request-id';
 import { notFoundHandler, onErrorHandler, AppError } from '../../src/server/lib/errors';
+import {
+	createRateLimitMiddleware,
+	type RateLimitBinding
+} from '../../src/server/middleware/rate-limit';
 import { registerLeaderboardRoutes } from '../../src/server/leaderboard/handlers';
 import type { LeaderboardPeriod } from '../../src/server/leaderboard/constants';
 import type {
@@ -32,12 +36,23 @@ type MiniEnv = {
 	Variables: { requestId: string; auth: AuthContext };
 };
 
-function makeApp(service: LeaderboardService, resolver: SessionResolver = async () => fakeSession) {
+function makeApp(
+	service: LeaderboardService,
+	resolver: SessionResolver = async () => fakeSession,
+	limiter?: RateLimitBinding
+) {
 	const m = new Hono<MiniEnv>();
 	m.use('*', requestIdMiddleware);
 	m.use('*', csrfProtection);
 	m.use('*', createAuthContext(resolver));
+	// Normative order (plan §D.1, S1k): requireAuth first (cheap 401
+	// fast-path), then the leaderboard read-class limiter (identity known).
+	// Binding absent (undefined) ⇒ pass-through, matching the composed app.
 	m.use('/api/leaderboard/*', requireAuth);
+	m.use(
+		'/api/leaderboard/*',
+		createRateLimitMiddleware('leaderboard', { getBinding: () => limiter })
+	);
 	registerLeaderboardRoutes(m as unknown as Hono<import('../../src/server/routes').AppEnv>, {
 		getService: () => service
 	});
@@ -164,5 +179,62 @@ describe('leaderboard routes (wire contract, DB-free)', () => {
 		const res = await get(app, '/api/leaderboard/next-week');
 		expect(res.status).toBe(404);
 		expect((await res.json()).error.code).toBe('NOT_FOUND');
+	});
+});
+
+describe('S1k — leaderboard read class rate limiting (wire contract)', () => {
+	const denyLimiter: RateLimitBinding = { limit: async () => ({ success: false }) };
+	const okLimiter: RateLimitBinding = { limit: async () => ({ success: true }) };
+
+	it.each(['today', 'yesterday', 'week', 'month'] as const)(
+		'GET /api/leaderboard/%s over the limit → 429 RATE_LIMITED + headers + NG21 envelope',
+		async (period) => {
+			const { service } = fakeService();
+			const app = makeApp(service, async () => fakeSession, denyLimiter);
+			const res = await get(app, `/api/leaderboard/${period}`);
+			expect(res.status).toBe(429);
+			expect(res.headers.get('retry-after')).toBe('60');
+			expect(res.headers.get('x-ratelimit-limit')).toBe('100'); // leaderboard class PROPOSED
+			expect(res.headers.get('x-ratelimit-remaining')).toBe('0');
+			expect(Number(res.headers.get('x-ratelimit-reset'))).toBeGreaterThan(Date.now() / 1000);
+			const body = await res.json();
+			expect(body.error.code).toBe('RATE_LIMITED');
+			expect(body.error.requestId).toBeTruthy();
+		}
+	);
+
+	it('GET below the limit → 200, service called (no 429)', async () => {
+		const { service, calls } = fakeService();
+		const app = makeApp(service, async () => fakeSession, okLimiter);
+		const res = await get(app, '/api/leaderboard/month?limit=25');
+		expect(res.status).toBe(200);
+		expect(calls).toEqual([{ period: 'month', viewerId: VIEWER_ID, limit: 25 }]);
+	});
+
+	it('cache-busting query strings (?cb= / ?t=) never bypass the limiter', async () => {
+		const spy = vi.fn(async (options: { key: string }) => {
+			void options;
+			return { success: false };
+		});
+		const { service } = fakeService();
+		const app = makeApp(service, async () => fakeSession, { limit: spy });
+		const first = await get(app, '/api/leaderboard/month?cb=random1');
+		const second = await get(app, '/api/leaderboard/month?t=1710000000000');
+		expect(first.status).toBe(429);
+		expect(second.status).toBe(429);
+		// Both requests resolve to the SAME identity key (user_id) — the URL
+		// never participates in keying, so cache-busting cannot reset quota.
+		const keys = spy.mock.calls.map((call) => (call[0] as { key: string }).key);
+		expect(keys).toEqual(['leaderboard:user-1', 'leaderboard:user-1']);
+	});
+
+	it('unauthenticated → 401 fast-path, limiter never called (guards before limiter)', async () => {
+		const spy = vi.fn(async () => ({ success: false }));
+		const { service } = fakeService();
+		const app = makeApp(service, async () => null, { limit: spy });
+		const res = await app.request(`${BASE}/api/leaderboard/today`);
+		expect(res.status).toBe(401);
+		expect((await res.json()).error.code).toBe('UNAUTHORIZED');
+		expect(spy).not.toHaveBeenCalled();
 	});
 });

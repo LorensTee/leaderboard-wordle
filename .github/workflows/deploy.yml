@@ -85,13 +85,17 @@ jobs:
         run: grep -q "export { scheduled }" .svelte-kit/cloudflare/_worker.js
       - name: Answer-pool secrecy proof
         run: bun run verify:bundle
-      # GATE 3 — no placeholder rate-limit namespace ids ship to production.
-      - name: Gate — rate-limit namespace placeholders absent
-        run: |
-          if grep -q '00000000-' wrangler.toml; then
-            echo "::error::rate-limit namespace_id placeholders still in wrangler.toml — provision namespaces first (plan I.1)"
-            exit 1
-          fi
+      # GATE 3 — no project-reserved placeholder namespace ids ship to
+      # production, and every per-class binding the middleware requires is
+      # declared. Shared logic: scripts/check-rate-limit-config.ts (also
+      # unit-tested — tests/unit/rate-limit-config.test.ts), so the gate and
+      # its tests cannot drift. Cloudflare schema (S1k-C): namespace_id is a
+      # positive-integer string the operator defines (docs example "1001").
+      # The gate rejects 1001–1005 (reserved as PROJECT placeholders),
+      # malformed ids, and shared ids with conflicting limits; it accepts
+      # any other positive-integer ids.
+      - name: Gate — rate-limit namespace ids chosen and correctly formed
+        run: bun ./scripts/check-rate-limit-config.ts
       # GATE 4 — the GitHub deployment credentials exist.
       - name: Gate — Cloudflare deployment credentials present
         env:
@@ -122,9 +126,10 @@ jobs:
           for s in DATABASE_URL BETTER_AUTH_SECRET GOOGLE_CLIENT_ID GOOGLE_CLIENT_SECRET ADMIN_EMAIL BETTER_AUTH_URL; do
             echo "$LIST" | grep -q "$s" || { echo "::error::Worker secret $s missing — set it via \`wrangler secret put $s\` (plan F.1)"; exit 1; }
           done
-      # GATE 6 — namespace/binding validation: placeholder grep + wrangler dry-run so the
-      # actual rate-limit and ASSETS bindings resolve before any deploy (a typo'd or
-      # non-UUID namespace_id is caught here, not at deploy time).
+      # GATE 6 — namespace/binding validation: wrangler dry-run so the
+      # actual rate-limit, analytics, and ASSETS bindings resolve before any
+      # deploy (a typo'd namespace_id or undeclared binding is caught here,
+      # not at deploy time; Gate 3 already enforced the id format/policy).
       - name: Pre-deploy gate — wrangler dry-run (bindings resolve)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

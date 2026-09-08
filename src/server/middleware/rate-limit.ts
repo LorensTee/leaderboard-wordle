@@ -1,9 +1,11 @@
 // Phase-5 S1 (F1) — Cloudflare Workers Rate Limiting API middleware.
 // Contract: plan §F. One binding per class (see contradictions log S1b —
 // simple-limit namespaces apply ONE limit per key, so per-class PROPOSED
-// limits need per-class namespaces). Missing binding ⇒ pass-through (never
-// fail closed locally; unit-tested). The API is abuse protection only — NOT
-// an accounting mechanism (eventually consistent; plan §F.1).
+// limits need per-class namespaces). Missing binding ⇒ pass-through in
+// local/tests/preview (never fail closed there; unit-tested); production
+// drift is caught by rateLimitBindingGuard (S1k) — a partial binding set is
+// a loud 500, not a silent pass-through. The API is abuse protection only —
+// NOT an accounting mechanism (eventually consistent; plan §F.1).
 //
 // The `cloudflare:rate-limit` module is not declared in the installed
 // @cloudflare/workers-types, so the binding is typed structurally below
@@ -22,23 +24,46 @@ export type RateLimitBinding = {
  * copied from Architecture-v3 §Rate limiting "Suggested limit" column).
  * The operator must provision matching namespaces (handoff operator steps);
  * limits are informational in-app (the binding is the enforcement point).
+ *
+ * S1k — the `leaderboard` class closes the QA finding on the authenticated
+ * read endpoints: Architecture §Rate limiting reserved reads for edge rules
+ * ("operational, NOT code"), which nothing in this repo can enforce or
+ * verify. The class below codifies the SAME policy (the architecture's read
+ * row: 100 req/min) in-app for the authenticated /api/leaderboard/* routes,
+ * keyed per-user per plan §F.3. Full record in the contradictions log S1k.
  */
 export const RATE_LIMIT_CLASSES = {
 	auth: { bindingName: 'AUTH_RATE_LIMITER', limit: 10, keyPrefix: 'auth' },
 	game: { bindingName: 'GAME_RATE_LIMITER', limit: 30, keyPrefix: 'game' },
 	me: { bindingName: 'ME_RATE_LIMITER', limit: 10, keyPrefix: 'me' },
-	admin: { bindingName: 'ADMIN_RATE_LIMITER', limit: 20, keyPrefix: 'admin' }
+	admin: { bindingName: 'ADMIN_RATE_LIMITER', limit: 20, keyPrefix: 'admin' },
+	// PROPOSED 100 req/min — Architecture §Rate limiting "Read endpoints" row.
+	leaderboard: { bindingName: 'LEADERBOARD_RATE_LIMITER', limit: 100, keyPrefix: 'leaderboard' }
 } as const;
 
 export type RateLimitClassName = keyof typeof RATE_LIMIT_CLASSES;
 
-/** Unsafe methods each class throttles (reads are edge-limited, not app-limited). */
+/**
+ * Binding names whose presence production must never silently lack (S1k).
+ * Order follows RATE_LIMIT_CLASSES; consumed by the runtime drift guard and
+ * the deploy gate (scripts/check-rate-limit-config.ts keeps its own list —
+ * the gate validates the CONFIG, this list validates the RUNTIME env).
+ */
+export const REQUIRED_RATE_LIMIT_BINDINGS: readonly string[] = Object.values(
+	RATE_LIMIT_CLASSES
+).map((cfg) => cfg.bindingName);
+
+/** Methods each class throttles. Leaderboard is the read class: GET only. */
 const CLASS_UNSAFE_METHODS: Record<RateLimitClassName, ReadonlySet<string>> = {
 	// OAuth callback GETs must never be throttled — POST-only (plan §F.2).
 	auth: new Set(['POST']),
 	game: new Set(['POST', 'PUT', 'PATCH', 'DELETE']),
 	me: new Set(['POST', 'PUT', 'PATCH', 'DELETE']),
-	admin: new Set(['POST', 'PUT', 'PATCH', 'DELETE'])
+	admin: new Set(['POST', 'PUT', 'PATCH', 'DELETE']),
+	// S1k — the leaderboard class throttles its only method, GET. Keying
+	// ignores the URL (identity-only), so query-string cache-busting
+	// (`?cb=`, `?t=`) can never create fresh limiter identities.
+	leaderboard: new Set(['GET'])
 };
 
 /** Injectable limiter seam (mirrors the SessionResolver precedent in auth.ts). */
@@ -101,6 +126,43 @@ export function createRateLimitMiddleware(
 		return c.json(
 			errorEnvelope(ERROR_CODES.RATE_LIMITED, 'Rate limit exceeded', requestId),
 			429
+		);
+	};
+}
+
+/**
+ * S1k — production drift guard. Returns the names of required rate-limit
+ * bindings missing from a runtime environment, or [] when the environment is
+ * the local/test/preview shape (no rate-limit bindings at all → documented
+ * pass-through). Fail-closed logic: a real Worker environment that carries
+ * ANY rate-limit binding must carry ALL of them — a partially-provisioned
+ * deploy is a loud 500, never a silent pass-through. (A deployed Worker
+ * always carries all declared bindings — `wrangler deploy` validates the
+ * config; this guard is defense-in-depth against environment drift.)
+ */
+export function missingRateLimitBindings(env: Record<string, unknown> | undefined): string[] {
+	if (!env) return [];
+	if (!REQUIRED_RATE_LIMIT_BINDINGS.some((name) => env[name] !== undefined)) return [];
+	return REQUIRED_RATE_LIMIT_BINDINGS.filter((name) => env[name] === undefined);
+}
+
+/**
+ * Hono middleware mounting the drift guard on every API request (before any
+ * handler). Local dev / unit tests / preview-without-bindings pass through
+ * unchanged (plan §F.6); a partial production binding set fails closed with
+ * the NG21 envelope (500 INTERNAL, correlated by requestId).
+ */
+export function rateLimitBindingGuard(): MiddlewareHandler {
+	return async function rateLimitBindingGuardMiddleware(c, next) {
+		const missing = missingRateLimitBindings(c.env as Record<string, unknown> | undefined);
+		if (missing.length === 0) return next();
+		return c.json(
+			errorEnvelope(
+				ERROR_CODES.INTERNAL,
+				`Server misconfigured — missing required rate-limit bindings: ${missing.join(', ')}`,
+				c.get('requestId') ?? 'unknown'
+			),
+			500
 		);
 	};
 }

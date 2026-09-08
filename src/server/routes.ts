@@ -26,6 +26,7 @@ import { csrfProtection } from './middleware/csrf';
 import {
 	createRateLimitMiddleware,
 	RATE_LIMIT_CLASSES,
+	rateLimitBindingGuard,
 	type RateLimitBinding
 } from './middleware/rate-limit';
 import { registerProfileRoutes } from './profile/handlers';
@@ -53,6 +54,9 @@ export type HonoBindings = {
 	GAME_RATE_LIMITER?: RateLimitBinding;
 	ME_RATE_LIMITER?: RateLimitBinding;
 	ADMIN_RATE_LIMITER?: RateLimitBinding;
+	// S1k — leaderboard read class (see middleware/rate-limit.ts): the
+	// authenticated GET endpoints are protected in-app (100 req/min PROPOSED).
+	LEADERBOARD_RATE_LIMITER?: RateLimitBinding;
 	// Phase-6 J-A2 — Analytics Engine dataset for the game-API timing beacon.
 	// Optional: absent (local dev / tests / preview) → telemetry no-ops.
 	LATENCY?: AnalyticsEngineDatasetBinding;
@@ -90,6 +94,11 @@ export type AppEnv = {
 // the standard UNAUTHORIZED envelope BEFORE any handler runs.
 const base = new Hono<AppEnv>()
 	.use('*', requestIdMiddleware)
+	// S1k — production drift guard: a real Worker env carrying any rate-limit
+	// binding must carry all of them (loud 500 INTERNAL envelope, correlated
+	// by requestId). Local dev / unit tests / preview-without-bindings pass
+	// through unchanged (no bindings at all → no guard).
+	.use('*', rateLimitBindingGuard())
 	.use(
 		'*',
 		timeout(30_000, (c) =>
@@ -171,6 +180,17 @@ const base = new Hono<AppEnv>()
 		})
 	)
 	.use('/api/leaderboard/*', requireAuth)
+	// S1k — leaderboard read class (GET-only; PROPOSED 100 req/min, per-user
+	// keying per plan §F.3). Mounted AFTER requireAuth so unauthenticated
+	// floods keep the cheap 401 fast-path and identity is always known; the
+	// class throttles its only method (GET) and keys on identity, never the
+	// URL — query-string cache-busting cannot bypass it.
+	.use(
+		'/api/leaderboard/*',
+		createRateLimitMiddleware('leaderboard', {
+			getBinding: getRateLimitBinding(RATE_LIMIT_CLASSES.leaderboard.bindingName)
+		})
+	)
 	// Better Auth — mounted per the current Hono integration docs:
 	// `app.all("/api/auth/*", (c) => auth.handler(c.req.raw))`. Runtime values
 	// come from Hono bindings (getAuth factory). Deliberately NOT behind
