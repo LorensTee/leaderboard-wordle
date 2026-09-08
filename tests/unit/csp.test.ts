@@ -37,6 +37,15 @@ describe('CSP directive builder', () => {
 		const value = serializeCsp(buildCspDirectives());
 		expect(value).toContain(`default-src 'self'`);
 		expect(value).toContain(`script-src 'self' ${PREPAINT_SCRIPT_SHA256}`);
+		// J-A1 — Cloudflare Web Analytics beacon: exact script host in
+		// script-src and exact analytics origin in connect-src; the token is
+		// NOT in the CSP; no wildcards / unsafe-eval were added.
+		expect(value).toContain('https://static.cloudflareinsights.com');
+		expect(value).toContain(`connect-src 'self' https://cloudflareinsights.com`);
+		expect(value).not.toMatch(/script-src[^;]*\*|connect-src[^;]*\*/);
+		expect(value).not.toContain('unsafe-eval');
+		expect(value).not.toContain('static.cloudflareinsights.com/beacon.min.js');
+		expect(value).not.toContain('1875099085ec473cb10b4b00cf08d5d7');
 		expect(value).toContain(`style-src 'self'`);
 		expect(value).toContain(`style-src-attr 'unsafe-inline'`);
 		expect(value).not.toContain(`style-src 'self' 'unsafe-inline'`);

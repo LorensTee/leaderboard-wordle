@@ -21,8 +21,13 @@ export const CSP_REPORT_ONLY_ENV = 'CSP_REPORT_ONLY';
 const BASE_DIRECTIVES = {
 	'default-src': ['self'],
 	// Pre-paint script allowed by its exact hash (plus Kit's own hashes on
-	// the page surface in hash mode).
-	'script-src': ['self', PREPAINT_SCRIPT_SHA256],
+	// the page surface in hash mode). J-A1: the Cloudflare Web Analytics
+	// beacon (src/lib/app/cloudflare-analytics.svelte) is a module script
+	// loaded from static.cloudflareinsights.com in production only — allowed
+	// by its exact host (no paths in script-src; no wildcards, no
+	// unsafe-eval). The beacon token lives ONLY in the data-cf-beacon
+	// attribute and is deliberately NOT in the CSP.
+	'script-src': ['self', PREPAINT_SCRIPT_SHA256, 'https://static.cloudflareinsights.com'],
 	// style-src 'unsafe-inline' REMOVED (plan §G.2 "prefer strict"): no
 	// legitimate runtime <style> injection in the production build (styles
 	// are bundled; Svelte transitions mutate element.style programmatically,
@@ -34,7 +39,10 @@ const BASE_DIRECTIVES = {
 	'style-src-attr': ['unsafe-inline'],
 	'img-src': ['self', 'data:'],
 	'font-src': ['self'],
-	'connect-src': ['self'],
+	// J-A1: the Cloudflare beacon posts analytics to cloudflareinsights.com
+	// (the RUM endpoint). Host-scoped to the exact analytics origin — no
+	// broad wildcards, no data:. Everything else (API, WS) stays 'self'.
+	'connect-src': ['self', 'https://cloudflareinsights.com'],
 	'frame-ancestors': ['none'],
 	'base-uri': ['self'],
 	'form-action': ['self'],

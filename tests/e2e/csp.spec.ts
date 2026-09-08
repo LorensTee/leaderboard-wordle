@@ -157,4 +157,30 @@ test.describe('CSP enforcement + theme (S2)', () => {
 		expect(res.headers()['x-frame-options']).toBe('DENY');
 		expect(res.headers()['x-request-id']).toBeTruthy();
 	});
+
+	test('Cloudflare Web Analytics beacon (J-A1): present exactly once, CSP allows it, clean', async ({
+		page
+	}) => {
+		const violations = await withCspWatch(page, async () => {
+			const response = await page.goto('/');
+			expect(response?.status(), 'beacon page must load').not.toBe(500);
+			// Beacon module script rendered exactly once per document (the root
+			// layout <svelte:head> persists across SPA navigation, so a client
+			// navigation must NOT re-add it).
+			const beacons = page.locator('script[data-cf-beacon]');
+			expect(await beacons.count(), 'beacon must appear exactly once').toBe(1);
+			await expect(beacons).toHaveAttribute(
+				'src',
+				'https://static.cloudflareinsights.com/beacon.min.js'
+			);
+			// The page CSP must permit the beacon's script host and analytics
+			// connection (Cloudflare manual-install contract). The token stays
+			// in data-cf-beacon, never in the CSP.
+			const csp = response?.headers()['content-security-policy'] ?? '';
+			expect(csp).toContain('https://static.cloudflareinsights.com');
+			expect(csp).toContain(`connect-src 'self' https://cloudflareinsights.com`);
+			expect(csp).not.toContain('1875099085ec473cb10b4b00cf08d5d7');
+		});
+		expect(violations, 'beacon page CSP violations').toEqual([]);
+	});
 });

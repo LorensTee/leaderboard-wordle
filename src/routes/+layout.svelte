@@ -6,6 +6,7 @@
 	import { Toaster } from 'svelte-sonner';
 	import { queryClient } from '$lib/app/query-client';
 	import { initTheme } from '$lib/app/theme';
+	import CloudflareAnalytics from '$lib/app/cloudflare-analytics.svelte';
 	import Header from '$lib/shared/ui/header.svelte';
 
 	import favicon from '$lib/assets/favicon.svg';
@@ -25,6 +26,8 @@
 </svelte:head>
 
 <QueryClientProvider client={queryClient}>
+	<!-- J-A1 Cloudflare Web Analytics beacon (production only, once per page). -->
+	<CloudflareAnalytics />
 	<div class="flex min-h-dvh flex-col">
 		<Header user={data.user} />
 		<main class="mx-auto flex w-full max-w-xl flex-1 flex-col px-3 pb-4 pt-2">
