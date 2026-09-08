@@ -116,7 +116,10 @@
 	</header>
 
 	<Tabs bind:value aria-label="Leaderboard periods">
-		<TabsList class="max-w-full overflow-x-auto">
+	<!-- TabsList is a content-fitted row: the four period tabs fit the
+	     layout, so no overflow/scroll affordance (a scroll container here
+	     rendered a stray scrollbar + sub-pixel scroll movement). -->
+		<TabsList class="max-w-full">
 			{#each TAB_ORDER as tab (tab.id)}
 				<TabsTrigger value={tab.id}>{tab.label}</TabsTrigger>
 			{/each}

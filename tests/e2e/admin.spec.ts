@@ -79,9 +79,6 @@ test.describe('admin page (deterministic session + seeded puzzles)', () => {
 		// Admin sees the Admin tab.
 		await page.getByRole('link', { name: 'Admin', exact: true }).click();
 		await expect(page).toHaveURL(/\/admin$/);
-		await expect(
-			page.getByRole('heading', { name: 'Admin — puzzle scheduling' })
-		).toBeVisible();
 		// The populated calendar shows the seeded word.
 		await expect(
 			page.locator(`[data-date="${target}"]`).getByText('light', { exact: true })
@@ -264,7 +261,11 @@ test.describe('admin page (deterministic session + seeded puzzles)', () => {
 		await page.setViewportSize({ width: 390, height: 844 });
 
 		await page.goto('/admin');
-		await expect(page.getByRole('heading', { name: 'Admin — puzzle scheduling' })).toBeVisible();
+		// The page opens straight into the calendar (no intro hero).
+		await expect(page.getByRole('heading', { level: 2 })).toBeVisible();
+		await expect(
+			page.getByRole('heading', { name: 'Admin — puzzle scheduling' })
+		).toHaveCount(0);
 		// Narrow screens keep usable cells: no horizontal overflow.
 		const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
 		expect(overflow).toBe(false);

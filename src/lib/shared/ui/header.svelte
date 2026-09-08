@@ -78,9 +78,12 @@
 </script>
 
 <header class="border-b border-black/10 dark:border-white/10">
-	<!-- max-w-3xl: brand + tabs + controls fit ONE row on desktop; on mobile
-	     the wrap keeps brand+controls on row 1 and moves the tabs to row 2. -->
-	<div class="mx-auto flex w-full max-w-3xl flex-wrap items-center px-3">
+	<!-- max-w-4xl: brand + tabs + controls fit ONE row on desktop — with the
+	     role-gated Admin tab added, max-w-3xl overflowed by a few px and
+	     pushed the right-side controls (theme/avatar/sign-out) onto a second
+	     row. On mobile (< sm) the wrap still keeps brand+controls on row 1
+	     and moves the tabs to row 2. -->
+	<div class="mx-auto flex w-full max-w-4xl flex-wrap items-center px-3">
 		<a
 			href={resolve('/')}
 			class="order-1 flex h-14 items-center gap-2 text-base font-bold tracking-tight"

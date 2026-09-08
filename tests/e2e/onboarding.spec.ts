@@ -236,7 +236,8 @@ test('9. completed user reaches the normal shell — tabs, and Admin tab only fo
 	await adminPage.goto('/play');
 	await expect(adminPage.getByRole('link', { name: 'Admin', exact: true })).toBeVisible();
 	await adminPage.goto('/admin');
-	await expect(adminPage.getByRole('heading', { name: 'Admin' })).toBeVisible();
+	// The admin page opens straight into the calendar (no intro hero).
+	await expect(adminPage.getByRole('heading', { level: 2 })).toBeVisible();
 	await adminContext.close();
 
 	// A non-admin hitting /admin is redirected away (real route guard).

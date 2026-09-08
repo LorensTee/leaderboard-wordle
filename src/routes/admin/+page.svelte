@@ -16,7 +16,7 @@
 	import { CalendarDate } from '@internationalized/date';
 	import { endOfMonth, startOfMonth, today as intlToday } from '@internationalized/date';
 	import { createMutation, createQuery } from '@tanstack/svelte-query';
-	import { RefreshCw, Shield, TriangleAlert } from '@lucide/svelte';
+	import { RefreshCw, TriangleAlert } from '@lucide/svelte';
 	import { toast } from 'svelte-sonner';
 	import { queryClient } from '$lib/app/query-client';
 	import { adminApi, adminKeys } from '$lib/shared/api/admin';
@@ -182,21 +182,6 @@
 </script>
 
 <section class="mx-auto w-full max-w-4xl px-4 py-8 sm:py-10">
-	<div class="mb-6 flex items-center gap-3">
-		<span
-			class="grid size-12 place-items-center rounded-2xl bg-tile-gray/15 text-tile-gray"
-			aria-hidden="true"
-		>
-			<Shield size={26} />
-		</span>
-		<div>
-			<h1 class="text-xl font-bold tracking-tight">Admin — puzzle scheduling</h1>
-			<p class="text-sm text-black/50 dark:text-white/50">
-				Queue approved words ahead of time; the server validates everything.
-			</p>
-		</div>
-	</div>
-
 	{#if needsReplacement}
 		<div
 			class="mb-5 flex flex-col gap-3 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4"

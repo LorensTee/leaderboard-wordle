@@ -183,8 +183,8 @@ test.describe('leaderboard page (deterministic session + seeded competition)', (
 		await page.getByRole('tab', { name: 'This week' }).click();
 		await expect(page.getByText('Not qualified yet')).toBeVisible();
 
-		// No horizontal overflow at the page level (the tab strip scrolls
-		// internally by design).
+		// No horizontal overflow at the page level (the four period tabs
+		// fit the tab strip — no internal scroll container).
 		const overflow = await page.evaluate(
 			() => document.documentElement.scrollWidth > window.innerWidth + 1
 		);
