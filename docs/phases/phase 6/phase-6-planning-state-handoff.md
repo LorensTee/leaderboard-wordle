@@ -1,5 +1,11 @@
 # Phase 6 — Planning-State Handoff
 
+> **HISTORICAL (2026-09-11).** This handoff describes the state at planning time
+> (`main @ 294ff0b`). Production has since been provisioned and deployed — read
+> `phase-6-implementation-handoff.md` §7 ("Current production operator state —
+> September 2026") for the current baseline before acting on any "not yet
+> provisioned" statement below. Do not re-perform completed operator work.
+
 A fresh implementation chat can continue **without this conversation's history**.
 Everything needed to implement Phase 6 (Deployment) is in this file and its links.
 This is a **planning-state** handoff: it records verified facts, decisions, and

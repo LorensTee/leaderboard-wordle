@@ -1,5 +1,12 @@
 # Phase 6 — Implementation Prompt (Deployment)
 
+> **HISTORICAL (2026-09-11).** This prompt describes the state at planning/
+> implementation time (`main @ 294ff0b`). Production has since been provisioned
+> and deployed — read `phase-6-implementation-handoff.md` §7 ("Current
+> production operator state — September 2026") for the current baseline before
+> acting on any "not yet provisioned" statement below. Do not re-perform
+> completed operator work.
+
 You are starting a **fresh implementation chat** for **Phase 6 — Deployment** of
 `https://github.com/LorensTee/leaderboard-wordle`. You work in the repository itself.
 
