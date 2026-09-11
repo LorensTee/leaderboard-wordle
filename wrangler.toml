@@ -1,6 +1,6 @@
 # Cloudflare Workers configuration — @sveltejs/adapter-cloudflare (Workers Static Assets)
 # See https://svelte.dev/docs/kit/adapter-cloudflare
-name = "leaderboard-wordle"
+name = "lb"
 main = ".svelte-kit/cloudflare/_worker.js"
 compatibility_date = "2026-08-23"
 # Better Auth requires AsyncLocalStorage (nodejs_compat). NG1 / Architecture-v3.
